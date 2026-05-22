@@ -80,19 +80,19 @@ const STORES = [
   },
 
   // ============================================================
-  // 2. 京都祇園四条店(京都)
+  // 2. 京都祇園店(京都)
   // ============================================================
   {
     region: "kyoto",
-    slug: "gion-shijo",
+    slug: "gion",
 
-    name_full_en: "Kyoto Omakase Sushi & Wagyu Steak (Muslim-Friendly) Gion-Shijo Restaurant",
-    name_short: "Omakase 墨 — Gion-Shijo",
-    name_jp: "おまかせ 墨 祇園四条店",
+    name_full_en: "Kyoto Omakase Sushi & Wagyu Steak (Muslim-Friendly) Gion Restaurant",
+    name_short: "Omakase 墨 — Gion",
+    name_jp: "おまかせ 墨 祇園店",
     name_zh: "京都寿司和牛餐厅",
 
     city: "Gion, Kyoto",
-    region_label: "Gion-Shijo · Kyoto",
+    region_label: "Gion · Kyoto",
     station_en: "Gion-Shijo Station",
     address_jp_line1: "京都府京都市東山区富永町135",
     address_en_line1: "135 Tominaga-cho, Higashiyama-ku, Kyoto",
