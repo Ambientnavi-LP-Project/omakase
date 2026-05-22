@@ -6,7 +6,8 @@ pagination:
 permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}index.html"
 eleventyComputed:
   title: "{{ store.name_full_en }}"
-  tablecheck_with_utm: "{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral"
+  is_reserve_ready: "{{ 'true' if store.tablecheck_url != 'TBD' else 'false' }}"
+  tablecheck_with_utm: "{% if store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral{% else %}#{% endif %}"
 ---
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
@@ -14,7 +15,7 @@ eleventyComputed:
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>{{ store.name_full_en }}</title>
-<meta name="description" content="Halal-certified omakase featuring ultra-rare lean Wagyu and authentic Edomae sushi in the heart of Asakusa, Tokyo. Prayer room on-site. Alcohol-free menu.">
+<meta name="description" content="Muslim-friendly omakase featuring ultra-rare lean Wagyu and authentic Edomae sushi in {{ store.city }}. Alcohol-free menu, crafted for everyone.">
 {% if store.channel_id != "default" %}
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/">
@@ -135,11 +136,11 @@ body { padding-bottom: 72px; }
 <!-- HEADER -->
 <header class="fixed top-0 left-0 w-full z-50 bg-ginza-black/80 backdrop-blur-md border-b border-ginza-gold/20">
 <div class="hidden sm:flex items-center justify-center gap-6 py-1.5 border-b border-ginza-gold/10 text-[9px] tracking-[0.25em] text-ginza-gold/60 uppercase">
-<span>Asakusa · Tokyo</span>
+<span>{{ store.region_label }}</span>
 <span class="header-divider"></span>
 <span>Open {{ store.hours }}</span>
 <span class="header-divider"></span>
-<span>Halal Certified</span>
+<span>Muslim-Friendly</span>
 </div>
 <nav class="flex items-center justify-between px-6 py-3 max-w-[390px] mx-auto">
 <div class="flex flex-col leading-none">
@@ -179,7 +180,7 @@ body { padding-bottom: 72px; }
 </h1>
 <p class="text-sm text-ginza-gold/60 tracking-widest mb-5 jp-text">おまかせコース · 和牛体験</p>
 <p class="text-sm font-light text-ginza-ivory/70 mb-8 max-w-xs mx-auto leading-relaxed">
-Ultra-rare lean Wagyu. Halal certified.<br/>A dining experience crafted for the world.
+Ultra-rare lean Wagyu. Muslim-friendly.<br/>A dining experience crafted for the world.
 </p>
 
 <div class="flex flex-col items-center gap-3 w-full max-w-xs mx-auto">
@@ -213,7 +214,7 @@ Ultra-rare lean Wagyu. Halal certified.<br/>A dining experience crafted for the 
 
   <div class="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
     <svg class="w-4 h-4 text-ginza-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
-    <span class="text-[10px] font-josefin tracking-widest uppercase">Halal Certified · Alcohol Free</span>
+    <span class="text-[10px] font-josefin tracking-widest uppercase">Muslim-Friendly · Alcohol Free</span>
   </div>
 </div>
 </div>
@@ -265,9 +266,9 @@ It ranked No.1 on Tripadvisor's Tokyo ranking from August 2025 to March 2026.
 <path d="M24 10a14 14 0 1 0 0 28 10.5 10.5 0 1 1 0-21A14 14 0 0 0 24 10z" fill="white"/>
 <polygon points="33,9 34.5,13.5 39,13.5 35.3,16.2 36.8,20.7 33,18 29.2,20.7 30.7,16.2 27,13.5 31.5,13.5" fill="white"/>
 </svg>
-<p class="text-[10px] uppercase tracking-widest text-ginza-gold">Halal Certified</p>
-<p class="font-cormorant text-lg italic leading-tight">Japan Muslim<br/>Association</p>
-<p class="text-[9px] text-ginza-ivory/50 leading-relaxed">Certified Halal. No pork, no alcohol. Prayer room on-site.</p>
+<p class="text-[10px] uppercase tracking-widest text-ginza-gold">Muslim-Friendly</p>
+<p class="font-cormorant text-lg italic leading-tight">Crafted for<br/>Every Guest</p>
+<p class="text-[9px] text-ginza-ivory/50 leading-relaxed">Pork-free, alcohol-free menu. Crafted for everyone.</p>
 </div>
 </div>
 </section>
@@ -343,7 +344,7 @@ I visit livestock farms all over Japan and purchase only Wagyu that I truly acce
 <div class="mb-4">
 <p class="section-label mb-3">For Everyone in the World</p>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70">
-I personally select Wagyu processed at halal-certified slaughterhouses in Japan. This restaurant was born to share authentic Japanese food culture with everyone — regardless of nationality, religion, age, or gender.
+I personally select Wagyu processed at trusted suppliers in Japan. This restaurant was born to share authentic Japanese food culture with everyone — regardless of nationality, religion, age, or gender.
 </p>
 </div>
 </div>
@@ -378,7 +379,7 @@ I personally select Wagyu processed at halal-certified slaughterhouses in Japan.
 </div>
 <div class="rounded-xl p-4 text-center" style="background:linear-gradient(135deg,rgba(201,169,110,0.15) 0%,rgba(201,169,110,0.05) 100%); border:1px solid rgba(201,169,110,0.35);">
 <p class="font-cormorant italic text-2xl text-ginza-gold mb-1">100%</p>
-<p class="text-[10px] tracking-widest uppercase text-ginza-ivory/60">Halal certified</p>
+<p class="text-[10px] tracking-widest uppercase text-ginza-ivory/60">Muslim-Friendly</p>
 <p class="text-[10px] text-ginza-ivory/40 mt-1">Alcohol-free menu</p>
 </div>
 </div>
@@ -528,7 +529,7 @@ window.addEventListener('load', function() {
         <span class="text-[10px] text-ginza-ivory/40 font-josefin tracking-wider ml-2">TRIPADVISOR</span>
       </div>
       <p class="font-cormorant italic text-base leading-relaxed text-ginza-ivory/85 mb-4">
-        "The prayer room made all the difference. Beautifully presented halal wagyu, thoughtfully served. My family from Dubai felt completely at home in Tokyo."
+        "Beautifully presented Wagyu, thoughtfully served. The Muslim-friendly menu meant my family from Dubai could fully enjoy the experience. Truly felt at home."
       </p>
       <div class="flex items-center gap-3 pt-3 border-t border-ginza-gold/10">
         <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant italic text-sm">A</div>
@@ -596,7 +597,7 @@ window.addEventListener('load', function() {
         <span class="text-[10px] text-ginza-ivory/40 font-josefin tracking-wider ml-2">GOOGLE</span>
       </div>
       <p class="font-cormorant italic text-base leading-relaxed text-ginza-ivory/85 mb-4">
-        "As a Muslim food lover, finding authentic halal-certified omakase in Tokyo was a dream. The attention to every detail — from certification to the prayer space — showed real respect. The wagyu itself was sublime."
+        "As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail and respect for our needs really showed. The wagyu itself was sublime."
       </p>
       <div class="flex items-center gap-3 pt-3 border-t border-ginza-gold/10">
         <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant italic text-sm">F</div>
@@ -670,8 +671,8 @@ Reservations recommended 2 weeks in advance.<br/>Walk-ins welcome subject to ava
 <div>
 <p class="text-[10px] font-josefin tracking-[0.2em] text-ginza-gold uppercase mb-1">Address</p>
 <address class="not-italic text-sm text-ginza-ivory/70 font-light leading-relaxed">
-〒{{ store.address_postal }} 東京都台東区浅草3丁目27-5<br/>
-{{ store.address_en }}<br/><br/>
+〒{{ store.address_postal }} {{ store.address_jp_line1 }}<br/>
+{{ store.address_en_line1 }}<br/><br/>
 <span class="text-ginza-ivory/40 text-[11px]">Open {{ store.hours }}</span>
 </address>
 <a href="{{ store.maps_link }}" target="_blank" rel="noopener"
@@ -686,8 +687,8 @@ Open in Google Maps
 </div>
 </div>
 <div class="map-wrapper">
-<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d8773704.22541926!2d132.3809798!3d35.1867375!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188f69b5a2d697%3A0x120914786e0e27ec!2zT21ha2FzZSBTdXNoaSBXYWd5dSAoSGFsYWwpIFRva3lvIEFzYWt1c2EgUmVzdGF1cmFudCDmtYXojYnlr7_lj7jlkozniZvppJDljoU!5e1!3m2!1sja!2sjp!4v1777448547207!5m2!1sja!2sjp"
-allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Omakase Asakusa Map">
+<iframe src="{{ store.maps_embed }}"
+allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ store.name_short }} Map">
 </iframe>
 </div>
 </div>
@@ -701,51 +702,18 @@ allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" ti
 <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
 </svg>
 </div>
-<p class="section-label mb-3">Halal Dining</p>
-<h2 class="font-cormorant italic text-3xl mb-6">A Halal-Friendly Dining Experience in Asakusa</h2>
+<p class="section-label mb-3">Muslim-Friendly Dining</p>
+<h2 class="font-cormorant italic text-3xl mb-6">A Muslim-Friendly Dining Experience in {{ store.city.split(',')[0] }}</h2>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-xs mb-4">
-Welcome to our restaurant — a warm, inclusive space where guests from all cultures can dine with peace of mind. We proudly serve Halal-certified, alcohol-free dishes, making us a trusted choice for Muslim travelers and families visiting Japan.
+Welcome to our restaurant — a warm, inclusive space where guests from all cultures can dine with peace of mind. We thoughtfully prepare pork-free, alcohol-free dishes, making us a trusted choice for Muslim travelers and families visiting Japan.
 </p>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/60 max-w-xs mb-8">
-To ensure comfort and convenience for our Muslim guests, we also provide a <span class="text-ginza-gold/80">prayer room on-site</span>.
+Please feel free to share any dietary preferences or restrictions when making your reservation — we will do our best to accommodate.
 </p>
-<div class="flex flex-wrap items-center justify-center gap-3 text-xs font-josefin tracking-[0.15em] text-ginza-gold mb-8">
+<div class="flex flex-wrap items-center justify-center gap-3 text-xs font-josefin tracking-[0.15em] text-ginza-gold mb-4">
 <span class="px-3 py-1 border border-ginza-gold/30 rounded">NO PORK</span>
 <span class="px-3 py-1 border border-ginza-gold/30 rounded">NO ALCOHOL IN FOOD</span>
-<span class="px-3 py-1 border border-ginza-gold/30 rounded">PRAYER ROOM</span>
-</div>
-<div class="halal-cert-badge-wrap">
-<div class="flex flex-col items-center gap-3">
-<div class="halal-cert-badge">
-<svg class="w-7 h-7 text-ginza-gold" viewBox="0 0 32 32" fill="none">
-<path d="M16 4a12 12 0 1 0 0 24 9 9 0 1 1 0-18 12 12 0 0 0 0-6z" fill="currentColor" opacity="0.9"/>
-<polygon points="22,6 23.2,9.6 27,9.6 24,11.8 25.2,15.4 22,13.2 18.8,15.4 20,11.8 17,9.6 20.8,9.6" fill="currentColor" opacity="0.85"/>
-</svg>
-<span class="text-[8px] font-josefin tracking-wider text-ginza-gold uppercase leading-none">HALAL</span>
-</div>
-<p class="text-[9px] tracking-widest text-ginza-ivory/50 uppercase">Japan Halal<br/>Association</p>
-</div>
-<div class="flex flex-col items-center gap-3">
-<div class="halal-cert-badge">
-<svg class="w-6 h-6 text-ginza-gold" viewBox="0 0 32 32" fill="none">
-<circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
-<path d="M16 8a8 8 0 1 0 0 16A6 6 0 1 1 16 8z" fill="currentColor" opacity="0.8"/>
-<path d="M21 9l1 3h3l-2.5 1.8 1 3L21 15l-3.5 1.8 1-3L16 12h3z" fill="currentColor" opacity="0.9"/>
-</svg>
-<span class="text-[8px] font-josefin tracking-wider text-ginza-gold uppercase leading-none">CERTIFIED</span>
-</div>
-<p class="text-[9px] tracking-widest text-ginza-ivory/50 uppercase">Muslim<br/>Friendly</p>
-</div>
-<div class="flex flex-col items-center gap-3">
-<div class="halal-cert-badge">
-<svg class="w-6 h-6 text-ginza-gold" viewBox="0 0 32 32" fill="none">
-<path d="M16 6 L16 18 M10 12 L16 6 L22 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="8" y="20" width="16" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-</svg>
-<span class="text-[8px] font-josefin tracking-wider text-ginza-gold uppercase leading-none">PRAYER</span>
-</div>
-<p class="text-[9px] tracking-widest text-ginza-ivory/50 uppercase">Prayer Room<br/>On-Site</p>
-</div>
+<span class="px-3 py-1 border border-ginza-gold/30 rounded">MUSLIM-FRIENDLY</span>
 </div>
 </div>
 </section>
@@ -756,8 +724,8 @@ To ensure comfort and convenience for our Muslim guests, we also provide a <span
 <div class="mb-1 text-[9px] font-josefin tracking-[0.35em] text-ginza-gold/60 uppercase">omakase</div>
 <div class="font-cormorant italic text-3xl tracking-widest text-ginza-gold mb-8">墨</div>
 <address class="not-italic text-sm text-ginza-ivory/60 mb-8 font-light leading-relaxed">
-〒{{ store.address_postal }} 東京都台東区浅草3丁目27-5<br/>
-{{ store.address_en }}<br/><br/>
+〒{{ store.address_postal }} {{ store.address_jp_line1 }}<br/>
+{{ store.address_en_line1 }}<br/><br/>
 Open {{ store.hours }}
 </address>
 <div class="flex justify-center gap-6 mb-12">
