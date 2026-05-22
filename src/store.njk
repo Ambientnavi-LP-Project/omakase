@@ -1,11 +1,12 @@
 ---
 pagination:
-  data: stores.stores
+  data: stores.pages
   size: 1
   alias: store
-permalink: "/{{ store.region }}/{{ store.slug }}/index.html"
+permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}index.html"
 eleventyComputed:
   title: "{{ store.name_full_en }}"
+  tablecheck_with_utm: "{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral"
 ---
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
@@ -14,6 +15,10 @@ eleventyComputed:
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>{{ store.name_full_en }}</title>
 <meta name="description" content="Halal-certified omakase featuring ultra-rare lean Wagyu and authentic Edomae sushi in the heart of Asakusa, Tokyo. Prayer room on-site. Alcohol-free menu.">
+{% if store.channel_id != "default" %}
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/">
+{% endif %}
 
 <!-- Google tag (gtag.js) - GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ stores.brand.ga4_id }}"></script>
@@ -24,7 +29,8 @@ eleventyComputed:
   gtag('config', '{{ stores.brand.ga4_id }}', {
     'store_name': '{{ store.slug }}',
     'store_area': '{{ store.region }}',
-    'brand': '{{ stores.brand.brand_slug }}'
+    'brand': '{{ stores.brand.brand_slug }}',
+    'channel': '{{ store.channel_id }}'
   });
 </script>
 
@@ -120,7 +126,7 @@ body { padding-bottom: 72px; }
     <strong>Reservations</strong>
     Recommended 2 weeks in advance
   </div>
-  <a href="{{ store.tablecheck_url }}" target="_blank" rel="noopener" class="sticky-cta-btn"
+  <a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="sticky-cta-btn"
      data-ga-event="reserve_click" data-ga-location="sticky_cta">
     RESERVE →
   </a>
@@ -145,7 +151,7 @@ body { padding-bottom: 72px; }
 <span class="header-divider"></span>
 <a class="nav-link" href="#access">Access</a>
 </div>
-<a href="{{ store.tablecheck_url }}" target="_blank" rel="noopener"
+<a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener"
    class="bg-ginza-gold text-ginza-black px-4 py-2 rounded-lg text-[10px] font-josefin font-semibold tracking-widest hover:bg-opacity-90 hover:scale-105 transition-all"
    data-ga-event="reserve_click" data-ga-location="header">
   RESERVE
@@ -177,7 +183,7 @@ Ultra-rare lean Wagyu. Halal certified.<br/>A dining experience crafted for the 
 </p>
 
 <div class="flex flex-col items-center gap-3 w-full max-w-xs mx-auto">
-  <a href="{{ store.tablecheck_url }}" target="_blank" rel="noopener"
+  <a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener"
      class="w-full bg-ginza-gold text-ginza-black font-josefin font-semibold rounded-lg tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_24px_rgba(201,169,110,0.3)] flex overflow-hidden"
      data-ga-event="reserve_click" data-ga-location="hero">
     <span class="flex-1 py-4 px-4 text-center">RESERVE YOUR SEAT</span>
@@ -635,7 +641,7 @@ Reservations recommended 2 weeks in advance.<br/>Walk-ins welcome subject to ava
     </span>
   </div>
 
-  <a href="{{ store.tablecheck_url }}" target="_blank" rel="noopener"
+  <a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener"
      class="w-full bg-ginza-gold text-ginza-black font-josefin font-bold py-4 rounded-lg tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_24px_rgba(201,169,110,0.3)] flex items-center justify-center gap-2"
      data-ga-event="reserve_click" data-ga-location="reservation_section">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -763,7 +769,7 @@ Open {{ store.hours }}
     </svg>
   </a>
   <a class="text-ginza-gold hover:text-white transition-colors"
-     href="{{ store.tablecheck_url }}" target="_blank" rel="noopener" aria-label="Reserve"
+     href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" aria-label="Reserve"
      data-ga-event="reserve_click" data-ga-location="footer">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>
@@ -800,7 +806,8 @@ Open {{ store.hours }}
         'event_label': location,
         'store_name': '{{ store.slug }}',
         'store_area': '{{ store.region }}',
-        'brand': '{{ stores.brand.brand_slug }}'
+        'brand': '{{ stores.brand.brand_slug }}',
+        'channel': '{{ store.channel_id }}'
       });
     }, true);
   }
