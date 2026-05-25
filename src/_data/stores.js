@@ -76,8 +76,6 @@ const STORES = [
     rating_count: "500+",
     rating_source: "Google reviews",
 
-    google_ads_id: "AW-17959279983",
-
     maps_embed: "https://www.google.com/maps?q=Omakase+Sushi+Wagyu+Asakusa+Tokyo&output=embed"
   },
 
@@ -115,8 +113,6 @@ const STORES = [
     rating: "4.8",
     rating_count: "300+",
     rating_source: "Google reviews",
-
-    google_ads_id: "AW-18160244247",
 
     maps_embed: "https://www.google.com/maps?q=Kyoto+Omakase+Sushi+Wagyu+Gion&output=embed"
   },
