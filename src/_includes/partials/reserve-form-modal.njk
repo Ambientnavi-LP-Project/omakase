@@ -242,6 +242,7 @@
             </svg>
           </div>
           <p style="font-size:10px;color:rgba(240,237,228,0.4);margin:4px 0 0;">📅 タップしてカレンダーから日付を選択 / Tap to pick from calendar</p>
+          <p id="r_date_note" style="display:none;font-size:10px;color:#e57373;margin:6px 0 0;line-height:1.5;"></p>
           {# 予約不可日の案内表示。配列が空なら何も出ない。 #}
           {% if store.form_config and store.form_config.blocked_dates and store.form_config.blocked_dates.length %}
           <p style="font-size:10px;color:#e57373;margin:6px 0 0;line-height:1.5;">
@@ -481,10 +482,12 @@
     window._reserveModalOpenedAt = Date.now();
 
     var today = new Date();
-    var minDate = today.getFullYear() + '-' +
-                  String(today.getMonth()+1).padStart(2,'0') + '-' +
-                  String(today.getDate()).padStart(2,'0');
-    document.getElementById('r_date').setAttribute('min', minDate);
+    function ymd_(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+    var minD = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    // 先頭の連続した予約不可日(工事休業等)はスキップし、最初に選べる日を min に設定
+    var _g = 0;
+    while (BLOCKED_DATES.indexOf(ymd_(minD)) !== -1 && _g < 366) { minD.setDate(minD.getDate() + 1); _g++; }
+    document.getElementById('r_date').setAttribute('min', ymd_(minD));
 
     // GA4 event
     if (typeof gtag === 'function') {
@@ -541,9 +544,12 @@
     var dateInput = document.getElementById('r_date');
     if (dateInput && BLOCKED_DATES.length) {
       dateInput.addEventListener('change', function() {
-        if (BLOCKED_DATES.indexOf(this.value) !== -1) {
-          alert('申し訳ございません。選択された日付は予約を受付しておりません。\n\nSorry, the selected date is unavailable. Please select another date.');
-          this.value = '';
+        var note = document.getElementById('r_date_note');
+        if (this.value && BLOCKED_DATES.indexOf(this.value) !== -1) {
+          this.value = '';   // alertを出さず静かにクリア（スマホのスクロール中に邪魔しない）
+          if (note) { note.textContent = '※ その日は予約を受付しておりません。別の日をお選びください / That date is unavailable. Please choose another date.'; note.style.display = 'block'; }
+        } else if (note) {
+          note.style.display = 'none';
         }
       });
     }
