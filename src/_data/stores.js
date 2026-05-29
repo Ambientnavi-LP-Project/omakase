@@ -1,228 +1,190 @@
-/**
- * 店舗データ定義(omakase業態)
- * 新しい店舗を追加するときは、stores配列に store オブジェクトを追加するだけ。
+/* ============================================================
+ * Phase 2 フロント変更（予約フォーム）
+ *  - GAS Web App の doGet で空き状況を取得 → 満席枠を選べなくする／残数表示
+ *  - 送信時に doPost で上限判定（ハード）。OKのときだけ EmailJS を発火。
  *
- * channels配列で、店舗ごとに複数のチャネル別ページを生成:
- *  - default → /{region}/{slug}/         (直接訪問・SEO)
- *  - japan   → /{region}/{slug}/japan/   (日本向け広告)
- *  - global  → /{region}/{slug}/global/  (海外向け広告)
- *  - map     → /{region}/{slug}/map/     (Googleマップ GBP)
- *
- * 予約ボタンを押すと、TableCheckリンクに channel に応じたUTMが自動付与:
- *  - default → ?utm_source=lp&utm_medium=referral
- *  - japan   → ?utm_source=lp-japan&utm_medium=referral
- *  - global  → ?utm_source=lp-global&utm_medium=referral
- *  - map     → ?utm_source=lp-map&utm_medium=referral
- *
- * 【予約導線の切り替え】reserve_system フィールドで店舗ごとに選択:
- *  - "tablecheck" → 予約ボタンを押すと外部TableCheck画面に遷移(現状の全店構成)
- *  - "form"       → ページ内モーダルで予約フォーム(EmailJS)を表示
- *
- * フォーム体制で必要な設定はすべて `form_config` にまとめてある。
- * 切り替えるときは store の reserve_system を "form" にして、
- * 必要なら form_config の値(EmailJS情報・工事休業日など)を上書きするだけ。
+ * ★前提: Phase 1 の変更（紹介者 r_referrer / store_slug 送信）が入っていること。
+ * ============================================================ */
+
+
+/* ------------------------------------------------------------
+ * 1) Web App のURL（デプロイ後の /exec を貼る）
+ *    <script> の冒頭、emailjs.init の近くに置く
+ * ------------------------------------------------------------ */
+const GAS_ENDPOINT = 'https://script.google.com/macros/s/XXXXXXXXXXXXXXXXXXXX/exec';
+
+// パスから店名スラッグを取得（japan/global/map のチャネル接尾辞は除外）
+function getStoreSlugFromPath() {
+  var segs = window.location.pathname.split('/').filter(function (s) {
+    return s && ['japan', 'global', 'map'].indexOf(s) === -1;
+  });
+  return segs[1] || '';
+}
+
+
+/* ------------------------------------------------------------
+ * 2) 空き状況の取得 → 希望時間セレクトに反映
+ *    日付が選ばれたタイミングで呼ぶ
+ * ------------------------------------------------------------ */
+async function refreshAvailability() {
+  var date = document.getElementById('r_date').value;
+  var timeSel = document.getElementById('r_time');
+  if (!date || !timeSel) return;
+
+  var slug = getStoreSlugFromPath();
+  try {
+    var res = await fetch(GAS_ENDPOINT + '?store=' + encodeURIComponent(slug) + '&date=' + encodeURIComponent(date));
+    var json = await res.json();
+    if (!json || !json.ok) return;
+
+    Array.prototype.forEach.call(timeSel.options, function (opt) {
+      if (!opt.value) return;                 // 先頭の "-" は無視
+      var slot = json.slots[opt.value];
+      if (!slot) return;
+      if (slot.full) {
+        opt.disabled = true;
+        opt.textContent = opt.value + '（満席 / Full）';
+        if (timeSel.value === opt.value) timeSel.value = '';  // 満席を選択済みなら解除
+      } else {
+        opt.disabled = false;
+        opt.textContent = opt.value + '（残り' + slot.remaining + '組 / ' + slot.remaining + ' left）';
+      }
+    });
+  } catch (err) {
+    // 取得失敗時はラベルそのまま。最終判定は送信時の doPost が行う。
+    console.warn('availability fetch failed', err);
+  }
+}
+
+
+/* ------------------------------------------------------------
+ * 3) 日付変更リスナーに refreshAvailability() を追加
+ *    既存の「工事休業日チェック」リスナーの末尾に1行足すだけ
+ * ------------------------------------------------------------
+ *  document.addEventListener('DOMContentLoaded', function() {
+ *    var dateInput = document.getElementById('r_date');
+ *    if (dateInput) {
+ *      dateInput.addEventListener('change', function() {
+ *        var selected = this.value;
+ *        if (BLOCKED_DATES.indexOf(selected) !== -1) {
+ *          alert('... 工事休業 ...');
+ *          this.value = '';
+ *          return;                  // ← 休業日なら空き取得しない
+ *        }
+ *        refreshAvailability();     // ★ 追加：空き状況を取得して枠に反映
+ *      });
+ *    }
+ *  });
  */
 
-// ============================================================
-// ブランド共通: フォーム送信時の EmailJS 設定
-// (全店共通。テンプレート側で store.location を送るので、
-//  メール本文の差別化はテンプレ側でやる)
-// ============================================================
-const FORM_DEFAULT = {
-  emailjs: {
-    public_key:        "6I-wkxv05ZwY-PpXa",
-    service_id:        "service_41qov79",
-    template_id_owner: "template_uk1m5wn",  // 店舗側へ届くメール
-    template_id_guest: "template_f9w6hmy"   // ゲストへの自動返信
-  },
-  // 予約不可日(YYYY-MM-DD)。店舗ごとに上書き可。
-  blocked_dates: []
-};
 
-const STORES = [
-  // ============================================================
-  // 1. 浅草古民家店(東京)
-  // ============================================================
-  {
-    region: "tokyo",
-    slug: "asakusa-kominka",
+/* ------------------------------------------------------------
+ * 4) confirmAndSubmit() を丸ごと差し替え
+ *    送信前に doPost で上限判定。OKなら EmailJS（メールはベストエフォート）。
+ *    満席なら送信ブロックして残数を更新。
+ * ------------------------------------------------------------ */
+async function confirmAndSubmit() {
+  var checkDetails = document.getElementById('confirm_check_details').checked;
+  var checkPolicy  = document.getElementById('confirm_check_policy').checked;
+  var errEl = document.getElementById('confirm_error');
 
-    name_full_en: "Omakase Sushi Wagyu (Muslim-Friendly) Tokyo Asakusa Restaurant",
-    name_short: "Omakase 墨 — Asakusa",
-    name_jp: "おまかせ 墨 浅草店",
-    name_zh: "浅草寿司和牛餐厅",
-
-    city: "Asakusa, Tokyo",
-    region_label: "Asakusa · Tokyo",
-    station_en: "Asakusa Station",
-    address_jp_line1: "東京都台東区浅草3丁目27-5",
-    address_en_line1: "3-27-5 Asakusa, Taito-ku, Tokyo",
-    address_postal: "111-0032",
-
-    tel_display: "03-3872-2010",
-    tel_raw: "+81338722010",
-
-    hours: "11:00 – 23:00",
-    hours_note: "Open Daily",
-
-    // ▼ 予約導線
-    reserve_system: "tablecheck",  // "tablecheck" | "form"
-    tablecheck_url: "https://www.tablecheck.com/shops/halal-omakase-asakusa/reserve",
-    form_config: FORM_DEFAULT,
-
-    maps_link: "https://maps.app.goo.gl/pxiMce5bhj1WMLpo9",
-
-    rating: "4.8",
-    rating_count: "500+",
-    rating_source: "Google reviews",
-
-    maps_embed: "https://www.google.com/maps?q=Omakase+Sushi+Wagyu+Asakusa+Tokyo&output=embed"
-  },
-
-  // ============================================================
-  // 2. 京都祇園店(京都)
-  // ============================================================
-  {
-    region: "kyoto",
-    slug: "gion",
-
-    name_full_en: "Kyoto Omakase Sushi & Wagyu Steak (Muslim-Friendly) Gion Restaurant",
-    name_short: "Omakase 墨 — Gion",
-    name_jp: "おまかせ 墨 祇園店",
-    name_zh: "京都寿司和牛餐厅",
-
-    city: "Gion, Kyoto",
-    region_label: "Gion · Kyoto",
-    station_en: "Gion-Shijo Station",
-    address_jp_line1: "京都府京都市東山区富永町135",
-    address_en_line1: "135 Tominaga-cho, Higashiyama-ku, Kyoto",
-    address_postal: "605-0078",
-
-    tel_display: "070-3527-8163",
-    tel_raw: "+817035278163",
-
-    hours: "11:00 – 23:00",
-    hours_note: "Open Daily",
-
-    reserve_system: "tablecheck",
-    tablecheck_url: "https://www.tablecheck.com/shops/5wshijo/reserve",
-    form_config: FORM_DEFAULT,
-
-    maps_link: "https://maps.app.goo.gl/TbMo3qDpCAJdZxQ28",
-
-    rating: "4.8",
-    rating_count: "300+",
-    rating_source: "Google reviews",
-
-    maps_embed: "https://www.google.com/maps?q=Kyoto+Omakase+Sushi+Wagyu+Gion&output=embed"
-  },
-
-  // ============================================================
-  // 3. 築地店(東京)
-  // ============================================================
-  {
-    region: "tokyo",
-    slug: "tsukiji",
-
-    name_full_en: "Tsukiji Fish Market Sushi Omakase & Wagyu (Muslim-Friendly) Restaurant",
-    name_short: "Omakase 墨 — Tsukiji",
-    name_jp: "おまかせ 墨 築地店",
-    name_zh: "筑地寿司和牛餐厅",
-
-    city: "Tsukiji, Tokyo",
-    region_label: "Tsukiji · Tokyo",
-    station_en: "Tsukiji Station",
-    address_jp_line1: "東京都中央区築地6丁目24-7",
-    address_en_line1: "6-24-7 Tsukiji, Chuo-ku, Tokyo",
-    address_postal: "104-0061",
-
-    tel_display: "090-3787-5518",
-    tel_raw: "+819037875518",
-
-    hours: "11:00 – 23:00",
-    hours_note: "Open Daily",
-
-    reserve_system: "tablecheck",
-    tablecheck_url: "https://www.tablecheck.com/shops/yakiniku-burger-ramen-zen/reserve",
-    form_config: FORM_DEFAULT,
-
-    maps_link: "https://maps.app.goo.gl/dUzfn2z9UQnkC8k57",
-
-    rating: "4.8",
-    rating_count: "500+",
-    rating_source: "Google reviews",
-
-    maps_embed: "https://www.google.com/maps?q=Tsukiji+Fish+Market+Sushi+Omakase+Wagyu&output=embed"
-  },
-
-  // ============================================================
-  // 4. 東心斎橋店(大阪)
-  // ============================================================
-  // ⏳ TODO: tablecheck_url / maps_link / maps_embed を確定したら差し替える
-  {
-    region: "osaka",
-    slug: "higashi-shinsaibashi",
-
-    name_full_en: "Osaka Omakase Sushi & Wagyu Steak Halal Dotonbori Restaurant",
-    name_short: "Omakase 墨 — Higashi-Shinsaibashi",
-    name_jp: "おまかせ 墨 東心斎橋店",
-    name_zh: "大阪寿司和牛餐厅",
-
-    city: "Higashi-Shinsaibashi, Osaka",
-    region_label: "Higashi-Shinsaibashi · Osaka",
-    station_en: "Shinsaibashi Station",
-    address_jp_line1: "大阪府大阪市中央区東心斎橋1-18-6 ギャラリービルディング 4F",
-    address_en_line1: "1-18-6 Higashi-Shinsaibashi, Chuo-ku, Osaka, Gallery Bldg. 4F",
-    address_postal: "542-0083",
-
-    tel_display: "090-4467-3409",
-    tel_raw: "+819081295414",
-
-    hours: "11:00 – 23:00",
-    hours_note: "Open Daily",
-
-    reserve_system: "tablecheck",
-    tablecheck_url: "TBD",     // ⏳ 確定したら差し替え
-    form_config: FORM_DEFAULT,
-
-    maps_link: "TBD",          // ⏳ GoogleマップURLが来たら差し替え
-
-    rating: "4.8",
-    rating_count: "100+",
-    rating_source: "Google reviews",
-
-    maps_embed: "TBD"          // ⏳ 埋め込みHTMLが来たら差し替え
+  if (!checkDetails || !checkPolicy) {
+    errEl.textContent = '両方にチェックを入れてください / Please check both boxes.';
+    errEl.style.display = 'block';
+    return;
   }
-];
+  errEl.style.display = 'none';
 
-const CHANNELS = [
-  { id: "default", suffix: "",        utm_source: "lp" },
-  { id: "japan",   suffix: "japan/",  utm_source: "lp-japan" },
-  { id: "global",  suffix: "global/", utm_source: "lp-global" },
-  { id: "map",     suffix: "map/",    utm_source: "lp-map" }
-];
+  var btn = document.getElementById('confirm_submit_btn');
+  var btnHtml = 'この内容で送信<br/><span style="font-size:9px;opacity:0.75;">CONFIRM &amp; SEND</span>';
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
 
-// 店舗 × チャネルの全組み合わせを生成
-const pages = [];
-STORES.forEach(store => {
-  CHANNELS.forEach(channel => {
-    pages.push({
-      ...store,
-      channel_id: channel.id,
-      channel_suffix: channel.suffix,
-      channel_utm_source: channel.utm_source
+  var name     = document.getElementById('r_name').value.trim();
+  var email    = document.getElementById('r_email').value.trim();
+  var phone    = document.getElementById('r_phone').value.trim();
+  var referrer = document.getElementById('r_referrer').value.trim();
+  var course   = document.getElementById('r_course').value;
+  var guests   = document.getElementById('r_guests').value;
+  var time     = document.getElementById('r_time').value;
+  var date     = document.getElementById('r_date').value;
+  var message  = document.getElementById('r_message').value.trim();
+
+  var source = window.location.pathname;
+  var slug = getStoreSlugFromPath();
+  var segsRegion = source.split('/').filter(function (s) { return s && ['japan', 'global', 'map'].indexOf(s) === -1; });
+
+  var params = {
+    name, email, phone, referrer, course, guests, time, date, message,
+    source_path:  source,
+    store_slug:   slug,
+    store_region: segsRegion[0] || '',
+    location: '新宿三丁目店',
+    location_key: 'shinjuku',
+    address_jp: '東京都新宿区新宿3-7-5 一兆ビル 2F',
+    address_en: 'Tokyo, Shinjuku-ku, Shinjuku 3-7-5, Iccho Bldg. 2F'
+  };
+
+  // --- ① 上限判定（ハード）。ここで枠を確保し、確定行の書込み＆Slackも実施される ---
+  var capRes;
+  try {
+    var capResp = await fetch(GAS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // preflight回避
+      body: JSON.stringify(params)
     });
-  });
-});
+    capRes = await capResp.json();
+  } catch (err) {
+    errEl.textContent = '空き状況の確認に失敗しました。通信環境をご確認のうえ、もう一度お試しください。/ Failed to verify availability. Please try again.';
+    errEl.style.display = 'block';
+    btn.innerHTML = btnHtml;
+    btn.disabled = false;
+    return;
+  }
 
-module.exports = {
-  brand: {
-    domain: "japan-omakase.wagyu-sushi.com",
-    ga4_id: "G-71QJSRH923",
-    brand_name: "Halal Omakase Sushi & Wagyu",
-    brand_slug: "japan-omakase"
-  },
-  stores: STORES,
-  channels: CHANNELS,
-  pages: pages
-};
+  if (!capRes || !capRes.ok) {
+    if (capRes && capRes.reason === 'full') {
+      errEl.textContent = '申し訳ございません。選択された時間枠は満席です。別の時間をお選びください。/ This time slot is fully booked. Please choose another time.';
+    } else if (capRes && capRes.reason === 'busy') {
+      errEl.textContent = 'アクセスが集中しています。数秒後にもう一度お試しください。/ Busy now, please retry in a few seconds.';
+    } else {
+      errEl.textContent = 'エラーが発生しました。再度お試しください。/ An error occurred. Please try again.';
+    }
+    errEl.style.display = 'block';
+    btn.innerHTML = btnHtml;
+    btn.disabled = false;
+    await refreshAvailability();   // 満席表示を最新化
+    return;
+  }
+
+  // --- ② 枠確保OK = 予約は確定済み。メールはベストエフォート（失敗しても成功画面） ---
+  params.booking_id = capRes.booking_id;
+  try {
+    await emailjs.send('service_41qov79', 'template_uk1m5wn', params);
+    await emailjs.send('service_41qov79', 'template_f9w6hmy', params);
+  } catch (mailErr) {
+    // 予約自体は確定（シート＆Slack済み）。メール失敗はログのみ。
+    console.warn('EmailJS failed but booking is recorded:', mailErr);
+  }
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'reservation_form_submit',
+    form_guests: guests,
+    form_date: date,
+    form_course: course,
+    source_path: source,
+    booking_id: capRes.booking_id
+  });
+
+  // 成功画面へ
+  document.getElementById('confirmDialog').style.display = 'none';
+  document.getElementById('reserveForm').style.display = 'none';
+  document.getElementById('reserveSuccess').style.display = 'block';
+  var brushSvg = document.getElementById('sumiBrushSvg');
+  if (brushSvg) {
+    brushSvg.classList.remove('drawing');
+    void brushSvg.offsetWidth;
+    brushSvg.classList.add('drawing');
+  }
+}
