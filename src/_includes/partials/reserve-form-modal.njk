@@ -230,7 +230,7 @@
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
           <div><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">人数 / Guests *</label><select id="r_guests" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8+</option></select></div>
-          <div><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">希望時間 / Time *</label><select id="r_time" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"><option value="">-</option><option>12:00</option><option>14:00</option><option>17:00</option><option>20:00</option></select></div>
+          <div><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">希望時間 / Time *</label><select id="r_time" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"><option value="">-</option><option value="12:00">12:00</option><option value="14:00">14:00</option><option value="17:00">17:00</option><option value="20:00">20:00</option></select></div>
         </div>
 
         <div style="margin-bottom:16px;">
@@ -257,10 +257,9 @@
           <p style="margin:0 0 4px;">・24時間前以内：¥5,000 / person &nbsp;|&nbsp; Within 24 hours: ¥5,000 / person</p>
           <p style="margin:0 0 10px;">・48時間前以内：¥2,500 / person &nbsp;|&nbsp; Within 48 hours: ¥2,500 / person</p>
           <hr style="border:none;border-top:1px solid rgba(201,169,110,0.15);margin:8px 0;"/>
-          <p style="margin:0 0 10px;color:rgba(240,237,228,0.4);">※ このフォームでの送信は予約確定ではありません。{{ stores.brand.brand_name }} からの予約確定メールをお待ちください。<br/><br/>* This form does not confirm your reservation. Please wait for a confirmation email from {{ stores.brand.brand_name }}.</p>
           <hr style="border:none;border-top:1px solid rgba(201,169,110,0.15);margin:8px 0;"/>
           {% if store.tel_display != 'TBD' %}
-          <p style="margin:0;color:rgba(201,169,110,0.75);font-weight:600;">※ 当日予約の場合、お席の確認が遅れることがございますので、<a href="tel:{{ store.tel_raw }}" style="color:#c9a96e;text-decoration:underline;">{{ store.tel_display }}</a> までお電話ください。<br/><br/><span style="color:rgba(240,237,228,0.5);font-weight:400;">* For same-day reservations, seat confirmation may be delayed. Please call <a href="tel:{{ store.tel_raw }}" style="color:#c9a96e;text-decoration:underline;">{{ store.tel_display }}</a>.</span></p>
+          <p style="margin:0;color:rgba(240,237,228,0.6);font-weight:400;">* For urgent inquiries, please call us at <a href="tel:{{ store.tel_raw }}" style="color:#c9a96e;text-decoration:underline;">{{ store.tel_display }}</a>.</p>
           {% endif %}
         </div>
 
@@ -439,7 +438,7 @@
           if (timeSel.value === opt.value) timeSel.value = '';
         } else {
           opt.disabled = false;
-          opt.textContent = opt.value + '（残り' + slot.remaining + '組 / ' + slot.remaining + ' left）';
+          opt.textContent = opt.value;   // 残り枠は表示しない
         }
       });
     } catch (err) { console.warn('availability fetch failed', err); }
@@ -684,12 +683,12 @@
       params.booking_id = capRes.booking_id;
     }
 
-    // 確定済み。メールはベストエフォート（失敗しても成功画面）
-    try {
-      await emailjs.send(EMAILJS_CFG.service_id, EMAILJS_CFG.template_id_owner, params);
-      await emailjs.send(EMAILJS_CFG.service_id, EMAILJS_CFG.template_id_guest, params);
-    } catch (mailErr) {
-      console.warn('EmailJS failed but booking recorded:', mailErr);
+    // 確定済み。メールは待たずにバックグラウンド送信（予約はdoPostで確定済み → SENDINGの固まり防止）
+    if (typeof emailjs !== 'undefined' && EMAILJS_CFG.public_key) {
+      emailjs.send(EMAILJS_CFG.service_id, EMAILJS_CFG.template_id_owner, params)
+        .catch(function (e) { console.warn('owner mail failed:', e); });
+      emailjs.send(EMAILJS_CFG.service_id, EMAILJS_CFG.template_id_guest, params)
+        .catch(function (e) { console.warn('guest mail failed:', e); });
     }
 
     if (typeof gtag === 'function') {
