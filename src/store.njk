@@ -36,6 +36,18 @@ eleventyComputed:
   });
 </script>
 
+{% if store.slug == "shinjuku-sanchome" %}
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17988602222"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-17988602222');
+</script>
+{% endif %}
+
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
