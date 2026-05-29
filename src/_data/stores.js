@@ -271,6 +271,7 @@ module.exports = {
   brand: {
     domain: "japan-omakase.wagyu-sushi.com",
     ga4_id: "G-71QJSRH923",
+    gas_endpoint: "https://script.google.com/macros/s/AKfycbyqKnuZysH7fLhL7etze1eMOuS003cB5v2YIQeBfhRFGE19RpD8oA0HHOTMizYRRDda/exec",
     brand_name: "Halal Omakase Sushi & Wagyu",
     brand_slug: "japan-omakase"
   },
