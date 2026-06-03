@@ -371,6 +371,7 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
 </div>
 </section>
 
+{% if false %}
 <div class="relative h-48 overflow-hidden">
 <img src="/images/hero.jpg" alt="" class="w-full h-full object-cover object-center"/>
 <div class="absolute inset-0" style="background:linear-gradient(to bottom, #090909 0%, transparent 30%, transparent 70%, #090909 100%);"></div>
@@ -378,7 +379,9 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
 <p class="font-cormorant italic text-2xl text-ginza-ivory/80 tracking-widest">— Course Selection —</p>
 </div>
 </div>
+{% endif %}
 
+{% if false %}
 <!-- COURSE SELECTION -->
 <section class="reveal py-16 bg-ginza-black" id="courses">
 <div class="px-6 max-w-3xl mx-auto">
@@ -530,6 +533,7 @@ window.addEventListener('load', function() {
 
 </div>
 </section>
+{% endif %}
 
 <!-- REVIEWS / VOICES -->
 <section class="reveal py-20 bg-ginza-black border-t border-ginza-gold/10" id="reviews">
@@ -825,21 +829,10 @@ Open {{ store.hours }}
 </div>
 </footer>
 
-{# ============================================================
-   予約導線: フォーム版モーダル
-   store.reserve_system == "form" のときだけマウントされる。
-   TableCheck版のときは <a> リンクで外部遷移するため不要。
-   ============================================================ #}
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
   {% include "partials/reserve-form-modal.njk" %}
 {% endif %}
 
-{# ============================================================
-   予約導線: 電話案内モーダル
-   store.tablecheck_url == "TBD" のときだけマウントされる。
-   TableCheckのURLがまだ準備できていない店舗向けに、
-   電話予約をご案内するゴールド枠モーダルを表示する。
-   ============================================================ #}
 {% if store.is_form_reserve != 'true' and is_form_reserve != 'true' and store.tablecheck_url == 'TBD' %}
 <style>
   .call-modal-backdrop {
@@ -986,7 +979,6 @@ Open {{ store.hours }}
       });
     }
   }
-  // Escapeキーで閉じる
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeCallReserveModal();
   });
