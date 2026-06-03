@@ -51,7 +51,7 @@ eleventyComputed:
 
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Epilogue:wght@300;400;600&family=Josefin+Sans:wght@300;400;600&family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Epilogue:wght@300;400;600&family=Josefin+Sans:wght@300;400;600&family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet"/>
 
 <script>
 tailwind.config = {
@@ -65,7 +65,8 @@ tailwind.config = {
       },
       fontFamily: {
         'epilogue': ['Epilogue', 'sans-serif'],
-        'cormorant': ['Cormorant Garamond', 'serif'],
+        'cormorant': ['Playfair Display', 'serif'],
+        'playfair': ['Playfair Display', 'serif'],
         'josefin': ['Josefin Sans', 'sans-serif'],
       },
       animation: { 'ken-burns': 'kenburns 20s ease-in-out infinite alternate' },
@@ -107,7 +108,7 @@ body { padding-bottom: 72px; }
 .map-wrapper { position:relative; width:100%; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; border:1px solid rgba(201,169,110,0.2); }
 .map-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; filter:grayscale(30%) contrast(1.05); }
 .jp-text { font-family: 'Noto Serif JP', serif; font-weight: 300; letter-spacing: 0.15em; }
-.year-badge { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:3.5rem; color:rgba(201,169,110,0.2); line-height:1; }
+.year-badge { font-family:'Playfair Display',serif; font-style:normal; font-size:3.5rem; color:rgba(201,169,110,0.2); line-height:1; }
 .section-label { font-size:10px; letter-spacing:0.3em; color:rgba(201,169,110,0.6); text-transform:uppercase; }
 .slide { transition: opacity 1.2s ease-in-out; }
 .course-scroll { display:flex; gap:16px; overflow-x:auto; padding:8px 0 16px; -ms-overflow-style:none; scrollbar-width:none; }
@@ -175,7 +176,7 @@ body { padding-bottom: 72px; }
 
 /* ===== Hero (hero1: SP=portrait full, PC=16:11 center-crop) ===== */
 #hero-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#070707;overflow:hidden;}
-.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;filter:brightness(1.06) saturate(1.05) contrast(1.04);}
+.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;filter:brightness(0.92) saturate(1.06) contrast(1.06);}
 /* PC: show hero1 as a 16:11 window, cropping top/bottom, centered */
 @media (min-width:768px){
   #hero{height:auto;aspect-ratio:16/11;max-height:88vh;}
@@ -252,7 +253,7 @@ body { padding-bottom: 72px; }
 <img src="/images/top.jpg" alt="" class="w-8 h-8 rounded-full object-cover border border-ginza-gold/40 flex-shrink-0"/>
 <div class="flex flex-col leading-none min-w-0">
 <span class="text-[8px] tracking-[0.3em] text-ginza-gold/60 uppercase mb-1">Gastronomic Tour of Japan</span>
-<span class="text-[10px] md:text-[11px] text-ginza-gold leading-tight font-cormorant italic truncate">{{ store.name_full_en }}</span>
+<span class="text-[10px] md:text-[11px] text-ginza-gold leading-tight font-cormorant truncate">{{ store.name_full_en }}</span>
 </div>
 </div>
 <div class="hidden xs:flex items-center gap-4 flex-shrink-0">
@@ -357,7 +358,7 @@ Wagyu &amp; Sushi<br/>Halal Omakase Experience
 <section class="reveal py-14 md:py-20 bg-ginza-black" id="experience">
 <div class="text-center mb-9 px-6 max-w-2xl mx-auto">
 <p class="section-label mb-4">The Experience</p>
-<h3 class="font-cormorant italic text-2xl md:text-3xl leading-snug mb-5">A Journey Through Japan</h3>
+<h3 class="font-cormorant text-2xl md:text-3xl leading-snug mb-5">A Journey Through Japan</h3>
 <p class="text-sm font-light text-ginza-ivory/80 leading-relaxed">
 A journey through Japan's food culture — wagyu, sushi, and projection-mapped dining. Muslim-friendly omakase, crafted for travelers from around the world.
 </p>
@@ -383,12 +384,12 @@ A journey through Japan's food culture — wagyu, sushi, and projection-mapped d
 <section class="reveal py-16 bg-ginza-black" id="menu">
 <div class="text-center mb-10 px-6">
 <p class="section-label mb-4">Menu · Mastery</p>
-<h3 class="font-cormorant italic text-3xl mb-4 leading-snug">"A Journey Through Japan"</h3>
+<h3 class="font-cormorant text-3xl mb-4 leading-snug">"A Journey Through Japan"</h3>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
 Beyond our signature courses, we also offer a selection of premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.
 </p>
 </div>
-<div class="grid grid-cols-3 gap-2 md:gap-3 px-3 md:px-6 mb-3 md:mb-4 max-w-5xl mx-auto">
+<div class="grid grid-cols-3 gap-2 md:gap-3 px-3 md:px-6 mb-10 md:mb-14 max-w-5xl mx-auto">
 <div class="relative overflow-hidden rounded-lg group" style="aspect-ratio:3/2;">
 <img alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi1.jpg"/>
 </div>
@@ -422,7 +423,7 @@ Beyond our signature courses, we also offer a selection of premium dishes — cr
 <div class="max-w-3xl mx-auto px-8">
 <div class="text-center mb-12">
 <p class="section-label mb-4">Our Story</p>
-<h3 class="font-cormorant italic text-3xl leading-snug">The Story Begins in 1962</h3>
+<h3 class="font-cormorant text-3xl leading-snug">The Story Begins in 1962</h3>
 </div>
 <div class="flex items-start gap-4 mb-10">
 <div class="flex-shrink-0 text-center">
@@ -436,7 +437,7 @@ The first generation started this journey as a Wagyu merchant. A craftsman who f
 </div>
 </div>
 <div class="relative mb-10 pl-6 border-l border-ginza-gold/30">
-<p class="font-cormorant italic text-xl leading-relaxed text-ginza-ivory/90 mb-3">
+<p class="font-cormorant text-xl leading-relaxed text-ginza-ivory/90 mb-3">
 "Wagyu was never a 'special occasion treat' for me. I have known its taste since I was a child and it was always close to me."
 </p>
 <p class="text-[10px] font-josefin tracking-widest text-ginza-gold/60 uppercase">— 5th Generation Owner</p>
@@ -471,7 +472,7 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
 
 <div class="text-center mb-10">
 <p class="section-label mb-4">The Experience</p>
-<h3 class="font-cormorant italic text-3xl mb-4 leading-snug">Wagyu &amp; Sushi Course<br/>× Projection Mapping</h3>
+<h3 class="font-cormorant text-3xl mb-4 leading-snug">Wagyu &amp; Sushi Course<br/>× Projection Mapping</h3>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
 Not just a meal — a journey through Japan. Each course unfolds alongside a projection-mapped experience of Japanese culture and travel, served Muslim-friendly.
 </p>
@@ -517,7 +518,7 @@ A lineup as varied as your appetite — from a sushi-focused journey, to wagyu c
 <div class="p-5">
 <span class="cat-badge">{% if c.cat == 'sushi' %}<svg viewBox='0 0 24 24' fill='currentColor'><ellipse cx='12' cy='9' rx='9' ry='4'/><path d='M3 9v3c0 2.2 4 4 9 4s9-1.8 9-4V9' fill='none' stroke='currentColor' stroke-width='1.5'/></svg>Sushi{% elif c.cat == 'wagyu' %}<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M4 7c2-3 14-3 16 0 1.5 2 1 6-2 7-1 4-9 4-10 0-3-1-3.5-5-2-7z'/></svg>Wagyu / Beef{% else %}<svg viewBox='0 0 24 24' fill='currentColor'><circle cx='12' cy='12' r='9'/></svg>Sushi &amp; Wagyu{% endif %}</span>
 <p class="text-[9px] section-label mb-1">{{ c.tier }}</p>
-<p class="font-cormorant italic text-xl mb-3">{{ c.name }}</p>
+<p class="font-cormorant text-xl mb-3">{{ c.name }}</p>
 <div class="flex items-baseline gap-2 mb-1">
 <span class="text-ginza-gold font-josefin font-bold">&yen;{{ comma(total) }}</span>
 <span class="text-ginza-ivory/35 text-[9px]">(&yen;{{ comma(incl) }} incl. tax)</span>
@@ -556,7 +557,7 @@ function toggleCourse(id) {
 <div class="max-w-3xl mx-auto px-6">
   <div class="text-center mb-10">
     <p class="section-label mb-4">Guest Voices</p>
-    <h3 class="font-cormorant italic text-3xl mb-3">From Around the World</h3>
+    <h3 class="font-cormorant text-3xl mb-3">From Around the World</h3>
     <p class="text-sm font-light text-ginza-ivory/50 max-w-sm mx-auto leading-relaxed">
       A selection of impressions shared by our guests.<br/>
       <span class="text-ginza-ivory/30 text-[11px]">※ Sample voices · to be replaced with verified reviews</span>
@@ -569,11 +570,11 @@ function toggleCourse(id) {
         <span class="text-ginza-gold text-sm">★★★★★</span>
         <span class="text-[10px] text-ginza-ivory/40 font-josefin tracking-wider ml-2">TRIPADVISOR</span>
       </div>
-      <p class="font-cormorant italic text-base leading-relaxed text-ginza-ivory/85 mb-4">
+      <p class="font-cormorant text-base leading-relaxed text-ginza-ivory/85 mb-4">
         "Beautifully presented Wagyu, thoughtfully served. The Muslim-friendly menu meant my family from Dubai could fully enjoy the experience. Truly felt at home."
       </p>
       <div class="flex items-center gap-3 pt-3 border-t border-ginza-gold/10">
-        <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant italic text-sm">A</div>
+        <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant text-sm">A</div>
         <div>
           <p class="text-[11px] font-josefin tracking-wider text-ginza-ivory/70">Ahmed K.</p>
           <p class="text-[9px] text-ginza-ivory/40 tracking-widest uppercase">Dubai · UAE</p>
@@ -586,11 +587,11 @@ function toggleCourse(id) {
         <span class="text-ginza-gold text-sm">★★★★★</span>
         <span class="text-[10px] text-ginza-ivory/40 font-josefin tracking-wider ml-2">GOOGLE</span>
       </div>
-      <p class="font-cormorant italic text-base leading-relaxed text-ginza-ivory/85 mb-4">
+      <p class="font-cormorant text-base leading-relaxed text-ginza-ivory/85 mb-4">
         "The course was theatrical — watching the chef carve the wagyu felt like a performance. The quality of the beef is on another level. Worth every yen."
       </p>
       <div class="flex items-center gap-3 pt-3 border-t border-ginza-gold/10">
-        <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant italic text-sm">J</div>
+        <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant text-sm">J</div>
         <div>
           <p class="text-[11px] font-josefin tracking-wider text-ginza-ivory/70">Jennifer M.</p>
           <p class="text-[9px] text-ginza-ivory/40 tracking-widest uppercase">New York · USA</p>
@@ -603,11 +604,11 @@ function toggleCourse(id) {
         <span class="text-ginza-gold text-sm">★★★★★</span>
         <span class="text-[10px] text-ginza-ivory/40 font-josefin tracking-wider ml-2">GOOGLE</span>
       </div>
-      <p class="font-cormorant italic text-base leading-relaxed text-ginza-ivory/85 mb-4">
+      <p class="font-cormorant text-base leading-relaxed text-ginza-ivory/85 mb-4">
         「接待で利用しました。海外のお客様に和牛と寿司の両方を体験していただけて大変喜ばれました。静かな個室と丁寧な英語対応で安心してお任せできます。」
       </p>
       <div class="flex items-center gap-3 pt-3 border-t border-ginza-gold/10">
-        <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant italic text-sm">T</div>
+        <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant text-sm">T</div>
         <div>
           <p class="text-[11px] font-josefin tracking-wider text-ginza-ivory/70">田中 宏之 様</p>
           <p class="text-[9px] text-ginza-ivory/40 tracking-widest uppercase">Tokyo · Japan</p>
@@ -620,11 +621,11 @@ function toggleCourse(id) {
         <span class="text-ginza-gold text-sm">★★★★★</span>
         <span class="text-[10px] text-ginza-ivory/40 font-josefin tracking-wider ml-2">TRIPADVISOR</span>
       </div>
-      <p class="font-cormorant italic text-base leading-relaxed text-ginza-ivory/85 mb-4">
+      <p class="font-cormorant text-base leading-relaxed text-ginza-ivory/85 mb-4">
         "真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。"
       </p>
       <div class="flex items-center gap-3 pt-3 border-t border-ginza-gold/10">
-        <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant italic text-sm">L</div>
+        <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant text-sm">L</div>
         <div>
           <p class="text-[11px] font-josefin tracking-wider text-ginza-ivory/70">Lin H.</p>
           <p class="text-[9px] text-ginza-ivory/40 tracking-widest uppercase">Hong Kong</p>
@@ -637,11 +638,11 @@ function toggleCourse(id) {
         <span class="text-ginza-gold text-sm">★★★★★</span>
         <span class="text-[10px] text-ginza-ivory/40 font-josefin tracking-wider ml-2">GOOGLE</span>
       </div>
-      <p class="font-cormorant italic text-base leading-relaxed text-ginza-ivory/85 mb-4">
+      <p class="font-cormorant text-base leading-relaxed text-ginza-ivory/85 mb-4">
         "As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail and respect for our needs really showed. The wagyu itself was sublime."
       </p>
       <div class="flex items-center gap-3 pt-3 border-t border-ginza-gold/10">
-        <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant italic text-sm">F</div>
+        <div class="w-8 h-8 rounded-full bg-ginza-gold/20 border border-ginza-gold/30 flex items-center justify-center text-ginza-gold font-cormorant text-sm">F</div>
         <div>
           <p class="text-[11px] font-josefin tracking-wider text-ginza-ivory/70">Farah S.</p>
           <p class="text-[9px] text-ginza-ivory/40 tracking-widest uppercase">Kuala Lumpur</p>
@@ -654,13 +655,13 @@ function toggleCourse(id) {
 
   <div class="mt-10 flex flex-wrap justify-center items-center gap-6 pt-8 border-t border-ginza-gold/10">
     <div class="text-center">
-      <p class="font-cormorant italic text-3xl text-ginza-gold leading-none mb-1">{{ store.rating }}</p>
+      <p class="font-cormorant text-3xl text-ginza-gold leading-none mb-1">{{ store.rating }}</p>
       <p class="text-ginza-gold text-sm mb-1">★★★★★</p>
       <p class="text-[9px] text-ginza-ivory/40 font-josefin tracking-widest uppercase">Google · {{ store.rating_count }} reviews</p>
     </div>
     <div class="w-px h-12 bg-ginza-gold/20"></div>
     <div class="text-center">
-      <p class="font-cormorant italic text-3xl text-ginza-gold leading-none mb-1">No.1</p>
+      <p class="font-cormorant text-3xl text-ginza-gold leading-none mb-1">No.1</p>
       <p class="text-[9px] text-ginza-ivory/40 font-josefin tracking-widest uppercase mt-2">Tripadvisor Tokyo<br/>Aug 2025 — Mar 2026 (flagship)</p>
     </div>
   </div>
@@ -671,7 +672,7 @@ function toggleCourse(id) {
 <section class="reveal py-20 px-6 text-center bg-ginza-black" id="reservation">
 <div class="max-w-[390px] mx-auto">
 <p class="section-label mb-4">Reserve</p>
-<h3 class="font-cormorant italic text-3xl mb-2">Begin Your Experience</h3>
+<h3 class="font-cormorant text-3xl mb-2">Begin Your Experience</h3>
 <p class="text-sm font-light text-ginza-ivory/50 mb-6 max-w-xs mx-auto">
 Reservations recommended 2 weeks in advance.<br/>Walk-ins welcome subject to availability.
 </p>
@@ -719,11 +720,13 @@ Reservations recommended 2 weeks in advance.<br/>Walk-ins welcome subject to ava
 
 <!-- ACCESS -->
 <section class="reveal py-20 px-6 bg-ginza-black" id="access">
-<div class="max-w-[390px] mx-auto">
+<div class="max-w-5xl mx-auto">
 <div class="text-center mb-10">
 <p class="section-label mb-4">Access</p>
-<h3 class="font-cormorant italic text-3xl">Find Us</h3>
+<h3 class="font-cormorant text-3xl">Find Us</h3>
 </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-start">
+<div class="max-w-[420px] mx-auto md:mx-0 w-full">
 <div class="mb-8 flex items-start gap-4">
 <div class="mt-1 flex-shrink-0 w-8 h-8 flex items-center justify-center border border-ginza-gold/30 rounded-full">
 <svg class="w-3.5 h-3.5 text-ginza-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -777,13 +780,17 @@ Open in Google Maps
 </ul>
 </div>
 </div>
+</div><!-- /left column -->
 {% if store.maps_embed != "TBD" %}
-<div class="map-wrapper">
+<div class="w-full md:sticky md:top-6">
+<div class="map-wrapper" style="padding-bottom:0;height:340px;">
 <iframe src="{{ store.maps_embed }}"
 allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ store.name_short }} Map">
 </iframe>
 </div>
+</div>
 {% endif %}
+</div><!-- /grid -->
 </div>
 </section>
 
@@ -796,7 +803,7 @@ allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" ti
 </svg>
 </div>
 <p class="section-label mb-3">Muslim-Friendly Dining</p>
-<h2 class="font-cormorant italic text-3xl mb-6">A Muslim-Friendly Dining Experience in {{ store.city.split(',')[0] }}</h2>
+<h2 class="font-cormorant text-3xl mb-6">A Muslim-Friendly Dining Experience in {{ store.city.split(',')[0] }}</h2>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-xs mb-4">
 Welcome to our restaurant — a warm, inclusive space where guests from all cultures can dine with peace of mind. We thoughtfully prepare pork-free, alcohol-free dishes, making us a trusted choice for Muslim travelers and families visiting Japan.
 </p>
@@ -815,7 +822,7 @@ Please feel free to share any dietary preferences or restrictions when making yo
 <footer class="py-16 px-8 bg-black/50 border-t border-white/5">
 <div class="text-center">
 <div class="mb-1 text-[9px] font-josefin tracking-[0.35em] text-ginza-gold/60 uppercase">omakase</div>
-<div class="font-cormorant italic text-lg md:text-xl tracking-wide text-ginza-gold mb-8 px-6 leading-snug">{{ store.name_full_en }}</div>
+<div class="font-cormorant text-lg md:text-xl tracking-wide text-ginza-gold mb-8 px-6 leading-snug">{{ store.name_full_en }}</div>
 <address class="not-italic text-sm text-ginza-ivory/60 mb-8 font-light leading-relaxed">
 〒{{ store.address_postal }} {{ store.address_jp_line1 }}<br/>
 {{ store.address_en_line1 }}<br/><br/>
