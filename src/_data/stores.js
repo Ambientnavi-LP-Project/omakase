@@ -50,6 +50,7 @@ const STORES = [
   {
     region: "tokyo",
     slug: "asakusa-kominka",
+    same_day_reserve: false,
 
     name_full_en: "Omakase Sushi Wagyu (Halal) Tokyo Asakusa Restaurant 浅草寿司和牛餐厅",
     name_short: "Omakase 墨 — Asakusa",
@@ -89,6 +90,7 @@ const STORES = [
   {
     region: "kyoto",
     slug: "gion",
+    same_day_reserve: false,
 
     name_full_en: "Kyoto Omakase Sushi & Wagyu Halal Gion Restaurant 京都寿司和牛餐厅",
     name_short: "Omakase 墨 — Gion",
@@ -127,6 +129,7 @@ const STORES = [
   {
     region: "tokyo",
     slug: "tsukiji",
+    same_day_reserve: false,
 
     name_full_en: "Tsukiji Fish Market Sushi Omakase & Wagyu (Halal) Restaurant 筑地寿司和牛餐厅",
     name_short: "Omakase 墨 — Tsukiji",
@@ -166,6 +169,7 @@ const STORES = [
   {
     region: "osaka",
     slug: "higashi-shinsaibashi",
+    same_day_reserve: false,
 
     name_full_en: "Osaka Omakase Sushi & Wagyu Steak Halal Dotonbori Restaurant 大阪寿司和牛餐厅",
     name_short: "Omakase 墨 — Higashi-Shinsaibashi",
@@ -204,6 +208,8 @@ const STORES = [
   {
     region: "tokyo",
     slug: "shinjuku-sanchome",
+    same_day_reserve: true,
+    price_adjust: 5000,  // 新宿三丁目のみ全コース税抜+5000(税込は×1.1で再計算)
 
     name_full_en: "Tokyo Omakase Sushi Wagyu (Muslim-Friendly) Shinjuku Restaurant 新宿寿司和牛餐厅",
     name_short: "Omakase 墨 — Shinjuku",
@@ -273,6 +279,26 @@ STORES.forEach(store => {
   });
 });
 
+// ============================================================
+// テスト用チャンネル(新宿三丁目だけ)
+// 本番URLを変えずに、/tokyo/shinjuku-sanchome/test/ で確認するための派生ページ。
+// channel_id が "default" 以外なので、テンプレ側で自動的に
+// noindex + canonical(本番URL) が付与され、本番SEOには影響しない。
+// 価格+5000・当日予約ありは store 側の price_adjust / same_day_reserve で反映済み。
+// 確認が済んだら、この test チャンネルのブロックは削除してよい。
+// ============================================================
+const TEST_TARGET_SLUG = "shinjuku-sanchome";
+const testStore = STORES.find(s => s.slug === TEST_TARGET_SLUG);
+const pagesTest = [];
+if (testStore) {
+  pagesTest.push({
+    ...testStore,
+    channel_id: "test",
+    channel_suffix: "test/",
+    channel_utm_source: "lp-test"
+  });
+}
+
 module.exports = {
   brand: {
     domain: "japan-omakase.wagyu-sushi.com",
@@ -283,5 +309,6 @@ module.exports = {
   },
   stores: STORES,
   channels: CHANNELS,
-  pages: pages
+  pages: pages,        // 本番用(default/japan/global/map)。testは含まない。
+  pagesTest: pagesTest // テスト用(新宿三丁目のtestチャンネルのみ)。store-test.njk が使う。
 };
