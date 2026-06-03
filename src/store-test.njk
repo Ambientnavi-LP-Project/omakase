@@ -128,10 +128,6 @@ body { padding-bottom: 72px; }
 .course-card .cat-bar{height:4px;width:100%;background:var(--cat);}
 .course-card .cat-badge{display:inline-flex;align-items:center;gap:5px;background:var(--cat-soft);color:var(--cat);border:1px solid var(--cat);border-radius:999px;padding:3px 9px;font-family:'Josefin Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;}
 .course-card .cat-badge svg{width:12px;height:12px;}
-/* empty course image -> elegant placeholder with category badge */
-.course-img-ph{display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:linear-gradient(135deg,#0d0d0d,#161616);}
-.course-img-ph .cat-badge{margin:0;transform:scale(1.15);}
-.aspect-\[4\/3\].img-fallback .course-img-ph{display:flex;}
 /* category legend chips */
 .cat-legend{display:inline-flex;align-items:center;gap:6px;font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--cat);}
 .cat-legend-dot{width:9px;height:9px;border-radius:50%;background:var(--cat);}
@@ -165,9 +161,11 @@ body { padding-bottom: 72px; }
 @keyframes loaderPulse{0%,100%{transform:scale(0.9);opacity:0.85;}50%{transform:scale(1.05);opacity:1;}}
 .loader-word{font-family:'Josefin Sans',sans-serif;font-weight:300;letter-spacing:0.42em;text-transform:uppercase;font-size:11px;color:rgba(201,169,110,0.85);padding-left:0.42em;overflow:hidden;white-space:nowrap;animation:loaderReveal 2s ease forwards;}
 @keyframes loaderReveal{0%{opacity:0;letter-spacing:0.7em;}100%{opacity:1;letter-spacing:0.42em;}}
-.loader-bar{margin-top:18px;width:120px;height:1px;background:rgba(201,169,110,0.18);overflow:hidden;}
-.loader-bar::after{content:'';display:block;height:100%;width:40%;background:linear-gradient(90deg,transparent,#c9a96e,transparent);animation:loaderSweep 1.3s ease-in-out infinite;}
-@keyframes loaderSweep{0%{transform:translateX(-120%);}100%{transform:translateX(330%);}}
+.loader-route{position:relative;margin-top:20px;width:180px;height:18px;}
+.loader-route::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:repeating-linear-gradient(90deg,rgba(201,169,110,0.5) 0 5px,transparent 5px 11px);transform:translateY(-50%);}
+.loader-plane{position:absolute;top:50%;left:0;width:16px;height:16px;color:#c9a96e;transform:translateY(-50%);animation:planeFly 2.0s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(201,169,110,0.6));}
+.loader-plane svg{width:100%;height:100%;transform:rotate(90deg);}
+@keyframes planeFly{0%{left:-6%;opacity:0;}15%{opacity:1;}85%{opacity:1;}100%{left:100%;opacity:0;}}
 
 /* ===== Section divider — projection light beam ===== */
 .pm-divider{position:relative;height:2px;width:100%;background:rgba(201,169,110,0.10);overflow:hidden;}
@@ -204,8 +202,12 @@ body { padding-bottom: 72px; }
     <span class="loader-ring"></span>
     <span class="loader-sun"></span>
   </div>
-  <div class="loader-word">Gastronomic Tour of Japan</div>
-  <div class="loader-bar"></div>
+  <div class="loader-word">Welcome — Gastronomic Tour of Japan</div>
+  <div class="loader-route">
+    <span class="loader-plane" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L11 19v-5.5z"/></svg>
+    </span>
+  </div>
 </div>
 <script>
 (function(){
@@ -344,10 +346,6 @@ Wagyu &amp; Sushi<br/>Halal Omakase Experience
     </span>
   </div>
 
-  <div class="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
-    <svg class="w-4 h-4 text-ginza-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
-    <span class="text-[10px] font-josefin tracking-widest uppercase">Muslim-Friendly · Alcohol Free</span>
-  </div>
 </div>
 </section>
 
@@ -400,7 +398,7 @@ Beyond our signature courses, we also offer a selection of premium dishes — cr
 <img alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi3.jpg"/>
 </div>
 </div>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 px-3 md:px-6 mb-10 max-w-5xl mx-auto">
+<div class="grid grid-cols-2 gap-2 md:gap-3 px-3 md:px-6 mb-10 max-w-2xl mx-auto">
 <div class="relative aspect-[4/5] overflow-hidden rounded-lg group">
 <img alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu-wagyu-steak.jpg"/>
 </div>
@@ -511,13 +509,8 @@ A lineup as varied as your appetite — from a sushi-focused journey, to wagyu c
 <div class="course-card cat-{{ c.cat }} relative bg-ginza-gold/5 {% if c.popular %}border-2 border-ginza-gold{% else %}border border-ginza-gold/20{% endif %}"{% if c.popular %} style="box-shadow:0 0 24px rgba(201,169,110,0.18);"{% endif %}>
 <div class="cat-bar"></div>
 {% if c.popular %}<div class="absolute top-3 right-3 bg-ginza-gold text-ginza-black text-[9px] font-josefin font-bold tracking-widest px-2.5 py-1 rounded-full z-10">MOST POPULAR</div>{% endif %}
-<div class="aspect-[4/3] w-full overflow-hidden bg-ginza-black/40 relative">
-{% if c.img_empty %}{% endif %}<img src="{{ c.img }}" alt="{{ c.name }}" loading="lazy" class="w-full h-full object-cover course-img" onerror="this.style.display='none';this.parentNode.classList.add('img-fallback');"/>
-<div class="course-img-ph"><span class="cat-badge">{% if c.cat == 'sushi' %}<svg viewBox='0 0 24 24' fill='currentColor'><ellipse cx='12' cy='9' rx='9' ry='4'/><path d='M3 9v3c0 2.2 4 4 9 4s9-1.8 9-4V9' fill='none' stroke='currentColor' stroke-width='1.5'/></svg>SUSHI{% elif c.cat == 'wagyu' %}<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M4 7c2-3 14-3 16 0 1.5 2 1 6-2 7-1 4-9 4-10 0-3-1-3.5-5-2-7z'/></svg>WAGYU{% else %}<svg viewBox='0 0 24 24' fill='currentColor'><circle cx='12' cy='12' r='9'/></svg>SUSHI &amp; WAGYU{% endif %}</span></div>
-</div>
-<div class="p-5">
+<div class="p-5 pt-6">
 <span class="cat-badge">{% if c.cat == 'sushi' %}<svg viewBox='0 0 24 24' fill='currentColor'><ellipse cx='12' cy='9' rx='9' ry='4'/><path d='M3 9v3c0 2.2 4 4 9 4s9-1.8 9-4V9' fill='none' stroke='currentColor' stroke-width='1.5'/></svg>Sushi{% elif c.cat == 'wagyu' %}<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M4 7c2-3 14-3 16 0 1.5 2 1 6-2 7-1 4-9 4-10 0-3-1-3.5-5-2-7z'/></svg>Wagyu / Beef{% else %}<svg viewBox='0 0 24 24' fill='currentColor'><circle cx='12' cy='12' r='9'/></svg>Sushi &amp; Wagyu{% endif %}</span>
-<p class="text-[9px] section-label mb-1">{{ c.tier }}</p>
 <p class="font-cormorant text-xl mb-3">{{ c.name }}</p>
 <div class="flex items-baseline gap-2 mb-1">
 <span class="text-ginza-gold font-josefin font-bold">&yen;{{ comma(total) }}</span>
