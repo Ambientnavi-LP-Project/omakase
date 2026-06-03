@@ -90,6 +90,27 @@
   .form-course-card-details { margin-top:10px; padding-top:10px; border-top:1px solid rgba(201,169,110,0.12); font-size:10px; color:rgba(240,237,228,0.55); line-height:1.65; }
   .form-course-card-details-row { display:flex; gap:8px; margin-bottom:3px; }
   .form-course-card-details-label { color:rgba(201,169,110,0.55); flex-shrink:0; width:42px; font-size:10px; }
+  /* course picker cards */
+  .cp-card{position:relative;border-radius:14px;overflow:hidden;margin-bottom:12px;background:rgba(201,169,110,0.04);border:1px solid rgba(201,169,110,0.2);}
+  .cp-card.cp-pop{border-color:var(--cpcol);}
+  .cp-bar{height:4px;background:var(--cpcol);}
+  .cp-body{padding:14px 16px 16px;}
+  .cp-pop-tag{position:absolute;top:10px;right:10px;background:#c9a96e;color:#090909;font-size:8px;font-weight:700;letter-spacing:0.12em;padding:3px 8px;border-radius:999px;font-family:'Josefin Sans',sans-serif;}
+  .cp-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(201,169,110,0.12);color:var(--cpcol);border:1px solid var(--cpcol);border-radius:999px;padding:2px 9px;font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;font-family:'Josefin Sans',sans-serif;margin-bottom:8px;}
+  .cp-name{font-family:'Cormorant Garamond',serif;font-size:19px;color:#f0ede4;margin-bottom:6px;line-height:1.15;}
+  .cp-price{display:flex;align-items:baseline;gap:6px;margin-bottom:3px;}
+  .cp-price-main{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:16px;color:#c9a96e;}
+  .cp-price-tax{font-size:9px;color:rgba(240,237,228,0.4);}
+  .cp-meta{font-family:'Josefin Sans',sans-serif;font-size:10px;color:rgba(240,237,228,0.5);margin-bottom:12px;}
+  .cp-detbtn{width:100%;background:none;border:1px solid rgba(201,169,110,0.3);color:rgba(201,169,110,0.8);font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:0.1em;padding:8px;border-radius:8px;cursor:pointer;}
+  .cp-detail{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
+  .cp-detail-inner{border-top:1px solid rgba(201,169,110,0.12);padding-top:10px;margin-top:10px;}
+  .cp-row{display:flex;gap:8px;margin-bottom:4px;font-size:10px;}
+  .cp-row-label{color:rgba(201,169,110,0.5);flex-shrink:0;width:54px;}
+  .cp-row-txt{color:rgba(240,237,228,0.6);}
+  .cp-row-hl{color:var(--cpcol);font-weight:500;}
+  .cp-sig{font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--cpcol);border:1px solid var(--cpcol);border-radius:999px;padding:1px 5px;margin-left:3px;}
+  .cp-select{width:100%;background:var(--cpcol);color:#0a0a0a;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:11px;border:none;border-radius:8px;cursor:pointer;margin-top:12px;}
 
   /* ===== Success screen animation ===== */
   .success-stage { position:relative; padding:40px 0 32px; text-align:center; overflow:hidden; }
@@ -158,82 +179,12 @@
 
         <div style="margin-bottom:16px;">
           <label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:8px;">コース / Course *</label>
-
-          <label class="form-course-card" id="course-card-sushi-standard" onclick="selectCourse('sushi-standard')">
-            <input type="radio" name="r_course_radio" value="Sushi Standard - ¥54,800 (¥60,280 inc.tax) / 8 courses 60-75 min"/>
-            <span class="check-mark"></span>
-            <div class="form-course-card-tier">Sushi Course · Standard</div>
-            <div class="form-course-card-name">Sushi Course Standard</div>
-            <div class="form-course-card-price">
-              <span class="form-course-card-price-main">¥54,800</span>
-              <span class="form-course-card-price-tax">(¥60,280 incl.tax)</span>
-            </div>
-            <div class="form-course-card-meta">8 courses · 60–75 min</div>
-          </label>
-
-          <label class="form-course-card" id="course-card-sushi-premium" onclick="selectCourse('sushi-premium')">
-            <input type="radio" name="r_course_radio" value="Sushi Premium - ¥74,800 (¥82,280 inc.tax) / 8 courses 60-75 min"/>
-            <span class="check-mark"></span>
-            <div class="form-course-card-tier">Sushi Course · Premium</div>
-            <div class="form-course-card-name">Sushi Course Premium</div>
-            <div class="form-course-card-price">
-              <span class="form-course-card-price-main">¥74,800</span>
-              <span class="form-course-card-price-tax">(¥82,280 incl.tax)</span>
-            </div>
-            <div class="form-course-card-meta">8 courses · 60–75 min</div>
-          </label>
-
-          <label class="form-course-card" id="course-card-wagyu-standard" onclick="selectCourse('wagyu-standard')">
-            <input type="radio" name="r_course_radio" value="Wagyu Standard - ¥54,800 (¥60,280 inc.tax) / 8 courses 60-75 min"/>
-            <span class="check-mark"></span>
-            <div class="form-course-card-tier">Wagyu Course · Standard</div>
-            <div class="form-course-card-name">Wagyu Course Standard</div>
-            <div class="form-course-card-price">
-              <span class="form-course-card-price-main">¥54,800</span>
-              <span class="form-course-card-price-tax">(¥60,280 incl.tax)</span>
-            </div>
-            <div class="form-course-card-meta">8 courses · 60–75 min</div>
-          </label>
-
-          <label class="form-course-card" id="course-card-kobe-premium" onclick="selectCourse('kobe-premium')">
-            <input type="radio" name="r_course_radio" value="Kobe Beef Premium - ¥74,800 (¥82,280 inc.tax) / 8 courses 60-75 min"/>
-            <span class="check-mark"></span>
-            <div class="form-course-card-tier">Kobe Beef Course · Premium</div>
-            <div class="form-course-card-name">Kobe Beef Course Premium</div>
-            <div class="form-course-card-price">
-              <span class="form-course-card-price-main">¥74,800</span>
-              <span class="form-course-card-price-tax">(¥82,280 incl.tax)</span>
-            </div>
-            <div class="form-course-card-meta">8 courses · 60–75 min</div>
-          </label>
-
-          <label class="form-course-card popular" id="course-card-sushi-wagyu-standard" onclick="selectCourse('sushi-wagyu-standard')">
-            <input type="radio" name="r_course_radio" value="Sushi & Wagyu Standard - ¥64,800 (¥71,280 inc.tax) / 8 courses 60-75 min"/>
-            <span class="check-mark"></span>
-            <div class="form-course-card-tier">Sushi & Wagyu · Standard</div>
-            <div class="form-course-card-name">Sushi & Wagyu Course Standard</div>
-            <div class="form-course-card-price">
-              <span class="form-course-card-price-main">¥64,800</span>
-              <span class="form-course-card-price-tax">(¥71,280 incl.tax)</span>
-            </div>
-            <div class="form-course-card-meta">8 courses · 60–75 min</div>
-          </label>
-
-          <label class="form-course-card" id="course-card-sushi-kobe-premium" onclick="selectCourse('sushi-kobe-premium')">
-            <input type="radio" name="r_course_radio" value="Sushi & Kobe Beef Premium - ¥84,800 (¥93,280 inc.tax) / 8 courses 60-75 min"/>
-            <span class="check-mark"></span>
-            <div class="form-course-card-tier">Sushi & Kobe Beef · Premium</div>
-            <div class="form-course-card-name">Sushi & Kobe Beef Course Premium</div>
-            <div class="form-course-card-price">
-              <span class="form-course-card-price-main">¥84,800</span>
-              <span class="form-course-card-price-tax">(¥93,280 incl.tax)</span>
-            </div>
-            <div class="form-course-card-meta">8 courses · 60–75 min</div>
-          </label>
-
+          <button type="button" id="course-trigger" onclick="openCoursePicker()" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:13px 14px;color:#f0ede4;font-size:14px;box-sizing:border-box;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <span id="course-trigger-label" style="color:rgba(240,237,228,0.5);">コースを選択 / Select a course</span>
+            <span style="color:#c9a96e;font-size:12px;flex-shrink:0;">▼</span>
+          </button>
           <input type="hidden" id="r_course" value=""/>
-
-          <p style="font-size:10px;color:rgba(240,237,228,0.4);margin:4px 0 0;line-height:1.5;">価格は1名様あたり / Prices are per person. All dishes Muslim-friendly.</p>
+          <p style="font-size:10px;color:rgba(240,237,228,0.4);margin:6px 0 0;line-height:1.5;">価格は1名様あたり / Prices are per person. All dishes Muslim-friendly.</p>
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
@@ -251,12 +202,6 @@
           </div>
           <p style="font-size:10px;color:rgba(240,237,228,0.4);margin:4px 0 0;">📅 タップしてカレンダーから日付を選択 / Tap to pick from calendar</p>
           <p id="r_date_note" style="display:none;font-size:10px;color:#e57373;margin:6px 0 0;line-height:1.5;"></p>
-          {# 予約不可日の案内表示。配列が空なら何も出ない。 #}
-          {% if store.form_config and store.form_config.blocked_dates and store.form_config.blocked_dates.length %}
-          <p style="font-size:10px;color:#e57373;margin:6px 0 0;line-height:1.5;">
-            ※ 予約受付不可日があります / Some dates are unavailable: please pick another date if selection is rejected.
-          </p>
-          {% endif %}
         </div>
 
         <div style="margin-bottom:20px;"><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">ご要望 / Special Requests</label><textarea id="r_message" rows="3" placeholder="Allergies, dietary requirements, special occasions..." style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;resize:vertical;-webkit-appearance:none;"></textarea></div>
@@ -374,6 +319,17 @@
   </div>
 </div>
 
+<!-- COURSE PICKER SUB-MODAL -->
+<div id="coursePicker" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.9);overflow-y:auto;-webkit-overflow-scrolling:touch;">
+  <div style="min-height:100%;display:flex;flex-direction:column;max-width:460px;margin:0 auto;padding:18px 16px 40px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#0a0a0a;padding:8px 0 12px;z-index:2;">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#f0ede4;margin:0;">Select Your Course</p>
+      <button type="button" onclick="closeCoursePicker()" aria-label="Close" style="background:none;border:none;color:#c9a96e;font-size:22px;cursor:pointer;line-height:1;">×</button>
+    </div>
+    <div id="cp-cards"></div>
+  </div>
+</div>
+
 <!-- EmailJS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
@@ -395,7 +351,8 @@
     address_en:   '{{ store.address_en_line1 }}'
   };
   // 当日予約の受付可否（store.same_day_reserve が false なら当日は電話案内）
-  var SAME_DAY_RESERVE = ('{{ store.same_day_reserve }}' !== 'false');
+  // テストページのみ：当日予約は受付けず電話案内へ固定（本番stores.jsは変更しない）
+  var SAME_DAY_RESERVE = false;
   var TEL_DISPLAY = '{{ store.tel_display }}';
   var TEL_RAW = '{{ store.tel_raw }}';
 
@@ -449,22 +406,84 @@
   // ============================================================
   // Course card radio selection
   // ============================================================
-  window.selectCourse = function(courseId) {
-    var ids = ['sushi-standard','sushi-premium','wagyu-standard','kobe-premium','sushi-wagyu-standard','sushi-kobe-premium'];
-    ids.forEach(function(id) {
-      var card = document.getElementById('course-card-' + id);
-      if (!card) return;
-      var radio = card.querySelector('input[type="radio"]');
-      if (id === courseId) {
-        card.classList.add('selected');
-        radio.checked = true;
-        document.getElementById('r_course').value = radio.value;
-      } else {
-        card.classList.remove('selected');
-        radio.checked = false;
-      }
+  // ============================================================
+  // Course picker (sub-modal with cards + collapsible details)
+  // ============================================================
+  var CP_COURSES = [
+    { id:'sushi-standard', cat:'sushi', name:'Sushi Course Standard', price:'¥59,800', tax:'¥65,780', meta:'8 courses · 60–75 min',
+      rows:[['序','Chilled Tofu',0],['八寸','Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame',0],['鮨','Temaki: Salmon & Ikura · Nigiri 3 kinds · Hand-Served Wagyu Sushi',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
+    { id:'sushi-premium', cat:'sushi', name:'Sushi Course Premium', price:'¥79,800', tax:'¥87,780', meta:'8 courses · 60–75 min',
+      rows:[['序','Chilled Tofu',0],['八寸','Premium Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Mini Ikura Bowl / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Sea Urchin · Temaki: Salmon & Ikura · Nigiri 6 kinds (incl. Urchin / Ikura Gunkan)',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
+    { id:'wagyu-standard', cat:'wagyu', name:'Wagyu Course Standard', price:'¥59,800', tax:'¥65,780', meta:'8 courses · 60–75 min',
+      rows:[['序','Chilled Tofu',0],['八寸','Appetizer Plate — Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Wagyu Shigureni',0],['温物','Wagyu Shabu-shabu & Dashi',0],['逸品','Wagyu Fillet Spring Roll',0],['和牛','Mini Wagyu Sukiyaki with Egg Yolk Sauce · Wagyu Steak',1],['椀・甘味','Miso Soup · Matcha & Dessert',0]] },
+    { id:'sushi-wagyu-standard', cat:'mix', name:'Sushi & Wagyu Course Standard', price:'¥69,800', tax:'¥76,780', meta:'8 courses · 60–75 min', popular:true,
+      rows:[['序','Chilled Tofu',0],['八寸','Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Salmon & Ikura · Nigiri 3 kinds',0],['温物','Wagyu Shabu-shabu & Dashi',0],['和牛','Hand-Served Wagyu Sushi',1],['茶と甘味・椀','Matcha & Dessert · Miso Soup',0]] },
+    { id:'kobe-premium', cat:'wagyu', name:'Kobe Beef Course Premium', price:'¥79,800', tax:'¥87,780', meta:'8 courses · 60–75 min',
+      rows:[['序','Chilled Tofu',0],['八寸','Kobe Beef Appetizer Plate — Kobe Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Kobe Shigureni',0],['温物','Kobe Beef Shabu-shabu & Dashi',0],['逸品','Wagyu Fillet Spring Roll',0],['神戸牛','Mini Kobe Beef Sukiyaki with Egg Yolk Sauce · Kobe Beef Steak',1],['椀・甘味','Miso Soup · Matcha & Dessert',0]] },
+    { id:'sushi-kobe-premium', cat:'mix', name:'Sushi & Kobe Beef Course Premium', price:'¥89,800', tax:'¥98,780', meta:'8 courses · 60–75 min',
+      rows:[['序','Chilled Tofu',0],['八寸','Kobe Beef Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Sea Urchin · Nigiri 3 kinds',0],['温物','Kobe Beef Shabu-shabu & Dashi',0],['逸品','Kobe Beef Steak',1],['神戸牛','Seared Kobe Beef Nigiri',1],['茶と甘味・椀','Matcha & Dessert · Miso Soup',0]] }
+  ];
+  var CP_CATCOLOR = { sushi:'#5dc9b0', wagyu:'#d36a5a', mix:'#c9a96e' };
+  var CP_CATLABEL = { sushi:'Sushi', wagyu:'Wagyu / Beef', mix:'Sushi & Wagyu' };
+
+  function cpBuildCards(){
+    var wrap = document.getElementById('cp-cards');
+    if (!wrap || wrap.dataset.built === '1') return;
+    var html = '';
+    CP_COURSES.forEach(function(c){
+      var col = CP_CATCOLOR[c.cat];
+      var rows = c.rows.map(function(r){
+        var cls = r[2] ? 'cp-row-hl' : 'cp-row-txt';
+        var tag = r[2] ? ' <span class="cp-sig">Signature</span>' : '';
+        return '<div class="cp-row"><span class="cp-row-label">'+r[0]+'</span><span class="'+cls+'">'+r[1]+tag+'</span></div>';
+      }).join('');
+      html += '<div class="cp-card'+(c.popular?' cp-pop':'')+'" style="--cpcol:'+col+';">'
+        + '<div class="cp-bar"></div>'
+        + (c.popular?'<div class="cp-pop-tag">MOST POPULAR</div>':'')
+        + '<div class="cp-body">'
+        + '<span class="cp-badge">'+CP_CATLABEL[c.cat]+'</span>'
+        + '<div class="cp-name">'+c.name+'</div>'
+        + '<div class="cp-price"><span class="cp-price-main">'+c.price+'</span><span class="cp-price-tax">('+c.tax+' incl.tax)</span></div>'
+        + '<div class="cp-meta">'+c.meta+'</div>'
+        + '<button type="button" class="cp-detbtn" data-toggle="'+c.id+'">詳細を見る / SEE DETAILS</button>'
+        + '<div class="cp-detail" id="cp-detail-'+c.id+'"><div class="cp-detail-inner">'+rows+'</div></div>'
+        + '<button type="button" class="cp-select" data-choose="'+c.id+'">このコースを選ぶ / SELECT</button>'
+        + '</div></div>';
     });
+    wrap.innerHTML = html;
+    wrap.dataset.built = '1';
+    wrap.addEventListener('click', function(e){
+      var t = e.target.closest('[data-toggle]');
+      if (t){ cpToggle(t.getAttribute('data-toggle')); return; }
+      var s = e.target.closest('[data-choose]');
+      if (s){ cpChoose(s.getAttribute('data-choose')); }
+    });
+  }
+  window.cpToggle = function(id){
+    var d = document.getElementById('cp-detail-'+id);
+    if (!d) return;
+    d.style.maxHeight = (d.style.maxHeight && d.style.maxHeight !== '0px') ? '0px' : (d.scrollHeight + 40)+'px';
   };
+  window.cpChoose = function(id){
+    var c = CP_COURSES.filter(function(x){return x.id===id;})[0];
+    if (!c) return;
+    var val = c.name + ' - ' + c.price + ' (' + c.tax + ' incl.tax) / ' + c.meta;
+    document.getElementById('r_course').value = val;
+    var lbl = document.getElementById('course-trigger-label');
+    if (lbl){ lbl.textContent = c.name + '  ' + c.price; lbl.style.color = '#f0ede4'; }
+    closeCoursePicker();
+  };
+  window.openCoursePicker = function(){
+    cpBuildCards();
+    document.getElementById('coursePicker').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  };
+  window.closeCoursePicker = function(){
+    document.getElementById('coursePicker').style.display = 'none';
+    // 親モーダルが開いているので body は hidden のままでよい
+  };
+  // 互換: 旧 selectCourse 呼び出しが残っていても落ちないように
+  window.selectCourse = function(courseId){ if (window.cpChoose) window.cpChoose(courseId); };
 
   // ============================================================
   // Open / Close modal
@@ -512,14 +531,8 @@
       var el = document.getElementById(id);
       if (el) el.value = '';
     });
-    ['sushi-standard','sushi-premium','wagyu-standard','kobe-premium','sushi-wagyu-standard','sushi-kobe-premium'].forEach(function(id) {
-      var card = document.getElementById('course-card-' + id);
-      if (card) {
-        card.classList.remove('selected');
-        var radio = card.querySelector('input[type="radio"]');
-        if (radio) radio.checked = false;
-      }
-    });
+    var ctl = document.getElementById('course-trigger-label');
+    if (ctl){ ctl.textContent = 'コースを選択 / Select a course'; ctl.style.color = 'rgba(240,237,228,0.5)'; }
     var cd1 = document.getElementById('confirm_check_details');
     var cd2 = document.getElementById('confirm_check_policy');
     if (cd1) cd1.checked = false;
