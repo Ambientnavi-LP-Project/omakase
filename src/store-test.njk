@@ -92,6 +92,15 @@ body { padding-bottom: 72px; }
 .sticky-cta-text strong { display:block; color:rgba(201,169,110,0.9); font-weight:600; font-size:12px; letter-spacing:0.08em; }
 .sticky-cta-btn { flex-shrink:0; background:#c9a96e; color:#090909; font-family:'Josefin Sans',sans-serif; font-weight:700; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; padding:12px 20px; border-radius:8px; white-space:nowrap; transition:transform 0.2s,opacity 0.2s; border:none; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; }
 .sticky-cta-btn:hover { transform:scale(1.04); opacity:0.92; }
+/* floating availability button (bottom-right) */
+.float-cta{position:fixed;right:16px;bottom:16px;z-index:100;display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:#c9a96e;color:#090909;border:none;cursor:pointer;text-decoration:none;border-radius:14px;padding:11px 18px;box-shadow:0 8px 28px rgba(0,0,0,0.45),0 0 0 1px rgba(201,169,110,0.5);transition:transform .2s,box-shadow .2s;animation:floatIn .6s ease both;}
+.float-cta:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 34px rgba(0,0,0,0.55),0 0 0 1px rgba(201,169,110,0.7);}
+@keyframes floatIn{0%{opacity:0;transform:translateY(20px);}100%{opacity:1;transform:translateY(0);}}
+.float-cta-viewers{display:flex;align-items:center;gap:6px;font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.06em;color:rgba(9,9,9,0.72);text-transform:uppercase;}
+.float-dot{width:7px;height:7px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 0 rgba(22,163,74,0.6);animation:pulseGreen 1.8s ease-in-out infinite;}
+@keyframes pulseGreen{0%{box-shadow:0 0 0 0 rgba(22,163,74,0.6);}70%{box-shadow:0 0 0 7px rgba(22,163,74,0);}100%{box-shadow:0 0 0 0 rgba(22,163,74,0);}}
+.float-cta-main{font-family:'Josefin Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;}
+@media (max-width:380px){.float-cta{right:10px;bottom:10px;padding:9px 14px;}.float-cta-main{font-size:12px;}}
 .halal-cert-badge { display:inline-flex; flex-direction:column; align-items:center; gap:6px; border:1.5px solid #c9a96e; border-radius:50%; width:88px; height:88px; justify-content:center; position:relative; background:radial-gradient(circle at center,rgba(201,169,110,0.08) 0%,transparent 70%); }
 .halal-cert-badge::before { content:''; position:absolute; inset:4px; border-radius:50%; border:0.5px dashed rgba(201,169,110,0.4); }
 .halal-cert-badge-wrap { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:2rem; }
@@ -110,6 +119,21 @@ body { padding-bottom: 72px; }
 }
 .course-detail-panel { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
 .course-detail-panel.open { max-height:600px; }
+/* course category accents */
+.cat-sushi{--cat:#5dc9b0;--cat-soft:rgba(93,201,176,0.12);}
+.cat-wagyu{--cat:#d36a5a;--cat-soft:rgba(211,106,90,0.12);}
+.cat-mix{--cat:#c9a96e;--cat-soft:rgba(201,169,110,0.14);}
+.course-card{position:relative;}
+.course-card .cat-bar{height:4px;width:100%;background:var(--cat);}
+.course-card .cat-badge{display:inline-flex;align-items:center;gap:5px;background:var(--cat-soft);color:var(--cat);border:1px solid var(--cat);border-radius:999px;padding:3px 9px;font-family:'Josefin Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;}
+.course-card .cat-badge svg{width:12px;height:12px;}
+/* empty course image -> elegant placeholder with category badge */
+.course-img-ph{display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:linear-gradient(135deg,#0d0d0d,#161616);}
+.course-img-ph .cat-badge{margin:0;transform:scale(1.15);}
+.aspect-\[4\/3\].img-fallback .course-img-ph{display:flex;}
+/* category legend chips */
+.cat-legend{display:inline-flex;align-items:center;gap:6px;font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--cat);}
+.cat-legend-dot{width:9px;height:9px;border-radius:50%;background:var(--cat);}
 .chevron-icon { transition:transform 0.3s; }
 .chevron-icon.open { transform:rotate(180deg); }
 .booking-pulse { display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444; margin-right:8px; animation: pulseRed 1.8s ease-in-out infinite; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
@@ -149,14 +173,19 @@ body { padding-bottom: 72px; }
 .pm-divider::after{content:'';position:absolute;top:0;left:0;height:100%;width:32%;background:linear-gradient(90deg,transparent,rgba(201,169,110,0.9),rgba(240,237,228,0.6),rgba(201,169,110,0.9),transparent);filter:blur(0.5px);animation:pmBeam 5.5s ease-in-out infinite;}
 @keyframes pmBeam{0%{transform:translateX(-120%);}50%{transform:translateX(280%);}100%{transform:translateX(-120%);}}
 
-/* ===== Hero (hero2 landscape, full-bleed, title overlay OK) ===== */
+/* ===== Hero (hero1: SP=portrait full, PC=16:11 center-crop) ===== */
 #hero-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#070707;overflow:hidden;}
-.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(1.0) saturate(1.04) contrast(1.05);}
-.hero-scrim-top{position:absolute;top:0;left:0;right:0;height:38%;background:linear-gradient(to bottom,rgba(7,7,7,0.80) 0%,rgba(7,7,7,0.30) 60%,transparent 100%);pointer-events:none;z-index:2;}
-.hero-scrim-bottom{position:absolute;bottom:0;left:0;right:0;height:60%;background:linear-gradient(to top,rgba(7,7,7,0.92) 0%,rgba(7,7,7,0.50) 45%,transparent 100%);pointer-events:none;z-index:2;}
-/* ===== Story block: hero1 portrait + concept text side by side ===== */
-.story-portrait{aspect-ratio:9/16;width:100%;overflow:hidden;border-radius:12px;}
-.story-portrait video{width:100%;height:100%;object-fit:cover;filter:brightness(1.08) saturate(1.05) contrast(1.04);}
+.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;filter:brightness(1.06) saturate(1.05) contrast(1.04);}
+/* PC: show hero1 as a 16:11 window, cropping top/bottom, centered */
+@media (min-width:768px){
+  #hero{height:auto;aspect-ratio:16/11;max-height:88vh;}
+  .hero-bg-video{object-fit:cover;object-position:center 42%;}
+}
+.hero-scrim-top{position:absolute;top:0;left:0;right:0;height:34%;background:linear-gradient(to bottom,rgba(7,7,7,0.78) 0%,rgba(7,7,7,0.28) 60%,transparent 100%);pointer-events:none;z-index:2;}
+.hero-scrim-bottom{position:absolute;bottom:0;left:0;right:0;height:58%;background:linear-gradient(to top,rgba(7,7,7,0.92) 0%,rgba(7,7,7,0.48) 45%,transparent 100%);pointer-events:none;z-index:2;}
+/* ===== Experience block: hero2 + hero3 side by side ===== */
+.exp-vid{aspect-ratio:16/9;width:100%;overflow:hidden;border-radius:12px;background:#111;}
+.exp-vid video{width:100%;height:100%;object-fit:cover;filter:brightness(1.08) saturate(1.05) contrast(1.04);}
 /* ===== Hero title with hinomaru ===== */
 .hero-title-wrap{padding:6px 10px;}
 .hinomaru{position:absolute;top:50%;left:50%;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 50% 50%, #d63a2f 0%, #c4302a 70%, #b02820 100%);transform:translate(-50%,-50%);z-index:0;opacity:0.92;box-shadow:0 0 50px rgba(214,58,47,0.5);}
@@ -193,32 +222,24 @@ body { padding-bottom: 72px; }
 })();
 </script>
 
-<!-- STICKY CTA -->
-<div class="sticky-cta">
-  <div class="sticky-cta-text">
-    <strong>Reservations</strong>
-    Recommended 2 weeks in advance
-  </div>
-  {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
-  <button onclick="openReserveModal('sticky_cta')" class="sticky-cta-btn"
-          data-ga-event="reserve_click" data-ga-location="sticky_cta">
-    RESERVE →
-  </button>
-  {% elif store.tablecheck_url == 'TBD' %}
-  <button onclick="openCallReserveModal('sticky_cta')" class="sticky-cta-btn"
-          data-ga-event="reserve_click" data-ga-location="sticky_cta">
-    RESERVE →
-  </button>
-  {% else %}
-  <a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="sticky-cta-btn"
-     data-ga-event="reserve_click" data-ga-location="sticky_cta">
-    RESERVE →
-  </a>
-  {% endif %}
-</div>
+<!-- FLOATING AVAILABILITY BUTTON -->
+{% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
+<button onclick="openReserveModal('float_cta')" class="float-cta" data-ga-event="reserve_click" data-ga-location="float_cta">
+{% elif store.tablecheck_url == 'TBD' %}
+<button onclick="openCallReserveModal('float_cta')" class="float-cta" data-ga-event="reserve_click" data-ga-location="float_cta">
+{% else %}
+<a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="float-cta" data-ga-event="reserve_click" data-ga-location="float_cta">
+{% endif %}
+  <span class="float-cta-viewers"><span class="float-dot"></span><span id="viewer-count">5</span> people viewing now</span>
+  <span class="float-cta-main">Check availability <span aria-hidden="true">→</span></span>
+{% if store.is_form_reserve == 'true' or is_form_reserve == 'true' or store.tablecheck_url == 'TBD' %}
+</button>
+{% else %}
+</a>
+{% endif %}
 
 <!-- HEADER -->
-<header class="fixed top-0 left-0 w-full z-50 bg-ginza-black/80 backdrop-blur-md border-b border-ginza-gold/20">
+<header class="relative w-full z-40 bg-ginza-black border-b border-ginza-gold/20">
 <div class="hidden sm:flex items-center justify-center gap-6 py-1.5 border-b border-ginza-gold/10 text-[9px] tracking-[0.25em] text-ginza-gold/60 uppercase">
 <span>{{ store.region_label }}</span>
 <span class="header-divider"></span>
@@ -247,7 +268,7 @@ body { padding-bottom: 72px; }
 <div class="absolute inset-0 z-0">
 <div id="hero-stage">
 <video class="hero-bg-video" autoplay muted loop playsinline preload="auto">
-<source src="/images/hero2.mp4" type="video/mp4"/>
+<source src="/images/hero1.mp4" type="video/mp4"/>
 </video>
 <div class="hero-scrim-top"></div>
 <div class="hero-scrim-bottom"></div>
@@ -315,10 +336,10 @@ Wagyu &amp; Sushi<br/>Halal Omakase Experience
   </a>
 
   <!-- BOOKING COUNT BANNER -->
-  <div class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-ginza-gold/10 via-ginza-gold/20 to-ginza-gold/10 border border-ginza-gold/40 rounded-full px-4 py-2.5 mt-1">
+  <div class="inline-flex self-center items-center justify-center gap-2 bg-gradient-to-r from-ginza-gold/10 via-ginza-gold/20 to-ginza-gold/10 border border-ginza-gold/40 rounded-full px-3.5 py-2 mt-1">
     <span class="booking-pulse"></span>
     <span class="text-[11px] font-josefin font-semibold tracking-[0.1em] text-ginza-gold uppercase">
-      <span class="text-ginza-ivory">76 bookings</span> in the last 24 hours
+      <span class="text-ginza-ivory"><span class="booking-count">12</span> bookings</span> in the last 24 hours
     </span>
   </div>
 
@@ -332,20 +353,25 @@ Wagyu &amp; Sushi<br/>Halal Omakase Experience
 <!-- divider -->
 <div class="pm-divider"></div>
 
-<!-- STORY (hero1 portrait + concept text, side by side) -->
+<!-- EXPERIENCE (concept text + hero2/hero3 side by side) -->
 <section class="reveal py-14 md:py-20 bg-ginza-black" id="experience">
-<div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-<div class="story-portrait mx-auto max-w-[300px] md:max-w-none">
-<video autoplay muted loop playsinline preload="auto">
-<source src="/images/hero1.mp4" type="video/mp4"/>
-</video>
-</div>
-<div class="text-center md:text-left">
+<div class="text-center mb-9 px-6 max-w-2xl mx-auto">
 <p class="section-label mb-4">The Experience</p>
 <h3 class="font-cormorant italic text-2xl md:text-3xl leading-snug mb-5">A Journey Through Japan</h3>
 <p class="text-sm font-light text-ginza-ivory/80 leading-relaxed">
 A journey through Japan's food culture — wagyu, sushi, and projection-mapped dining. Muslim-friendly omakase, crafted for travelers from around the world.
 </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 px-4 md:px-6 max-w-5xl mx-auto">
+<div class="exp-vid">
+<video autoplay muted loop playsinline preload="auto">
+<source src="/images/hero2.mp4" type="video/mp4"/>
+</video>
+</div>
+<div class="exp-vid">
+<video autoplay muted loop playsinline preload="auto">
+<source src="/images/hero3.mp4" type="video/mp4"/>
+</video>
 </div>
 </div>
 </section>
@@ -453,6 +479,14 @@ Not just a meal — a journey through Japan. Each course unfolds alongside a pro
 
 <div class="text-center mb-6">
 <p class="section-label mb-2">Course Selection</p>
+<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-xl mx-auto mb-4">
+A lineup as varied as your appetite — from a sushi-focused journey, to wagyu courses, to the finest Kobe beef, and grand courses that bring everything together.
+</p>
+<div class="flex flex-wrap items-center justify-center gap-2.5 mb-2">
+<span class="cat-legend cat-sushi"><span class="cat-legend-dot"></span>Sushi</span>
+<span class="cat-legend cat-wagyu"><span class="cat-legend-dot"></span>Wagyu / Kobe Beef</span>
+<span class="cat-legend cat-mix"><span class="cat-legend-dot"></span>Sushi &amp; Wagyu</span>
+</div>
 <p class="text-xs text-ginza-ivory/40 font-josefin tracking-widest">Tap a course to see full details · All dishes Muslim-friendly · Seasonal menu</p>
 </div>
 
@@ -462,23 +496,26 @@ Not just a meal — a journey through Japan. Each course unfolds alongside a pro
 {% set adj = store.price_adjust or 0 %}
 {% macro comma(n) %}{% set s = (n | string) %}{% set out = "" %}{% set L = s | length %}{% for i in range(0, L) %}{% set ch = s[i] %}{% set posFromEnd = L - i %}{% if i > 0 and posFromEnd % 3 == 0 %}{{ "," }}{% endif %}{{ ch }}{% endfor %}{% endmacro %}
 {% set COURSES = [
-  { id: "sushi-standard", tier: "Sushi Course · Standard", name: "Sushi Course Standard", base: 54800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-standard.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame"], ["鮨", "Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish) · Nigiri 3 kinds (Seared Salmon / Tamago / Wagyu) · Chef's Hand-Served Wagyu Sushi"], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
-  { id: "sushi-premium", tier: "Sushi Course · Premium", name: "Sushi Course Premium", base: 74800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-premium.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Premium Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Mini Ikura Bowl / Dashimaki Tamago / Miso Cream Cheese"], ["鮨", "Temaki: Sea Urchin · Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish) · Nigiri 3 kinds (Urchin Gunkan / Ikura Gunkan / Wagyu)"], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
-  { id: "wagyu-standard", tier: "Wagyu Course · Standard", name: "Wagyu Course Standard", base: 54800, meta: "8 courses · 60–75 min", img: "/images/course-wagyu-standard.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Appetizer Plate — Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Simmered Wagyu Shigureni"], ["温物", "Wagyu Shabu-shabu &amp; Dashi"], ["逸品", "Wagyu Fillet Spring Roll"], ["和牛", "Mini Wagyu Sukiyaki with Egg Yolk Sauce · Wagyu Steak"], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
-  { id: "kobe-premium", tier: "Kobe Beef Course · Premium", name: "Kobe Beef Course Premium", base: 74800, meta: "8 courses · 60–75 min", img: "/images/course-kobe-premium.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Kobe Beef Appetizer Plate — Kobe Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Kobe Shigureni"], ["温物", "Kobe Beef Shabu-shabu &amp; Dashi"], ["逸品", "Wagyu Fillet Spring Roll"], ["神戸牛", "Mini Kobe Beef Sukiyaki with Egg Yolk Sauce · Kobe Beef Steak"], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
-  { id: "sushi-wagyu-standard", tier: "Sushi &amp; Wagyu · Standard", name: "Sushi &amp; Wagyu Course Standard", base: 64800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-wagyu-standard.jpg", popular: true, rows: [["序", "Chilled Tofu"], ["八寸", "Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese"], ["鮨", "Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish)"], ["温物", "Wagyu Shabu-shabu &amp; Dashi"], ["逸品", "Wagyu Fillet Spring Roll"], ["和牛", "Chef's Hand-Served Wagyu Sushi"], ["茶と甘味・椀", "Matcha &amp; Dessert — Tsujiri · Aka-dashi Miso Soup — Lake Shinji Clams"]] },
-  { id: "sushi-kobe-premium", tier: "Sushi &amp; Kobe Beef · Premium", name: "Sushi &amp; Kobe Beef Course Premium", base: 84800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-kobe-premium.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Kobe Beef Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese"], ["鮨", "Temaki: Sea Urchin · Nigiri 3 kinds (Tuna / Salmon / Ikura Gunkan)"], ["温物", "Kobe Beef Shabu-shabu &amp; Dashi"], ["逸品", "Kobe Beef Steak"], ["神戸牛", "Seared Kobe Beef Nigiri"], ["茶と甘味・椀", "Matcha &amp; Dessert — Tsujiri · Aka-dashi Miso Soup — Lake Shinji Clams"]] }
+  { id: "sushi-standard", cat: "sushi", tier: "Sushi Course · Standard", name: "Sushi Course Standard", base: 54800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-standard.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame"], ["鮨", "Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish) · Nigiri 3 kinds (Seared Salmon / Tamago / Wagyu) · Chef's Hand-Served Wagyu Sushi"], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
+  { id: "sushi-premium", cat: "sushi", tier: "Sushi Course · Premium", name: "Sushi Course Premium", base: 74800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-premium.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Premium Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Mini Ikura Bowl / Dashimaki Tamago / Miso Cream Cheese"], ["鮨", "Temaki: Sea Urchin · Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish) · Nigiri 3 kinds (Urchin Gunkan / Ikura Gunkan / Wagyu)"], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
+  { id: "wagyu-standard", cat: "wagyu", tier: "Wagyu Course · Standard", name: "Wagyu Course Standard", base: 54800, meta: "8 courses · 60–75 min", img: "/images/course-wagyu-standard.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Appetizer Plate — Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Simmered Wagyu Shigureni"], ["温物", "Wagyu Shabu-shabu &amp; Dashi"], ["逸品", "Wagyu Fillet Spring Roll"], ["和牛", "Mini Wagyu Sukiyaki with Egg Yolk Sauce · Wagyu Steak"], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
+  { id: "sushi-wagyu-standard", cat: "mix", tier: "Sushi &amp; Wagyu · Standard", name: "Sushi &amp; Wagyu Course Standard", base: 64800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-wagyu-standard.jpg", popular: true, rows: [["序", "Chilled Tofu"], ["八寸", "Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese"], ["鮨", "Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish)"], ["温物", "Wagyu Shabu-shabu &amp; Dashi"], ["逸品", "Wagyu Fillet Spring Roll"], ["和牛", "Chef's Hand-Served Wagyu Sushi"], ["茶と甘味・椀", "Matcha &amp; Dessert — Tsujiri · Aka-dashi Miso Soup — Lake Shinji Clams"]] },
+  { id: "kobe-premium", cat: "wagyu", tier: "Kobe Beef Course · Premium", name: "Kobe Beef Course Premium", base: 74800, meta: "8 courses · 60–75 min", img: "/images/course-kobe-premium.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Kobe Beef Appetizer Plate — Kobe Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Kobe Shigureni"], ["温物", "Kobe Beef Shabu-shabu &amp; Dashi"], ["逸品", "Wagyu Fillet Spring Roll"], ["神戸牛", "Mini Kobe Beef Sukiyaki with Egg Yolk Sauce · Kobe Beef Steak"], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
+  { id: "sushi-kobe-premium", cat: "mix", tier: "Sushi &amp; Kobe Beef · Premium", name: "Sushi &amp; Kobe Beef Course Premium", base: 84800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-kobe-premium.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Kobe Beef Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese"], ["鮨", "Temaki: Sea Urchin · Nigiri 3 kinds (Tuna / Salmon / Ikura Gunkan)"], ["温物", "Kobe Beef Shabu-shabu &amp; Dashi"], ["逸品", "Kobe Beef Steak"], ["神戸牛", "Seared Kobe Beef Nigiri"], ["茶と甘味・椀", "Matcha &amp; Dessert — Tsujiri · Aka-dashi Miso Soup — Lake Shinji Clams"]] }
 ] %}
 
 {% for c in COURSES %}
 {% set total = c.base + adj %}
 {% set incl = ((total * 1.1) | round(0, "floor")) | int %}
-<div class="course-card relative bg-ginza-gold/5 {% if c.popular %}border-2 border-ginza-gold{% else %}border border-ginza-gold/20{% endif %}"{% if c.popular %} style="box-shadow:0 0 24px rgba(201,169,110,0.18);"{% endif %}>
+<div class="course-card cat-{{ c.cat }} relative bg-ginza-gold/5 {% if c.popular %}border-2 border-ginza-gold{% else %}border border-ginza-gold/20{% endif %}"{% if c.popular %} style="box-shadow:0 0 24px rgba(201,169,110,0.18);"{% endif %}>
+<div class="cat-bar"></div>
 {% if c.popular %}<div class="absolute top-3 right-3 bg-ginza-gold text-ginza-black text-[9px] font-josefin font-bold tracking-widest px-2.5 py-1 rounded-full z-10">MOST POPULAR</div>{% endif %}
-<div class="aspect-[4/3] w-full overflow-hidden bg-ginza-black/40">
-<img src="{{ c.img }}" alt="{{ c.name }}" loading="lazy" class="w-full h-full object-cover"/>
+<div class="aspect-[4/3] w-full overflow-hidden bg-ginza-black/40 relative">
+{% if c.img_empty %}{% endif %}<img src="{{ c.img }}" alt="{{ c.name }}" loading="lazy" class="w-full h-full object-cover course-img" onerror="this.style.display='none';this.parentNode.classList.add('img-fallback');"/>
+<div class="course-img-ph"><span class="cat-badge">{% if c.cat == 'sushi' %}<svg viewBox='0 0 24 24' fill='currentColor'><ellipse cx='12' cy='9' rx='9' ry='4'/><path d='M3 9v3c0 2.2 4 4 9 4s9-1.8 9-4V9' fill='none' stroke='currentColor' stroke-width='1.5'/></svg>SUSHI{% elif c.cat == 'wagyu' %}<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M4 7c2-3 14-3 16 0 1.5 2 1 6-2 7-1 4-9 4-10 0-3-1-3.5-5-2-7z'/></svg>WAGYU{% else %}<svg viewBox='0 0 24 24' fill='currentColor'><circle cx='12' cy='12' r='9'/></svg>SUSHI &amp; WAGYU{% endif %}</span></div>
 </div>
 <div class="p-5">
+<span class="cat-badge">{% if c.cat == 'sushi' %}<svg viewBox='0 0 24 24' fill='currentColor'><ellipse cx='12' cy='9' rx='9' ry='4'/><path d='M3 9v3c0 2.2 4 4 9 4s9-1.8 9-4V9' fill='none' stroke='currentColor' stroke-width='1.5'/></svg>Sushi{% elif c.cat == 'wagyu' %}<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M4 7c2-3 14-3 16 0 1.5 2 1 6-2 7-1 4-9 4-10 0-3-1-3.5-5-2-7z'/></svg>Wagyu / Beef{% else %}<svg viewBox='0 0 24 24' fill='currentColor'><circle cx='12' cy='12' r='9'/></svg>Sushi &amp; Wagyu{% endif %}</span>
 <p class="text-[9px] section-label mb-1">{{ c.tier }}</p>
 <p class="font-cormorant italic text-xl mb-3">{{ c.name }}</p>
 <div class="flex items-baseline gap-2 mb-1">
@@ -642,7 +679,7 @@ Reservations recommended 2 weeks in advance.<br/>Walk-ins welcome subject to ava
   <div class="inline-flex items-center justify-center gap-2 bg-ginza-gold/10 border border-ginza-gold/40 rounded-full px-4 py-2 mb-8">
     <span class="booking-pulse"></span>
     <span class="text-[11px] font-josefin font-semibold tracking-[0.1em] text-ginza-gold uppercase">
-      <span class="text-ginza-ivory">76 bookings</span> in the last 24 hours
+      <span class="text-ginza-ivory"><span class="booking-count">12</span> bookings</span> in the last 24 hours
     </span>
   </div>
 
@@ -712,6 +749,32 @@ Open in Google Maps
 </a>
 {% endif %}
 <p class="text-[10px] text-ginza-gold/70 mt-3"><a href="tel:{{ store.tel_raw }}" class="hover:text-ginza-gold" data-ga-event="tel_click" data-ga-location="access">📞 {{ store.tel_display }}</a></p>
+</div>
+</div>
+
+<!-- NEAREST STATIONS -->
+<div class="mb-8 flex items-start gap-4">
+<div class="mt-1 flex-shrink-0 w-8 h-8 flex items-center justify-center border border-ginza-gold/30 rounded-full">
+<svg class="w-3.5 h-3.5 text-ginza-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-8.25V15m-7.5 0h9m-9 0a1.5 1.5 0 0 1-1.5-1.5V6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v7.5a1.5 1.5 0 0 1-1.5 1.5m-9 0-1.5 3m10.5-3 1.5 3"/>
+</svg>
+</div>
+<div class="flex-1">
+<p class="text-[10px] font-josefin tracking-[0.2em] text-ginza-gold uppercase mb-3">Nearest Stations</p>
+<ul class="space-y-2.5">
+<li class="flex items-center justify-between gap-3 border-b border-ginza-gold/10 pb-2.5">
+<span class="text-sm text-ginza-ivory/80 font-light">Shinjuku-sanchome Sta. <span class="block text-[10px] text-ginza-ivory/40">Marunouchi / Fukutoshin / Shinjuku Line · Exit C3</span></span>
+<span class="text-[11px] font-josefin tracking-widest text-ginza-gold whitespace-nowrap">2 min</span>
+</li>
+<li class="flex items-center justify-between gap-3 border-b border-ginza-gold/10 pb-2.5">
+<span class="text-sm text-ginza-ivory/80 font-light">Shinjuku Sta. <span class="block text-[10px] text-ginza-ivory/40">JR / Private &amp; Subway Lines · East Exit</span></span>
+<span class="text-[11px] font-josefin tracking-widest text-ginza-gold whitespace-nowrap">5 min</span>
+</li>
+<li class="flex items-center justify-between gap-3">
+<span class="text-sm text-ginza-ivory/80 font-light">Shinjuku-gyoenmae Sta. <span class="block text-[10px] text-ginza-ivory/40">Marunouchi Line</span></span>
+<span class="text-[11px] font-josefin tracking-widest text-ginza-gold whitespace-nowrap">7 min</span>
+</li>
+</ul>
 </div>
 </div>
 {% if store.maps_embed != "TBD" %}
@@ -989,5 +1052,29 @@ Open {{ store.hours }}
   }
 </script>
 
+<script>
+(function(){
+  // 数時間おきに決定的に変わる booking 数(9〜19) と viewer 数(4〜8)
+  function seeded(min,max,bucket){
+    var h=(bucket*2654435761)%2147483647; var r=(h>>>0)/2147483647;
+    return min+Math.floor(r*(max-min+1));
+  }
+  var now=Date.now();
+  var bookingBucket=Math.floor(now/(3*3600*1000)); // 3時間ごと
+  var viewerBucket=Math.floor(now/(7*60*1000));     // 約7分ごと
+  var bookings=seeded(9,19,bookingBucket);
+  var viewers=seeded(4,8,viewerBucket);
+  document.querySelectorAll('.booking-count').forEach(function(el){el.textContent=bookings;});
+  var v=document.getElementById('viewer-count'); if(v) v.textContent=viewers;
+  // viewer数は滞在中ゆっくり揺らす
+  setInterval(function(){
+    if(!v) return;
+    var cur=parseInt(v.textContent,10)||5;
+    var d=Math.random()<0.5?-1:1;
+    cur=Math.max(4,Math.min(8,cur+d));
+    v.textContent=cur;
+  }, 9000);
+})();
+</script>
 </body>
 </html>
