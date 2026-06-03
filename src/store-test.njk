@@ -149,22 +149,14 @@ body { padding-bottom: 72px; }
 .pm-divider::after{content:'';position:absolute;top:0;left:0;height:100%;width:32%;background:linear-gradient(90deg,transparent,rgba(201,169,110,0.9),rgba(240,237,228,0.6),rgba(201,169,110,0.9),transparent);filter:blur(0.5px);animation:pmBeam 5.5s ease-in-out infinite;}
 @keyframes pmBeam{0%{transform:translateX(-120%);}50%{transform:translateX(280%);}100%{transform:translateX(-120%);}}
 
-/* ===== Hero (hero1 portrait centered, brightened, readable) ===== */
-#hero-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#070707;}
-.hero-portrait{position:relative;height:100%;max-height:100vh;aspect-ratio:9/16;width:auto;overflow:hidden;}
-.hero-portrait video{width:100%;height:100%;object-fit:cover;filter:brightness(1.32) saturate(1.08) contrast(1.02);}
-/* readability scrims: top for header, bottom for copy/buttons */
-.hero-scrim-top{position:absolute;top:0;left:0;right:0;height:42%;background:linear-gradient(to bottom,rgba(7,7,7,0.78) 0%,rgba(7,7,7,0.30) 55%,transparent 100%);pointer-events:none;z-index:2;}
-.hero-scrim-bottom{position:absolute;bottom:0;left:0;right:0;height:62%;background:linear-gradient(to top,rgba(7,7,7,0.92) 0%,rgba(7,7,7,0.55) 45%,transparent 100%);pointer-events:none;z-index:2;}
-/* side fills so portrait sits cleanly on wide screens */
-@media (min-width:681px){
-  #hero-stage::before,#hero-stage::after{content:'';position:absolute;top:0;bottom:0;width:34%;z-index:1;}
-  #hero-stage::before{left:0;background:linear-gradient(to right,rgba(7,7,7,0.96),rgba(7,7,7,0.55) 60%,transparent);}
-  #hero-stage::after{right:0;background:linear-gradient(to left,rgba(7,7,7,0.96),rgba(7,7,7,0.55) 60%,transparent);}
-}
-@media (max-width:680px){
-  .hero-portrait{height:100%;width:100%;aspect-ratio:auto;}
-}
+/* ===== Hero (hero2 landscape, full-bleed, title overlay OK) ===== */
+#hero-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#070707;overflow:hidden;}
+.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(1.0) saturate(1.04) contrast(1.05);}
+.hero-scrim-top{position:absolute;top:0;left:0;right:0;height:38%;background:linear-gradient(to bottom,rgba(7,7,7,0.80) 0%,rgba(7,7,7,0.30) 60%,transparent 100%);pointer-events:none;z-index:2;}
+.hero-scrim-bottom{position:absolute;bottom:0;left:0;right:0;height:60%;background:linear-gradient(to top,rgba(7,7,7,0.92) 0%,rgba(7,7,7,0.50) 45%,transparent 100%);pointer-events:none;z-index:2;}
+/* ===== Story block: hero1 portrait + concept text side by side ===== */
+.story-portrait{aspect-ratio:9/16;width:100%;overflow:hidden;border-radius:12px;}
+.story-portrait video{width:100%;height:100%;object-fit:cover;filter:brightness(1.08) saturate(1.05) contrast(1.04);}
 /* ===== Hero title with hinomaru ===== */
 .hero-title-wrap{padding:6px 10px;}
 .hinomaru{position:absolute;top:50%;left:50%;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 50% 50%, #d63a2f 0%, #c4302a 70%, #b02820 100%);transform:translate(-50%,-50%);z-index:0;opacity:0.92;box-shadow:0 0 50px rgba(214,58,47,0.5);}
@@ -254,29 +246,29 @@ body { padding-bottom: 72px; }
 <section class="relative h-screen w-full flex flex-col justify-end items-center overflow-hidden" id="hero">
 <div class="absolute inset-0 z-0">
 <div id="hero-stage">
-<div class="hero-portrait">
-<video autoplay muted loop playsinline preload="auto">
-<source src="/images/hero1.mp4" type="video/mp4"/>
+<video class="hero-bg-video" autoplay muted loop playsinline preload="auto">
+<source src="/images/hero2.mp4" type="video/mp4"/>
 </video>
 <div class="hero-scrim-top"></div>
 <div class="hero-scrim-bottom"></div>
 </div>
 </div>
-</div>
 
-<div class="relative z-10 w-full px-8 pb-28 text-center">
-<div class="hero-title-wrap inline-block relative mb-6">
+<div class="relative z-10 w-full px-7 pb-20 text-center">
+<div class="hero-title-wrap inline-block relative">
 <span class="hinomaru" aria-hidden="true"></span>
-<h1 class="hero-title relative font-josefin font-bold leading-[0.95] tracking-tight text-ginza-ivory">
-<span class="block text-3xl md:text-5xl">Gastronomic Tour</span>
-<span class="block text-4xl md:text-6xl">of <span class="text-ginza-ivory">JAPAN</span></span>
+<p class="hero-eyebrow relative font-josefin tracking-[0.32em] uppercase text-ginza-gold/90 text-[10px] md:text-xs mb-3">Gastronomic Tour of Japan</p>
+<h1 class="hero-title relative font-josefin font-bold leading-[1.05] tracking-tight text-ginza-ivory text-2xl md:text-4xl">
+Wagyu &amp; Sushi<br/>Halal Omakase Experience
 </h1>
 </div>
-<p class="hero-sub text-xs md:text-sm text-ginza-gold tracking-[0.22em] uppercase mb-7 font-semibold">~ Wagyu &amp; Sushi Halal Omakase Experience ~</p>
-<p class="text-sm font-light text-ginza-ivory/70 mb-8 max-w-sm mx-auto leading-relaxed">
-A journey through Japan's food culture — wagyu, sushi, and projection-mapped dining.<br/>Muslim-friendly omakase, crafted for travelers from around the world.
-</p>
 
+
+</div>
+</section>
+
+<!-- HERO INTRO (black bg: CTA only) -->
+<section class="bg-ginza-black px-7 pt-8 pb-12 text-center">
 <div class="flex flex-col items-center gap-3 w-full max-w-xs mx-auto">
   {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
   <button onclick="openReserveModal('hero')"
@@ -335,28 +327,25 @@ A journey through Japan's food culture — wagyu, sushi, and projection-mapped d
     <span class="text-[10px] font-josefin tracking-widest uppercase">Muslim-Friendly · Alcohol Free</span>
   </div>
 </div>
-</div>
 </section>
 
 <!-- divider -->
 <div class="pm-divider"></div>
 
-<!-- PROJECTION MAPPING -->
-<section class="reveal py-14 md:py-20 bg-ginza-black" id="projection">
-<div class="text-center mb-8 px-6">
-<p class="section-label mb-3">Projection Mapping</p>
-<h3 class="font-cormorant italic text-2xl md:text-3xl leading-snug">Where the Table Becomes Japan</h3>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 px-3 md:px-6 max-w-5xl mx-auto">
-<div class="relative overflow-hidden rounded-lg bg-ginza-black/40" style="aspect-ratio:16/9;">
-<video class="w-full h-full object-cover" style="filter:brightness(1.28) saturate(1.06);" autoplay muted loop playsinline preload="auto">
-<source src="/images/hero2.mp4" type="video/mp4"/>
+<!-- STORY (hero1 portrait + concept text, side by side) -->
+<section class="reveal py-14 md:py-20 bg-ginza-black" id="experience">
+<div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+<div class="story-portrait mx-auto max-w-[300px] md:max-w-none">
+<video autoplay muted loop playsinline preload="auto">
+<source src="/images/hero1.mp4" type="video/mp4"/>
 </video>
 </div>
-<div class="relative overflow-hidden rounded-lg bg-ginza-black/40" style="aspect-ratio:16/9;">
-<video class="w-full h-full object-cover" style="filter:brightness(1.28) saturate(1.06);" autoplay muted loop playsinline preload="auto">
-<source src="/images/hero3.mp4" type="video/mp4"/>
-</video>
+<div class="text-center md:text-left">
+<p class="section-label mb-4">The Experience</p>
+<h3 class="font-cormorant italic text-2xl md:text-3xl leading-snug mb-5">A Journey Through Japan</h3>
+<p class="text-sm font-light text-ginza-ivory/80 leading-relaxed">
+A journey through Japan's food culture — wagyu, sushi, and projection-mapped dining. Muslim-friendly omakase, crafted for travelers from around the world.
+</p>
 </div>
 </div>
 </section>
