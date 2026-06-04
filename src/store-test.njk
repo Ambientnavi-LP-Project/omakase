@@ -277,7 +277,7 @@ body { padding-bottom: 72px; }
 <source src="/images/hero1.mp4" type="video/mp4"/>
 </video>
 {% else %}
-<img class="hero-bg-video" src="/images/course1.jpg" alt=""/>
+<picture><source media="(max-width:680px)" srcset="/images/course2.jpg"/><img class="hero-bg-video" src="/images/course1.jpg" alt=""/></picture>
 {% endif %}
 <div class="hero-scrim-top"></div>
 <div class="hero-scrim-bottom"></div>
