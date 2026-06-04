@@ -53,6 +53,7 @@ const STORES = [
     same_day_reserve: false,
     time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
     max_guests: 14,
+    stations: [ { name: 'Asakusa Sta. (Tsukuba Express)', line: 'つくばエクスプレス', min: 5 }, { name: 'Asakusa Sta.', line: 'Ginza / Toei Asakusa / Tobu Lines', min: 8 } ],
 
     name_full_en: "Omakase Sushi Wagyu (Halal) Tokyo Asakusa Restaurant 浅草寿司和牛餐厅",
     name_short: "Omakase 墨 — Asakusa",
@@ -95,6 +96,7 @@ const STORES = [
     same_day_reserve: false,
     time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
     max_guests: 12,
+    stations: [ { name: 'Gion-Shijo Sta. (Keihan)', line: '京阪本線', min: 2 }, { name: 'Kyoto-Kawaramachi Sta. (Hankyu)', line: '阪急京都線', min: 3 } ],
 
     name_full_en: "Kyoto Omakase Sushi & Wagyu Halal Gion Restaurant 京都寿司和牛餐厅",
     name_short: "Omakase 墨 — Gion",
@@ -136,6 +138,7 @@ const STORES = [
     same_day_reserve: false,
     time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
     max_guests: 10,
+    stations: [ { name: 'Tsukiji Sta.', line: 'Hibiya Line · Exit 1', min: 7 }, { name: 'Tsukijishijo Sta.', line: 'Toei Oedo Line', min: 7 }, { name: 'Higashi-ginza Sta.', line: 'Hibiya / Toei Asakusa', min: 9 } ],
 
     name_full_en: "Tsukiji Fish Market Sushi Omakase & Wagyu (Halal) Restaurant 筑地寿司和牛餐厅",
     name_short: "Omakase 墨 — Tsukiji",
@@ -178,6 +181,7 @@ const STORES = [
     same_day_reserve: false,
     time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
     max_guests: 15,
+    stations: [ { name: 'Nagahoribashi Sta.', line: 'Sakaisuji / Nagahori-Tsurumiryokuchi', min: 4 }, { name: 'Shinsaibashi Sta.', line: 'Midosuji / Nagahori-Tsurumiryokuchi', min: 5 }, { name: 'Namba Sta.', line: 'Midosuji / Yotsubashi / Sennichimae', min: 12 } ],
 
     name_full_en: "Osaka Omakase Sushi & Wagyu Steak Halal Dotonbori Restaurant 大阪寿司和牛餐厅",
     name_short: "Omakase 墨 — Higashi-Shinsaibashi",
@@ -217,8 +221,10 @@ const STORES = [
     region: "tokyo",
     slug: "shinjuku-sanchome",
     same_day_reserve: true,
+    projection_mapping: true,
     time_slots: ['13:00','15:00','17:00','19:00','21:00'],
     max_guests: 12,
+    stations: [ { name: 'Shinjuku-sanchome Sta.', line: 'Marunouchi / Fukutoshin / Shinjuku Line · Exit C3', min: 2 }, { name: 'Shinjuku Sta.', line: 'JR / Private & Subway Lines · East Exit', min: 5 }, { name: 'Shinjuku-gyoenmae Sta.', line: 'Marunouchi Line', min: 7 } ],
     price_adjust: 5000,  // 新宿三丁目のみ全コース税抜+5000(税込は×1.1で再計算)
 
     name_full_en: "Tokyo Omakase Sushi Wagyu (Muslim-Friendly) Shinjuku Restaurant 新宿寿司和牛餐厅",
