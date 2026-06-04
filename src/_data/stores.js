@@ -56,8 +56,8 @@ const STORES = [
     stations: [ { name: 'Asakusa Sta. (Tsukuba Express)', line: 'つくばエクスプレス', min: 5 }, { name: 'Asakusa Sta.', line: 'Ginza / Toei Asakusa / Tobu Lines', min: 8 } ],
 
     name_full_en: "Omakase Sushi Wagyu (Halal) Tokyo Asakusa Restaurant 浅草寿司和牛餐厅",
-    name_short: "Omakase 墨 — Asakusa",
-    name_jp: "おまかせ 墨 浅草店",
+    name_short: "Omakase Wagyu&Sushi — Asakusa",
+    name_jp: "Omakase Wagyu&Sushi 浅草店",
     name_zh: "",
 
     city: "Asakusa, Tokyo",
@@ -99,8 +99,8 @@ const STORES = [
     stations: [ { name: 'Gion-Shijo Sta. (Keihan)', line: '京阪本線', min: 2 }, { name: 'Kyoto-Kawaramachi Sta. (Hankyu)', line: '阪急京都線', min: 3 } ],
 
     name_full_en: "Kyoto Omakase Sushi & Wagyu Halal Gion Restaurant 京都寿司和牛餐厅",
-    name_short: "Omakase 墨 — Gion",
-    name_jp: "おまかせ 墨 祇園店",
+    name_short: "Omakase Wagyu&Sushi — Gion",
+    name_jp: "Omakase Wagyu&Sushi 祇園店",
     name_zh: "",
 
     city: "Gion, Kyoto",
@@ -141,8 +141,8 @@ const STORES = [
     stations: [ { name: 'Tsukiji Sta.', line: 'Hibiya Line · Exit 1', min: 7 }, { name: 'Tsukijishijo Sta.', line: 'Toei Oedo Line', min: 7 }, { name: 'Higashi-ginza Sta.', line: 'Hibiya / Toei Asakusa', min: 9 } ],
 
     name_full_en: "Tsukiji Fish Market Sushi Omakase & Wagyu (Halal) Restaurant 筑地寿司和牛餐厅",
-    name_short: "Omakase 墨 — Tsukiji",
-    name_jp: "おまかせ 墨 築地店",
+    name_short: "Omakase Wagyu&Sushi — Tsukiji",
+    name_jp: "Omakase Wagyu&Sushi 築地店",
     name_zh: "",
 
     city: "Tsukiji, Tokyo",
@@ -184,8 +184,8 @@ const STORES = [
     stations: [ { name: 'Nagahoribashi Sta.', line: 'Sakaisuji / Nagahori-Tsurumiryokuchi', min: 4 }, { name: 'Shinsaibashi Sta.', line: 'Midosuji / Nagahori-Tsurumiryokuchi', min: 5 }, { name: 'Namba Sta.', line: 'Midosuji / Yotsubashi / Sennichimae', min: 12 } ],
 
     name_full_en: "Osaka Omakase Sushi & Wagyu Steak Halal Dotonbori Restaurant 大阪寿司和牛餐厅",
-    name_short: "Omakase 墨 — Higashi-Shinsaibashi",
-    name_jp: "おまかせ 墨 東心斎橋店",
+    name_short: "Omakase Wagyu&Sushi — Higashi-Shinsaibashi",
+    name_jp: "Omakase Wagyu&Sushi 東心斎橋店",
     name_zh: "",
 
     city: "Higashi-Shinsaibashi, Osaka",
@@ -228,8 +228,8 @@ const STORES = [
     price_adjust: 5000,  // 新宿三丁目のみ全コース税抜+5000(税込は×1.1で再計算)
 
     name_full_en: "Tokyo Omakase Sushi Wagyu (Muslim-Friendly) Shinjuku Restaurant 新宿寿司和牛餐厅",
-    name_short: "Omakase 墨 — Shinjuku",
-    name_jp: "おまかせ 墨 新宿三丁目店",
+    name_short: "Omakase Wagyu&Sushi — Shinjuku",
+    name_jp: "Omakase Wagyu&Sushi 新宿三丁目店",
     name_zh: "",
 
     city: "Shinjuku, Tokyo",
@@ -318,7 +318,7 @@ module.exports = {
     domain: "japan-omakase.wagyu-sushi.com",
     ga4_id: "G-71QJSRH923",
     gas_endpoint: "https://script.google.com/macros/s/AKfycbyqKnuZysH7fLhL7etze1eMOuS003cB5v2YIQeBfhRFGE19RpD8oA0HHOTMizYRRDda/exec",
-    brand_name: "Halal Omakase Sushi & Wagyu",
+    brand_name: "Omakase wagyu&sushi 〜Gastronomic Tour〜",
     brand_slug: "japan-omakase"
   },
   stores: STORES,
