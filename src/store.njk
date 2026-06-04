@@ -272,9 +272,13 @@ body { padding-bottom: 72px; }
 <section class="relative h-screen w-full flex flex-col justify-end items-center overflow-hidden" id="hero">
 <div class="absolute inset-0 z-0">
 <div id="hero-stage">
+{% if store.projection_mapping %}
 <video class="hero-bg-video" autoplay muted loop playsinline preload="auto">
 <source src="/images/hero1.mp4" type="video/mp4"/>
 </video>
+{% else %}
+<img class="hero-bg-video" src="/images/course1.jpg" alt=""/>
+{% endif %}
 <div class="hero-scrim-top"></div>
 <div class="hero-scrim-bottom"></div>
 </div>
@@ -352,6 +356,7 @@ body { padding-bottom: 72px; }
 </div>
 </section>
 
+{% if store.projection_mapping %}
 <!-- divider -->
 <div class="pm-divider"></div>
 
@@ -377,6 +382,7 @@ A journey through Japan's food culture — wagyu, sushi, and projection-mapped d
 </div>
 </div>
 </section>
+{% endif %}
 
 <!-- divider -->
 <div class="pm-divider"></div>
@@ -385,7 +391,7 @@ A journey through Japan's food culture — wagyu, sushi, and projection-mapped d
 <section class="reveal py-16 bg-ginza-black" id="menu">
 <div class="text-center mb-10 px-6">
 <p class="section-label mb-4">Menu · Mastery</p>
-<h3 class="font-cormorant text-3xl mb-4 leading-snug">"A Journey Through Japan"</h3>
+<h3 class="font-cormorant text-3xl mb-4 leading-snug">"Wagyu &amp; Sushi Indulgence"</h3>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
 Beyond our signature courses, we also offer a selection of premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.
 </p>
@@ -473,10 +479,17 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
 
 <div class="text-center mb-10">
 <p class="section-label mb-4">The Experience</p>
+{% if store.projection_mapping %}
 <h3 class="font-cormorant text-3xl mb-4 leading-snug">Wagyu &amp; Sushi Course<br/>× Projection Mapping</h3>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
 Not just a meal — a journey through Japan. Each course unfolds alongside a projection-mapped experience of Japanese culture and travel, served Muslim-friendly.
 </p>
+{% else %}
+<h3 class="font-cormorant text-3xl mb-4 leading-snug">Wagyu &amp; Sushi<br/>Omakase Course</h3>
+<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
+A journey through Japan's finest — premium Wagyu and authentic Edomae sushi, crafted course by course and served Muslim-friendly.
+</p>
+{% endif %}
 </div>
 
 <div class="text-center mb-6">
@@ -761,18 +774,12 @@ Open in Google Maps
 <div class="flex-1">
 <p class="text-[10px] font-josefin tracking-[0.2em] text-ginza-gold uppercase mb-3">Nearest Stations</p>
 <ul class="space-y-2.5">
-<li class="flex items-center justify-between gap-3 border-b border-ginza-gold/10 pb-2.5">
-<span class="text-sm text-ginza-ivory/80 font-light">Shinjuku-sanchome Sta. <span class="block text-[10px] text-ginza-ivory/40">Marunouchi / Fukutoshin / Shinjuku Line · Exit C3</span></span>
-<span class="text-[11px] font-josefin tracking-widest text-ginza-gold whitespace-nowrap">2 min</span>
+{% for st in store.stations %}
+<li class="flex items-center justify-between gap-3 {% if not loop.last %}border-b border-ginza-gold/10 pb-2.5{% endif %}">
+<span class="text-sm text-ginza-ivory/80 font-light">{{ st.name }} <span class="block text-[10px] text-ginza-ivory/40">{{ st.line }}</span></span>
+<span class="text-[11px] font-josefin tracking-widest text-ginza-gold whitespace-nowrap">{{ st.min }} min</span>
 </li>
-<li class="flex items-center justify-between gap-3 border-b border-ginza-gold/10 pb-2.5">
-<span class="text-sm text-ginza-ivory/80 font-light">Shinjuku Sta. <span class="block text-[10px] text-ginza-ivory/40">JR / Private &amp; Subway Lines · East Exit</span></span>
-<span class="text-[11px] font-josefin tracking-widest text-ginza-gold whitespace-nowrap">5 min</span>
-</li>
-<li class="flex items-center justify-between gap-3">
-<span class="text-sm text-ginza-ivory/80 font-light">Shinjuku-gyoenmae Sta. <span class="block text-[10px] text-ginza-ivory/40">Marunouchi Line</span></span>
-<span class="text-[11px] font-josefin tracking-widest text-ginza-gold whitespace-nowrap">7 min</span>
-</li>
+{% endfor %}
 </ul>
 </div>
 </div>
