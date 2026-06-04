@@ -611,6 +611,14 @@
       errEl.style.display = 'block';
       return;
     }
+    // 過去日（昨日以前）は受付不可（手入力対策。カレンダー側 min でも制限済み）
+    var _n = new Date();
+    var _todayStr = _n.getFullYear() + '-' + String(_n.getMonth()+1).padStart(2,'0') + '-' + String(_n.getDate()).padStart(2,'0');
+    if (date < _todayStr) {
+      errEl.textContent = '※ 過去の日付は選択できません / Please choose today or a future date.';
+      errEl.style.display = 'block';
+      return;
+    }
     // 当日予約OFFのとき、今日の日付なら電話案内へ
     if (!SAME_DAY_RESERVE) {
       var _t = new Date();
