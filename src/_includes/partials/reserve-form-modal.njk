@@ -364,6 +364,35 @@
   };
   // 当日予約の受付可否（store.same_day_reserve が false なら当日は電話案内）
   var SAME_DAY_RESERVE = ('{{ store.same_day_reserve }}' === 'true');
+  var TIME_SLOTS = [{% for t in store.time_slots %}'{{ t }}'{% if not loop.last %},{% endif %}{% endfor %}];
+
+  // 選択された日付に応じて時間枠の選択可否を更新する。
+  // 当日(today)を選んだ場合：現在時刻を過ぎた枠は無効化（SAME_DAY_RESERVE時のみ当日選択可）。
+  // 明日以降：全枠を有効化。
+  function refreshTimeOptions_(dateStr) {
+    var sel = document.getElementById('r_time');
+    if (!sel) return;
+    var now = new Date();
+    var y = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+    var isToday = (dateStr === y);
+    var nowMin = now.getHours() * 60 + now.getMinutes();
+    // option を作り直す
+    var current = sel.value;
+    var html = '<option value="">-</option>';
+    var firstEnabled = '';
+    TIME_SLOTS.forEach(function(t) {
+      var parts = t.split(':');
+      var slotMin = parseInt(parts[0],10) * 60 + parseInt(parts[1]||'0',10);
+      // 当日は「現在時刻以降」の枠のみ有効（同分はぎりぎり不可にして余裕を持たせる）
+      var disabled = isToday && slotMin <= nowMin;
+      if (!disabled && !firstEnabled) firstEnabled = t;
+      html += '<option value="' + t + '"' + (disabled ? ' disabled' : '') + '>' + t + (disabled ? '（受付終了 / closed）' : '') + '</option>';
+    });
+    sel.innerHTML = html;
+    // 以前の選択が無効になっていたらクリア
+    var stillValid = current && TIME_SLOTS.indexOf(current) !== -1 && !(isToday && (parseInt(current.split(':')[0],10)*60 + parseInt(current.split(':')[1]||'0',10)) <= nowMin);
+    sel.value = stillValid ? current : '';
+  }
   var TEL_DISPLAY = '{{ store.tel_display }}';
   var TEL_RAW = '{{ store.tel_raw }}';
 
@@ -561,15 +590,17 @@
   // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
     var dateInput = document.getElementById('r_date');
-    if (dateInput && BLOCKED_DATES.length) {
+    if (dateInput) {
       dateInput.addEventListener('change', function() {
         var note = document.getElementById('r_date_note');
         if (this.value && BLOCKED_DATES.indexOf(this.value) !== -1) {
-          this.value = '';   // alertを出さず静かにクリア（スマホのスクロール中に邪魔しない）
+          this.value = '';
           if (note) { note.textContent = '※ その日は予約を受付しておりません。別の日をお選びください / That date is unavailable. Please choose another date.'; note.style.display = 'block'; }
         } else if (note) {
           note.style.display = 'none';
         }
+        // 当日選択時は現在時刻以降の枠だけ有効化（新宿などsame-day可の店向け）
+        refreshTimeOptions_(this.value);
       });
     }
   });
@@ -628,6 +659,19 @@
           + (TEL_DISPLAY ? ': <a href="tel:' + TEL_RAW + '" style="color:#c9a96e;text-decoration:underline;">' + TEL_DISPLAY + '</a>' : '.');
         errEl.style.display = 'block';
         return;
+      }
+    } else {
+      // 当日予約OKの店：今日を選んだ場合、現在時刻を過ぎた枠は不可
+      var _tn = new Date();
+      var _td = _tn.getFullYear() + '-' + String(_tn.getMonth()+1).padStart(2,'0') + '-' + String(_tn.getDate()).padStart(2,'0');
+      if (date === _td) {
+        var _nowMin = _tn.getHours() * 60 + _tn.getMinutes();
+        var _slotMin = parseInt(time.split(':')[0],10) * 60 + parseInt(time.split(':')[1]||'0',10);
+        if (_slotMin <= _nowMin) {
+          errEl.textContent = '※ 本日のこの時間枠は受付を終了しました。別の時間または日付をお選びください / This time slot has closed for today. Please choose another time or date.';
+          errEl.style.display = 'block';
+          return;
+        }
       }
     }
     if (BLOCKED_DATES.indexOf(date) !== -1) {
