@@ -51,6 +51,8 @@ const STORES = [
     region: "tokyo",
     slug: "asakusa-kominka",
     same_day_reserve: false,
+    time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
+    max_guests: 14,
 
     name_full_en: "Omakase Sushi Wagyu (Halal) Tokyo Asakusa Restaurant 浅草寿司和牛餐厅",
     name_short: "Omakase 墨 — Asakusa",
@@ -71,7 +73,7 @@ const STORES = [
     hours_note: "Open Daily",
 
     // ▼ 予約導線
-    reserve_system: "tablecheck",  // "tablecheck" | "form"
+    reserve_system: "form",  // 全店フォーム予約に統一
     tablecheck_url: "https://www.tablecheck.com/shops/halal-omakase-asakusa/reserve",
     form_config: FORM_DEFAULT,
 
@@ -91,6 +93,8 @@ const STORES = [
     region: "kyoto",
     slug: "gion",
     same_day_reserve: false,
+    time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
+    max_guests: 12,
 
     name_full_en: "Kyoto Omakase Sushi & Wagyu Halal Gion Restaurant 京都寿司和牛餐厅",
     name_short: "Omakase 墨 — Gion",
@@ -110,7 +114,7 @@ const STORES = [
     hours: "11:00 – 23:00",
     hours_note: "Open Daily",
 
-    reserve_system: "tablecheck",
+    reserve_system: "form",
     tablecheck_url: "https://www.tablecheck.com/shops/5wshijo/reserve",
     form_config: FORM_DEFAULT,
 
@@ -130,6 +134,8 @@ const STORES = [
     region: "tokyo",
     slug: "tsukiji",
     same_day_reserve: false,
+    time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
+    max_guests: 10,
 
     name_full_en: "Tsukiji Fish Market Sushi Omakase & Wagyu (Halal) Restaurant 筑地寿司和牛餐厅",
     name_short: "Omakase 墨 — Tsukiji",
@@ -149,7 +155,7 @@ const STORES = [
     hours: "11:00 – 23:00",
     hours_note: "Open Daily",
 
-    reserve_system: "tablecheck",
+    reserve_system: "form",
     tablecheck_url: "https://www.tablecheck.com/shops/yakiniku-burger-ramen-zen/reserve",
     form_config: FORM_DEFAULT,
 
@@ -170,6 +176,8 @@ const STORES = [
     region: "osaka",
     slug: "higashi-shinsaibashi",
     same_day_reserve: false,
+    time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
+    max_guests: 15,
 
     name_full_en: "Osaka Omakase Sushi & Wagyu Steak Halal Dotonbori Restaurant 大阪寿司和牛餐厅",
     name_short: "Omakase 墨 — Higashi-Shinsaibashi",
@@ -189,7 +197,7 @@ const STORES = [
     hours: "11:00 – 23:00",
     hours_note: "Open Daily",
 
-    reserve_system: "tablecheck",
+    reserve_system: "form",
     tablecheck_url: "TBD",     // ⏳ 確定したら差し替え
     form_config: FORM_DEFAULT,
 
@@ -209,6 +217,8 @@ const STORES = [
     region: "tokyo",
     slug: "shinjuku-sanchome",
     same_day_reserve: true,
+    time_slots: ['13:00','15:00','17:00','19:00','21:00'],
+    max_guests: 12,
     price_adjust: 5000,  // 新宿三丁目のみ全コース税抜+5000(税込は×1.1で再計算)
 
     name_full_en: "Tokyo Omakase Sushi Wagyu (Muslim-Friendly) Shinjuku Restaurant 新宿寿司和牛餐厅",
@@ -287,17 +297,15 @@ STORES.forEach(store => {
 // 価格+5000・当日予約ありは store 側の price_adjust / same_day_reserve で反映済み。
 // 確認が済んだら、この test チャンネルのブロックは削除してよい。
 // ============================================================
-const TEST_TARGET_SLUG = "shinjuku-sanchome";
-const testStore = STORES.find(s => s.slug === TEST_TARGET_SLUG);
 const pagesTest = [];
-if (testStore) {
+STORES.forEach(s => {
   pagesTest.push({
-    ...testStore,
+    ...s,
     channel_id: "test",
     channel_suffix: "test/",
     channel_utm_source: "lp-test"
   });
-}
+});
 
 module.exports = {
   brand: {
