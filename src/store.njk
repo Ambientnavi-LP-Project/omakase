@@ -13,15 +13,6 @@ eleventyComputed:
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
 <head>
-
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TJKTLQJ6');</script>
-<!-- End Google Tag Manager -->
-
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>{{ store.name_full_en }}</title>
@@ -29,8 +20,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 {% if store.channel_id != "default" %}
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/">
-{% endif %}　　　
+{% endif %}
 
+<!-- Google tag (gtag.js) - GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ stores.brand.ga4_id }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ stores.brand.ga4_id }}', {
+    'store_name': '{{ store.slug }}',
+    'store_area': '{{ store.region }}',
+    'brand': '{{ stores.brand.brand_slug }}',
+    'channel': '{{ store.channel_id }}'
+  });
+</script>
+
+{% if store.gads_id %}
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ store.gads_id }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ store.gads_id }}');
+</script>
+{% endif %}
 
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
@@ -182,11 +197,6 @@ body { padding-bottom: 72px; }
 </head>
 
 <body class="bg-ginza-black text-ginza-ivory font-epilogue overflow-x-hidden">
-
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TJKTLQJ6"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 
 <!-- OPENING LOADER -->
 <div id="opening-overlay">
@@ -504,8 +514,8 @@ A lineup as varied as your appetite — from a sushi-focused journey, to wagyu c
   { id: "sushi-standard", cat: "sushi", tier: "Sushi Course · Standard", name: "Sushi Course Standard", base: 54800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-standard.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame"], ["鮨", "Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish) · Nigiri 3 kinds (Seared Salmon / Tamago / Wagyu) · Chef's Hand-Served Wagyu Sushi", true], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
   { id: "sushi-premium", cat: "sushi", tier: "Sushi Course · Premium", name: "Sushi Course Premium", base: 74800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-premium.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Premium Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Mini Ikura Bowl / Dashimaki Tamago / Miso Cream Cheese"], ["鮨", "Temaki: Sea Urchin · Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish) · Nigiri 3 kinds (Urchin Gunkan / Ikura Gunkan / Wagyu)", true], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
   { id: "wagyu-standard", cat: "wagyu", tier: "Wagyu Course · Standard", name: "Wagyu Course Standard", base: 54800, meta: "8 courses · 60–75 min", img: "/images/course-wagyu-standard.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Appetizer Plate — Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Simmered Wagyu Shigureni"], ["温物", "Wagyu Shabu-shabu &amp; Dashi"], ["逸品", "Wagyu Fillet Spring Roll"], ["和牛", "Mini Wagyu Sukiyaki with Egg Yolk Sauce · Wagyu Steak", true], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
-  { id: "sushi-wagyu-standard", cat: "mix", tier: "Sushi & Wagyu · Standard", name: "Sushi & Wagyu Course Standard", base: 64800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-wagyu-standard.jpg", popular: true, rows: [["序", "Chilled Tofu"], ["八寸", "Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese"], ["鮨", "Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish)"], ["温物", "Wagyu Shabu-shabu &amp; Dashi"], ["逸品", "Wagyu Fillet Spring Roll"], ["和牛", "Chef's Hand-Served Wagyu Sushi", true], ["茶と甘味・椀", "Matcha &amp; Dessert — Tsujiri · Aka-dashi Miso Soup — Lake Shinji Clams"]] },
   { id: "kobe-premium", cat: "wagyu", tier: "Kobe Beef Course · Premium", name: "Kobe Beef Course Premium", base: 74800, meta: "8 courses · 60–75 min", img: "/images/course-kobe-premium.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Kobe Beef Appetizer Plate — Kobe Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Kobe Shigureni"], ["温物", "Kobe Beef Shabu-shabu &amp; Dashi"], ["逸品", "Wagyu Fillet Spring Roll"], ["神戸牛", "Mini Kobe Beef Sukiyaki with Egg Yolk Sauce · Kobe Beef Steak", true], ["椀", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["茶と甘味", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
+  { id: "sushi-wagyu-standard", cat: "mix", tier: "Sushi & Wagyu · Standard", name: "Sushi & Wagyu Course Standard", base: 64800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-wagyu-standard.jpg", popular: true, rows: [["序", "Chilled Tofu"], ["八寸", "Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese"], ["鮨", "Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish)"], ["温物", "Wagyu Shabu-shabu &amp; Dashi"], ["逸品", "Wagyu Fillet Spring Roll"], ["和牛", "Chef's Hand-Served Wagyu Sushi", true], ["茶と甘味・椀", "Matcha &amp; Dessert — Tsujiri · Aka-dashi Miso Soup — Lake Shinji Clams"]] },
   { id: "sushi-kobe-premium", cat: "mix", tier: "Sushi & Kobe Beef · Premium", name: "Sushi & Kobe Beef Course Premium", base: 84800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-kobe-premium.jpg", popular: false, rows: [["序", "Chilled Tofu"], ["八寸", "Kobe Beef Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese"], ["鮨", "Temaki: Sea Urchin · Nigiri 3 kinds (Tuna / Salmon / Ikura Gunkan)"], ["温物", "Kobe Beef Shabu-shabu &amp; Dashi"], ["逸品", "Kobe Beef Steak"], ["神戸牛", "Seared Kobe Beef Nigiri", true], ["茶と甘味・椀", "Matcha &amp; Dessert — Tsujiri · Aka-dashi Miso Soup — Lake Shinji Clams"]] }
 ] %}
 
