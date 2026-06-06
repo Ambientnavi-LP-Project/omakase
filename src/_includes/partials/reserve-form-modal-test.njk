@@ -441,18 +441,22 @@
   // ============================================================
   // Course picker (sub-modal with cards + collapsible details)
   // ============================================================
+  var PRICE_ADJUST = parseInt('{{ store.price_adjust or 0 }}', 10) || 0;
+  function cpYen_(n){ return '¥' + n.toLocaleString('en-US'); }
+  function cpPrice_(base){ return cpYen_(base + PRICE_ADJUST); }
+  function cpTax_(base){ return cpYen_(Math.floor((base + PRICE_ADJUST) * 1.1)); }
   var CP_COURSES = [
-    { id:'sushi-standard', cat:'sushi', name:'Sushi Course Standard', price:'¥59,800', tax:'¥65,780', meta:'8 courses · 60–75 min',
+    { id:'sushi-standard', cat:'sushi', name:'Sushi Course Standard', base:54800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame',0],['鮨','Temaki: Salmon & Ikura · Nigiri 3 kinds · Hand-Served Wagyu Sushi',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
-    { id:'sushi-premium', cat:'sushi', name:'Sushi Course Premium', price:'¥79,800', tax:'¥87,780', meta:'8 courses · 60–75 min',
+    { id:'sushi-premium', cat:'sushi', name:'Sushi Course Premium', base:74800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Premium Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Mini Ikura Bowl / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Sea Urchin · Temaki: Salmon & Ikura · Nigiri 6 kinds (incl. Urchin / Ikura Gunkan)',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
-    { id:'wagyu-standard', cat:'wagyu', name:'Wagyu Course Standard', price:'¥59,800', tax:'¥65,780', meta:'8 courses · 60–75 min',
+    { id:'wagyu-standard', cat:'wagyu', name:'Wagyu Course Standard', base:54800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Appetizer Plate — Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Wagyu Shigureni',0],['温物','Wagyu Shabu-shabu & Dashi',0],['逸品','Wagyu Fillet Spring Roll',0],['和牛','Mini Wagyu Sukiyaki with Egg Yolk Sauce · Wagyu Steak',1],['椀・甘味','Miso Soup · Matcha & Dessert',0]] },
-    { id:'sushi-wagyu-standard', cat:'mix', name:'Sushi & Wagyu Course Standard', price:'¥69,800', tax:'¥76,780', meta:'8 courses · 60–75 min', popular:true,
+    { id:'sushi-wagyu-standard', cat:'mix', name:'Sushi & Wagyu Course Standard', base:64800, meta:'8 courses · 60–75 min', popular:true,
       rows:[['序','Chilled Tofu',0],['八寸','Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Salmon & Ikura · Nigiri 3 kinds',0],['温物','Wagyu Shabu-shabu & Dashi',0],['和牛','Hand-Served Wagyu Sushi',1],['茶と甘味・椀','Matcha & Dessert · Miso Soup',0]] },
-    { id:'kobe-premium', cat:'wagyu', name:'Kobe Beef Course Premium', price:'¥79,800', tax:'¥87,780', meta:'8 courses · 60–75 min',
+    { id:'kobe-premium', cat:'wagyu', name:'Kobe Beef Course Premium', base:74800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Kobe Beef Appetizer Plate — Kobe Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Kobe Shigureni',0],['温物','Kobe Beef Shabu-shabu & Dashi',0],['逸品','Wagyu Fillet Spring Roll',0],['神戸牛','Mini Kobe Beef Sukiyaki with Egg Yolk Sauce · Kobe Beef Steak',1],['椀・甘味','Miso Soup · Matcha & Dessert',0]] },
-    { id:'sushi-kobe-premium', cat:'mix', name:'Sushi & Kobe Beef Course Premium', price:'¥89,800', tax:'¥98,780', meta:'8 courses · 60–75 min',
+    { id:'sushi-kobe-premium', cat:'mix', name:'Sushi & Kobe Beef Course Premium', base:84800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Kobe Beef Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Sea Urchin · Nigiri 3 kinds',0],['温物','Kobe Beef Shabu-shabu & Dashi',0],['逸品','Kobe Beef Steak',1],['神戸牛','Seared Kobe Beef Nigiri',1],['茶と甘味・椀','Matcha & Dessert · Miso Soup',0]] }
   ];
   var CP_CATCOLOR = { sushi:'#5dc9b0', wagyu:'#d36a5a', mix:'#c9a96e' };
@@ -475,7 +479,7 @@
         + '<div class="cp-body">'
         + '<span class="cp-badge">'+CP_CATLABEL[c.cat]+'</span>'
         + '<div class="cp-name">'+c.name+'</div>'
-        + '<div class="cp-price"><span class="cp-price-main">'+c.price+'</span><span class="cp-price-tax">('+c.tax+' incl.tax)</span></div>'
+        + '<div class="cp-price"><span class="cp-price-main">'+cpPrice_(c.base)+'</span><span class="cp-price-tax">('+cpTax_(c.base)+' incl.tax)</span></div>'
         + '<div class="cp-meta">'+c.meta+'</div>'
         + '<button type="button" class="cp-detbtn" data-toggle="'+c.id+'">詳細を見る / SEE DETAILS</button>'
         + '<div class="cp-detail" id="cp-detail-'+c.id+'"><div class="cp-detail-inner">'+rows+'</div></div>'
@@ -499,10 +503,10 @@
   window.cpChoose = function(id){
     var c = CP_COURSES.filter(function(x){return x.id===id;})[0];
     if (!c) return;
-    var val = c.name + ' - ' + c.price + ' (' + c.tax + ' incl.tax) / ' + c.meta;
+    var val = c.name + ' - ' + cpPrice_(c.base) + ' (' + cpTax_(c.base) + ' incl.tax) / ' + c.meta;
     document.getElementById('r_course').value = val;
     var lbl = document.getElementById('course-trigger-label');
-    if (lbl){ lbl.textContent = c.name + '  ' + c.price; lbl.style.color = '#f0ede4'; }
+    if (lbl){ lbl.textContent = c.name + '  ' + cpPrice_(c.base); lbl.style.color = '#f0ede4'; }
     closeCoursePicker();
   };
   window.openCoursePicker = function(){
