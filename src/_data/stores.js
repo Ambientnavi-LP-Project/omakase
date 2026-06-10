@@ -313,6 +313,29 @@ STORES.forEach(s => {
   });
 });
 
+// ============================================================
+// 寿司特化LP用ページ(祇園四条・東心斎橋のみ)
+// 別テンプレ store-sushi.njk が消費する。
+// URLは /{region}/{slug}/sushi/ (例: /kyoto/gion/sushi/、/osaka/higashi-shinsaibashi/sushi/)
+//
+// store.njk(和牛+寿司の通常LP)とは内容が異なる別ページ:
+//  - 和牛中心の Our Story を削除し、寿司の店という情報だけ残した寿司特化版
+//  - コースも寿司コースのみに絞る(テンプレ側で実装)
+// channel_id="sushi" なので GA4 では channel=sushi で計測でき、
+// 予約リンクのUTMは utm_source=lp-sushi が付与される。
+//
+// 対象店を増やす/減らすときは SUSHI_SLUGS を編集するだけ。
+// ============================================================
+const SUSHI_SLUGS = ["gion", "higashi-shinsaibashi"];
+const pagesSushi = STORES
+  .filter(s => SUSHI_SLUGS.includes(s.slug))
+  .map(s => ({
+    ...s,
+    channel_id: "sushi",
+    channel_suffix: "sushi/",
+    channel_utm_source: "lp-sushi"
+  }));
+
 module.exports = {
   brand: {
     domain: "japan-omakase.wagyu-sushi.com",
@@ -323,6 +346,7 @@ module.exports = {
   },
   stores: STORES,
   channels: CHANNELS,
-  pages: pages,        // 本番用(default/japan/global/map)。testは含まない。
-  pagesTest: pagesTest // テスト用(新宿三丁目のtestチャンネルのみ)。store-test.njk が使う。
+  pages: pages,         // 本番用(default/japan/global/map)。testは含まない。
+  pagesTest: pagesTest, // テスト用(新宿三丁目のtestチャンネルのみ)。store-test.njk が使う。
+  pagesSushi: pagesSushi // 寿司特化LP用(祇園四条・東心斎橋)。store-sushi.njk が使う。
 };
