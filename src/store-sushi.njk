@@ -821,7 +821,7 @@ Open {{ store.hours }}
 </footer>
 
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
-  {% include "partials/reserve-form-modal.njk" %}
+  {% include "partials/reserve-form-modal-sushi.njk" %}
 {% endif %}
 
 {% if store.is_form_reserve != 'true' and is_form_reserve != 'true' and store.tablecheck_url == 'TBD' %}
