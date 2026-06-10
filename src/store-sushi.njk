@@ -269,13 +269,7 @@ body { padding-bottom: 72px; }
 <section class="relative h-screen w-full flex flex-col justify-end items-center overflow-hidden" id="hero">
 <div class="absolute inset-0 z-0">
 <div id="hero-stage">
-{% if store.projection_mapping %}
-<video class="hero-bg-video" autoplay muted loop playsinline preload="auto">
-<source src="/images/hero1.mp4" type="video/mp4"/>
-</video>
-{% else %}
-<picture><source media="(max-width:680px)" srcset="/images/course2.jpg"/><img class="hero-bg-video" src="/images/course1.jpg" alt=""/></picture>
-{% endif %}
+<picture><source media="(max-width:680px)" srcset="/images/sushi-hero.jpg"/><img class="hero-bg-video" src="/images/sushi-hero.jpg" alt="Sushi omakase selection"/></picture>
 <div class="hero-scrim-top"></div>
 <div class="hero-scrim-bottom"></div>
 </div>
