@@ -190,6 +190,32 @@ body { padding-bottom: 72px; }
 .hero-title{z-index:1;text-shadow:0 2px 24px rgba(0,0,0,0.85),0 1px 4px rgba(0,0,0,0.9);}
 .hero-sub{text-shadow:0 1px 12px rgba(0,0,0,0.95),0 0 30px rgba(0,0,0,0.8);}
 @media (max-width:680px){.hinomaru{width:120px;height:120px;}}
+
+/* ===== Japanese accents: 青海波 (seigaiha) waves + 金箔 gold-leaf flakes ===== */
+.seigaiha{position:relative;isolation:isolate;}
+.seigaiha::before{
+  content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='42' viewBox='0 0 84 42'%3E%3Cg fill='none' stroke='%23c9a96e' stroke-width='1'%3E%3Ccircle cx='0' cy='42' r='38'/%3E%3Ccircle cx='0' cy='42' r='29'/%3E%3Ccircle cx='0' cy='42' r='20'/%3E%3Ccircle cx='0' cy='42' r='11'/%3E%3Ccircle cx='42' cy='42' r='38'/%3E%3Ccircle cx='42' cy='42' r='29'/%3E%3Ccircle cx='42' cy='42' r='20'/%3E%3Ccircle cx='42' cy='42' r='11'/%3E%3Ccircle cx='84' cy='42' r='38'/%3E%3Ccircle cx='84' cy='42' r='29'/%3E%3Ccircle cx='84' cy='42' r='20'/%3E%3Ccircle cx='84' cy='42' r='11'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:84px 42px;background-repeat:repeat;
+  opacity:0.06;                       /* ← 波柄の濃さ。0.04〜0.10で調整 */
+  animation:seigaihaDrift 70s linear infinite;
+}
+@keyframes seigaihaDrift{from{background-position:0 0;}to{background-position:84px 0;}}
+
+/* 金箔 (gold leaf) drifting slowly up through the hero */
+.gold-flakes{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden;}
+.gold-flakes span{position:absolute;bottom:-12px;width:7px;height:7px;
+  background:radial-gradient(circle at 35% 30%,#f0d99a 0%,#d9b876 45%,#b8923f 100%);
+  border-radius:60% 40% 55% 45%/55% 45% 60% 40%;
+  opacity:0;filter:drop-shadow(0 0 4px rgba(201,169,110,0.55));
+  animation:flakeFloat linear infinite;}
+@keyframes flakeFloat{
+  0%{opacity:0;transform:translateY(0) translateX(0) rotate(0deg) scale(0.5);}
+  12%{opacity:0.85;}
+  85%{opacity:0.5;}
+  100%{opacity:0;transform:translateY(-80vh) translateX(var(--sway,14px)) rotate(220deg) scale(1);}
+}
+@media (prefers-reduced-motion: reduce){ .seigaiha::before{animation:none;} .gold-flakes{display:none;} }
 </style>
 </head>
 
@@ -254,7 +280,7 @@ body { padding-bottom: 72px; }
 <img src="/images/top.jpg" alt="" class="w-8 h-8 rounded-full object-cover border border-ginza-gold/40 flex-shrink-0"/>
 <div class="flex flex-col leading-none min-w-0">
 <span class="text-[8px] tracking-[0.3em] text-ginza-gold/60 uppercase mb-1">Omakase Sushi</span>
-<span class="text-[10px] md:text-[11px] text-ginza-gold leading-tight font-cormorant truncate">{{ store.name_full_en }}</span>
+<span class="text-[10px] md:text-[11px] text-ginza-gold leading-tight font-cormorant break-words">{{ store.name_full_en }}</span>
 </div>
 </div>
 <div class="hidden xs:flex items-center gap-4 flex-shrink-0">
@@ -273,6 +299,19 @@ body { padding-bottom: 72px; }
 <div class="hero-scrim-top"></div>
 <div class="hero-scrim-bottom"></div>
 </div>
+</div>
+
+<!-- 金箔: drifting gold-leaf flakes -->
+<div class="gold-flakes" aria-hidden="true">
+<span style="left:8%;animation-duration:13s;animation-delay:0s;--sway:18px;"></span>
+<span style="left:18%;animation-duration:16s;animation-delay:3s;--sway:-14px;width:5px;height:5px;"></span>
+<span style="left:30%;animation-duration:11s;animation-delay:1.5s;--sway:22px;"></span>
+<span style="left:42%;animation-duration:14.5s;animation-delay:5s;--sway:-20px;width:9px;height:9px;"></span>
+<span style="left:55%;animation-duration:12s;animation-delay:2s;--sway:16px;"></span>
+<span style="left:66%;animation-duration:15s;animation-delay:6.5s;--sway:-12px;width:5px;height:5px;"></span>
+<span style="left:76%;animation-duration:13.5s;animation-delay:4s;--sway:20px;"></span>
+<span style="left:88%;animation-duration:10.5s;animation-delay:1s;--sway:-18px;width:6px;height:6px;"></span>
+<span style="left:95%;animation-duration:17s;animation-delay:7s;--sway:14px;width:5px;height:5px;"></span>
 </div>
 
 <div class="relative z-10 w-full px-7 pb-20 text-center">
@@ -380,7 +419,7 @@ A journey through Japan's food culture — sushi and projection-mapped dining. M
 <div class="pm-divider"></div>
 
 <!-- MENU -->
-<section class="reveal py-16 bg-ginza-black" id="menu">
+<section class="reveal py-16 bg-ginza-black seigaiha" id="menu">
 <div class="text-center mb-10 px-6">
 <p class="section-label mb-4">Menu · Mastery</p>
 <h3 class="font-cormorant text-3xl mb-4 leading-snug">"The Art of Sushi"</h3>
@@ -739,7 +778,7 @@ allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" ti
 </section>
 
 <!-- HALAL -->
-<section class="reveal py-20 px-8 bg-halal-green border-t border-ginza-gold/10">
+<section class="reveal py-20 px-8 bg-halal-green border-t border-ginza-gold/10 seigaiha">
 <div class="flex flex-col items-center text-center max-w-[390px] mx-auto">
 <div class="w-16 h-16 mb-6 text-ginza-gold opacity-80">
 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24">
