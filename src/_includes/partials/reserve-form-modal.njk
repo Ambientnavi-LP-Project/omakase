@@ -219,27 +219,9 @@
 
         <div style="margin-bottom:20px;"><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">ご要望 / Special Requests</label><textarea id="r_message" rows="3" placeholder="Allergies, dietary requirements, special occasions..." style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;resize:vertical;-webkit-appearance:none;"></textarea></div>
 
-        <div style="background:rgba(201,169,110,0.05);border:1px solid rgba(201,169,110,0.2);border-radius:8px;padding:12px 14px;margin-bottom:20px;font-size:11px;color:rgba(240,237,228,0.5);line-height:1.7;">
-          <p style="margin:0 0 6px;color:rgba(201,169,110,0.7);font-weight:600;">キャンセルポリシー / Cancellation Policy</p>
-          <p style="margin:0 0 4px;">・24時間前以内：¥10,000 / person &nbsp;|&nbsp; Within 24 hours: ¥10,000 / person</p>
-          <p style="margin:0 0 10px;">・48時間前以内：¥5,000 / person &nbsp;|&nbsp; Within 48 hours: ¥5,000 / person</p>
-          <hr style="border:none;border-top:1px solid rgba(201,169,110,0.15);margin:8px 0;"/>
-          <hr style="border:none;border-top:1px solid rgba(201,169,110,0.15);margin:8px 0;"/>
-          {% if store.tel_display != 'TBD' %}
-          <p style="margin:0;color:rgba(240,237,228,0.6);font-weight:400;">* For urgent inquiries, please call us at <a href="tel:{{ store.tel_raw }}" style="color:#c9a96e;text-decoration:underline;">{{ store.tel_display }}</a>.</p>
-          {% endif %}
-        </div>
-
-        <div style="background:rgba(201,169,110,0.05);border:1px solid rgba(201,169,110,0.2);border-radius:8px;padding:12px 14px;margin-bottom:12px;font-size:11px;color:rgba(240,237,228,0.5);line-height:1.7;">
-          <p style="margin:0 0 6px;color:rgba(201,169,110,0.7);font-weight:600;">個人情報の取り扱いについて / Privacy Policy</p>
-          <p style="margin:0 0 6px;">ご入力いただいた個人情報(お名前・メールアドレス・電話番号等)は、ご予約の確認・連絡および当店からのお知らせのみに使用し、第三者に提供することはございません。法令に基づく場合を除き、お客様の同意なく目的外に利用することはありません。</p>
-          <p style="margin:0;color:rgba(240,237,228,0.4);">* Personal information you provide (name, email, phone number, etc.) will be used solely for reservation confirmation, communication, and store notifications. We will not share your information with third parties except as required by law.</p>
-        </div>
-
         <p id="r_error" style="color:#e57373;font-size:12px;margin-bottom:12px;display:none;"></p>
         <button onclick="openConfirmDialog()" id="r_submit" style="width:100%;background:#c9a96e;color:#090909;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.15em;text-transform:uppercase;padding:14px;border:none;border-radius:8px;cursor:pointer;">SEND REQUEST / 送信する</button>
 
-        <p style="font-size:10px;color:rgba(240,237,228,0.35);margin:10px 0 0;text-align:center;line-height:1.6;">送信することで、上記の個人情報の取り扱いに同意したものとみなされます。<br/>By submitting, you agree to the privacy terms above.</p>
       </div>
 
       {# Success screen — shown after EmailJS send succeeds #}
@@ -303,6 +285,22 @@
           <span style="font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.6);text-transform:uppercase;flex-shrink:0;">Course / コース</span>
           <span id="confirm_course" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:#c9a96e;font-weight:600;text-align:right;line-height:1.4;">—</span>
         </div>
+      </div>
+
+      <!-- キャンセルポリシー & 個人情報（確定画面に表示） -->
+      <div style="background:rgba(201,169,110,0.05);border:1px solid rgba(201,169,110,0.2);border-radius:8px;padding:12px 14px;margin-bottom:12px;font-size:11px;color:rgba(240,237,228,0.5);line-height:1.7;">
+        <p style="margin:0 0 6px;color:rgba(201,169,110,0.7);font-weight:600;">キャンセルポリシー / Cancellation Policy</p>
+        <p style="margin:0 0 4px;">・24時間前以内：¥10,000 / person &nbsp;|&nbsp; Within 24 hours: ¥10,000 / person</p>
+        <p style="margin:0 0 10px;">・48時間前以内：¥5,000 / person &nbsp;|&nbsp; Within 48 hours: ¥5,000 / person</p>
+        {% if store.tel_display != 'TBD' %}
+        <hr style="border:none;border-top:1px solid rgba(201,169,110,0.15);margin:8px 0;"/>
+        <p style="margin:0;color:rgba(240,237,228,0.6);font-weight:400;">* For urgent inquiries, please call us at <a href="tel:{{ store.tel_raw }}" style="color:#c9a96e;text-decoration:underline;">{{ store.tel_display }}</a>.</p>
+        {% endif %}
+      </div>
+
+      <div style="background:rgba(201,169,110,0.05);border:1px solid rgba(201,169,110,0.2);border-radius:8px;padding:12px 14px;margin-bottom:18px;font-size:11px;color:rgba(240,237,228,0.5);line-height:1.7;">
+        <p style="margin:0 0 6px;color:rgba(201,169,110,0.7);font-weight:600;">Privacy Policy</p>
+        <p style="margin:0;color:rgba(240,237,228,0.4);">* Personal information you provide (name, email, phone number, etc.) will be used solely for reservation confirmation, communication, and store notifications. We will not share your information with third parties except as required by law.</p>
       </div>
 
       <div style="margin-bottom:20px;">
