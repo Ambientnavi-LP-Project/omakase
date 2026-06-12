@@ -172,13 +172,14 @@
           <input id="r_website" name="website" type="text" tabindex="-1" autocomplete="off"/>
         </div>
 
-        <div style="margin-bottom:16px;"><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">お名前 / Name *</label><input id="r_name" type="text" placeholder="Yamada Taro" autocomplete="name" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"/></div>
-        <div style="margin-bottom:16px;"><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">メールアドレス / Email *</label><input id="r_email" type="email" placeholder="example@email.com" autocomplete="email" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"/></div>
-        <div style="margin-bottom:16px;"><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">電話番号 / Phone *</label><input id="r_phone" type="tel" placeholder="+81 90-0000-0000" autocomplete="tel" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"/></div>
+        <p style="font-size:11px;color:rgba(240,237,228,0.5);margin:0 0 14px;"><span style="color:#e2574c;font-weight:700;">*</span> は必須項目です / Required fields</p>
+        <div style="margin-bottom:16px;"><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">お名前 / Name <span style="color:#e2574c;font-weight:700;margin-left:2px;">*</span></label><input id="r_name" type="text" placeholder="Yamada Taro" autocomplete="name" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"/></div>
+        <div style="margin-bottom:16px;"><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">メールアドレス / Email <span style="color:#e2574c;font-weight:700;margin-left:2px;">*</span></label><input id="r_email" type="email" placeholder="example@email.com" autocomplete="email" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"/></div>
+        <div style="margin-bottom:16px;"><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">電話番号 / Phone <span style="color:#e2574c;font-weight:700;margin-left:2px;">*</span></label><input id="r_phone" type="tel" placeholder="+81 90-0000-0000" autocomplete="tel" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"/></div>
         <div style="margin-bottom:16px;"><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">紹介者 / Referred by</label><input id="r_referrer" type="text" placeholder="Optional" autocomplete="off" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"/></div>
 
         <div style="margin-bottom:16px;">
-          <label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:8px;">コース / Course *</label>
+          <label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:8px;">コース / Course <span style="color:#e2574c;font-weight:700;margin-left:2px;">*</span></label>
           <button type="button" id="course-trigger" onclick="openCoursePicker()" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:13px 14px;color:#f0ede4;font-size:14px;box-sizing:border-box;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;">
             <span id="course-trigger-label" style="color:rgba(240,237,228,0.5);">コースを選択 / Select a course</span>
             <span style="color:#c9a96e;font-size:12px;flex-shrink:0;">▼</span>
@@ -188,12 +189,12 @@
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-          <div><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">人数 / Guests *</label><select id="r_guests" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"><option value="">-</option>{% for n in range(1, (store.max_guests or 8) + 1) %}<option>{{ n }}</option>{% endfor %}</select></div>
-          <div><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">希望時間 / Time *</label><select id="r_time" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"><option value="">-</option>{% for t in store.time_slots %}<option value="{{ t }}">{{ t }}</option>{% endfor %}</select></div>
+          <div><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">人数 / Guests <span style="color:#e2574c;font-weight:700;margin-left:2px;">*</span></label><select id="r_guests" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"><option value="">-</option>{% for n in range(1, (store.max_guests or 8) + 1) %}<option>{{ n }}</option>{% endfor %}</select></div>
+          <div><label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">希望時間 / Time <span style="color:#e2574c;font-weight:700;margin-left:2px;">*</span></label><select id="r_time" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:10px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;"><option value="">-</option>{% for t in store.time_slots %}<option value="{{ t }}">{{ t }}</option>{% endfor %}</select></div>
         </div>
 
         <div style="margin-bottom:16px;">
-          <label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">希望日 / Preferred Date *</label>
+          <label style="display:block;font-size:10px;letter-spacing:0.15em;color:rgba(201,169,110,0.7);text-transform:uppercase;margin-bottom:6px;">希望日 / Preferred Date <span style="color:#e2574c;font-weight:700;margin-left:2px;">*</span></label>
           <div style="position:relative;" onclick="document.getElementById('r_date').showPicker ? document.getElementById('r_date').showPicker() : document.getElementById('r_date').focus();">
             <input id="r_date" type="date" style="width:100%;background:#1a1a1a;border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:12px 40px 12px 14px;color:#f0ede4;font-size:16px;box-sizing:border-box;-webkit-appearance:none;cursor:pointer;" onclick="event.stopPropagation(); this.showPicker && this.showPicker();"/>
             <svg style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#c9a96e;pointer-events:none;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -220,8 +221,8 @@
 
         <div style="background:rgba(201,169,110,0.05);border:1px solid rgba(201,169,110,0.2);border-radius:8px;padding:12px 14px;margin-bottom:20px;font-size:11px;color:rgba(240,237,228,0.5);line-height:1.7;">
           <p style="margin:0 0 6px;color:rgba(201,169,110,0.7);font-weight:600;">キャンセルポリシー / Cancellation Policy</p>
-          <p style="margin:0 0 4px;">・24時間前以内：¥5,000 / person &nbsp;|&nbsp; Within 24 hours: ¥5,000 / person</p>
-          <p style="margin:0 0 10px;">・48時間前以内：¥2,500 / person &nbsp;|&nbsp; Within 48 hours: ¥2,500 / person</p>
+          <p style="margin:0 0 4px;">・24時間前以内：¥10,000 / person &nbsp;|&nbsp; Within 24 hours: ¥10,000 / person</p>
+          <p style="margin:0 0 10px;">・48時間前以内：¥5,000 / person &nbsp;|&nbsp; Within 48 hours: ¥5,000 / person</p>
           <hr style="border:none;border-top:1px solid rgba(201,169,110,0.15);margin:8px 0;"/>
           <hr style="border:none;border-top:1px solid rgba(201,169,110,0.15);margin:8px 0;"/>
           {% if store.tel_display != 'TBD' %}
@@ -528,7 +529,7 @@
   // ============================================================
   // Open / Close modal
   // ============================================================
-  window.openReserveModal = function(label) {
+  window.openReserveModal = function(label, preselectCourseId) {
     document.getElementById('reserveModal').style.display = 'block';
     document.body.style.overflow = 'hidden';
     window._reserveModalOpenedAt = Date.now();
@@ -583,6 +584,22 @@
     if (err) { err.style.display = 'none'; err.textContent = ''; }
     var btn = document.getElementById('r_submit');
     if (btn) { btn.textContent = 'SEND REQUEST / 送信する'; btn.disabled = false; }
+
+    // カードから「このコースで予約」で開かれた場合：コースを事前選択
+    if (preselectCourseId && window.cpChoose) {
+      // cpChoose は coursePicker を閉じる前提だが、ここでは picker は未表示なので値セットのみ走る
+      window.cpChoose(preselectCourseId);
+      if (typeof gtag === 'function') {
+        gtag('event', 'course_preselect', {
+          'event_category': 'engagement',
+          'event_label': preselectCourseId,
+          'store_name': '{{ store.slug }}',
+          'store_area': '{{ store.region }}',
+          'brand': '{{ stores.brand.brand_slug }}',
+          'channel': '{{ store.channel_id }}'
+        });
+      }
+    }
   };
 
   // ============================================================
