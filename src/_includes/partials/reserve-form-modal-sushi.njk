@@ -558,6 +558,26 @@
       event: 'reserve_modal_open',
       reserve_button_location: label
     });
+
+    // カードの「Reserve」から開かれた場合：そのコースを事前選択
+    if (preselectCourseId && window.cpChoose) {
+      window.cpChoose(preselectCourseId);
+      if (typeof gtag === 'function') {
+        gtag('event', 'course_preselect', {
+          'event_category': 'engagement',
+          'event_label': preselectCourseId,
+          'store_name': '{{ store.slug }}',
+          'store_area': '{{ store.region }}',
+          'brand': '{{ stores.brand.brand_slug }}',
+          'channel': '{{ store.channel_id }}'
+        });
+      }
+    } else {
+      var rc = document.getElementById('r_course');
+      if (rc) rc.value = '';
+      var ctl0 = document.getElementById('course-trigger-label');
+      if (ctl0) { ctl0.textContent = 'コースを選択 / Select a course'; ctl0.style.color = 'rgba(240,237,228,0.5)'; }
+    }
   };
 
   window.closeReserveModal = function() {
@@ -582,22 +602,6 @@
     if (err) { err.style.display = 'none'; err.textContent = ''; }
     var btn = document.getElementById('r_submit');
     if (btn) { btn.textContent = 'SEND REQUEST / 送信する'; btn.disabled = false; }
-
-    // カードから「このコースで予約」で開かれた場合：コースを事前選択
-    if (preselectCourseId && window.cpChoose) {
-      // cpChoose は coursePicker を閉じる前提だが、ここでは picker は未表示なので値セットのみ走る
-      window.cpChoose(preselectCourseId);
-      if (typeof gtag === 'function') {
-        gtag('event', 'course_preselect', {
-          'event_category': 'engagement',
-          'event_label': preselectCourseId,
-          'store_name': '{{ store.slug }}',
-          'store_area': '{{ store.region }}',
-          'brand': '{{ stores.brand.brand_slug }}',
-          'channel': '{{ store.channel_id }}'
-        });
-      }
-    }
   };
 
   // ============================================================
