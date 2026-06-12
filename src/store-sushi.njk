@@ -516,6 +516,22 @@ From a sushi-focused journey to sushi paired with premium Wagyu or Kobe beef —
 <button onclick="toggleCourse('{{ c.id }}')" class="w-full text-[10px] font-josefin tracking-widest border border-ginza-gold/30 text-ginza-gold/70 py-2 rounded-lg flex items-center justify-center gap-1">
 SEE DETAILS <svg class="chevron-icon w-3 h-3" id="chevron-{{ c.id }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/></svg>
 </button>
+{% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
+<button onclick="openReserveModal('course_card', '{{ c.id }}')" class="w-full mt-2 text-[11px] font-josefin font-bold tracking-widest bg-ginza-gold text-ginza-black py-2.5 rounded-lg flex items-center justify-center gap-1.5 hover:scale-[1.03] transition-transform" data-ga-event="reserve_click" data-ga-location="course_card_{{ c.id }}">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+このコースで予約 / Reserve
+</button>
+{% elif store.tablecheck_url == 'TBD' %}
+<button onclick="openCallReserveModal('course_card_{{ c.id }}')" class="w-full mt-2 text-[11px] font-josefin font-bold tracking-widest bg-ginza-gold text-ginza-black py-2.5 rounded-lg flex items-center justify-center gap-1.5 hover:scale-[1.03] transition-transform" data-ga-event="reserve_click" data-ga-location="course_card_{{ c.id }}">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+このコースで予約 / Reserve
+</button>
+{% else %}
+<a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="w-full mt-2 text-[11px] font-josefin font-bold tracking-widest bg-ginza-gold text-ginza-black py-2.5 rounded-lg flex items-center justify-center gap-1.5 hover:scale-[1.03] transition-transform" data-ga-event="reserve_click" data-ga-location="course_card_{{ c.id }}">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+このコースで予約 / Reserve
+</a>
+{% endif %}
 <div class="course-detail-panel" id="detail-{{ c.id }}">
 <div class="border-t border-ginza-gold/10 space-y-2 pt-3 mt-3">
 {% for r in c.rows %}
@@ -1066,5 +1082,70 @@ Open {{ store.hours }}
   }, 9000);
 })();
 </script>
+
+<!-- ===== 離脱防止ダイアログ（20秒経過で表示・1セッション1回） ===== -->
+<style>
+  .stay-modal-backdrop{position:fixed;inset:0;z-index:300;background:rgba(9,9,9,0.82);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .35s ease;}
+  .stay-modal-backdrop.open{display:flex;opacity:1;}
+  .stay-modal{position:relative;width:100%;max-width:380px;background:linear-gradient(180deg,#0e0e0e 0%,#090909 100%);border:1px solid rgba(201,169,110,0.4);border-radius:18px;padding:38px 26px 28px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,0.7),0 0 44px rgba(201,169,110,0.12);transform:translateY(22px) scale(0.98);transition:transform .4s ease;}
+  .stay-modal-backdrop.open .stay-modal{transform:translateY(0) scale(1);}
+  .stay-modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(240,237,228,0.06);border:1px solid rgba(201,169,110,0.2);color:rgba(240,237,228,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;}
+  .stay-modal-close:hover{background:rgba(240,237,228,0.12);color:#c9a96e;}
+  .stay-modal-pulse{display:inline-flex;align-items:center;gap:8px;background:rgba(201,169,110,0.1);border:1px solid rgba(201,169,110,0.4);border-radius:999px;padding:6px 14px;margin-bottom:18px;}
+  .stay-modal-pulse .dot{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:stayPulseRed 1.8s ease-in-out infinite;box-shadow:0 0 0 0 rgba(239,68,68,0.7);}
+  @keyframes stayPulseRed{0%{box-shadow:0 0 0 0 rgba(239,68,68,0.7);}70%{box-shadow:0 0 0 8px rgba(239,68,68,0);}100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}}
+  .stay-modal-pulse span{font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#c9a96e;}
+  .stay-modal-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:26px;color:#f0ede4;line-height:1.3;margin:0 0 14px;}
+  .stay-modal-desc{font-family:'Epilogue',sans-serif;font-weight:300;font-size:13px;line-height:1.7;color:rgba(240,237,228,0.65);margin:0 0 24px;}
+  .stay-modal-cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border-radius:10px;border:none;cursor:pointer;background:#c9a96e;color:#090909;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;box-shadow:0 0 24px rgba(201,169,110,0.3);transition:transform .2s,opacity .2s;}
+  .stay-modal-cta:hover{transform:scale(1.03);opacity:0.95;}
+  .stay-modal-dismiss{display:inline-block;margin-top:14px;background:none;border:none;cursor:pointer;font-family:'Josefin Sans',sans-serif;font-size:11px;letter-spacing:0.1em;color:rgba(240,237,228,0.4);text-decoration:underline;text-underline-offset:3px;}
+  .stay-modal-dismiss:hover{color:rgba(240,237,228,0.7);}
+</style>
+<div class="stay-modal-backdrop" id="stayModal" onclick="if(event.target===this)closeStayModal('backdrop')">
+  <div class="stay-modal" role="dialog" aria-modal="true" aria-labelledby="stayModalTitle">
+    <button class="stay-modal-close" onclick="closeStayModal('x')" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/></svg>
+    </button>
+    <div class="stay-modal-pulse"><span class="dot"></span><span>Seats fill up fast</span></div>
+    <h3 class="stay-modal-title" id="stayModalTitle">迷っていますか？<br/>Still deciding?</h3>
+    <p class="stay-modal-desc">
+      お席は先着順のため、人気の日程・コースから埋まってしまうことがございます。<br/>
+      ご検討中でしたら、お早めのご予約がおすすめです。<br/>
+      <span style="display:block;margin-top:8px;color:rgba(240,237,228,0.45);font-size:12px;">Seats are first-come, first-served — popular courses can sell out.</span>
+    </p>
+    <button class="stay-modal-cta" onclick="stayModalGoCourses()" data-ga-event="stay_modal_cta" data-ga-location="stay_modal">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#090909" stroke-width="1.8"><path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/></svg>
+      人気コースを見る / View Courses
+    </button>
+    <button class="stay-modal-dismiss" onclick="closeStayModal('later')">あとで / Maybe later</button>
+  </div>
+</div>
+<script>
+(function(){
+  var KEY='stay_modal_shown', DELAY=20000, shown=false;
+  function alreadyShown(){try{return sessionStorage.getItem(KEY)==='1';}catch(e){return false;}}
+  function markShown(){try{sessionStorage.setItem(KEY,'1');}catch(e){}}
+  window.openStayModal=function(){
+    if(shown||alreadyShown())return;
+    var m=document.getElementById('stayModal'); if(!m)return;
+    shown=true; markShown(); m.classList.add('open'); document.body.style.overflow='hidden';
+    if(typeof gtag==='function'){gtag('event','stay_modal_open',{'event_category':'engagement','event_label':'20s_timer','store_name':'{{ store.slug }}','store_area':'{{ store.region }}','brand':'{{ stores.brand.brand_slug }}','channel':'{{ store.channel_id }}'});}
+  };
+  window.closeStayModal=function(how){
+    var m=document.getElementById('stayModal'); if(!m)return;
+    m.classList.remove('open'); document.body.style.overflow='';
+    if(typeof gtag==='function'){gtag('event','stay_modal_close',{'event_category':'engagement','event_label':how||'close','store_name':'{{ store.slug }}','store_area':'{{ store.region }}','brand':'{{ stores.brand.brand_slug }}','channel':'{{ store.channel_id }}'});}
+  };
+  window.stayModalGoCourses=function(){
+    closeStayModal('cta_courses');
+    var t=document.getElementById('courses');
+    if(t){requestAnimationFrame(function(){t.scrollIntoView({behavior:'smooth',block:'start'});});}
+  };
+  if(!alreadyShown()){setTimeout(window.openStayModal,DELAY);}
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){var m=document.getElementById('stayModal');if(m&&m.classList.contains('open'))closeStayModal('esc');}});
+})();
+</script>
+
 </body>
 </html>
