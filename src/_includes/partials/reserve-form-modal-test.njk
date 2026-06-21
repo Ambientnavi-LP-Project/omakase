@@ -112,6 +112,22 @@
   .cp-sig{font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--cpcol);border:1px solid var(--cpcol);border-radius:999px;padding:1px 5px;margin-left:3px;}
   .cp-select{width:100%;background:var(--cpcol);color:#0a0a0a;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:11px;border:none;border-radius:8px;cursor:pointer;margin-top:12px;}
 
+  /* ===== Course picker: category step (same feel as page) ===== */
+  .cp-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:rgba(201,169,110,0.85);font-family:'Josefin Sans',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;padding:2px 0 12px;}
+  .cp-back:hover{color:#c9a96e;}
+  .cp-cat{position:relative;display:flex;flex-direction:row;align-items:center;gap:12px;width:100%;text-align:left;background:rgba(201,169,110,0.05);border:1px solid var(--cpcol);border-radius:14px;padding:14px 14px 14px 16px;margin-bottom:12px;cursor:pointer;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease;}
+  .cp-cat:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,0.45);}
+  .cp-cat-bar{position:absolute;top:0;left:0;width:4px;height:100%;background:var(--cpcol);}
+  .cp-cat-tag{position:absolute;top:9px;right:9px;z-index:3;background:var(--cpcol);color:#090909;font-family:'Josefin Sans',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:3px 8px;border-radius:999px;}
+  .cp-cat-body{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;}
+  .cp-cat-name{font-family:'Cormorant Garamond',serif;font-size:20px;color:#f0ede4;line-height:1.15;}
+  .cp-cat-desc{font-family:'Epilogue',sans-serif;font-weight:300;font-size:11px;line-height:1.45;color:rgba(240,237,228,0.6);}
+  .cp-cat-price{font-family:'Josefin Sans',sans-serif;font-size:13px;font-weight:700;color:var(--cpcol);margin-top:2px;}
+  .cp-cat-cta{display:inline-flex;align-items:center;gap:5px;margin-top:5px;font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--cpcol);border-bottom:1px solid var(--cpcol);padding-bottom:2px;}
+  .cp-cat-photo{position:relative;flex-shrink:0;width:96px;height:76px;border-radius:9px;overflow:hidden;border:1px solid rgba(201,169,110,0.18);background:linear-gradient(135deg,rgba(201,169,110,0.12),rgba(201,169,110,0.03));}
+  .cp-cat-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .cp-cat-photo-empty::after{content:'Photo';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Josefin Sans',sans-serif;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(201,169,110,0.4);}
+
   /* ===== Success screen animation ===== */
   .success-stage { position:relative; padding:40px 0 32px; text-align:center; overflow:hidden; }
   .gold-foil-bg {
@@ -337,7 +353,11 @@
       <p style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#f0ede4;margin:0;">Select Your Course</p>
       <button type="button" onclick="closeCoursePicker()" aria-label="Close" style="background:none;border:none;color:#c9a96e;font-size:22px;cursor:pointer;line-height:1;">×</button>
     </div>
-    <div id="cp-cards"></div>
+    <div id="cp-cats"></div>
+    <div id="cp-courses" style="display:none;">
+      <button type="button" class="cp-back" onclick="cpBack()">&larr; Back to categories</button>
+      <div id="cp-cards"></div>
+    </div>
   </div>
 </div>
 
@@ -461,39 +481,90 @@
   var CP_CATCOLOR = { sushi:'#5dc9b0', wagyu:'#d36a5a', mix:'#c9a96e' };
   var CP_CATLABEL = { sushi:'Sushi', wagyu:'Wagyu / Beef', mix:'Sushi & Wagyu' };
 
-  function cpBuildCards(){
-    var wrap = document.getElementById('cp-cards');
+  var CP_CATIMG  = { sushi:'/images/cat-sushi.jpg', wagyu:'/images/cat-wagyu.jpg', mix:'/images/cat-mix.jpg' };
+  var CP_CATDESC = { sushi:'A course to savor sushi to the fullest.', wagyu:'Wagyu & Kobe beef — shabu-shabu, sukiyaki, steak.', mix:'The best of both — sushi & wagyu in one.' };
+  var CP_CATORDER = ['sushi','wagyu','mix'];
+
+  function cpCatFrom_(cat){
+    var min = 0;
+    CP_COURSES.forEach(function(c){ if(c.cat===cat && (min===0 || c.base<min)) min=c.base; });
+    return min;
+  }
+  // ステップ1: カテゴリ3択
+  function cpBuildCats(){
+    var wrap = document.getElementById('cp-cats');
     if (!wrap || wrap.dataset.built === '1') return;
     var html = '';
-    CP_COURSES.forEach(function(c){
-      var col = CP_CATCOLOR[c.cat];
-      var rows = c.rows.map(function(r){
-        var cls = r[2] ? 'cp-row-hl' : 'cp-row-txt';
-        var tag = r[2] ? ' <span class="cp-sig">Signature</span>' : '';
-        return '<div class="cp-row"><span class="cp-row-label">'+r[0]+'</span><span class="'+cls+'">'+r[1]+tag+'</span></div>';
-      }).join('');
-      html += '<div class="cp-card'+(c.popular?' cp-pop':'')+'" style="--cpcol:'+col+';">'
-        + '<div class="cp-bar"></div>'
-        + (c.popular?'<div class="cp-pop-tag">MOST POPULAR</div>':'')
-        + '<div class="cp-body">'
-        + '<span class="cp-badge">'+CP_CATLABEL[c.cat]+'</span>'
-        + '<div class="cp-name">'+c.name+'</div>'
-        + '<div class="cp-price"><span class="cp-price-main">'+cpPrice_(c.base)+'</span><span class="cp-price-tax">('+cpTax_(c.base)+' incl.tax)</span></div>'
-        + '<div class="cp-meta">'+c.meta+'</div>'
-        + '<button type="button" class="cp-detbtn" data-toggle="'+c.id+'">詳細を見る / SEE DETAILS</button>'
-        + '<div class="cp-detail" id="cp-detail-'+c.id+'"><div class="cp-detail-inner">'+rows+'</div></div>'
-        + '<button type="button" class="cp-select" data-choose="'+c.id+'">このコースを選ぶ / SELECT</button>'
-        + '</div></div>';
+    CP_CATORDER.forEach(function(cat){
+      var col = CP_CATCOLOR[cat];
+      var pop = (cat === 'mix');
+      html += '<button type="button" class="cp-cat" style="--cpcol:'+col+';" data-cat="'+cat+'">'
+        + '<span class="cp-cat-bar"></span>'
+        + (pop ? '<span class="cp-cat-tag">MOST POPULAR</span>' : '')
+        + '<span class="cp-cat-body">'
+        + '<span class="cp-cat-name">'+CP_CATLABEL[cat]+'</span>'
+        + '<span class="cp-cat-desc">'+CP_CATDESC[cat]+'</span>'
+        + '<span class="cp-cat-price">From '+cpPrice_(cpCatFrom_(cat))+'</span>'
+        + '<span class="cp-cat-cta">View 2 courses &rarr;</span>'
+        + '</span>'
+        + '<span class="cp-cat-photo"><img src="'+CP_CATIMG[cat]+'" alt="'+CP_CATLABEL[cat]+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'cp-cat-photo-empty\');"/></span>'
+        + '</button>';
     });
     wrap.innerHTML = html;
     wrap.dataset.built = '1';
     wrap.addEventListener('click', function(e){
-      var t = e.target.closest('[data-toggle]');
-      if (t){ cpToggle(t.getAttribute('data-toggle')); return; }
-      var s = e.target.closest('[data-choose]');
-      if (s){ cpChoose(s.getAttribute('data-choose')); }
+      var b = e.target.closest('[data-cat]');
+      if (b){ cpShowCat(b.getAttribute('data-cat')); }
     });
   }
+  // 1コース分のカード(従来と同一レイアウト)
+  function cpCourseCard_(c){
+    var rows = c.rows.map(function(r){
+      var cls = r[2] ? 'cp-row-hl' : 'cp-row-txt';
+      var tag = r[2] ? ' <span class="cp-sig">Signature</span>' : '';
+      return '<div class="cp-row"><span class="cp-row-label">'+r[0]+'</span><span class="'+cls+'">'+r[1]+tag+'</span></div>';
+    }).join('');
+    var col = CP_CATCOLOR[c.cat];
+    return '<div class="cp-card'+(c.popular?' cp-pop':'')+'" style="--cpcol:'+col+';">'
+      + '<div class="cp-bar"></div>'
+      + (c.popular?'<div class="cp-pop-tag">MOST POPULAR</div>':'')
+      + '<div class="cp-body">'
+      + '<span class="cp-badge">'+CP_CATLABEL[c.cat]+'</span>'
+      + '<div class="cp-name">'+c.name+'</div>'
+      + '<div class="cp-price"><span class="cp-price-main">'+cpPrice_(c.base)+'</span><span class="cp-price-tax">('+cpTax_(c.base)+' incl.tax)</span></div>'
+      + '<div class="cp-meta">'+c.meta+'</div>'
+      + '<button type="button" class="cp-detbtn" data-toggle="'+c.id+'">詳細を見る / SEE DETAILS</button>'
+      + '<div class="cp-detail" id="cp-detail-'+c.id+'"><div class="cp-detail-inner">'+rows+'</div></div>'
+      + '<button type="button" class="cp-select" data-choose="'+c.id+'">このコースを選ぶ / SELECT</button>'
+      + '</div></div>';
+  }
+  // ステップ2: 選んだカテゴリの2コースを描画
+  function cpRenderCourses(cat){
+    var wrap = document.getElementById('cp-cards');
+    if (!wrap) return;
+    var html = '';
+    CP_COURSES.forEach(function(c){ if(c.cat===cat){ html += cpCourseCard_(c); } });
+    wrap.innerHTML = html;
+    if (wrap.dataset.bound !== '1'){
+      wrap.addEventListener('click', function(e){
+        var t = e.target.closest('[data-toggle]');
+        if (t){ cpToggle(t.getAttribute('data-toggle')); return; }
+        var s = e.target.closest('[data-choose]');
+        if (s){ cpChoose(s.getAttribute('data-choose')); }
+      });
+      wrap.dataset.bound = '1';
+    }
+  }
+  window.cpShowCat = function(cat){
+    cpRenderCourses(cat);
+    document.getElementById('cp-cats').style.display = 'none';
+    document.getElementById('cp-courses').style.display = 'block';
+    var pt = document.getElementById('coursePicker'); if (pt) pt.scrollTop = 0;
+  };
+  window.cpBack = function(){
+    document.getElementById('cp-courses').style.display = 'none';
+    document.getElementById('cp-cats').style.display = 'block';
+  };
   window.cpToggle = function(id){
     var d = document.getElementById('cp-detail-'+id);
     if (!d) return;
@@ -509,7 +580,9 @@
     closeCoursePicker();
   };
   window.openCoursePicker = function(){
-    cpBuildCards();
+    cpBuildCats();
+    document.getElementById('cp-cats').style.display = 'block';
+    document.getElementById('cp-courses').style.display = 'none';
     document.getElementById('coursePicker').style.display = 'block';
     document.body.style.overflow = 'hidden';
   };
