@@ -500,20 +500,12 @@ A journey through Japan's finest — premium Wagyu and authentic Edomae sushi, c
 </div>
 </div>
 
-<div class="text-center mb-6">
+<div class="text-center mb-8">
 <p class="section-label mb-2">Course Selection</p>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-xl mx-auto mb-4">
-A lineup as varied as your appetite — from a sushi-focused journey, to wagyu courses, to the finest Kobe beef, and grand courses that bring everything together.
+Too many options? Just pick a style. Choose one below and we'll show you its two courses — Standard &amp; Premium. All Muslim-friendly.
 </p>
-<div class="flex flex-wrap items-center justify-center gap-2.5 mb-2">
-<span class="cat-legend cat-sushi"><span class="cat-legend-dot"></span>Sushi</span>
-<span class="cat-legend cat-wagyu"><span class="cat-legend-dot"></span>Wagyu / Kobe Beef</span>
-<span class="cat-legend cat-mix"><span class="cat-legend-dot"></span>Sushi &amp; Wagyu</span>
 </div>
-<p class="text-xs text-ginza-ivory/40 font-josefin tracking-widest">Tap a course to see full details · All dishes Muslim-friendly · Seasonal menu</p>
-</div>
-
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="courseGrid">
 
 {# ===== 価格計算: 税抜 base に store.price_adjust を加算、税込は ×1.1 ===== #}
 {% set adj = store.price_adjust or 0 %}
@@ -527,64 +519,197 @@ A lineup as varied as your appetite — from a sushi-focused journey, to wagyu c
   { id: "sushi-kobe-premium", cat: "mix", tier: "Sushi & Kobe Beef · Premium", name: "Sushi & Kobe Beef Course Premium", base: 79800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-kobe-premium.jpg", popular: false, rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Kobe Beef Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese"], ["Sushi", "Temaki: Sea Urchin · Nigiri 3 kinds (Tuna / Salmon / Ikura Gunkan)"], ["Hot Dish", "Kobe Beef Shabu-shabu &amp; Dashi"], ["Specialty", "Kobe Beef Steak"], ["Kobe Beef", "Seared Kobe Beef Nigiri", true], ["Tea &amp; Soup", "Matcha &amp; Dessert — Tsujiri · Aka-dashi Miso Soup — Lake Shinji Clams"]] }
 ] %}
 
-{% for c in COURSES %}
-{% set total = c.base + adj %}
-{% set incl = ((total * 1.1) | round(0, "floor")) | int %}
-<div class="course-card cat-{{ c.cat }} relative bg-ginza-gold/5 {% if c.popular %}border-2 border-ginza-gold{% else %}border border-ginza-gold/20{% endif %}"{% if c.popular %} style="box-shadow:0 0 24px rgba(201,169,110,0.18);"{% endif %}>
-<div class="cat-bar"></div>
-{% if c.popular %}<div class="absolute top-3 right-3 bg-ginza-gold text-ginza-black text-[9px] font-josefin font-bold tracking-widest px-2.5 py-1 rounded-full z-10">MOST POPULAR</div>{% endif %}
-{% if c.id == 'sushi-standard' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">PURE SUSHI EXPERIENCE</div>{% endif %}
-<div class="p-5 pt-6">
-<span class="cat-badge">{% if c.cat == 'sushi' %}<svg viewBox='0 0 24 24' fill='currentColor'><ellipse cx='12' cy='9' rx='9' ry='4'/><path d='M3 9v3c0 2.2 4 4 9 4s9-1.8 9-4V9' fill='none' stroke='currentColor' stroke-width='1.5'/></svg>Sushi{% elif c.cat == 'wagyu' %}<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M4 7c2-3 14-3 16 0 1.5 2 1 6-2 7-1 4-9 4-10 0-3-1-3.5-5-2-7z'/></svg>Wagyu / Beef{% else %}<svg viewBox='0 0 24 24' fill='currentColor'><circle cx='12' cy='12' r='9'/></svg>Sushi &amp; Wagyu{% endif %}</span>
-<p class="font-cormorant text-xl {% if c.tagline %}mb-1.5{% else %}mb-3{% endif %}">{{ c.name }}</p>
-{% if c.tagline %}<p class="text-[11px] leading-snug text-ginza-gold/85 font-light italic mb-3">{{ c.tagline }}</p>{% endif %}
-<div class="flex items-baseline gap-2 mb-1">
-<span class="text-ginza-gold font-josefin font-bold">&yen;{{ comma(total) }}</span>
-<span class="text-ginza-ivory/35 text-[9px]">(&yen;{{ comma(incl) }} incl. tax)</span>
-</div>
-<p class="text-[10px] text-ginza-ivory/45 font-josefin mb-4">{{ c.meta }}</p>
-<button onclick="toggleCourse('{{ c.id }}')" class="w-full text-[10px] font-josefin tracking-widest border border-ginza-gold/30 text-ginza-gold/70 py-2 rounded-lg flex items-center justify-center gap-1">
-SEE DETAILS <svg class="chevron-icon w-3 h-3" id="chevron-{{ c.id }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/></svg>
-</button>
-{% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
-<button onclick="openReserveModal('course_card', '{{ c.id }}')" class="w-full mt-2 text-[11px] font-josefin font-bold tracking-widest bg-ginza-gold text-ginza-black py-2.5 rounded-lg flex items-center justify-center gap-1.5 hover:scale-[1.03] transition-transform" data-ga-event="reserve_click" data-ga-location="course_card_{{ c.id }}">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-Reserve
-</button>
-{% elif store.tablecheck_url == 'TBD' %}
-<button onclick="openCallReserveModal('course_card_{{ c.id }}')" class="w-full mt-2 text-[11px] font-josefin font-bold tracking-widest bg-ginza-gold text-ginza-black py-2.5 rounded-lg flex items-center justify-center gap-1.5 hover:scale-[1.03] transition-transform" data-ga-event="reserve_click" data-ga-location="course_card_{{ c.id }}">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-Reserve
-</button>
-{% else %}
-<a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="w-full mt-2 text-[11px] font-josefin font-bold tracking-widest bg-ginza-gold text-ginza-black py-2.5 rounded-lg flex items-center justify-center gap-1.5 hover:scale-[1.03] transition-transform" data-ga-event="reserve_click" data-ga-location="course_card_{{ c.id }}">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-Reserve
-</a>
-{% endif %}
-<div class="course-detail-panel" id="detail-{{ c.id }}">
-<div class="border-t border-ginza-gold/10 space-y-2 pt-3 mt-3">
-{% for r in c.rows %}
-<div class="flex gap-2 text-[10px]"><span class="text-ginza-gold/50 w-16 flex-shrink-0">{{ r[0] }}</span><span class="{% if r[2] %}course-hl{% else %}text-ginza-ivory/60{% endif %}">{{ r[1] | safe }}{% if r[2] %} <span class="course-hl-tag">Signature</span>{% endif %}</span></div>
-{% endfor %}
-</div>
-</div>
-</div>
-</div>
-{% endfor %}
+{# ===== カテゴリ定義（3択）。各カテゴリ = Standard + Premium の2コース ===== #}
+{% set CATS = [
+  { key: "sushi", label: "Sushi Courses", desc: "A course to savor sushi to the fullest — temaki, nigiri &amp; a hand-served finale.", tag: "", img: "/images/cat-sushi.jpg" },
+  { key: "wagyu", label: "Wagyu Courses", desc: "Wagyu &amp; Kobe beef — shabu-shabu, sukiyaki and steak.", tag: "", img: "/images/cat-wagyu.jpg" },
+  { key: "mix", label: "Sushi &amp; Wagyu", desc: "The best of both — sushi and wagyu in one indulgent journey.", tag: "Most Popular", img: "/images/cat-mix.jpg" }
+] %}
 
+<!-- CATEGORY CHOICE BUTTONS -->
+<div class="cat-choice-grid">
+{% for cat in CATS %}
+{% set fromBase = 0 %}
+{% for c in COURSES %}{% if c.cat == cat.key %}{% if fromBase == 0 or c.base < fromBase %}{% set fromBase = c.base %}{% endif %}{% endif %}{% endfor %}
+{% set fromTotal = fromBase + adj %}
+{% set fromIncl = ((fromTotal * 1.1) | round(0, "floor")) | int %}
+<button type="button" class="cat-choice cat-{{ cat.key }}" onclick="openCourseCat('{{ cat.key }}')" data-ga-event="course_category_open" data-ga-location="cat_{{ cat.key }}">
+<span class="cat-choice-bar"></span>
+{% if cat.tag %}<span class="cat-choice-tag">{{ cat.tag | safe }}</span>{% endif %}
+<span class="cat-choice-body">
+<span class="cat-choice-label">{{ cat.label | safe }}</span>
+<span class="cat-choice-desc">{{ cat.desc | safe }}</span>
+<span class="cat-choice-price">From &yen;{{ comma(fromTotal) }} <span class="cat-choice-tax">(&yen;{{ comma(fromIncl) }} incl. tax)</span></span>
+<span class="cat-choice-cta">View 2 courses <span aria-hidden="true">→</span></span>
+</span>
+<span class="cat-choice-photo"><img src="{{ cat.img }}" alt="{{ cat.label }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cat-choice-photo-empty');"/></span>
+</button>
+{% endfor %}
 </div>
+
+<p class="text-center text-[11px] text-ginza-ivory/40 font-josefin tracking-widest mt-6">2 courses per style · All dishes Muslim-friendly · Seasonal menu</p>
 
 </div>
 </section>
 
+<!-- COURSE CATEGORY MODALS -->
+{% for cat in CATS %}
+<div class="cc-backdrop cat-{{ cat.key }}" id="ccModal-{{ cat.key }}" onclick="if(event.target===this)closeCourseCat('{{ cat.key }}')">
+<div class="cc-modal" role="dialog" aria-modal="true" aria-labelledby="ccTitle-{{ cat.key }}">
+<button class="cc-close" onclick="closeCourseCat('{{ cat.key }}')" aria-label="Close">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/></svg>
+</button>
+<div class="cc-head">
+<h3 class="cc-head-title" id="ccTitle-{{ cat.key }}">{{ cat.label | safe }}</h3>
+<p class="cc-head-sub">Standard &amp; Premium · All Muslim-friendly</p>
+</div>
+<div class="cc-list">
+{% for c in COURSES %}{% if c.cat == cat.key %}
+{% set total = c.base + adj %}
+{% set incl = ((total * 1.1) | round(0, "floor")) | int %}
+<div class="cc-course{% if c.popular %} cc-course-pop{% endif %}">
+{% if c.popular %}<span class="cc-course-pop-tag">MOST POPULAR</span>{% endif %}
+<div class="cc-course-head-row">
+<div class="cc-course-photo">
+<img src="{{ c.img }}" alt="{{ c.name }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cc-course-photo-empty');"/>
+</div>
+<div class="cc-course-head-txt">
+<p class="cc-course-tier">{{ c.tier }}</p>
+<p class="cc-course-name">{{ c.name }}</p>
+<div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(total) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>
+<p class="cc-course-meta">{{ c.meta }}</p>
+</div>
+</div>
+{% if c.tagline %}<p class="cc-course-tagline">{{ c.tagline }}</p>{% endif %}
+<button type="button" class="cc-course-toggle" onclick="toggleCourseDetail('{{ c.id }}')" aria-expanded="false" data-ga-event="course_detail_view" data-ga-location="course_modal_{{ c.id }}">
+<span>See details</span>
+<svg class="cc-chevron" id="cc-chevron-{{ c.id }}" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/></svg>
+</button>
+<div class="cc-course-rows" id="cc-detail-{{ c.id }}">
+<div class="cc-course-rows-inner">
+{% for r in c.rows %}
+<div class="cc-course-row"><span class="cc-course-row-k">{{ r[0] }}</span><span class="cc-course-row-v{% if r[2] %} cc-course-hl{% endif %}">{{ r[1] | safe }}{% if r[2] %} <span class="course-hl-tag">Signature</span>{% endif %}</span></div>
+{% endfor %}
+</div>
+</div>
+{% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
+<button onclick="closeCourseCat('{{ cat.key }}'); openReserveModal('course_modal', '{{ c.id }}')" class="cc-course-reserve" data-ga-event="reserve_click" data-ga-location="course_modal_{{ c.id }}">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+Reserve this course
+</button>
+{% elif store.tablecheck_url == 'TBD' %}
+<button onclick="closeCourseCat('{{ cat.key }}'); openCallReserveModal('course_modal_{{ c.id }}')" class="cc-course-reserve" data-ga-event="reserve_click" data-ga-location="course_modal_{{ c.id }}">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+Reserve this course
+</button>
+{% else %}
+<a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="cc-course-reserve" data-ga-event="reserve_click" data-ga-location="course_modal_{{ c.id }}">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+Reserve this course
+</a>
+{% endif %}
+</div>
+{% endif %}{% endfor %}
+</div>
+</div>
+</div>
+{% endfor %}
+
+<style>
+/* ===== Category choice buttons ===== */
+.cat-choice-grid{display:flex;flex-direction:column;gap:12px;max-width:540px;margin:0 auto;}
+.cat-choice{position:relative;display:flex;flex-direction:row;align-items:center;gap:14px;text-align:left;width:100%;background:var(--cat-soft,rgba(201,169,110,0.06));border:1px solid var(--cat,rgba(201,169,110,0.3));border-radius:16px;padding:16px 16px 16px 18px;cursor:pointer;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
+.cat-choice:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(0,0,0,0.45);}
+.cat-choice-bar{position:absolute;top:0;left:0;width:4px;height:100%;z-index:2;background:var(--cat);}
+.cat-choice-tag{position:absolute;top:10px;right:10px;z-index:3;background:var(--cat);color:#090909;font-family:'Josefin Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:3px 9px;border-radius:999px;}
+.cat-choice-body{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:5px;}
+.cat-choice-photo{position:relative;flex-shrink:0;width:104px;height:84px;border-radius:10px;overflow:hidden;border:1px solid rgba(201,169,110,0.18);background:linear-gradient(135deg,rgba(201,169,110,0.12),rgba(201,169,110,0.03));}
+.cat-choice-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.cat-choice-photo-empty::after{content:'Photo';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Josefin Sans',sans-serif;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(201,169,110,0.4);}
+.cat-choice-label{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;color:#f0ede4;line-height:1.15;}
+.cat-choice-desc{font-family:'Epilogue',sans-serif;font-weight:300;font-size:12px;line-height:1.5;color:rgba(240,237,228,0.6);}
+.cat-choice-price{font-family:'Josefin Sans',sans-serif;font-size:14px;font-weight:700;color:var(--cat);margin-top:2px;}
+.cat-choice-tax{font-family:'Epilogue',sans-serif;font-weight:300;font-size:10px;color:rgba(240,237,228,0.35);letter-spacing:0;}
+.cat-choice-cta{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-family:'Josefin Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--cat);border-bottom:1px solid var(--cat);padding-bottom:2px;transition:gap .2s ease;}
+.cat-choice:hover .cat-choice-cta{gap:11px;}
+@media (min-width:768px){.cat-choice-photo{width:92px;height:74px;}}
+
+/* ===== Course category modal ===== */
+.cc-backdrop{position:fixed;inset:0;z-index:200;background:rgba(9,9,9,0.86);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:0;opacity:0;transition:opacity .3s ease;}
+@media (min-width:768px){.cc-backdrop{align-items:center;padding:24px;}}
+.cc-backdrop.open{display:flex;opacity:1;}
+.cc-modal{position:relative;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;background:linear-gradient(180deg,#0e0e0e 0%,#090909 100%);border:1px solid var(--cat,rgba(201,169,110,0.4));border-top:3px solid var(--cat,#c9a96e);border-radius:20px 20px 0 0;padding:30px 22px 28px;box-shadow:0 -10px 60px rgba(0,0,0,0.7);transform:translateY(40px);transition:transform .35s ease;}
+@media (min-width:768px){.cc-modal{border-radius:18px;transform:translateY(20px) scale(0.98);}}
+.cc-backdrop.open .cc-modal{transform:translateY(0) scale(1);}
+.cc-modal::-webkit-scrollbar{width:0;display:none;}
+.cc-close{position:absolute;top:14px;right:14px;z-index:5;width:34px;height:34px;border-radius:50%;background:rgba(240,237,228,0.08);border:1px solid rgba(201,169,110,0.25);color:rgba(240,237,228,0.7);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;}
+.cc-close:hover{background:rgba(240,237,228,0.16);color:#c9a96e;}
+.cc-head{text-align:center;margin-bottom:22px;}
+.cc-head-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:#f0ede4;line-height:1.2;margin:0 0 4px;}
+.cc-head-sub{font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(201,169,110,0.65);}
+.cc-list{display:flex;flex-direction:column;gap:16px;}
+.cc-course{position:relative;border:1px solid rgba(201,169,110,0.2);border-radius:14px;padding:20px 18px;background:rgba(201,169,110,0.04);}
+.cc-course-pop{border:1.5px solid var(--cat);box-shadow:0 0 22px rgba(201,169,110,0.16);}
+.cc-course-pop-tag{position:absolute;top:-9px;left:18px;background:var(--cat);color:#090909;font-family:'Josefin Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:999px;}
+.cc-course-tier{font-family:'Josefin Sans',sans-serif;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cat);margin:0 0 3px;}
+.cc-course-name{font-family:'Cormorant Garamond',serif;font-size:21px;color:#f0ede4;line-height:1.2;margin:0 0 3px;}
+.cc-course-tagline{font-family:'Epilogue',sans-serif;font-style:italic;font-weight:300;font-size:11px;line-height:1.4;color:rgba(201,169,110,0.85);margin:0 0 8px;}
+.cc-course-price{display:flex;align-items:baseline;gap:8px;margin:6px 0 2px;}
+.cc-course-price-main{font-family:'Josefin Sans',sans-serif;font-size:19px;font-weight:700;color:var(--cat);}
+.cc-course-price-tax{font-family:'Epilogue',sans-serif;font-weight:300;font-size:10px;color:rgba(240,237,228,0.4);}
+.cc-course-meta{font-family:'Josefin Sans',sans-serif;font-size:10px;color:rgba(240,237,228,0.45);margin:0 0 12px;}
+/* per-course photo: small thumbnail beside the heading */
+.cc-course-head-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:10px;}
+.cc-course-head-txt{flex:1;min-width:0;}
+.cc-course-photo{position:relative;flex-shrink:0;width:128px;height:84px;border-radius:10px;overflow:hidden;border:1px solid rgba(201,169,110,0.18);background:linear-gradient(135deg,rgba(201,169,110,0.08),rgba(201,169,110,0.02));}
+.cc-course-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.cc-course-photo-empty::after{content:'Photo';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Josefin Sans',sans-serif;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(201,169,110,0.4);}
+@media (min-width:480px){.cc-course-photo{width:150px;height:98px;}}
+/* See details toggle */
+.cc-course-toggle{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:9px;margin-bottom:10px;border:1px solid rgba(201,169,110,0.3);border-radius:9px;background:transparent;cursor:pointer;color:rgba(201,169,110,0.8);font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;transition:background .2s,color .2s;}
+.cc-course-toggle:hover{background:rgba(201,169,110,0.08);color:#c9a96e;}
+.cc-chevron{transition:transform .3s ease;}
+.cc-chevron.open{transform:rotate(180deg);}
+/* collapsible rows */
+.cc-course-rows{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.cc-course-rows.open{max-height:900px;}
+.cc-course-rows-inner{display:flex;flex-direction:column;gap:7px;border-top:1px solid rgba(201,169,110,0.12);padding-top:12px;margin-bottom:4px;}
+.cc-course-row{display:flex;gap:10px;font-size:11px;line-height:1.45;}
+.cc-course-row-k{flex-shrink:0;width:78px;color:rgba(201,169,110,0.55);font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:0.04em;}
+.cc-course-row-v{color:rgba(240,237,228,0.62);}
+.cc-course-hl{color:var(--cat);font-weight:500;}
+.cc-course-reserve{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:13px;border:none;cursor:pointer;border-radius:10px;background:var(--cat,#c9a96e);color:#090909;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;transition:transform .2s,opacity .2s;}
+.cc-course-reserve:hover{transform:scale(1.02);opacity:0.95;}
+</style>
+
 <script>
-function toggleCourse(id) {
-  var panel = document.getElementById('detail-' + id);
-  var chevron = document.getElementById('chevron-' + id);
-  if (panel) panel.classList.toggle('open');
-  if (chevron) chevron.classList.toggle('open');
-}
+(function(){
+  var openKey = null;
+  window.openCourseCat = function(key){
+    var m = document.getElementById('ccModal-' + key);
+    if(!m) return;
+    m.classList.add('open'); openKey = key; document.body.style.overflow = 'hidden';
+    if(typeof gtag === 'function'){ gtag('event','course_category_view',{'event_category':'engagement','event_label':key,'store_name':'{{ store.slug }}','store_area':'{{ store.region }}','brand':'{{ stores.brand.brand_slug }}','channel':'{{ store.channel_id }}'}); }
+  };
+  window.closeCourseCat = function(key){
+    var m = document.getElementById('ccModal-' + (key || openKey));
+    if(!m) return;
+    m.classList.remove('open'); document.body.style.overflow = ''; openKey = null;
+  };
+  window.toggleCourseDetail = function(id){
+    var panel = document.getElementById('cc-detail-' + id);
+    var chev = document.getElementById('cc-chevron-' + id);
+    var btn = chev ? chev.closest('.cc-course-toggle') : null;
+    if(!panel) return;
+    var open = panel.classList.toggle('open');
+    if(chev) chev.classList.toggle('open', open);
+    if(btn){ btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      var lbl = btn.querySelector('span'); if(lbl) lbl.textContent = open ? 'Hide details' : 'See details'; }
+  };
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && openKey){ closeCourseCat(openKey); }
+  });
+})();
 </script>
 
 <!-- REVIEWS / VOICES -->
@@ -1113,68 +1238,6 @@ Open {{ store.hours }}
 })();
 </script>
 
-<!-- ===== 離脱防止ダイアログ（30秒経過で表示・1セッション1回） ===== -->
-<style>
-  .stay-modal-backdrop{position:fixed;inset:0;z-index:300;background:rgba(9,9,9,0.82);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .35s ease;}
-  .stay-modal-backdrop.open{display:flex;opacity:1;}
-  .stay-modal{position:relative;width:100%;max-width:380px;background:linear-gradient(180deg,#0e0e0e 0%,#090909 100%);border:1px solid rgba(201,169,110,0.4);border-radius:18px;padding:38px 26px 28px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,0.7),0 0 44px rgba(201,169,110,0.12);transform:translateY(22px) scale(0.98);transition:transform .4s ease;}
-  .stay-modal-backdrop.open .stay-modal{transform:translateY(0) scale(1);}
-  .stay-modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(240,237,228,0.06);border:1px solid rgba(201,169,110,0.2);color:rgba(240,237,228,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;}
-  .stay-modal-close:hover{background:rgba(240,237,228,0.12);color:#c9a96e;}
-  .stay-modal-pulse{display:inline-flex;align-items:center;gap:8px;background:rgba(201,169,110,0.1);border:1px solid rgba(201,169,110,0.4);border-radius:999px;padding:6px 14px;margin-bottom:18px;}
-  .stay-modal-pulse .dot{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:stayPulseRed 1.8s ease-in-out infinite;box-shadow:0 0 0 0 rgba(239,68,68,0.7);}
-  @keyframes stayPulseRed{0%{box-shadow:0 0 0 0 rgba(239,68,68,0.7);}70%{box-shadow:0 0 0 8px rgba(239,68,68,0);}100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}}
-  .stay-modal-pulse span{font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#c9a96e;}
-  .stay-modal-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:26px;color:#f0ede4;line-height:1.3;margin:0 0 14px;}
-  .stay-modal-desc{font-family:'Epilogue',sans-serif;font-weight:300;font-size:13px;line-height:1.7;color:rgba(240,237,228,0.65);margin:0 0 24px;}
-  .stay-modal-cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border-radius:10px;border:none;cursor:pointer;background:#c9a96e;color:#090909;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;box-shadow:0 0 24px rgba(201,169,110,0.3);transition:transform .2s,opacity .2s;}
-  .stay-modal-cta:hover{transform:scale(1.03);opacity:0.95;}
-  .stay-modal-dismiss{display:inline-block;margin-top:14px;background:none;border:none;cursor:pointer;font-family:'Josefin Sans',sans-serif;font-size:11px;letter-spacing:0.1em;color:rgba(240,237,228,0.4);text-decoration:underline;text-underline-offset:3px;}
-  .stay-modal-dismiss:hover{color:rgba(240,237,228,0.7);}
-</style>
-<div class="stay-modal-backdrop" id="stayModal" onclick="if(event.target===this)closeStayModal('backdrop')">
-  <div class="stay-modal" role="dialog" aria-modal="true" aria-labelledby="stayModalTitle">
-    <button class="stay-modal-close" onclick="closeStayModal('x')" aria-label="Close">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6" stroke-linecap="round"/></svg>
-    </button>
-    <div class="stay-modal-pulse"><span class="dot"></span><span>Seats fill up fast</span></div>
-    <h3 class="stay-modal-title" id="stayModalTitle">Still deciding?</h3>
-    <p class="stay-modal-desc">
-      Seats are first-come, first-served, so popular dates and courses can fill up quickly.<br/>
-      If you're considering a visit, we recommend booking early.
-    </p>
-    <button class="stay-modal-cta" onclick="stayModalGoCourses()" data-ga-event="stay_modal_cta" data-ga-location="stay_modal">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#090909" stroke-width="1.8"><path d="M3 12h18M3 6h18M3 18h18" stroke-linecap="round"/></svg>
-      View Courses
-    </button>
-    <button class="stay-modal-dismiss" onclick="closeStayModal('later')">Maybe later</button>
-  </div>
-</div>
-<script>
-(function(){
-  var KEY='stay_modal_shown', DELAY=30000, shown=false;
-  function alreadyShown(){try{return sessionStorage.getItem(KEY)==='1';}catch(e){return false;}}
-  function markShown(){try{sessionStorage.setItem(KEY,'1');}catch(e){}}
-  window.openStayModal=function(){
-    if(shown||alreadyShown())return;
-    var m=document.getElementById('stayModal'); if(!m)return;
-    shown=true; markShown(); m.classList.add('open'); document.body.style.overflow='hidden';
-    if(typeof gtag==='function'){gtag('event','stay_modal_open',{'event_category':'engagement','event_label':'20s_timer','store_name':'{{ store.slug }}','store_area':'{{ store.region }}','brand':'{{ stores.brand.brand_slug }}','channel':'{{ store.channel_id }}'});}
-  };
-  window.closeStayModal=function(how){
-    var m=document.getElementById('stayModal'); if(!m)return;
-    m.classList.remove('open'); document.body.style.overflow='';
-    if(typeof gtag==='function'){gtag('event','stay_modal_close',{'event_category':'engagement','event_label':how||'close','store_name':'{{ store.slug }}','store_area':'{{ store.region }}','brand':'{{ stores.brand.brand_slug }}','channel':'{{ store.channel_id }}'});}
-  };
-  window.stayModalGoCourses=function(){
-    closeStayModal('cta_courses');
-    var t=document.getElementById('courses');
-    if(t){requestAnimationFrame(function(){t.scrollIntoView({behavior:'smooth',block:'start'});});}
-  };
-  if(!alreadyShown()){setTimeout(window.openStayModal,DELAY);}
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'){var m=document.getElementById('stayModal');if(m&&m.classList.contains('open'))closeStayModal('esc');}});
-})();
-</script>
 
 </body>
 </html>
