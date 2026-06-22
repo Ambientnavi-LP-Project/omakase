@@ -194,6 +194,9 @@ body { padding-bottom: 72px; }
 .exp-vid video{width:100%;height:100%;object-fit:cover;filter:brightness(0.70) saturate(1.04) contrast(1.06);}
 /* ===== Hero title with hinomaru ===== */
 .hero-title-wrap{padding:6px 10px;}
+/* title overlaps the image bottom slightly (around the "Gastronomic Tour" line) */
+.hero-title-band{position:relative;z-index:5;margin-top:-9vw;}
+@media (min-width:1280px){.hero-title-band{margin-top:-115px;}}
 .hinomaru{position:absolute;top:50%;left:50%;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 50% 50%, #d63a2f 0%, #c4302a 70%, #b02820 100%);transform:translate(-50%,-50%);z-index:0;opacity:0.92;box-shadow:0 0 50px rgba(214,58,47,0.5);}
 .hero-title{z-index:1;text-shadow:0 2px 24px rgba(0,0,0,0.85),0 1px 4px rgba(0,0,0,0.9);}
 .hero-sub{text-shadow:0 1px 12px rgba(0,0,0,0.95),0 0 30px rgba(0,0,0,0.8);}
@@ -289,7 +292,7 @@ body { padding-bottom: 72px; }
 </div>
 </div>
 
-<div class="w-full px-7 pt-8 pb-7 text-center bg-ginza-black">
+<div class="hero-title-band w-full px-7 pb-8 text-center">
 <div class="hero-title-wrap inline-block relative">
 <span class="hinomaru" aria-hidden="true"></span>
 <h1 class="hero-title relative font-cormorant font-semibold leading-[1.0] tracking-tight text-ginza-ivory">
@@ -438,7 +441,7 @@ Crafted so that everyone can dine with complete peace of mind — an invitation 
 <div class="text-center mb-8">
 <p class="section-label mb-2">Course Selection</p>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-xl mx-auto mb-4">
-Too many options? Just pick a style. Choose one below and we'll show you its two courses — Standard &amp; Premium. All Muslim-friendly.
+Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the season's finest ingredients and serve only what tastes best right now. From sushi to wagyu, every piece is one we recommend from the heart.
 </p>
 </div>
 
@@ -446,7 +449,7 @@ Too many options? Just pick a style. Choose one below and we'll show you its two
 {% set adj = store.price_adjust or 0 %}
 {% macro comma(n) %}{% set s = (n | string) %}{% set out = "" %}{% set L = s | length %}{% for i in range(0, L) %}{% set ch = s[i] %}{% set posFromEnd = L - i %}{% if i > 0 and posFromEnd % 3 == 0 %}{{ "," }}{% endif %}{{ ch }}{% endfor %}{% endmacro %}
 {% set COURSES = [
-  { id: "sushi-standard", cat: "sushi", tier: "Sushi Course · Standard", name: "Sushi Course Standard", base: 49800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-standard.jpg", popular: false, tagline: "For those who'd like to savor the sushi first.", rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame"], ["Sushi", "Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish) · Nigiri 3 kinds (Seared Salmon / Tamago / Wagyu) · Chef's Hand-Served Wagyu Sushi", true], ["Soup", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["Tea &amp; Sweets", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
+  { id: "sushi-standard", cat: "sushi", tier: "Sushi Course · Standard", name: "Sushi Course Standard", base: 49800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-standard.jpg", popular: false, tagline: "For those who'd like to savor the sushi first.", rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame"], ["Sushi", "Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish) · Nigiri 3 kinds (Seared Salmon / Tamago / Wagyu)", true], ["Soup", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["Tea &amp; Sweets", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
   { id: "sushi-premium", cat: "sushi", tier: "Sushi Course · Premium", name: "Sushi Course Premium", base: 69800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-premium.jpg", popular: false, rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Premium Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Mini Ikura Bowl / Dashimaki Tamago / Miso Cream Cheese"], ["Sushi", "Temaki: Sea Urchin · Temaki: Salmon &amp; Ikura · Nigiri 3 kinds (Tuna / Salmon / White Fish) · Nigiri 3 kinds (Urchin Gunkan / Ikura Gunkan / Wagyu)", true], ["Soup", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["Tea &amp; Sweets", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
   { id: "wagyu-standard", cat: "wagyu", tier: "Wagyu Course · Standard", name: "Wagyu Course Standard", base: 49800, meta: "8 courses · 60–75 min", img: "/images/course-wagyu-standard.jpg", popular: false, rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Appetizer Plate — Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Simmered Wagyu Shigureni"], ["Hot Dish", "Wagyu Shabu-shabu &amp; Dashi"], ["Specialty", "Wagyu Fillet Spring Roll"], ["Wagyu", "Mini Wagyu Sukiyaki with Egg Yolk Sauce · Wagyu Steak", true], ["Soup", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["Tea &amp; Sweets", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
   { id: "kobe-premium", cat: "wagyu", tier: "Kobe Beef Course · Premium", name: "Kobe Beef Course Premium", base: 69800, meta: "8 courses · 60–75 min", img: "/images/course-kobe-premium.jpg", popular: false, rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Kobe Beef Appetizer Plate — Kobe Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Kobe Shigureni"], ["Hot Dish", "Kobe Beef Shabu-shabu &amp; Dashi"], ["Specialty", "Wagyu Fillet Spring Roll"], ["Kobe Beef", "Mini Kobe Beef Sukiyaki with Egg Yolk Sauce · Kobe Beef Steak", true], ["Soup", "Aka-dashi Miso Soup — Lake Shinji Clams"], ["Tea &amp; Sweets", "Matcha Experience &amp; Dessert — Tsujiri · Mini Japanese Sweets"]] },
@@ -456,7 +459,7 @@ Too many options? Just pick a style. Choose one below and we'll show you its two
 
 {# ===== カテゴリ定義（3択）。各カテゴリ = Standard + Premium の2コース ===== #}
 {% set CATS = [
-  { key: "sushi", label: "Sushi Courses", desc: "A course to savor sushi to the fullest — temaki, nigiri &amp; a hand-served finale.", tag: "", img: "/images/hero-pc.jpg" },
+  { key: "sushi", label: "Sushi Courses", desc: "A course to savor sushi to the fullest — temaki &amp; nigiri, served course by course.", tag: "", img: "/images/hero-pc.jpg" },
   { key: "wagyu", label: "Wagyu Courses", desc: "Wagyu &amp; Kobe beef — shabu-shabu, sukiyaki and steak.", tag: "", img: "/images/hero-pc.jpg" },
   { key: "mix", label: "Sushi &amp; Wagyu", desc: "The best of both — sushi and wagyu in one indulgent journey.", tag: "Most Popular", img: "/images/hero-pc.jpg" }
 ] %}
