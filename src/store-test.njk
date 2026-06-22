@@ -174,16 +174,19 @@ body { padding-bottom: 72px; }
 .pm-divider::after{content:'';position:absolute;top:0;left:0;height:100%;width:32%;background:linear-gradient(90deg,transparent,rgba(201,169,110,0.9),rgba(240,237,228,0.6),rgba(201,169,110,0.9),transparent);filter:blur(0.5px);animation:pmBeam 5.5s ease-in-out infinite;}
 @keyframes pmBeam{0%{transform:translateX(-120%);}50%{transform:translateX(280%);}100%{transform:translateX(-120%);}}
 
-/* ===== Hero (hero1: SP=portrait full, PC=16:11 center-crop) ===== */
-#hero-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#070707;overflow:hidden;}
-.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;filter:none;}
-/* hero: landscape on all sizes (mobile matches PC), whole image visible */
-#hero{height:auto;aspect-ratio:16/11;max-height:90vh;}
-/* PC: show hero1 as a 16:11 window, cropping top/bottom, centered */
-@media (min-width:768px){
-  #hero{height:auto;aspect-ratio:16/11;max-height:88vh;}
-  .hero-bg-video{object-fit:cover;object-position:center 42%;}
-}
+/* ===== Hero: full 16:9 image (no side crop), title below image ===== */
+#hero-stage{position:relative;width:100%;aspect-ratio:16/9;background:#070707;overflow:hidden;}
+.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;filter:none;}
+/* Halal badge (hero image bottom-right) */
+.hero-halal-badge{position:absolute;right:10px;bottom:10px;z-index:3;display:inline-flex;align-items:center;gap:6px;background:rgba(13,31,16,0.80);backdrop-filter:blur(3px);border:1px solid rgba(201,169,110,0.6);border-radius:999px;padding:6px 12px 6px 9px;}
+.hero-halal-badge svg{width:16px;height:16px;color:#c9a96e;flex-shrink:0;}
+.hero-halal-badge span{font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#f0ede4;line-height:1;}
+/* Chef hospitality slideshow (course section) */
+.chef-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s ease-in-out;}
+.chef-slide.active{opacity:1;}
+.chef-dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:7px;z-index:2;}
+.chef-dot{width:7px;height:7px;border-radius:50%;background:rgba(240,237,228,0.45);transition:background .3s;}
+.chef-dot.active{background:#c9a96e;}
 .hero-scrim-top{position:absolute;top:0;left:0;right:0;height:34%;background:linear-gradient(to bottom,rgba(7,7,7,0.78) 0%,rgba(7,7,7,0.28) 60%,transparent 100%);pointer-events:none;z-index:2;}
 .hero-scrim-bottom{position:absolute;bottom:0;left:0;right:0;height:58%;background:linear-gradient(to top,rgba(7,7,7,0.92) 0%,rgba(7,7,7,0.48) 45%,transparent 100%);pointer-events:none;z-index:2;}
 /* ===== Experience block: hero2 + hero3 side by side ===== */
@@ -271,8 +274,7 @@ body { padding-bottom: 72px; }
 </header>
 
 <!-- HERO -->
-<section class="relative h-screen w-full flex flex-col justify-end items-center overflow-hidden" id="hero">
-<div class="absolute inset-0 z-0">
+<section class="relative w-full bg-ginza-black overflow-hidden" id="hero">
 <div id="hero-stage">
 {% if store.projection_mapping %}
 <video class="hero-bg-video" autoplay muted loop playsinline preload="auto">
@@ -281,12 +283,13 @@ body { padding-bottom: 72px; }
 {% else %}
 <picture><img class="hero-bg-video" src="/images/hero-pc.jpg" alt=""/></picture>
 {% endif %}
-<div class="hero-scrim-top" style="display:none;"></div>
-<div class="hero-scrim-bottom" style="display:none;"></div>
+<div class="hero-halal-badge" aria-label="Halal · Muslim-friendly">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<span>Halal</span>
 </div>
 </div>
 
-<div class="relative z-10 w-full px-7 pb-2 md:pb-10 text-center">
+<div class="w-full px-7 pt-8 pb-7 text-center bg-ginza-black">
 <div class="hero-title-wrap inline-block relative">
 <span class="hinomaru" aria-hidden="true"></span>
 <h1 class="hero-title relative font-cormorant font-semibold leading-[1.0] tracking-tight text-ginza-ivory">
@@ -295,8 +298,6 @@ body { padding-bottom: 72px; }
 </h1>
 <p class="hero-eyebrow relative font-josefin tracking-[0.22em] uppercase text-ginza-gold/90 text-base md:text-xl mt-5">Sushi &amp; Wagyu Halal Omakase Experience</p>
 </div>
-
-
 </div>
 </section>
 
@@ -403,16 +404,36 @@ Not just a meal — a journey through Japan. Each course unfolds alongside a pro
 {% else %}
 <h3 class="font-cormorant text-3xl mb-4 leading-snug">Sushi &amp; Wagyu<br/>Omakase Course</h3>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
-A journey through Japan's finest — premium Wagyu and authentic Edomae sushi, crafted course by course and served Muslim-friendly.
+Crafted so that everyone can dine with complete peace of mind — an invitation to savor not just a meal, but the depth of Japan's food culture itself.
 </p>
 {% endif %}
 </div>
 
 <div class="max-w-3xl mx-auto mb-10">
-<div class="relative w-full overflow-hidden rounded-2xl border border-ginza-gold/20" style="aspect-ratio:16/9;">
-<img src="/images/hero-pc.jpg" alt="" loading="lazy" class="w-full h-full object-cover"/>
+<div class="relative w-full overflow-hidden rounded-2xl border border-ginza-gold/20 bg-ginza-gold/5" style="aspect-ratio:16/9;" id="chefShow">
+<img src="/images/chef1.jpg" alt="Our chef's hospitality" loading="lazy" class="chef-slide active"/>
+<img src="/images/chef2.jpg" alt="Our chef's hospitality" loading="lazy" class="chef-slide"/>
+<img src="/images/chef3.jpg" alt="Our chef's hospitality" loading="lazy" class="chef-slide"/>
+<div class="chef-dots">
+<span class="chef-dot active"></span>
+<span class="chef-dot"></span>
+<span class="chef-dot"></span>
 </div>
 </div>
+</div>
+<script>
+(function(){
+  var root=document.getElementById('chefShow'); if(!root) return;
+  var slides=root.querySelectorAll('.chef-slide'), dots=root.querySelectorAll('.chef-dot');
+  if(slides.length<2) return;
+  var i=0;
+  setInterval(function(){
+    slides[i].classList.remove('active'); if(dots[i]) dots[i].classList.remove('active');
+    i=(i+1)%slides.length;
+    slides[i].classList.add('active'); if(dots[i]) dots[i].classList.add('active');
+  },4000);
+})();
+</script>
 
 <div class="text-center mb-8">
 <p class="section-label mb-2">Course Selection</p>
