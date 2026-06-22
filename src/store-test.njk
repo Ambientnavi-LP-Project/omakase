@@ -51,7 +51,7 @@ eleventyComputed:
 
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Epilogue:wght@300;400;600&family=Josefin+Sans:wght@300;400;600&family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Epilogue:wght@300;400;600&family=Josefin+Sans:wght@300;400;600&family=Noto+Serif+JP:wght@300;400;600&family=Noto+Naskh+Arabic:wght@500;700&display=swap" rel="stylesheet"/>
 
 <script>
 tailwind.config = {
@@ -178,9 +178,9 @@ body { padding-bottom: 72px; }
 #hero-stage{position:relative;width:100%;aspect-ratio:16/9;background:#070707;overflow:hidden;}
 .hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;filter:none;}
 /* Halal badge (hero image bottom-right) */
-.hero-halal-badge{position:absolute;right:10px;bottom:10px;z-index:3;display:inline-flex;align-items:center;gap:6px;background:rgba(13,31,16,0.80);backdrop-filter:blur(3px);border:1px solid rgba(201,169,110,0.6);border-radius:999px;padding:6px 12px 6px 9px;}
-.hero-halal-badge svg{width:16px;height:16px;color:#c9a96e;flex-shrink:0;}
-.hero-halal-badge span{font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#f0ede4;line-height:1;}
+.hero-halal-badge{position:absolute;right:12px;bottom:12px;z-index:3;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;width:56px;height:56px;background:rgba(13,31,16,0.82);backdrop-filter:blur(3px);border:1px solid rgba(201,169,110,0.6);border-radius:50%;}
+.hero-halal-badge .ar{font-family:'Noto Naskh Arabic','Geeza Pro','Segoe UI','Arial',sans-serif;font-size:19px;font-weight:700;line-height:1;color:#c9a96e;}
+.hero-halal-badge .en{font-family:'Josefin Sans',sans-serif;font-size:7px;font-weight:700;letter-spacing:0.2em;color:rgba(240,237,228,0.92);line-height:1;}
 /* Chef hospitality slideshow (course section) */
 .chef-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s ease-in-out;}
 .chef-slide.active{opacity:1;}
@@ -286,9 +286,9 @@ body { padding-bottom: 72px; }
 {% else %}
 <picture><img class="hero-bg-video" src="/images/hero-pc.jpg" alt=""/></picture>
 {% endif %}
-<div class="hero-halal-badge" aria-label="Halal · Muslim-friendly">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-<span>Halal</span>
+<div class="hero-halal-badge" aria-label="Halal · Muslim-friendly" title="Halal · Muslim-friendly">
+<span class="ar" dir="rtl">حلال</span>
+<span class="en">HALAL</span>
 </div>
 </div>
 
@@ -305,57 +305,51 @@ body { padding-bottom: 72px; }
 </section>
 
 <!-- HERO INTRO (black bg: CTA only) -->
-<section class="bg-ginza-black px-7 pt-8 pb-12 text-center">
-<div class="flex flex-col items-center gap-3 w-full max-w-xs mx-auto">
+<section class="bg-ginza-black px-7 pt-5 pb-9 text-center">
+<div class="flex flex-col items-center gap-2.5 w-full max-w-sm mx-auto">
   {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
   <button onclick="openReserveModal('hero')"
-     class="w-full bg-ginza-gold text-ginza-black font-josefin font-semibold rounded-lg tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_24px_rgba(201,169,110,0.3)] flex overflow-hidden"
+     class="w-full bg-gradient-to-r from-[#d8bc84] via-ginza-gold to-[#bd9a5e] text-ginza-black font-josefin font-bold rounded-xl tracking-[0.18em] text-sm shadow-[0_6px_24px_rgba(201,169,110,0.28)] hover:shadow-[0_8px_32px_rgba(201,169,110,0.45)] transition-shadow flex items-stretch overflow-hidden"
      data-ga-event="reserve_click" data-ga-location="hero">
-    <span class="flex-1 py-4 px-4 text-center">RESERVE YOUR SEAT</span>
-    <span class="bg-black/15 px-4 flex items-center justify-center">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+    <span class="flex-1 py-3.5 px-4 text-center">RESERVE YOUR SEAT</span>
+    <span class="bg-black/10 border-l border-black/10 px-3.5 flex items-center justify-center">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </span>
   </button>
   {% elif store.tablecheck_url == 'TBD' %}
   <button onclick="openCallReserveModal('hero')"
-     class="w-full bg-ginza-gold text-ginza-black font-josefin font-semibold rounded-lg tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_24px_rgba(201,169,110,0.3)] flex overflow-hidden"
+     class="w-full bg-gradient-to-r from-[#d8bc84] via-ginza-gold to-[#bd9a5e] text-ginza-black font-josefin font-bold rounded-xl tracking-[0.18em] text-sm shadow-[0_6px_24px_rgba(201,169,110,0.28)] hover:shadow-[0_8px_32px_rgba(201,169,110,0.45)] transition-shadow flex items-stretch overflow-hidden"
      data-ga-event="reserve_click" data-ga-location="hero">
-    <span class="flex-1 py-4 px-4 text-center">RESERVE YOUR SEAT</span>
-    <span class="bg-black/15 px-4 flex items-center justify-center">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+    <span class="flex-1 py-3.5 px-4 text-center">RESERVE YOUR SEAT</span>
+    <span class="bg-black/10 border-l border-black/10 px-3.5 flex items-center justify-center">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </span>
   </button>
   {% else %}
   <a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener"
-     class="w-full bg-ginza-gold text-ginza-black font-josefin font-semibold rounded-lg tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_24px_rgba(201,169,110,0.3)] flex overflow-hidden"
+     class="w-full bg-gradient-to-r from-[#d8bc84] via-ginza-gold to-[#bd9a5e] text-ginza-black font-josefin font-bold rounded-xl tracking-[0.18em] text-sm shadow-[0_6px_24px_rgba(201,169,110,0.28)] hover:shadow-[0_8px_32px_rgba(201,169,110,0.45)] transition-shadow flex items-stretch overflow-hidden"
      data-ga-event="reserve_click" data-ga-location="hero">
-    <span class="flex-1 py-4 px-4 text-center">RESERVE YOUR SEAT</span>
-    <span class="bg-black/15 px-4 flex items-center justify-center">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+    <span class="flex-1 py-3.5 px-4 text-center">RESERVE YOUR SEAT</span>
+    <span class="bg-black/10 border-l border-black/10 px-3.5 flex items-center justify-center">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </span>
   </a>
   {% endif %}
 
-  <a class="w-full text-center text-ginza-gold font-josefin text-xs tracking-widest py-3 rounded-lg border border-ginza-gold/40 hover:border-ginza-gold/80 transition-colors flex items-center justify-center gap-2"
+  <a class="w-full text-center text-ginza-gold/90 font-josefin text-[11px] tracking-[0.2em] py-2.5 rounded-xl border border-ginza-gold/30 hover:border-ginza-gold/70 hover:text-ginza-gold transition-colors flex items-center justify-center gap-2"
      href="#access" data-ga-event="map_click" data-ga-location="hero">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
       <path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="#c9a96e" stroke-width="1.5"/>
       <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" stroke="#c9a96e" stroke-width="1.5"/>
     </svg>
     ACCESS &amp; MAP
   </a>
 
-  <!-- BOOKING COUNT BANNER -->
-  <div class="inline-flex self-center items-center justify-center gap-2 bg-gradient-to-r from-ginza-gold/10 via-ginza-gold/20 to-ginza-gold/10 border border-ginza-gold/40 rounded-full px-3.5 py-2 mt-1">
+  <!-- BOOKING COUNT (subtle line) -->
+  <div class="inline-flex items-center gap-2 mt-1">
     <span class="booking-pulse"></span>
-    <span class="text-[11px] font-josefin font-semibold tracking-[0.1em] text-ginza-gold uppercase">
-      <span class="text-ginza-ivory"><span class="booking-count">12</span> bookings</span> in the last 24 hours
+    <span class="text-[10px] font-josefin font-medium tracking-[0.12em] text-ginza-ivory/55 uppercase">
+      <span class="text-ginza-gold/90"><span class="booking-count">12</span> bookings</span> in the last 24 hours
     </span>
   </div>
 
@@ -405,10 +399,7 @@ A journey through Japan's food culture — wagyu, sushi, and projection-mapped d
 Not just a meal — a journey through Japan. Each course unfolds alongside a projection-mapped experience of Japanese culture and travel, served Muslim-friendly.
 </p>
 {% else %}
-<h3 class="font-cormorant text-3xl mb-4 leading-snug">Sushi &amp; Wagyu<br/>Omakase Course</h3>
-<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
-Crafted so that everyone can dine with complete peace of mind — an invitation to savor not just a meal, but the depth of Japan's food culture itself.
-</p>
+<h3 class="font-cormorant text-3xl leading-snug">Sushi &amp; Wagyu Omakase Course</h3>
 {% endif %}
 </div>
 
@@ -751,8 +742,7 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
     <p class="section-label mb-4">Guest Voices</p>
     <h3 class="font-cormorant text-3xl mb-3">From Around the World</h3>
     <p class="text-sm font-light text-ginza-ivory/50 max-w-sm mx-auto leading-relaxed">
-      A selection of impressions shared by our guests.<br/>
-      <span class="text-ginza-ivory/30 text-[11px]">※ Sample voices · to be replaced with verified reviews</span>
+      A selection of impressions shared by our guests.
     </p>
   </div>
 
