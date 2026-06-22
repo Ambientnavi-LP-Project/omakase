@@ -176,7 +176,9 @@ body { padding-bottom: 72px; }
 
 /* ===== Hero (hero1: SP=portrait full, PC=16:11 center-crop) ===== */
 #hero-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#070707;overflow:hidden;}
-.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;filter:brightness(0.62) saturate(1.05) contrast(1.08);}
+.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;filter:none;}
+/* hero: landscape on all sizes (mobile matches PC), whole image visible */
+#hero{height:auto;aspect-ratio:16/11;max-height:90vh;}
 /* PC: show hero1 as a 16:11 window, cropping top/bottom, centered */
 @media (min-width:768px){
   #hero{height:auto;aspect-ratio:16/11;max-height:88vh;}
@@ -277,14 +279,14 @@ body { padding-bottom: 72px; }
 <source src="/images/hero1.mp4" type="video/mp4"/>
 </video>
 {% else %}
-<picture><source media="(max-width:680px)" srcset="/images/hero-sp.jpg"/><img class="hero-bg-video" src="/images/hero-pc.jpg" alt=""/></picture>
+<picture><img class="hero-bg-video" src="/images/hero-pc.jpg" alt=""/></picture>
 {% endif %}
-<div class="hero-scrim-top"></div>
-<div class="hero-scrim-bottom"></div>
+<div class="hero-scrim-top" style="display:none;"></div>
+<div class="hero-scrim-bottom" style="display:none;"></div>
 </div>
 </div>
 
-<div class="relative z-10 w-full px-7 pb-20 text-center">
+<div class="relative z-10 w-full px-7 pb-10 text-center">
 <div class="hero-title-wrap inline-block relative">
 <span class="hinomaru" aria-hidden="true"></span>
 <h1 class="hero-title relative font-cormorant font-semibold leading-[1.0] tracking-tight text-ginza-ivory">
@@ -408,7 +410,7 @@ A journey through Japan's finest — premium Wagyu and authentic Edomae sushi, c
 
 <div class="max-w-3xl mx-auto mb-10">
 <div class="relative w-full overflow-hidden rounded-2xl border border-ginza-gold/20" style="aspect-ratio:16/9;">
-<img src="/images/course.jpg" alt="" loading="lazy" class="w-full h-full object-cover"/>
+<img src="/images/hero-pc.jpg" alt="" loading="lazy" class="w-full h-full object-cover"/>
 </div>
 </div>
 
@@ -433,9 +435,9 @@ Too many options? Just pick a style. Choose one below and we'll show you its two
 
 {# ===== カテゴリ定義（3択）。各カテゴリ = Standard + Premium の2コース ===== #}
 {% set CATS = [
-  { key: "sushi", label: "Sushi Courses", desc: "A course to savor sushi to the fullest — temaki, nigiri &amp; a hand-served finale.", tag: "", img: "/images/cat-sushi.jpg" },
-  { key: "wagyu", label: "Wagyu Courses", desc: "Wagyu &amp; Kobe beef — shabu-shabu, sukiyaki and steak.", tag: "", img: "/images/cat-wagyu.jpg" },
-  { key: "mix", label: "Sushi &amp; Wagyu", desc: "The best of both — sushi and wagyu in one indulgent journey.", tag: "Most Popular", img: "/images/cat-mix.jpg" }
+  { key: "sushi", label: "Sushi Courses", desc: "A course to savor sushi to the fullest — temaki, nigiri &amp; a hand-served finale.", tag: "", img: "/images/hero-pc.jpg" },
+  { key: "wagyu", label: "Wagyu Courses", desc: "Wagyu &amp; Kobe beef — shabu-shabu, sukiyaki and steak.", tag: "", img: "/images/hero-pc.jpg" },
+  { key: "mix", label: "Sushi &amp; Wagyu", desc: "The best of both — sushi and wagyu in one indulgent journey.", tag: "Most Popular", img: "/images/hero-pc.jpg" }
 ] %}
 
 <!-- CATEGORY CHOICE BUTTONS -->
@@ -638,19 +640,31 @@ Reserve this course
 Beyond our signature courses, we also offer a selection of premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.
 </p>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 px-4 md:px-6 mb-10 max-w-5xl mx-auto">
-<div class="relative aspect-square overflow-hidden rounded-lg group">
-<img alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu1.jpg"/>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 px-4 md:px-6 mb-10 max-w-3xl mx-auto">
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Wagyu Steak" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu1.jpg"/>
 </div>
-<div class="relative aspect-square overflow-hidden rounded-lg group">
-<img alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu2.jpg"/>
+<figcaption class="mt-2.5 text-center text-[11px] font-josefin tracking-[0.18em] uppercase text-ginza-gold/80">Wagyu Steak</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Wagyu Shabu-shabu" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu2.jpg"/>
 </div>
-<div class="relative aspect-square overflow-hidden rounded-lg group">
-<img alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu3.jpg"/>
+<figcaption class="mt-2.5 text-center text-[11px] font-josefin tracking-[0.18em] uppercase text-ginza-gold/80">Wagyu Shabu-shabu</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Sea Urchin Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu3.jpg"/>
 </div>
-<div class="relative aspect-square overflow-hidden rounded-lg group">
-<img alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu4.jpg"/>
+<figcaption class="mt-2.5 text-center text-[11px] font-josefin tracking-[0.18em] uppercase text-ginza-gold/80">Sea Urchin Temaki</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Matcha &amp; Dessert" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu4.jpg"/>
 </div>
+<figcaption class="mt-2.5 text-center text-[11px] font-josefin tracking-[0.18em] uppercase text-ginza-gold/80">Matcha &amp; Dessert</figcaption>
+</figure>
 </div>
 </section>
 
