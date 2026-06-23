@@ -403,6 +403,59 @@ A journey through Japan's food culture — wagyu, sushi, and projection-mapped d
 <!-- divider -->
 <div class="pm-divider"></div>
 
+<!-- OMAKASE INTRO (heading + chef + course intro) -->
+<section class="reveal py-16 pb-10 bg-ginza-black" id="courses-intro">
+<div class="px-4 md:px-6 max-w-5xl mx-auto">
+
+<div class="text-center mb-10">
+{% if store.projection_mapping %}
+<h3 class="font-cormorant text-3xl mb-4 leading-snug">Sushi &amp; Wagyu Course<br/>× Projection Mapping</h3>
+<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
+Not just a meal — a journey through Japan. Each course unfolds alongside a projection-mapped experience of Japanese culture and travel, served Muslim-friendly.
+</p>
+{% else %}
+<h3 class="font-cormorant text-3xl leading-snug">Omakase Course Experience</h3>
+{% endif %}
+</div>
+
+<div class="max-w-3xl mx-auto mb-10">
+<div class="relative w-full overflow-hidden rounded-2xl border border-ginza-gold/20 bg-ginza-gold/5" style="aspect-ratio:16/9;" id="chefShow">
+<img src="/images/chef1.jpg" alt="Our chef's hospitality" loading="lazy" class="chef-slide active"/>
+<img src="/images/chef2.jpg" alt="Our chef's hospitality" loading="lazy" class="chef-slide"/>
+<img src="/images/chef3.jpg" alt="Our chef's hospitality" loading="lazy" class="chef-slide"/>
+<div class="chef-dots">
+<span class="chef-dot active"></span>
+<span class="chef-dot"></span>
+<span class="chef-dot"></span>
+</div>
+</div>
+</div>
+<script>
+(function(){
+  var root=document.getElementById('chefShow'); if(!root) return;
+  var slides=root.querySelectorAll('.chef-slide'), dots=root.querySelectorAll('.chef-dot');
+  if(slides.length<2) return;
+  var i=0;
+  setInterval(function(){
+    slides[i].classList.remove('active'); if(dots[i]) dots[i].classList.remove('active');
+    i=(i+1)%slides.length;
+    slides[i].classList.add('active'); if(dots[i]) dots[i].classList.add('active');
+  },4000);
+})();
+</script>
+
+<div class="text-center mb-8">
+<p class="section-label mb-2">Course Selection</p>
+<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-xl mx-auto mb-4">
+Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the season's finest ingredients and serve only what tastes best right now. From sushi to wagyu, every piece is one we recommend from the heart.
+</p>
+</div>
+
+</div>
+</section>
+
+<div class="pm-divider"></div>
+
 <!-- MENU -->
 <section class="reveal py-16 bg-ginza-black" id="menu">
 <div class="text-center mb-10 px-6">
@@ -471,50 +524,6 @@ Beyond our signature courses, we also offer a selection of premium dishes — cr
 <!-- COURSE SELECTION -->
 <section class="reveal py-16 bg-ginza-black" id="courses">
 <div class="px-4 md:px-6 max-w-5xl mx-auto">
-
-<div class="text-center mb-10">
-{% if store.projection_mapping %}
-<h3 class="font-cormorant text-3xl mb-4 leading-snug">Sushi &amp; Wagyu Course<br/>× Projection Mapping</h3>
-<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
-Not just a meal — a journey through Japan. Each course unfolds alongside a projection-mapped experience of Japanese culture and travel, served Muslim-friendly.
-</p>
-{% else %}
-<h3 class="font-cormorant text-3xl leading-snug">Omakase Course Experience</h3>
-{% endif %}
-</div>
-
-<div class="max-w-3xl mx-auto mb-10">
-<div class="relative w-full overflow-hidden rounded-2xl border border-ginza-gold/20 bg-ginza-gold/5" style="aspect-ratio:16/9;" id="chefShow">
-<img src="/images/chef1.jpg" alt="Our chef's hospitality" loading="lazy" class="chef-slide active"/>
-<img src="/images/chef2.jpg" alt="Our chef's hospitality" loading="lazy" class="chef-slide"/>
-<img src="/images/chef3.jpg" alt="Our chef's hospitality" loading="lazy" class="chef-slide"/>
-<div class="chef-dots">
-<span class="chef-dot active"></span>
-<span class="chef-dot"></span>
-<span class="chef-dot"></span>
-</div>
-</div>
-</div>
-<script>
-(function(){
-  var root=document.getElementById('chefShow'); if(!root) return;
-  var slides=root.querySelectorAll('.chef-slide'), dots=root.querySelectorAll('.chef-dot');
-  if(slides.length<2) return;
-  var i=0;
-  setInterval(function(){
-    slides[i].classList.remove('active'); if(dots[i]) dots[i].classList.remove('active');
-    i=(i+1)%slides.length;
-    slides[i].classList.add('active'); if(dots[i]) dots[i].classList.add('active');
-  },4000);
-})();
-</script>
-
-<div class="text-center mb-8">
-<p class="section-label mb-2">Course Selection</p>
-<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-xl mx-auto mb-4">
-Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the season's finest ingredients and serve only what tastes best right now. From sushi to wagyu, every piece is one we recommend from the heart.
-</p>
-</div>
 
 {# ===== 価格計算: 税抜 base に store.price_adjust を加算、税込は ×1.1 ===== #}
 {% set adj = store.price_adjust or 0 %}
