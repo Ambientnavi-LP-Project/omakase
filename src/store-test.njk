@@ -418,6 +418,7 @@ Not just a meal — a journey through Japan. Each course unfolds alongside a pro
 {% endif %}
 </div>
 
+{% if store.projection_mapping %}
 <div class="max-w-3xl mx-auto mb-10">
 <div class="relative w-full overflow-hidden rounded-2xl border border-ginza-gold/20 bg-ginza-gold/5" style="aspect-ratio:16/9;" id="chefShow">
 <img src="/images/chef1.jpg" alt="Our chef's hospitality" loading="lazy" class="chef-slide active"/>
@@ -443,6 +444,7 @@ Not just a meal — a journey through Japan. Each course unfolds alongside a pro
   },4000);
 })();
 </script>
+{% endif %}
 
 <div class="text-center mb-8">
 <p class="section-label mb-2">Course Selection</p>
@@ -547,7 +549,7 @@ Beyond our signature courses, we also offer a selection of premium dishes — cr
 <p class="font-josefin text-[12px] md:text-[13px] tracking-[0.12em] uppercase text-ginza-gold/90">Seats are limited &mdash; reservation recommended</p>
 <p class="mt-2 inline-flex items-center gap-2 text-[11px] font-josefin tracking-[0.14em] uppercase text-ginza-ivory/55">
 <span style="display:inline-block;width:7px;height:7px;border-radius:9999px;background:#3fae6a;box-shadow:0 0 0 3px rgba(63,174,106,0.18);"></span>
-Seats available today
+Only a few seats left today
 </p>
 </div>
 
