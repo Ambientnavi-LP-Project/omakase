@@ -467,7 +467,7 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 {# ===== カテゴリ定義（3択）。各カテゴリ = Standard + Premium の2コース ===== #}
 {% set CATS = [
   { key: "sushi", label: "Sushi Courses", desc: "A course to savor sushi to the fullest — temaki &amp; nigiri, served course by course.", tag: "", img: "/images/cat-sushi.jpg" },
-  { key: "wagyu", label: "Wagyu Courses", desc: "Wagyu &amp; Kobe beef — shabu-shabu, sukiyaki and steak.", tag: "", img: "/images/cat-wagyu.jpg" },
+  { key: "wagyu", label: "Wagyu Beef Courses", desc: "Wagyu &amp; Kobe beef — shabu-shabu, sukiyaki and steak.", tag: "", img: "/images/cat-wagyu.jpg" },
   { key: "mix", label: "Sushi &amp; Wagyu", desc: "The best of both — sushi and wagyu in one indulgent journey.", tag: "Most Popular", img: "/images/cat-mix.jpg" }
 ] %}
 
@@ -514,17 +514,13 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 {% set incl = ((total * 1.1) | round(0, "floor")) | int %}
 <div class="cc-course{% if c.popular %} cc-course-pop{% endif %}">
 {% if c.popular %}<span class="cc-course-pop-tag">MOST POPULAR</span>{% endif %}
-<div class="cc-course-head-row">
 <div class="cc-course-photo">
 <img src="{{ c.img }}" alt="{{ c.name }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cc-course-photo-empty');"/>
 </div>
-<div class="cc-course-head-txt">
+<div class="cc-course-body">
 <p class="cc-course-tier">{{ c.tier }}</p>
 <p class="cc-course-name">{{ c.name }}</p>
 <div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(total) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>
-<p class="cc-course-meta">{{ c.meta }}</p>
-</div>
-</div>
 {% if c.tagline %}<p class="cc-course-tagline">{{ c.tagline }}</p>{% endif %}
 <button type="button" class="cc-course-toggle" onclick="toggleCourseDetail('{{ c.id }}')" aria-expanded="false" data-ga-event="course_detail_view" data-ga-location="course_modal_{{ c.id }}">
 <span>See details</span>
@@ -553,6 +549,7 @@ Reserve this course
 Reserve this course
 </a>
 {% endif %}
+</div>
 </div>
 {% endif %}{% endfor %}
 </div>
@@ -594,23 +591,20 @@ Reserve this course
 .cc-head-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:#f0ede4;line-height:1.2;margin:0 0 4px;}
 .cc-head-sub{font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(201,169,110,0.65);}
 .cc-list{display:flex;flex-direction:column;gap:16px;}
-.cc-course{position:relative;border:1px solid rgba(201,169,110,0.2);border-radius:14px;padding:20px 18px;background:rgba(201,169,110,0.04);}
+.cc-course{position:relative;border:1px solid rgba(201,169,110,0.2);border-radius:14px;overflow:hidden;background:rgba(201,169,110,0.04);}
 .cc-course-pop{border:1.5px solid var(--cat);box-shadow:0 0 22px rgba(201,169,110,0.16);}
-.cc-course-pop-tag{position:absolute;top:-9px;left:18px;background:var(--cat);color:#090909;font-family:'Josefin Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:999px;}
+.cc-course-pop-tag{position:absolute;top:10px;left:10px;z-index:2;background:var(--cat);color:#090909;font-family:'Josefin Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:999px;}
+.cc-course-body{padding:16px 18px 18px;}
 .cc-course-tier{font-family:'Josefin Sans',sans-serif;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cat);margin:0 0 3px;}
-.cc-course-name{font-family:'Cormorant Garamond',serif;font-size:21px;color:#f0ede4;line-height:1.2;margin:0 0 3px;}
-.cc-course-tagline{font-family:'Epilogue',sans-serif;font-style:italic;font-weight:300;font-size:11px;line-height:1.4;color:rgba(201,169,110,0.85);margin:0 0 8px;}
-.cc-course-price{display:flex;align-items:baseline;gap:8px;margin:6px 0 2px;}
+.cc-course-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:#f0ede4;line-height:1.2;margin:0 0 4px;}
+.cc-course-tagline{font-family:'Epilogue',sans-serif;font-style:italic;font-weight:300;font-size:11px;line-height:1.4;color:rgba(201,169,110,0.85);margin:0 0 10px;}
+.cc-course-price{display:flex;align-items:baseline;gap:8px;margin:6px 0 12px;}
 .cc-course-price-main{font-family:'Josefin Sans',sans-serif;font-size:19px;font-weight:700;color:var(--cat);}
 .cc-course-price-tax{font-family:'Epilogue',sans-serif;font-weight:300;font-size:10px;color:rgba(240,237,228,0.4);}
-.cc-course-meta{font-family:'Josefin Sans',sans-serif;font-size:10px;color:rgba(240,237,228,0.45);margin:0 0 12px;}
-/* per-course photo: small thumbnail beside the heading */
-.cc-course-head-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:10px;}
-.cc-course-head-txt{flex:1;min-width:0;}
-.cc-course-photo{position:relative;flex-shrink:0;width:128px;height:84px;border-radius:10px;overflow:hidden;border:1px solid rgba(201,169,110,0.18);background:linear-gradient(135deg,rgba(201,169,110,0.08),rgba(201,169,110,0.02));}
+/* per-course photo: full-width banner on top (matches reserve form) */
+.cc-course-photo{position:relative;width:100%;aspect-ratio:16/9;max-height:210px;overflow:hidden;background:linear-gradient(135deg,rgba(201,169,110,0.10),rgba(201,169,110,0.02));}
 .cc-course-photo img{width:100%;height:100%;object-fit:cover;display:block;}
-.cc-course-photo-empty::after{content:'Photo';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Josefin Sans',sans-serif;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(201,169,110,0.4);}
-@media (min-width:480px){.cc-course-photo{width:150px;height:98px;}}
+.cc-course-photo-empty::after{content:'Photo';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(201,169,110,0.4);}
 /* See details toggle */
 .cc-course-toggle{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:9px;margin-bottom:10px;border:1px solid rgba(201,169,110,0.3);border-radius:9px;background:transparent;cursor:pointer;color:rgba(201,169,110,0.8);font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;transition:background .2s,color .2s;}
 .cc-course-toggle:hover{background:rgba(201,169,110,0.08);color:#c9a96e;}
@@ -671,30 +665,63 @@ Reserve this course
 Beyond our signature courses, we also offer a selection of premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.
 </p>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 px-4 md:px-6 mb-10 max-w-3xl mx-auto">
+<!-- SUSHI SHOWCASE -->
+<div class="max-w-3xl mx-auto px-4 md:px-6 mb-12">
+<p class="text-center text-[11px] font-josefin tracking-[0.22em] uppercase text-ginza-gold/70 mb-4">Sushi Selection</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:1/1;">
+<img alt="Salmon &amp; Ikura Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi1.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Salmon &amp; Ikura Temaki</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:1/1;">
+<img alt="Wagyu Sushi" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi2.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Sushi</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:1/1;">
+<img alt="Nigiri Selection" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi3.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Nigiri Selection</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:1/1;">
+<img alt="Premium Nigiri" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi4.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Premium Nigiri</figcaption>
+</figure>
+</div>
+</div>
+
+<!-- SIGNATURE DISHES (compact) -->
+<p class="text-center text-[11px] font-josefin tracking-[0.22em] uppercase text-ginza-gold/70 mb-4 px-6">Signature Dishes</p>
+<div class="grid grid-cols-2 gap-3 px-4 md:px-6 mb-10 max-w-xl mx-auto">
 <figure class="group">
 <div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
 <img alt="Wagyu Steak" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu1.jpg"/>
 </div>
-<figcaption class="mt-2.5 text-center text-[11px] font-josefin tracking-[0.18em] uppercase text-ginza-gold/80">Wagyu Steak</figcaption>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Steak</figcaption>
 </figure>
 <figure class="group">
 <div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
 <img alt="Wagyu Shabu-shabu" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu2.jpg"/>
 </div>
-<figcaption class="mt-2.5 text-center text-[11px] font-josefin tracking-[0.18em] uppercase text-ginza-gold/80">Wagyu Shabu-shabu</figcaption>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Shabu-shabu</figcaption>
 </figure>
 <figure class="group">
 <div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
 <img alt="Sea Urchin Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu3.jpg"/>
 </div>
-<figcaption class="mt-2.5 text-center text-[11px] font-josefin tracking-[0.18em] uppercase text-ginza-gold/80">Sea Urchin Temaki</figcaption>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Sea Urchin Temaki</figcaption>
 </figure>
 <figure class="group">
 <div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
 <img alt="Matcha &amp; Dessert" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu4.jpg"/>
 </div>
-<figcaption class="mt-2.5 text-center text-[11px] font-josefin tracking-[0.18em] uppercase text-ginza-gold/80">Matcha &amp; Dessert</figcaption>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Matcha &amp; Dessert</figcaption>
 </figure>
 </div>
 </section>
