@@ -177,6 +177,8 @@ body { padding-bottom: 72px; }
 /* ===== Hero: full 16:9 image (no side crop), title below image ===== */
 #hero-stage{position:relative;width:100%;aspect-ratio:16/9;background:#070707;overflow:hidden;}
 .hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;filter:none;}
+.hero-slide{opacity:0;transition:opacity 1.2s ease-in-out;}
+.hero-slide.active{opacity:1;}
 /* Halal badge (hero image bottom-right) */
 .hero-halal-badge{position:absolute;right:12px;bottom:12px;z-index:3;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;width:56px;height:56px;background:rgba(13,31,16,0.82);backdrop-filter:blur(3px);border:1px solid rgba(201,169,110,0.6);border-radius:50%;}
 .hero-halal-badge .ar{font-family:'Noto Naskh Arabic','Geeza Pro','Segoe UI','Arial',sans-serif;font-size:19px;font-weight:700;line-height:1;color:#c9a96e;}
@@ -284,13 +286,27 @@ body { padding-bottom: 72px; }
 <source src="/images/hero1.mp4" type="video/mp4"/>
 </video>
 {% else %}
-<picture><img class="hero-bg-video" src="/images/hero-pc.jpg" alt=""/></picture>
+<img src="/images/course-sushi-premium.jpg" alt="" class="hero-bg-video hero-slide active" fetchpriority="high"/>
+<img src="/images/course-kobe-premium.jpg" alt="" class="hero-bg-video hero-slide" loading="lazy"/>
+<img src="/images/course-sushi-kobe-premium.jpg" alt="" class="hero-bg-video hero-slide" loading="lazy"/>
 {% endif %}
 <div class="hero-halal-badge" aria-label="Halal · Muslim-friendly" title="Halal · Muslim-friendly">
 <span class="ar" dir="rtl">حلال</span>
 <span class="en">HALAL</span>
 </div>
 </div>
+<script>
+(function(){
+  var slides=document.querySelectorAll('#hero-stage .hero-slide');
+  if(slides.length<2) return;
+  var i=0;
+  setInterval(function(){
+    slides[i].classList.remove('active');
+    i=(i+1)%slides.length;
+    slides[i].classList.add('active');
+  },4500);
+})();
+</script>
 
 <div class="hero-title-band w-full px-7 pb-8 text-center">
 <div class="hero-title-wrap inline-block relative">
@@ -450,9 +466,9 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 
 {# ===== カテゴリ定義（3択）。各カテゴリ = Standard + Premium の2コース ===== #}
 {% set CATS = [
-  { key: "sushi", label: "Sushi Courses", desc: "A course to savor sushi to the fullest — temaki &amp; nigiri, served course by course.", tag: "", img: "/images/hero-pc.jpg" },
-  { key: "wagyu", label: "Wagyu Courses", desc: "Wagyu &amp; Kobe beef — shabu-shabu, sukiyaki and steak.", tag: "", img: "/images/hero-pc.jpg" },
-  { key: "mix", label: "Sushi &amp; Wagyu", desc: "The best of both — sushi and wagyu in one indulgent journey.", tag: "Most Popular", img: "/images/hero-pc.jpg" }
+  { key: "sushi", label: "Sushi Courses", desc: "A course to savor sushi to the fullest — temaki &amp; nigiri, served course by course.", tag: "", img: "/images/cat-sushi.jpg" },
+  { key: "wagyu", label: "Wagyu Courses", desc: "Wagyu &amp; Kobe beef — shabu-shabu, sukiyaki and steak.", tag: "", img: "/images/cat-wagyu.jpg" },
+  { key: "mix", label: "Sushi &amp; Wagyu", desc: "The best of both — sushi and wagyu in one indulgent journey.", tag: "Most Popular", img: "/images/cat-mix.jpg" }
 ] %}
 
 <!-- CATEGORY CHOICE BUTTONS -->
