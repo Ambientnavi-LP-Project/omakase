@@ -92,6 +92,9 @@
   .form-course-card-details-label { color:rgba(201,169,110,0.55); flex-shrink:0; width:42px; font-size:10px; }
   /* course picker cards */
   .cp-card{position:relative;border-radius:14px;overflow:hidden;margin-bottom:12px;background:rgba(201,169,110,0.04);border:1px solid rgba(201,169,110,0.2);}
+  .cp-course-photo{position:relative;width:100%;aspect-ratio:16/9;max-height:175px;overflow:hidden;background:linear-gradient(135deg,rgba(201,169,110,0.10),rgba(201,169,110,0.02));}
+  .cp-course-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .cp-course-photo-empty::after{content:'Photo';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(201,169,110,0.4);}
   .cp-card.cp-pop{border-color:var(--cpcol);}
   .cp-bar{height:4px;background:var(--cpcol);}
   .cp-body{padding:14px 16px 16px;}
@@ -466,7 +469,7 @@
   function cpTax_(base){ return cpYen_(Math.floor((base + PRICE_ADJUST) * 1.1)); }
   var CP_COURSES = [
     { id:'sushi-standard', cat:'sushi', name:'Sushi Course Standard', base:49800, meta:'8 courses · 60–75 min',
-      rows:[['序','Chilled Tofu',0],['八寸','Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame',0],['鮨','Temaki: Salmon & Ikura · Nigiri 3 kinds · Hand-Served Wagyu Sushi',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
+      rows:[['序','Chilled Tofu',0],['八寸','Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame',0],['鮨','Temaki: Salmon & Ikura · Nigiri 3 kinds',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
     { id:'sushi-premium', cat:'sushi', name:'Sushi Course Premium', base:69800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Premium Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Mini Ikura Bowl / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Sea Urchin · Temaki: Salmon & Ikura · Nigiri 6 kinds (incl. Urchin / Ikura Gunkan)',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
     { id:'wagyu-standard', cat:'wagyu', name:'Wagyu Course Standard', base:49800, meta:'8 courses · 60–75 min',
@@ -481,7 +484,15 @@
   var CP_CATCOLOR = { sushi:'#5dc9b0', wagyu:'#d36a5a', mix:'#c9a96e' };
   var CP_CATLABEL = { sushi:'Sushi', wagyu:'Wagyu / Beef', mix:'Sushi & Wagyu' };
 
-  var CP_CATIMG  = { sushi:'/images/hero-pc.jpg', wagyu:'/images/hero-pc.jpg', mix:'/images/hero-pc.jpg' };
+  var CP_CATIMG  = { sushi:'/images/cat-sushi.jpg', wagyu:'/images/cat-wagyu.jpg', mix:'/images/cat-mix.jpg' };
+  var CP_COURSEIMG = {
+    'sushi-standard':'/images/course-sushi-standard.jpg',
+    'sushi-premium':'/images/course-sushi-premium.jpg',
+    'wagyu-standard':'/images/course-wagyu-standard.jpg',
+    'kobe-premium':'/images/course-kobe-premium.jpg',
+    'sushi-wagyu-standard':'/images/course-sushi-wagyu-standard.jpg',
+    'sushi-kobe-premium':'/images/course-sushi-kobe-premium.jpg'
+  };
   var CP_CATDESC = { sushi:'A course to savor sushi to the fullest.', wagyu:'Wagyu & Kobe beef — shabu-shabu, sukiyaki, steak.', mix:'The best of both — sushi & wagyu in one.' };
   var CP_CATORDER = ['sushi','wagyu','mix'];
 
@@ -526,6 +537,7 @@
     }).join('');
     var col = CP_CATCOLOR[c.cat];
     return '<div class="cp-card'+(c.popular?' cp-pop':'')+'" style="--cpcol:'+col+';">'
+      + '<div class="cp-course-photo"><img src="'+(CP_COURSEIMG[c.id]||'')+'" alt="'+c.name+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'cp-course-photo-empty\');"/></div>'
       + '<div class="cp-bar"></div>'
       + (c.popular?'<div class="cp-pop-tag">MOST POPULAR</div>':'')
       + '<div class="cp-body">'
