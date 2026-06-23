@@ -470,15 +470,15 @@
   var CP_COURSES = [
     { id:'sushi-standard', cat:'sushi', name:'Sushi Course Standard', base:49800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame',0],['鮨','Temaki: Salmon & Ikura · Nigiri 3 kinds',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
-    { id:'sushi-premium', cat:'sushi', name:'Sushi Course Premium', base:69800, meta:'8 courses · 60–75 min',
+    { id:'sushi-premium', premium:true, cat:'sushi', name:'Sushi Course Premium', base:69800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Premium Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Mini Ikura Bowl / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Sea Urchin · Temaki: Salmon & Ikura · Nigiri 6 kinds (incl. Urchin / Ikura Gunkan)',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
     { id:'wagyu-standard', cat:'wagyu', name:'Wagyu Course Standard', base:49800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Appetizer Plate — Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Wagyu Shigureni',0],['温物','Wagyu Shabu-shabu & Dashi',0],['逸品','Wagyu Fillet Spring Roll',0],['和牛','Mini Wagyu Sukiyaki with Egg Yolk Sauce · Wagyu Steak',1],['椀・甘味','Miso Soup · Matcha & Dessert',0]] },
-    { id:'kobe-premium', cat:'wagyu', name:'Kobe Beef Course Premium', base:69800, meta:'8 courses · 60–75 min',
+    { id:'kobe-premium', premium:true, cat:'wagyu', name:'Kobe Beef Course Premium', base:69800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Salmon & Ikura · Nigiri 3 kinds',0],['温物','Wagyu Shabu-shabu & Dashi',0],['和牛','Hand-Served Wagyu Sushi',1],['茶と甘味・椀','Matcha & Dessert · Miso Soup',0]] },
-    { id:'sushi-wagyu-standard', cat:'mix', name:'Sushi & Wagyu Course Standard', base:59800, meta:'8 courses · 60–75 min', popular:true,
+    { id:'sushi-wagyu-standard', cat:'mix', name:'Sushi & Wagyu Course Standard', base:59800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Kobe Beef Appetizer Plate — Kobe Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Kobe Shigureni',0],['温物','Kobe Beef Shabu-shabu & Dashi',0],['逸品','Wagyu Fillet Spring Roll',0],['神戸牛','Mini Kobe Beef Sukiyaki with Egg Yolk Sauce · Kobe Beef Steak',1],['椀・甘味','Miso Soup · Matcha & Dessert',0]] },
-    { id:'sushi-kobe-premium', cat:'mix', name:'Sushi & Kobe Beef Course Premium', base:79800, meta:'8 courses · 60–75 min',
+    { id:'sushi-kobe-premium', premium:true, cat:'mix', name:'Sushi & Kobe Beef Course Premium', base:79800, meta:'8 courses · 60–75 min',
       rows:[['序','Chilled Tofu',0],['八寸','Kobe Beef Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Sea Urchin · Nigiri 3 kinds',0],['温物','Kobe Beef Shabu-shabu & Dashi',0],['逸品','Kobe Beef Steak',1],['神戸牛','Seared Kobe Beef Nigiri',1],['茶と甘味・椀','Matcha & Dessert · Miso Soup',0]] }
   ];
   var CP_CATCOLOR = { sushi:'#5fa897', wagyu:'#c05a4d', mix:'#c9a96e' };
@@ -536,17 +536,17 @@
       return '<div class="cp-row"><span class="cp-row-label">'+r[0]+'</span><span class="'+cls+'">'+r[1]+tag+'</span></div>';
     }).join('');
     var col = CP_CATCOLOR[c.cat];
-    return '<div class="cp-card'+(c.popular?' cp-pop':'')+'" style="--cpcol:'+col+';">'
+    return '<div class="cp-card'+(c.premium?' cp-pop':'')+'" style="--cpcol:'+col+';">'
       + '<div class="cp-course-photo"><img src="'+(CP_COURSEIMG[c.id]||'')+'" alt="'+c.name+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'cp-course-photo-empty\');"/></div>'
       + '<div class="cp-bar"></div>'
-      + (c.popular?'<div class="cp-pop-tag">MOST POPULAR</div>':'')
+      + (c.premium?'<div class="cp-pop-tag">★ RECOMMENDED</div>':'')
       + '<div class="cp-body">'
       + '<span class="cp-badge">'+CP_CATLABEL[c.cat]+'</span>'
       + '<div class="cp-name">'+c.name+'</div>'
       + '<div class="cp-price"><span class="cp-price-main">'+cpPrice_(c.base)+'</span><span class="cp-price-tax">('+cpTax_(c.base)+' incl.tax)</span></div>'
-      + '<button type="button" class="cp-detbtn" data-toggle="'+c.id+'">詳細を見る / SEE DETAILS</button>'
+      + '<button type="button" class="cp-detbtn" data-toggle="'+c.id+'">SEE DETAILS</button>'
       + '<div class="cp-detail" id="cp-detail-'+c.id+'"><div class="cp-detail-inner">'+rows+'</div></div>'
-      + '<button type="button" class="cp-select" data-choose="'+c.id+'">このコースを選ぶ / SELECT</button>'
+      + '<button type="button" class="cp-select" data-choose="'+c.id+'">SELECT</button>'
       + '</div></div>';
   }
   // ステップ2: 選んだカテゴリの2コースを描画
