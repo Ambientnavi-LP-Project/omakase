@@ -482,7 +482,7 @@
       rows:[['序','Chilled Tofu',0],['八寸','Kobe Beef Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Sea Urchin · Nigiri 3 kinds',0],['温物','Kobe Beef Shabu-shabu & Dashi',0],['逸品','Kobe Beef Steak',1],['神戸牛','Seared Kobe Beef Nigiri',1],['茶と甘味・椀','Matcha & Dessert · Miso Soup',0]] }
   ];
   var CP_CATCOLOR = { sushi:'#5dc9b0', wagyu:'#d36a5a', mix:'#c9a96e' };
-  var CP_CATLABEL = { sushi:'Sushi', wagyu:'Wagyu / Beef', mix:'Sushi & Wagyu' };
+  var CP_CATLABEL = { sushi:'Sushi', wagyu:'Wagyu Beef', mix:'Sushi & Wagyu' };
 
   var CP_CATIMG  = { sushi:'/images/cat-sushi.jpg', wagyu:'/images/cat-wagyu.jpg', mix:'/images/cat-mix.jpg' };
   var CP_COURSEIMG = {
@@ -544,7 +544,6 @@
       + '<span class="cp-badge">'+CP_CATLABEL[c.cat]+'</span>'
       + '<div class="cp-name">'+c.name+'</div>'
       + '<div class="cp-price"><span class="cp-price-main">'+cpPrice_(c.base)+'</span><span class="cp-price-tax">('+cpTax_(c.base)+' incl.tax)</span></div>'
-      + '<div class="cp-meta">'+c.meta+'</div>'
       + '<button type="button" class="cp-detbtn" data-toggle="'+c.id+'">詳細を見る / SEE DETAILS</button>'
       + '<div class="cp-detail" id="cp-detail-'+c.id+'"><div class="cp-detail-inner">'+rows+'</div></div>'
       + '<button type="button" class="cp-select" data-choose="'+c.id+'">このコースを選ぶ / SELECT</button>'
@@ -585,7 +584,7 @@
   window.cpChoose = function(id){
     var c = CP_COURSES.filter(function(x){return x.id===id;})[0];
     if (!c) return;
-    var val = c.name + ' - ' + cpPrice_(c.base) + ' (' + cpTax_(c.base) + ' incl.tax) / ' + c.meta;
+    var val = c.name + ' - ' + cpPrice_(c.base) + ' (' + cpTax_(c.base) + ' incl.tax)';
     document.getElementById('r_course').value = val;
     var lbl = document.getElementById('course-trigger-label');
     if (lbl){ lbl.textContent = c.name + '  ' + cpPrice_(c.base); lbl.style.color = '#f0ede4'; }
