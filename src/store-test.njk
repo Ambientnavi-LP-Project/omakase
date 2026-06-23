@@ -308,20 +308,20 @@ body { padding-bottom: 72px; }
 })();
 </script>
 
-<div class="hero-title-band w-full px-7 pb-8 text-center">
+<div class="hero-title-band w-full px-7 pb-3 text-center">
 <div class="hero-title-wrap inline-block relative">
 <span class="hinomaru" aria-hidden="true"></span>
 <h1 class="hero-title relative font-cormorant font-semibold leading-[1.0] tracking-tight text-ginza-ivory">
 <span class="block text-3xl md:text-5xl">Gastronomic Tour</span>
 <span class="block text-4xl md:text-6xl">of <span class="text-ginza-ivory">JAPAN</span></span>
 </h1>
-<p class="hero-eyebrow relative font-josefin tracking-[0.22em] uppercase text-ginza-gold/90 text-base md:text-xl mt-5">Sushi &amp; Wagyu Halal Omakase Experience</p>
+<p class="hero-eyebrow relative font-josefin tracking-[0.22em] uppercase text-ginza-gold/90 text-base md:text-xl mt-3.5">Sushi &amp; Wagyu Halal Omakase Experience</p>
 </div>
 </div>
 </section>
 
 <!-- HERO INTRO (black bg: CTA only) -->
-<section class="bg-ginza-black px-7 pt-5 pb-9 text-center">
+<section class="bg-ginza-black px-7 pt-2 pb-7 text-center">
 <div class="flex flex-col items-center gap-2.5 w-full max-w-sm mx-auto">
   {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
   <button onclick="openReserveModal('hero')"
@@ -401,6 +401,71 @@ A journey through Japan's food culture — wagyu, sushi, and projection-mapped d
 {% endif %}
 
 <!-- divider -->
+<div class="pm-divider"></div>
+
+<!-- MENU -->
+<section class="reveal py-16 bg-ginza-black" id="menu">
+<div class="text-center mb-10 px-6">
+<h3 class="font-cormorant text-3xl mb-4 leading-snug">"Sushi &amp; Wagyu Indulgence"</h3>
+<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
+Beyond our signature courses, we also offer a selection of premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.
+</p>
+</div>
+<!-- SUSHI SHOWCASE -->
+<div class="max-w-3xl mx-auto px-4 md:px-6 mb-12">
+<p class="text-center text-[11px] font-josefin tracking-[0.22em] uppercase text-ginza-gold/70 mb-4">Sushi Selection</p>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Salmon &amp; Ikura Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi1.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Salmon &amp; Ikura Temaki</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Sea Urchin Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu3.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Sea Urchin Temaki</figcaption>
+</figure>
+<figure class="group col-span-2 sm:col-span-1">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Premium Nigiri" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi4.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Premium Nigiri</figcaption>
+</figure>
+</div>
+</div>
+
+<!-- SIGNATURE DISHES (compact) -->
+<p class="text-center text-[11px] font-josefin tracking-[0.22em] uppercase text-ginza-gold/70 mb-4 px-6">Signature Dishes</p>
+<div class="grid grid-cols-2 gap-3 px-4 md:px-6 mb-10 max-w-2xl mx-auto">
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Wagyu Sushi" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi2.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Sushi</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Wagyu Shabu-shabu" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu2.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Shabu-shabu</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Wagyu Sukiyaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sukiyaki.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Sukiyaki</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Matcha Experience &amp; Japanese Sweets" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu4.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Matcha Experience &amp; Japanese Sweets</figcaption>
+</figure>
+</div>
+</section>
+
 <div class="pm-divider"></div>
 
 <!-- COURSE SELECTION -->
@@ -653,70 +718,7 @@ Reserve this course
 
 
 
-<div class="pm-divider"></div>
 
-<!-- MENU -->
-<section class="reveal py-16 bg-ginza-black" id="menu">
-<div class="text-center mb-10 px-6">
-<h3 class="font-cormorant text-3xl mb-4 leading-snug">"Sushi &amp; Wagyu Indulgence"</h3>
-<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
-Beyond our signature courses, we also offer a selection of premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.
-</p>
-</div>
-<!-- SUSHI SHOWCASE -->
-<div class="max-w-4xl mx-auto px-4 md:px-6 mb-12">
-<p class="text-center text-[11px] font-josefin tracking-[0.22em] uppercase text-ginza-gold/70 mb-4">Sushi Selection</p>
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-<figure class="group">
-<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:4/3;">
-<img alt="Salmon &amp; Ikura Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi1.jpg"/>
-</div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Salmon &amp; Ikura Temaki</figcaption>
-</figure>
-<figure class="group">
-<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:4/3;">
-<img alt="Sea Urchin Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu3.jpg"/>
-</div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Sea Urchin Temaki</figcaption>
-</figure>
-<figure class="group">
-<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:4/3;">
-<img alt="Premium Nigiri" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi4.jpg"/>
-</div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Premium Nigiri</figcaption>
-</figure>
-</div>
-</div>
-
-<!-- SIGNATURE DISHES (compact) -->
-<p class="text-center text-[11px] font-josefin tracking-[0.22em] uppercase text-ginza-gold/70 mb-4 px-6">Signature Dishes</p>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 md:px-6 mb-10 max-w-3xl mx-auto">
-<figure class="group">
-<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
-<img alt="Wagyu Sushi" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi2.jpg"/>
-</div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Sushi</figcaption>
-</figure>
-<figure class="group">
-<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
-<img alt="Wagyu Shabu-shabu" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu2.jpg"/>
-</div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Shabu-shabu</figcaption>
-</figure>
-<figure class="group">
-<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
-<img alt="Wagyu Sukiyaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sukiyaki.jpg"/>
-</div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Sukiyaki</figcaption>
-</figure>
-<figure class="group">
-<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
-<img alt="Matcha Experience &amp; Japanese Sweets" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu4.jpg"/>
-</div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Matcha Experience &amp; Japanese Sweets</figcaption>
-</figure>
-</div>
-</section>
 
 <div class="pm-divider"></div>
 
