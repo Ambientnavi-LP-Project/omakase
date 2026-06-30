@@ -709,7 +709,15 @@ Reserve this course
     var m = document.getElementById('ccModal-' + key);
     if(!m) return;
     m.classList.add('open'); openKey = key; document.body.style.overflow = 'hidden';
-    window.dataLayer.push({event:'course_category_view',event_label:key});
+    window.dataLayer.push({
+      event: 'course_category_view',
+      event_category: 'engagement',
+      event_label: key,
+      store_name: '{{ store.slug }}',
+      store_area: '{{ store.region }}',
+      brand: '{{ stores.brand.brand_slug }}',
+      channel: '{{ store.channel_id }}'
+    });
   };
   window.closeCourseCat = function(key){
     var m = document.getElementById('ccModal-' + (key || openKey));
@@ -1229,7 +1237,15 @@ Open {{ store.hours }}
     }
   }
   function trackCallReserve() {
-    window.dataLayer.push({event:'call_reserve_action',event_label:__callReserveTrigger});
+    window.dataLayer.push({
+      event: 'call_reserve_action',
+      event_category: 'engagement',
+      event_label: __callReserveTrigger,
+      store_name: '{{ store.slug }}',
+      store_area: '{{ store.region }}',
+      brand: '{{ stores.brand.brand_slug }}',
+      channel: '{{ store.channel_id }}'
+    });
   }
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeCallReserveModal();
@@ -1244,12 +1260,20 @@ Open {{ store.hours }}
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
   /* === カスタムイベント → GTM 経由で GA4 へ === */
+  window.dataLayer = window.dataLayer || [];
   document.addEventListener('click', function(e){
     var el = e.target.closest('[data-ga-event]');
     if (!el) return;
+    var evtName = el.getAttribute('data-ga-event');
+    var location = el.getAttribute('data-ga-location') || '';
     window.dataLayer.push({
-      event: el.getAttribute('data-ga-event'),
-      event_label: el.getAttribute('data-ga-location') || ''
+      event: evtName,
+      event_category: 'engagement',
+      event_label: location,
+      store_name: '{{ store.slug }}',
+      store_area: '{{ store.region }}',
+      brand: '{{ stores.brand.brand_slug }}',
+      channel: '{{ store.channel_id }}'
     });
   }, true);
 </script>
