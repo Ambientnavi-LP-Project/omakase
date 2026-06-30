@@ -545,16 +545,7 @@
     // カードの「Reserve」から開かれた場合：そのコースを事前選択
     if (preselectCourseId && window.cpChoose) {
       window.cpChoose(preselectCourseId);
-      if (typeof gtag === 'function') {
-        gtag('event', 'course_preselect', {
-          'event_category': 'engagement',
-          'event_label': preselectCourseId,
-          'store_name': '{{ store.slug }}',
-          'store_area': '{{ store.region }}',
-          'brand': '{{ stores.brand.brand_slug }}',
-          'channel': '{{ store.channel_id }}'
-        });
-      }
+      window.dataLayer.push({event:'course_preselect',event_label:preselectCourseId});
     } else {
       var rc = document.getElementById('r_course');
       if (rc) rc.value = '';
@@ -781,18 +772,13 @@
         .catch(function (e) { console.warn('guest mail failed:', e); });
     }
 
-    if (typeof gtag === 'function') {
-      gtag('event', 'reservation_form_submit', {
-        'event_category': 'conversion',
-        'form_guests': params.guests,
-        'form_date': params.date,
-        'form_course': params.course,
-        'store_name': '{{ store.slug }}',
-        'store_area': '{{ store.region }}',
-        'brand': '{{ stores.brand.brand_slug }}',
-        'channel': '{{ store.channel_id }}'
-      });
-    }
+    window.dataLayer.push({
+      event: 'reservation_form_submit',
+      form_guests: params.guests,
+      form_date: params.date,
+      form_course: params.course,
+      booking_id: params.booking_id || ''
+    });
 
     document.getElementById('confirmDialog').style.display = 'none';
     document.getElementById('reserveForm').style.display = 'none';

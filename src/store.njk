@@ -22,17 +22,20 @@ eleventyComputed:
 <link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/">
 {% endif %}
 
-<!-- Google tag (gtag.js) - GA4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ stores.brand.ga4_id }}"></script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TJKTLQJ6');</script>
+<!-- End Google Tag Manager -->
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', '{{ stores.brand.ga4_id }}', {
-    'store_name': '{{ store.slug }}',
-    'store_area': '{{ store.region }}',
-    'brand': '{{ stores.brand.brand_slug }}',
-    'channel': '{{ store.channel_id }}'
+  window.dataLayer.push({
+    store_name: '{{ store.slug }}',
+    store_area: '{{ store.region }}',
+    brand: '{{ stores.brand.brand_slug }}',
+    channel: '{{ store.channel_id }}'
   });
 </script>
 
@@ -197,6 +200,10 @@ body { padding-bottom: 72px; }
 </head>
 
 <body class="bg-ginza-black text-ginza-ivory font-epilogue overflow-x-hidden">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TJKTLQJ6"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <!-- OPENING LOADER -->
 <div id="opening-overlay">
@@ -702,7 +709,7 @@ Reserve this course
     var m = document.getElementById('ccModal-' + key);
     if(!m) return;
     m.classList.add('open'); openKey = key; document.body.style.overflow = 'hidden';
-    if(typeof gtag === 'function'){ gtag('event','course_category_view',{'event_category':'engagement','event_label':key,'store_name':'{{ store.slug }}','store_area':'{{ store.region }}','brand':'{{ stores.brand.brand_slug }}','channel':'{{ store.channel_id }}'}); }
+    window.dataLayer.push({event:'course_category_view',event_label:key});
   };
   window.closeCourseCat = function(key){
     var m = document.getElementById('ccModal-' + (key || openKey));
@@ -1222,16 +1229,7 @@ Open {{ store.hours }}
     }
   }
   function trackCallReserve() {
-    if (typeof gtag === 'function') {
-      gtag('event', 'call_reserve_action', {
-        'event_category': 'conversion',
-        'event_label': __callReserveTrigger,
-        'store_name': '{{ store.slug }}',
-        'store_area': '{{ store.region }}',
-        'brand': '{{ stores.brand.brand_slug }}',
-        'channel': '{{ store.channel_id }}'
-      });
-    }
+    window.dataLayer.push({event:'call_reserve_action',event_label:__callReserveTrigger});
   }
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeCallReserveModal();
@@ -1245,23 +1243,15 @@ Open {{ store.hours }}
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  /* === GA4 custom event tracking === */
-  if (typeof gtag === 'function') {
-    document.addEventListener('click', function(e){
-      var el = e.target.closest('[data-ga-event]');
-      if (!el) return;
-      var evtName = el.getAttribute('data-ga-event');
-      var location = el.getAttribute('data-ga-location') || '';
-      gtag('event', evtName, {
-        'event_category': 'engagement',
-        'event_label': location,
-        'store_name': '{{ store.slug }}',
-        'store_area': '{{ store.region }}',
-        'brand': '{{ stores.brand.brand_slug }}',
-        'channel': '{{ store.channel_id }}'
-      });
-    }, true);
-  }
+  /* === カスタムイベント → GTM 経由で GA4 へ === */
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('[data-ga-event]');
+    if (!el) return;
+    window.dataLayer.push({
+      event: el.getAttribute('data-ga-event'),
+      event_label: el.getAttribute('data-ga-location') || ''
+    });
+  }, true);
 </script>
 
 <script>
