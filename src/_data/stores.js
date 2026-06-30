@@ -338,7 +338,7 @@ module.exports = {
   brand: {
     domain: "japan-omakase.wagyu-sushi.com",
     ga4_id: "G-71QJSRH923",
-    gas_endpoint: "https://script.google.com/macros/s/AKfycbyqKnuZysH7fLhL7etze1eMOuS003cB5v2YIQeBfhRFGE19RpD8oA0HHOTMizYRRDda/exec",
+    gas_endpoint: "https://script.google.com/macros/s/AKfycbxg9_jS2cMMgvOxJQPoFePq-L9ja7coWWL-bqXCrmMc7OwzGzyqXVF6QPrek5-W3arR/exec",
     brand_name: "Omakase wagyu&sushi 〜Gastronomic Tour〜",
     brand_slug: "japan-omakase"
   },
