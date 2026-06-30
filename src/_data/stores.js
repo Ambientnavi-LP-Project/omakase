@@ -270,8 +270,6 @@ const STORES = [
 
     // HTMLのiframeから取得した実埋め込みURL
     maps_embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2864.9117174052094!2d139.70598719999998!3d35.6910264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188d15e9f7526b%3A0x3182f34b1761d38c!2zVG9reW8gT21ha2FzZSBTdXNoaSBXYWd5dSAoSGFsYWwpIFNoaW5qdWt1IFJlc3RhdXJhbnQg5paw5a6_5a-_5Y-45ZKM54mb6aSQ5Y6F!5e1!3m2!1sja!2sjp!4v1775612822829!5m2!1sja!2sjp",
-
-    gads_conversion: 'AW-17988602222/6kOSCImRqbUcEO6S0YFD',
   }
 ];
 
