@@ -898,14 +898,6 @@
       booking_id: params.booking_id || ''
     });
 
-    {% if store.gads_conversion %}
-    if (typeof gtag === 'function') {
-      gtag('event', 'conversion', {
-        'send_to': '{{ store.gads_conversion }}'
-      });
-    }
-    {% endif %}
-
     document.getElementById('confirmDialog').style.display = 'none';
     document.getElementById('reserveForm').style.display = 'none';
     document.getElementById('reserveSuccess').style.display = 'block';
