@@ -622,23 +622,6 @@
     while (BLOCKED_DATES.indexOf(ymd_(minD)) !== -1 && _g < 366) { minD.setDate(minD.getDate() + 1); _g++; }
     document.getElementById('r_date').setAttribute('min', ymd_(minD));
 
-    // GA4 event
-    if (typeof gtag === 'function') {
-      gtag('event', 'reserve_modal_open', {
-        'event_category': 'engagement',
-        'event_label': label,
-        'store_name': '{{ store.slug }}',
-        'store_area': '{{ store.region }}',
-        'brand': '{{ stores.brand.brand_slug }}',
-        'channel': '{{ store.channel_id }}'
-      });
-    }
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: 'reserve_modal_open',
-      reserve_button_location: label
-    });
-
     // カードの「Reserve」から開かれた場合：そのコースを事前選択
     if (preselectCourseId && window.cpChoose) {
       window.cpChoose(preselectCourseId);
@@ -888,15 +871,6 @@
         'channel': '{{ store.channel_id }}'
       });
     }
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: 'reservation_form_submit',
-      form_guests: params.guests,
-      form_date: params.date,
-      form_course: params.course,
-      source_path: params.source_path,
-      booking_id: params.booking_id || ''
-    });
 
     document.getElementById('confirmDialog').style.display = 'none';
     document.getElementById('reserveForm').style.display = 'none';
