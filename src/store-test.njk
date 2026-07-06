@@ -401,7 +401,7 @@ A journey through Japan's food culture — wagyu, sushi, and projection-mapped d
 {% if store.projection_mapping %}
 <h3 class="font-cormorant text-3xl mb-4 leading-snug">Sushi &amp; Wagyu Course<br/>× Projection Mapping</h3>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
-Not just a meal — a journey through Japan. Each course unfolds alongside a projection-mapped experience of Japanese culture and travel, served Muslim-friendly.
+Not just a meal — a journey through Japan. Each course unfolds alongside a projection-mapped experience of Japanese culture and travel, inviting you to savor Japan's culinary culture through exquisite dishes (all halal).
 </p>
 {% else %}
 <h3 class="font-cormorant text-3xl leading-snug">Omakase Course Experience</h3>
@@ -448,12 +448,127 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 
 <div class="pm-divider"></div>
 
+<!-- COURSE SELECTION -->
+<section class="reveal py-16 bg-ginza-black" id="courses">
+<div class="px-4 md:px-6 max-w-5xl mx-auto">
+
+{# ===== 価格計算: 税抜 base に store.price_adjust を加算、税込は ×1.1 ===== #}
+{% set adj = store.price_adjust or 0 %}
+{% macro comma(n) %}{% set s = (n | string) %}{% set out = "" %}{% set L = s | length %}{% for i in range(0, L) %}{% set ch = s[i] %}{% set posFromEnd = L - i %}{% if i > 0 and posFromEnd % 3 == 0 %}{{ "," }}{% endif %}{{ ch }}{% endfor %}{% endmacro %}
+{% set COURSES = [
+  { id: "sushi-standard", cat: "sushi", tier: "Sushi Course · Standard", name: "Sushi Course Standard", base: 49800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-standard.jpg", popular: false, tagline: "For those who'd like to savor the sushi first.", rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Temaki", "Salmon &amp; Ikura Hand Roll"], ["Nigiri · 10", "Chutoro Tuna / Salmon / Sea Bream / Shrimp / Scallop &nbsp;·&nbsp; Lean Tuna / Seared Salmon / Tamago / Seared Sea Bream / Ikura Gunkan", true], ["Temaki", "Chopped Lean Tuna (Akami)"], ["Soup", "Aka-dashi Miso Soup &amp; Shrimp Chawanmushi"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
+  { id: "sushi-premium", cat: "sushi", tier: "Sushi Course · Premium", name: "Sushi Course Premium", base: 69800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-premium.jpg", popular: false, premium: true, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Temaki", "Sea Urchin Hand Roll &nbsp;·&nbsp; Salmon &amp; Ikura Hand Roll"], ["Nigiri · 10", "Chutoro Tuna / Salmon / Sea Bream / Sea Urchin Gunkan / Scallop &nbsp;·&nbsp; Lean Tuna / Seared Salmon / Tamago / Crab Gunkan / Ikura Gunkan", true], ["Temaki", "Chopped Chutoro Tuna"], ["Soup", "Aka-dashi Miso Soup &amp; Snow Crab Chawanmushi"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
+  { id: "wagyu-standard", cat: "wagyu", tier: "Wagyu Course · Standard", name: "Wagyu Course Standard", base: 49800, meta: "8 courses · 60–75 min", img: "/images/course-wagyu-standard.jpg", popular: false, rows: [["Hassun", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Hot Dish", "Wagyu Sukiyaki (thin-sliced)"], ["Steak", "Wagyu Fillet Steak 100g", true], ["Specialty", "Wagyu Spring Roll"], ["Wagyu Sushi", "Wagyu Nikuzushi &amp; Steak Hand Roll (20g)"], ["Soup", "Aka-dashi Miso Soup — Shijimi Clams"], ["Tea &amp; Sweets", "Matcha &amp; Mini Sweets"]] },
+  { id: "kobe-premium", cat: "wagyu", tier: "Kobe Beef Course · Premium", name: "Kobe Beef Course Premium", base: 69800, meta: "8 courses · 60–75 min", img: "/images/course-kobe-premium.jpg", popular: false, premium: true, rows: [["Hassun", "Kobe Beef Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Hot Dish", "Kobe Beef Sukiyaki (thin-sliced)"], ["Steak", "Kobe Beef Fillet Steak 100g", true], ["Specialty", "Kobe Beef Spring Roll"], ["Kobe Sushi", "Kobe Beef Nikuzushi &amp; Steak Hand Roll (20g)"], ["Soup", "Aka-dashi Miso Soup — Shijimi Clams"], ["Tea &amp; Sweets", "Matcha &amp; Mini Sweets"]] },
+  { id: "sushi-wagyu-standard", cat: "mix", tier: "Sushi & Wagyu · Standard", name: "Sushi & Wagyu Course Standard", base: 59800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-wagyu-standard.jpg", popular: false, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 5", "Chutoro Tuna / Salmon / Sea Bream / Tamago / Scallop"], ["Steak", "Wagyu Fillet Steak 100g", true], ["Hot Dish", "Wagyu Sukiyaki"], ["Temaki &amp; Sushi", "Salmon &amp; Ikura Hand Roll &nbsp;·&nbsp; Wagyu Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
+  { id: "sushi-kobe-premium", cat: "mix", tier: "Sushi & Kobe Beef · Premium", name: "Sushi & Kobe Beef Course Premium", base: 79800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-kobe-premium.jpg", popular: false, premium: true, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 5", "Chutoro Tuna / Salmon / Sea Bream / Tamago / Crab Gunkan"], ["Steak", "Kobe Beef Fillet Steak 100g", true], ["Hot Dish", "Kobe Beef Sukiyaki"], ["Temaki &amp; Sushi", "Sea Urchin Hand Roll &nbsp;·&nbsp; Kobe Beef Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] }
+] %}
+
+{# ===== ⑦⑧ 特別コース(3カテゴリには含めず、別枠で表示)=====
+   light = LP(web)予約限定 / lunch = ランチ限定。予約は各カードの Reserve から直接。 #}
+{% set SPECIALS = [
+  { id: "sushi-wagyu-light", kind: "web", tier: "Sushi & Wagyu · Light", name: "Sushi & Wagyu Light Course", base: 19800, meta: "8 courses · web reservation only", img: "/images/course-sushi-wagyu-standard.jpg", badge: "Web Reservation Exclusive", note: "Web-exclusive — and far from a light bite. A satisfying 8-course omakase, made for a first taste of Japan's omakase culture.", rows: [["Hassun", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 3", "Lean Tuna / Salmon / Sea Bream"], ["Steak", "Wagyu Fillet Steak 50g", true], ["Hot Dish", "Wagyu Sukiyaki"], ["Temaki &amp; Sushi", "Salmon &amp; Ikura Hand Roll &nbsp;·&nbsp; Wagyu Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
+  { id: "sushi-wagyu-lunch", kind: "lunch", tier: "Sushi & Wagyu · Lunch", name: "Sushi & Wagyu Lunch Course", base: 29800, meta: "8 courses · lunch time only", img: "/images/course-sushi-wagyu-standard.jpg", badge: "Lunch Time Only", note: "Served during lunch hours only.", rows: [["Hassun", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 5", "Chutoro Tuna / Salmon / Sea Bream / Tamago / Scallop"], ["Steak", "Wagyu Fillet Steak 50g", true], ["Hot Dish", "Wagyu Sukiyaki"], ["Temaki &amp; Sushi", "Salmon &amp; Ikura Hand Roll &nbsp;·&nbsp; Wagyu Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] }
+] %}
+
+{# ===== カテゴリ定義（3択）。各カテゴリ = Standard + Premium の2コース ===== #}
+{% set CATS = [
+  { key: "sushi", label: "Sushi Courses", desc: "A course centered on temaki &amp; nigiri sushi.", tag: "", img: "/images/cat-sushi.jpg" },
+  { key: "wagyu", label: "Wagyu Beef Courses", desc: "Wagyu &amp; Kobe beef — shabu-shabu, sukiyaki and steak.", tag: "", img: "/images/cat-wagyu.jpg" },
+  { key: "mix", label: "Sushi &amp; Wagyu", desc: "The best of both — sushi and wagyu in one indulgent journey.", tag: "Most Popular", img: "/images/cat-mix.jpg" }
+] %}
+
+<div class="text-center mb-6 px-6">
+<p class="font-josefin text-[12px] md:text-[13px] tracking-[0.12em] uppercase text-ginza-gold/90">Seats are limited &mdash; reservation recommended</p>
+<p class="mt-2 inline-flex items-center gap-2 text-[11px] font-josefin tracking-[0.14em] uppercase text-ginza-ivory/55">
+<span style="display:inline-block;width:7px;height:7px;border-radius:9999px;background:#3fae6a;box-shadow:0 0 0 3px rgba(63,174,106,0.18);"></span>
+Only a few seats left today
+</p>
+</div>
+
+<!-- CATEGORY CHOICE BUTTONS -->
+<div class="cat-choice-grid">
+{% for cat in CATS %}
+{% set fromBase = 0 %}
+{% for c in COURSES %}{% if c.cat == cat.key %}{% if fromBase == 0 or c.base < fromBase %}{% set fromBase = c.base %}{% endif %}{% endif %}{% endfor %}
+{% set fromTotal = fromBase + adj %}
+{% set fromIncl = ((fromTotal * 1.1) | round(0, "floor")) | int %}
+<button type="button" class="cat-choice cat-{{ cat.key }}" onclick="openCourseCat('{{ cat.key }}')" data-ga-event="course_category_open" data-ga-location="cat_{{ cat.key }}">
+<span class="cat-choice-bar"></span>
+{% if cat.tag %}<span class="cat-choice-tag">{{ cat.tag | safe }}</span>{% endif %}
+<span class="cat-choice-body">
+<span class="cat-choice-label">{{ cat.label | safe }}</span>
+<span class="cat-choice-desc">{{ cat.desc | safe }}</span>
+<span class="cat-choice-price">From &yen;{{ comma(fromTotal) }}</span>
+<span class="cat-choice-cta">View 2 courses <span aria-hidden="true">→</span></span>
+</span>
+<span class="cat-choice-photo"><img src="{{ cat.img }}" alt="{{ cat.label }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cat-choice-photo-empty');"/></span>
+</button>
+{% endfor %}
+</div>
+
+<p class="text-center text-[11px] text-ginza-ivory/40 font-josefin tracking-widest mt-6">2 courses per style · All dishes Muslim-friendly · Seasonal menu</p>
+
+<!-- ===== SPECIAL / VALUE COURSES (⑦ Light · ⑧ Lunch) ===== -->
+<div class="sp-band">
+<div class="sp-grid">
+{% for s in SPECIALS %}
+{% set total = s.base %}{# ⑦⑧ は price_adjust を適用しない(全国一律) #}
+{% set incl = ((total * 1.1) | round(0, "floor")) | int %}
+<div class="sp-card sp-{{ s.kind }}">
+<span class="sp-card-badge">{{ s.badge }}</span>
+<div class="sp-card-photo"><img src="{{ s.img }}" alt="{{ s.name }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('sp-card-photo-empty');"/></div>
+<div class="sp-card-body">
+<p class="sp-card-tier">{{ s.tier }}</p>
+<p class="sp-card-name">{{ s.name }}</p>
+<div class="sp-card-price"><span class="sp-card-price-main">&yen;{{ comma(total) }}</span><span class="sp-card-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>
+<p class="sp-card-note">{{ s.note }}</p>
+
+<button type="button" class="cc-course-toggle sp-toggle" onclick="toggleCourseDetail('{{ s.id }}')" aria-expanded="false" data-ga-event="course_detail_view" data-ga-location="special_{{ s.id }}">
+<span>See details</span>
+<svg class="cc-chevron" id="cc-chevron-{{ s.id }}" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/></svg>
+</button>
+<div class="cc-course-rows" id="cc-detail-{{ s.id }}">
+<div class="cc-course-rows-inner">
+{% for r in s.rows %}
+<div class="cc-course-row"><span class="cc-course-row-k">{{ r[0] }}</span><span class="cc-course-row-v{% if r[2] %} sp-hl{% endif %}">{{ r[1] | safe }}{% if r[2] %} <span class="sp-hl-tag">Signature</span>{% endif %}</span></div>
+{% endfor %}
+</div>
+</div>
+
+{% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
+<button onclick="openReserveModal('special_{{ s.id }}', '{{ s.id }}')" class="sp-reserve" data-ga-event="reserve_click" data-ga-location="special_{{ s.id }}">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+Reserve online
+</button>
+{% elif store.tablecheck_url == 'TBD' %}
+<button onclick="openCallReserveModal('special_{{ s.id }}')" class="sp-reserve" data-ga-event="reserve_click" data-ga-location="special_{{ s.id }}">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+Reserve online
+</button>
+{% else %}
+<a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="sp-reserve" data-ga-event="reserve_click" data-ga-location="special_{{ s.id }}">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+Reserve online
+</a>
+{% endif %}
+</div>
+</div>
+{% endfor %}
+</div>
+</div>
+
+</div>
+</section>
+
+<div class="pm-divider"></div>
+
 <!-- MENU -->
 <section class="reveal py-16 bg-ginza-black" id="menu">
 <div class="text-center mb-10 px-6">
 <h3 class="font-cormorant text-3xl mb-4 leading-snug">"Sushi &amp; Wagyu Indulgence"</h3>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
-Beyond our signature courses, we also offer a selection of premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.
+Within our signature courses, you'll also find premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.
 </p>
 </div>
 <!-- SUSHI SHOWCASE -->
@@ -507,128 +622,6 @@ Beyond our signature courses, we also offer a selection of premium dishes — cr
 </div>
 <figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Matcha Experience &amp; Japanese Sweets</figcaption>
 </figure>
-</div>
-</section>
-
-<div class="pm-divider"></div>
-
-<!-- COURSE SELECTION -->
-<section class="reveal py-16 bg-ginza-black" id="courses">
-<div class="px-4 md:px-6 max-w-5xl mx-auto">
-
-{# ===== 価格計算: 税抜 base に store.price_adjust を加算、税込は ×1.1 ===== #}
-{% set adj = store.price_adjust or 0 %}
-{% macro comma(n) %}{% set s = (n | string) %}{% set out = "" %}{% set L = s | length %}{% for i in range(0, L) %}{% set ch = s[i] %}{% set posFromEnd = L - i %}{% if i > 0 and posFromEnd % 3 == 0 %}{{ "," }}{% endif %}{{ ch }}{% endfor %}{% endmacro %}
-{% set COURSES = [
-  { id: "sushi-standard", cat: "sushi", tier: "Sushi Course · Standard", name: "Sushi Course Standard", base: 49800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-standard.jpg", popular: false, tagline: "For those who'd like to savor the sushi first.", rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Temaki", "Salmon &amp; Ikura Hand Roll"], ["Nigiri · 10", "Chutoro Tuna / Salmon / Sea Bream / Shrimp / Scallop &nbsp;·&nbsp; Lean Tuna / Seared Salmon / Tamago / Seared Sea Bream / Ikura Gunkan", true], ["Temaki", "Chopped Lean Tuna (Akami)"], ["Soup", "Aka-dashi Miso Soup &amp; Shrimp Chawanmushi"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
-  { id: "sushi-premium", cat: "sushi", tier: "Sushi Course · Premium", name: "Sushi Course Premium", base: 69800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-premium.jpg", popular: false, premium: true, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Temaki", "Sea Urchin Hand Roll &nbsp;·&nbsp; Salmon &amp; Ikura Hand Roll"], ["Nigiri · 10", "Chutoro Tuna / Salmon / Sea Bream / Sea Urchin Gunkan / Scallop &nbsp;·&nbsp; Lean Tuna / Seared Salmon / Tamago / Crab Gunkan / Ikura Gunkan", true], ["Temaki", "Chopped Chutoro Tuna"], ["Soup", "Aka-dashi Miso Soup &amp; Snow Crab Chawanmushi"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
-  { id: "wagyu-standard", cat: "wagyu", tier: "Wagyu Course · Standard", name: "Wagyu Course Standard", base: 49800, meta: "8 courses · 60–75 min", img: "/images/course-wagyu-standard.jpg", popular: false, rows: [["Hassun", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Hot Dish", "Wagyu Sukiyaki (thin-sliced)"], ["Steak", "Wagyu Fillet Steak 100g", true], ["Specialty", "Wagyu Spring Roll"], ["Wagyu Sushi", "Wagyu Nikuzushi &amp; Steak Hand Roll (20g)"], ["Soup", "Aka-dashi Miso Soup — Shijimi Clams"], ["Tea &amp; Sweets", "Matcha &amp; Mini Sweets"]] },
-  { id: "kobe-premium", cat: "wagyu", tier: "Kobe Beef Course · Premium", name: "Kobe Beef Course Premium", base: 69800, meta: "8 courses · 60–75 min", img: "/images/course-kobe-premium.jpg", popular: false, premium: true, rows: [["Hassun", "Kobe Beef Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Hot Dish", "Kobe Beef Sukiyaki (thin-sliced)"], ["Steak", "Kobe Beef Fillet Steak 100g", true], ["Specialty", "Kobe Beef Spring Roll"], ["Kobe Sushi", "Kobe Beef Nikuzushi &amp; Steak Hand Roll (20g)"], ["Soup", "Aka-dashi Miso Soup — Shijimi Clams"], ["Tea &amp; Sweets", "Matcha &amp; Mini Sweets"]] },
-  { id: "sushi-wagyu-standard", cat: "mix", tier: "Sushi & Wagyu · Standard", name: "Sushi & Wagyu Course Standard", base: 59800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-wagyu-standard.jpg", popular: false, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 5", "Chutoro Tuna / Salmon / Sea Bream / Tamago / Scallop"], ["Steak", "Wagyu Fillet Steak 100g", true], ["Hot Dish", "Wagyu Sukiyaki"], ["Temaki &amp; Sushi", "Salmon &amp; Ikura Hand Roll &nbsp;·&nbsp; Wagyu Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
-  { id: "sushi-kobe-premium", cat: "mix", tier: "Sushi & Kobe Beef · Premium", name: "Sushi & Kobe Beef Course Premium", base: 79800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-kobe-premium.jpg", popular: false, premium: true, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 5", "Chutoro Tuna / Salmon / Sea Bream / Tamago / Crab Gunkan"], ["Steak", "Kobe Beef Fillet Steak 100g", true], ["Hot Dish", "Kobe Beef Sukiyaki"], ["Temaki &amp; Sushi", "Sea Urchin Hand Roll &nbsp;·&nbsp; Kobe Beef Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] }
-] %}
-
-{# ===== ⑦⑧ 特別コース(3カテゴリには含めず、別枠で表示)=====
-   light = LP(web)予約限定 / lunch = ランチ限定。予約は各カードの Reserve から直接。 #}
-{% set SPECIALS = [
-  { id: "sushi-wagyu-light", kind: "web", tier: "Sushi & Wagyu · Light", name: "Sushi & Wagyu Light Course", base: 19800, meta: "8 courses · web reservation only", img: "/images/course-sushi-wagyu-standard.jpg", badge: "Web Reservation Exclusive", note: "Bookable online only — not available for walk-ins or phone.", rows: [["Hassun", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 3", "Lean Tuna / Salmon / Sea Bream"], ["Steak", "Wagyu Fillet Steak 50g", true], ["Hot Dish", "Wagyu Sukiyaki"], ["Temaki &amp; Sushi", "Salmon &amp; Ikura Hand Roll &nbsp;·&nbsp; Wagyu Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
-  { id: "sushi-wagyu-lunch", kind: "lunch", tier: "Sushi & Wagyu · Lunch", name: "Sushi & Wagyu Lunch Course", base: 29800, meta: "8 courses · lunch time only", img: "/images/course-sushi-wagyu-standard.jpg", badge: "Lunch Time Only", note: "Served during lunch hours only.", rows: [["Hassun", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 5", "Chutoro Tuna / Salmon / Sea Bream / Tamago / Scallop"], ["Steak", "Wagyu Fillet Steak 50g", true], ["Hot Dish", "Wagyu Sukiyaki"], ["Temaki &amp; Sushi", "Salmon &amp; Ikura Hand Roll &nbsp;·&nbsp; Wagyu Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] }
-] %}
-
-{# ===== カテゴリ定義（3択）。各カテゴリ = Standard + Premium の2コース ===== #}
-{% set CATS = [
-  { key: "sushi", label: "Sushi Courses", desc: "A course centered on temaki &amp; nigiri sushi.", tag: "", img: "/images/cat-sushi.jpg" },
-  { key: "wagyu", label: "Wagyu Beef Courses", desc: "Wagyu &amp; Kobe beef — shabu-shabu, sukiyaki and steak.", tag: "", img: "/images/cat-wagyu.jpg" },
-  { key: "mix", label: "Sushi &amp; Wagyu", desc: "The best of both — sushi and wagyu in one indulgent journey.", tag: "Most Popular", img: "/images/cat-mix.jpg" }
-] %}
-
-<div class="text-center mb-6 px-6">
-<p class="font-josefin text-[12px] md:text-[13px] tracking-[0.12em] uppercase text-ginza-gold/90">Seats are limited &mdash; reservation recommended</p>
-<p class="mt-2 inline-flex items-center gap-2 text-[11px] font-josefin tracking-[0.14em] uppercase text-ginza-ivory/55">
-<span style="display:inline-block;width:7px;height:7px;border-radius:9999px;background:#3fae6a;box-shadow:0 0 0 3px rgba(63,174,106,0.18);"></span>
-Only a few seats left today
-</p>
-</div>
-
-<!-- CATEGORY CHOICE BUTTONS -->
-<div class="cat-choice-grid">
-{% for cat in CATS %}
-{% set fromBase = 0 %}
-{% for c in COURSES %}{% if c.cat == cat.key %}{% if fromBase == 0 or c.base < fromBase %}{% set fromBase = c.base %}{% endif %}{% endif %}{% endfor %}
-{% set fromTotal = fromBase + adj %}
-{% set fromIncl = ((fromTotal * 1.1) | round(0, "floor")) | int %}
-<button type="button" class="cat-choice cat-{{ cat.key }}" onclick="openCourseCat('{{ cat.key }}')" data-ga-event="course_category_open" data-ga-location="cat_{{ cat.key }}">
-<span class="cat-choice-bar"></span>
-{% if cat.tag %}<span class="cat-choice-tag">{{ cat.tag | safe }}</span>{% endif %}
-<span class="cat-choice-body">
-<span class="cat-choice-label">{{ cat.label | safe }}</span>
-<span class="cat-choice-desc">{{ cat.desc | safe }}</span>
-<span class="cat-choice-price">From &yen;{{ comma(fromTotal) }}</span>
-<span class="cat-choice-cta">View 2 courses <span aria-hidden="true">→</span></span>
-</span>
-<span class="cat-choice-photo"><img src="{{ cat.img }}" alt="{{ cat.label }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cat-choice-photo-empty');"/></span>
-</button>
-{% endfor %}
-</div>
-
-<p class="text-center text-[11px] text-ginza-ivory/40 font-josefin tracking-widest mt-6">2 courses per style · All dishes Muslim-friendly · Seasonal menu</p>
-
-<!-- ===== SPECIAL / VALUE COURSES (⑦ Light · ⑧ Lunch) ===== -->
-<div class="sp-band">
-<div class="sp-band-head">
-<span class="sp-band-line"></span>
-<p class="sp-band-kicker">Special &amp; Value Courses</p>
-<span class="sp-band-line"></span>
-</div>
-<p class="sp-band-sub">Entry courses in addition to the three styles above — reserve directly below.</p>
-
-<div class="sp-grid">
-{% for s in SPECIALS %}
-{% set total = s.base + adj %}
-{% set incl = ((total * 1.1) | round(0, "floor")) | int %}
-<div class="sp-card sp-{{ s.kind }}">
-<span class="sp-card-badge">{{ s.badge }}</span>
-<div class="sp-card-photo"><img src="{{ s.img }}" alt="{{ s.name }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('sp-card-photo-empty');"/></div>
-<div class="sp-card-body">
-<p class="sp-card-tier">{{ s.tier }}</p>
-<p class="sp-card-name">{{ s.name }}</p>
-<div class="sp-card-price"><span class="sp-card-price-main">&yen;{{ comma(total) }}</span><span class="sp-card-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>
-<p class="sp-card-note">{{ s.note }}</p>
-
-<button type="button" class="cc-course-toggle sp-toggle" onclick="toggleCourseDetail('{{ s.id }}')" aria-expanded="false" data-ga-event="course_detail_view" data-ga-location="special_{{ s.id }}">
-<span>See details</span>
-<svg class="cc-chevron" id="cc-chevron-{{ s.id }}" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/></svg>
-</button>
-<div class="cc-course-rows" id="cc-detail-{{ s.id }}">
-<div class="cc-course-rows-inner">
-{% for r in s.rows %}
-<div class="cc-course-row"><span class="cc-course-row-k">{{ r[0] }}</span><span class="cc-course-row-v{% if r[2] %} sp-hl{% endif %}">{{ r[1] | safe }}{% if r[2] %} <span class="sp-hl-tag">Signature</span>{% endif %}</span></div>
-{% endfor %}
-</div>
-</div>
-
-{% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
-<button onclick="openReserveModal('special_{{ s.id }}', '{{ s.id }}')" class="sp-reserve" data-ga-event="reserve_click" data-ga-location="special_{{ s.id }}">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-Reserve online
-</button>
-{% elif store.tablecheck_url == 'TBD' %}
-<button onclick="openCallReserveModal('special_{{ s.id }}')" class="sp-reserve" data-ga-event="reserve_click" data-ga-location="special_{{ s.id }}">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-Reserve online
-</button>
-{% else %}
-<a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="sp-reserve" data-ga-event="reserve_click" data-ga-location="special_{{ s.id }}">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-Reserve online
-</a>
-{% endif %}
-</div>
-</div>
-{% endfor %}
-</div>
-</div>
-
 </div>
 </section>
 
