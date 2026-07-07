@@ -104,6 +104,7 @@
   .cp-price{display:flex;align-items:baseline;gap:6px;margin-bottom:3px;}
   .cp-price-main{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:16px;color:#c9a96e;}
   .cp-price-tax{font-size:9px;color:rgba(240,237,228,0.4);}
+  .cp-diff{font-family:'Epilogue',sans-serif;font-weight:300;font-size:11px;line-height:1.45;color:rgba(240,237,228,0.8);background:rgba(201,169,110,0.08);border-left:2px solid rgba(201,169,110,0.5);padding:6px 9px;border-radius:0 6px 6px 0;margin:6px 0 4px;}
   .cp-meta{font-family:'Josefin Sans',sans-serif;font-size:10px;color:rgba(240,237,228,0.5);margin-bottom:12px;}
   .cp-detbtn{width:100%;background:none;border:1px solid rgba(201,169,110,0.3);color:rgba(201,169,110,0.8);font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:0.1em;padding:8px;border-radius:8px;cursor:pointer;}
   .cp-detail{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
@@ -467,39 +468,50 @@
   function cpYen_(n){ return '¥' + n.toLocaleString('en-US'); }
   function cpPrice_(base){ return cpYen_(base + PRICE_ADJUST); }
   function cpTax_(base){ return cpYen_(Math.floor((base + PRICE_ADJUST) * 1.1)); }
+  // コース単位の実売価格(⑦⑧など noadj:true は price_adjust を適用しない)
+  function cpAdj_(c){ return (c && c.noadj) ? 0 : PRICE_ADJUST; }
+  function cpCoursePrice_(c){ return c.base + cpAdj_(c); }
   var CP_COURSES = [
-    { id:'sushi-standard', cat:'sushi', name:'Sushi Course Standard', base:49800, meta:'8 courses · 60–75 min',
-      rows:[['序','Chilled Tofu',0],['八寸','Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese / Edamame',0],['鮨','Temaki: Salmon & Ikura · Nigiri 3 kinds',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
-    { id:'sushi-premium', premium:true, cat:'sushi', name:'Sushi Course Premium', base:69800, meta:'8 courses · 60–75 min',
-      rows:[['序','Chilled Tofu',0],['八寸','Premium Sushi Appetizer Plate — Seared Salmon / Marinated Tuna / Mini Ikura Bowl / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Sea Urchin · Temaki: Salmon & Ikura · Nigiri 6 kinds (incl. Urchin / Ikura Gunkan)',1],['椀','Aka-dashi Miso Soup — Lake Shinji Clams',0],['茶と甘味','Matcha Experience & Dessert — Tsujiri',0]] },
-    { id:'wagyu-standard', cat:'wagyu', name:'Wagyu Course Standard', base:49800, meta:'8 courses · 60–75 min',
-      rows:[['序','Chilled Tofu',0],['八寸','Appetizer Plate — Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Wagyu Shigureni',0],['温物','Wagyu Shabu-shabu & Dashi',0],['逸品','Wagyu Fillet Spring Roll',0],['和牛','Mini Wagyu Sukiyaki with Egg Yolk Sauce · Wagyu Steak',1],['椀・甘味','Miso Soup · Matcha & Dessert',0]] },
-    { id:'kobe-premium', premium:true, cat:'wagyu', name:'Kobe Beef Course Premium', base:69800, meta:'8 courses · 60–75 min',
-      rows:[['序','Chilled Tofu',0],['八寸','Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Salmon & Ikura · Nigiri 3 kinds',0],['温物','Wagyu Shabu-shabu & Dashi',0],['和牛','Hand-Served Wagyu Sushi',1],['茶と甘味・椀','Matcha & Dessert · Miso Soup',0]] },
-    { id:'sushi-wagyu-standard', cat:'mix', name:'Sushi & Wagyu Course Standard', base:59800, meta:'8 courses · 60–75 min',
-      rows:[['序','Chilled Tofu',0],['八寸','Kobe Beef Appetizer Plate — Kobe Roast Beef / Dashimaki Tamago / Grilled Vegetables / Miso Cream Cheese / Kobe Shigureni',0],['温物','Kobe Beef Shabu-shabu & Dashi',0],['逸品','Wagyu Fillet Spring Roll',0],['神戸牛','Mini Kobe Beef Sukiyaki with Egg Yolk Sauce · Kobe Beef Steak',1],['椀・甘味','Miso Soup · Matcha & Dessert',0]] },
-    { id:'sushi-kobe-premium', premium:true, cat:'mix', name:'Sushi & Kobe Beef Course Premium', base:79800, meta:'8 courses · 60–75 min',
-      rows:[['序','Chilled Tofu',0],['八寸','Kobe Beef Appetizer Plate — Wagyu Roast Beef / Seared Salmon / Marinated Tuna / Dashimaki Tamago / Miso Cream Cheese',0],['鮨','Temaki: Sea Urchin · Nigiri 3 kinds',0],['温物','Kobe Beef Shabu-shabu & Dashi',0],['逸品','Kobe Beef Steak',1],['神戸牛','Seared Kobe Beef Nigiri',1],['茶と甘味・椀','Matcha & Dessert · Miso Soup',0]] }
+    { id:'sushi-standard', cat:'sushi', name:'Sushi Course Standard', base:49800, meta:'8 courses · 60–75 min', diff:'The standard sushi omakase.',
+      rows:[['八寸','Sushi Hassun — Seasonal Appetizers',0],['序','Chilled Tofu',0],['手巻','Salmon & Ikura Hand Roll',0],['握り','Nigiri 10 — Chutoro / Salmon / Sea Bream / Shrimp / Scallop · Lean Tuna / Seared Salmon / Tamago / Seared Sea Bream / Ikura Gunkan',0],['手巻','Chopped Lean Tuna (Akami)',0],['椀','Aka-dashi Miso Soup & Shrimp Chawanmushi',0],['茶と甘味','Matcha & Mini Japanese Sweets',0]] },
+    { id:'sushi-premium', premium:true, cat:'sushi', name:'Sushi Course Premium', base:69800, meta:'8 courses · 60–75 min', diff:'Adds Sea Urchin & Crab nigiri, an extra Sea Urchin hand roll, snow-crab chawanmushi.',
+      rows:[['八寸','Sushi Hassun — Seasonal Appetizers',0],['序','Chilled Tofu',0],['手巻','Sea Urchin Hand Roll · Salmon & Ikura Hand Roll',0],['握り','Nigiri 10 — Chutoro / Salmon / Sea Bream / Urchin Gunkan / Scallop · Lean Tuna / Seared Salmon / Tamago / Crab Gunkan / Ikura Gunkan',0],['手巻','Chopped Chutoro Tuna',0],['椀','Aka-dashi Miso Soup & Snow Crab Chawanmushi',0],['茶と甘味','Matcha & Mini Japanese Sweets',0]] },
+    { id:'wagyu-standard', cat:'wagyu', name:'Wagyu Course Standard', base:49800, meta:'8 courses · 60–75 min', diff:'The standard wagyu omakase.',
+      rows:[['八寸','Wagyu Hassun — Seasonal Appetizers',0],['序','Chilled Tofu',0],['温物','Wagyu Sukiyaki (thin-sliced)',0],['和牛','Wagyu Fillet Steak 100g',0],['逸品','Wagyu Spring Roll',0],['鮨','Wagyu Nikuzushi & Steak Hand Roll (20g)',0],['椀・甘味','Aka-dashi Miso Soup — Shijimi · Bite-Size Gyudon · Matcha & Sweets',0]] },
+    { id:'kobe-premium', premium:true, cat:'wagyu', name:'Kobe Beef Course Premium', base:69800, meta:'8 courses · 60–75 min', diff:'Same as Standard, upgraded to premium Kobe Beef.',
+      rows:[['八寸','Kobe Beef Hassun — Seasonal Appetizers',0],['序','Chilled Tofu',0],['温物','Kobe Beef Sukiyaki (thin-sliced)',0],['神戸牛','Kobe Beef Fillet Steak 100g',0],['逸品','Kobe Beef Spring Roll',0],['鮨','Kobe Beef Nikuzushi & Steak Hand Roll (20g)',0],['椀・甘味','Aka-dashi Miso Soup — Shijimi · Bite-Size Kobe Beef Gyudon · Matcha & Sweets',0]] },
+    { id:'sushi-wagyu-standard', cat:'mix', name:'Sushi & Wagyu Course Standard', base:59800, meta:'8 courses · 60–75 min', diff:'The standard sushi + wagyu combo.',
+      rows:[['八寸','Sushi Hassun — Seasonal Appetizers',0],['序','Chilled Tofu',0],['握り','Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop',0],['和牛','Wagyu Fillet Steak 100g',0],['温物','Wagyu Sukiyaki',0],['鮨','Salmon & Ikura Hand Roll · Wagyu Nikuzushi',0],['椀・甘味','Aka-dashi Miso Soup · Matcha & Sweets',0]] },
+    { id:'sushi-kobe-premium', premium:true, cat:'mix', name:'Sushi & Kobe Beef Course Premium', base:79800, meta:'8 courses · 60–75 min', diff:'Adds Sea Urchin & Crab sushi; beef upgraded to Kobe Beef.',
+      rows:[['八寸','Sushi Hassun — Seasonal Appetizers',0],['序','Chilled Tofu',0],['握り','Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Crab Gunkan',0],['神戸牛','Kobe Beef Fillet Steak 100g',0],['温物','Kobe Beef Sukiyaki',0],['鮨','Sea Urchin Hand Roll · Kobe Beef Nikuzushi',0],['椀・甘味','Aka-dashi Miso Soup · Matcha & Sweets',0]] },
+    /* ⑦ Web限定 → 'mix'(Sushi & Wagyu)の入口 / ⑧ Lunch → 'lunch'(browse非表示・枠外バナーから preselect)。
+       どちらも noadj:true で price_adjust 非適用。 */
+    { id:'sushi-wagyu-light', cat:'mix', noadj:true, nophoto:true, name:'Sushi & Wagyu Course — Web Exclusive', base:19800, meta:'8 courses · online only', diff:'Online-only entry · the full sushi & wagyu flow.',
+      rows:[['八寸','Wagyu Hassun — Seasonal Appetizers',0],['序','Chilled Tofu',0],['握り','Nigiri 3 — Lean Tuna / Salmon / Sea Bream',0],['和牛','Wagyu Fillet Steak 50g',0],['温物','Wagyu Sukiyaki',0],['鮨','Salmon & Ikura Hand Roll · Wagyu Nikuzushi',0],['椀・甘味','Aka-dashi Miso Soup · Matcha & Sweets',0]] },
+    { id:'sushi-wagyu-lunch', cat:'mix', noadj:true, nophoto:true, name:'Sushi & Wagyu Lunch Course', base:29800, meta:'8 courses · lunch time only', diff:'Lunch-only · the full sushi & wagyu flow.',
+      rows:[['八寸','Wagyu Hassun — Seasonal Appetizers',0],['序','Chilled Tofu',0],['握り','Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop',0],['和牛','Wagyu Fillet Steak 50g',0],['温物','Wagyu Sukiyaki',0],['鮨','Salmon & Ikura Hand Roll · Wagyu Nikuzushi',0],['椀・甘味','Aka-dashi Miso Soup · Matcha & Sweets',0]] }
   ];
-  var CP_CATCOLOR = { sushi:'#5fa897', wagyu:'#c05a4d', mix:'#c9a96e' };
-  var CP_CATLABEL = { sushi:'Sushi', wagyu:'Wagyu Beef', mix:'Sushi & Wagyu' };
+  var CP_CATCOLOR = { sushi:'#86a196', wagyu:'#b58374', mix:'#c9a96e', special:'#c9a96e' };
+  var CP_CATLABEL = { sushi:'Sushi', wagyu:'Wagyu Beef', mix:'Sushi & Wagyu', special:'Special Courses' };
 
-  var CP_CATIMG  = { sushi:'/images/cat-sushi.jpg', wagyu:'/images/cat-wagyu.jpg', mix:'/images/cat-mix.jpg' };
+  var CP_CATIMG  = { sushi:'/images/cat-sushi.jpg', wagyu:'/images/cat-wagyu.jpg', mix:'/images/cat-mix.jpg', special:'/images/course-sushi-wagyu-standard.jpg' };
   var CP_COURSEIMG = {
     'sushi-standard':'/images/course-sushi-standard.jpg',
     'sushi-premium':'/images/course-sushi-premium.jpg',
     'wagyu-standard':'/images/course-wagyu-standard.jpg',
     'kobe-premium':'/images/course-kobe-premium.jpg',
     'sushi-wagyu-standard':'/images/course-sushi-wagyu-standard.jpg',
-    'sushi-kobe-premium':'/images/course-sushi-kobe-premium.jpg'
+    'sushi-kobe-premium':'/images/course-sushi-kobe-premium.jpg',
+    'sushi-wagyu-light':'/images/course-sushi-wagyu-standard.jpg',
+    'sushi-wagyu-lunch':'/images/course-sushi-wagyu-standard.jpg'
   };
-  var CP_CATDESC = { sushi:'A course to savor sushi to the fullest.', wagyu:'Wagyu & Kobe beef — shabu-shabu, sukiyaki, steak.', mix:'The best of both — sushi & wagyu in one.' };
-  var CP_CATORDER = ['sushi','wagyu','mix'];
+  var CP_CATDESC = { sushi:'A course to savor sushi to the fullest.', wagyu:'Wagyu & Kobe beef — shabu-shabu, sukiyaki, steak.', mix:'The best of both — from a web-exclusive entry to premium Kobe.', special:'' };
+  var CP_CATORDER = ['mix','sushi','wagyu'];
 
   function cpCatFrom_(cat){
     var min = 0;
-    CP_COURSES.forEach(function(c){ if(c.cat===cat && (min===0 || c.base<min)) min=c.base; });
-    return min;
+    CP_COURSES.forEach(function(c){ if(c.cat===cat){ var p=cpCoursePrice_(c); if(min===0||p<min)min=p; } });
+    return min;  // 実売価格(noadj考慮済み)
   }
   // ステップ1: カテゴリ3択
   function cpBuildCats(){
@@ -515,7 +527,7 @@
         + '<span class="cp-cat-body">'
         + '<span class="cp-cat-name">'+CP_CATLABEL[cat]+'</span>'
         + '<span class="cp-cat-desc">'+CP_CATDESC[cat]+'</span>'
-        + '<span class="cp-cat-price">From '+cpPrice_(cpCatFrom_(cat))+'</span>'
+        + '<span class="cp-cat-price">From '+cpYen_(cpCatFrom_(cat))+'</span>'
         + '<span class="cp-cat-cta">View 2 courses &rarr;</span>'
         + '</span>'
         + '<span class="cp-cat-photo"><img src="'+CP_CATIMG[cat]+'" alt="'+CP_CATLABEL[cat]+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'cp-cat-photo-empty\');"/></span>'
@@ -531,19 +543,18 @@
   // 1コース分のカード(従来と同一レイアウト)
   function cpCourseCard_(c){
     var rows = c.rows.map(function(r){
-      var cls = r[2] ? 'cp-row-hl' : 'cp-row-txt';
-      var tag = r[2] ? ' <span class="cp-sig">Signature</span>' : '';
-      return '<div class="cp-row"><span class="cp-row-label">'+r[0]+'</span><span class="'+cls+'">'+r[1]+tag+'</span></div>';
+      return '<div class="cp-row"><span class="cp-row-label">'+r[0]+'</span><span class="cp-row-txt">'+r[1]+'</span></div>';
     }).join('');
     var col = CP_CATCOLOR[c.cat];
     return '<div class="cp-card'+(c.premium?' cp-pop':'')+'" style="--cpcol:'+col+';">'
-      + '<div class="cp-course-photo"><img src="'+(CP_COURSEIMG[c.id]||'')+'" alt="'+c.name+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'cp-course-photo-empty\');"/></div>'
+      + (c.nophoto ? '' : '<div class="cp-course-photo"><img src="'+(CP_COURSEIMG[c.id]||'')+'" alt="'+c.name+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'cp-course-photo-empty\');"/></div>')
       + '<div class="cp-bar"></div>'
       + (c.premium?'<div class="cp-pop-tag">★ RECOMMENDED</div>':'')
       + '<div class="cp-body">'
       + '<span class="cp-badge">'+CP_CATLABEL[c.cat]+'</span>'
       + '<div class="cp-name">'+c.name+'</div>'
-      + '<div class="cp-price"><span class="cp-price-main">'+cpPrice_(c.base)+'</span><span class="cp-price-tax">('+cpTax_(c.base)+' incl.tax)</span></div>'
+      + '<div class="cp-price"><span class="cp-price-main">'+cpYen_(cpCoursePrice_(c))+'</span><span class="cp-price-tax">('+cpYen_(Math.floor(cpCoursePrice_(c)*1.1))+' incl.tax)</span></div>'
+      + (c.diff?'<div class="cp-diff">'+c.diff+'</div>':'')
       + '<button type="button" class="cp-detbtn" data-toggle="'+c.id+'">SEE DETAILS</button>'
       + '<div class="cp-detail" id="cp-detail-'+c.id+'"><div class="cp-detail-inner">'+rows+'</div></div>'
       + '<button type="button" class="cp-select" data-choose="'+c.id+'">SELECT</button>'
@@ -584,10 +595,12 @@
   window.cpChoose = function(id){
     var c = CP_COURSES.filter(function(x){return x.id===id;})[0];
     if (!c) return;
-    var val = c.name + ' - ' + cpPrice_(c.base) + ' (' + cpTax_(c.base) + ' incl.tax)';
+    var priceStr = cpYen_(cpCoursePrice_(c));               // ⑦⑧ は noadj で全国一律
+    var taxStr = cpYen_(Math.floor(cpCoursePrice_(c) * 1.1));
+    var val = c.name + ' - ' + priceStr + ' (' + taxStr + ' incl.tax)';
     document.getElementById('r_course').value = val;
     var lbl = document.getElementById('course-trigger-label');
-    if (lbl){ lbl.textContent = c.name + '  ' + cpPrice_(c.base); lbl.style.color = '#f0ede4'; }
+    if (lbl){ lbl.textContent = c.name + '  ' + priceStr; lbl.style.color = '#f0ede4'; }
     closeCoursePicker();
   };
   window.openCoursePicker = function(){
