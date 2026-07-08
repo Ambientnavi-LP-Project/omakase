@@ -542,17 +542,7 @@ Choose a style to see every course &amp; price — from a web-exclusive entry up
 <div class="feat-body">
 <p class="feat-name">{{ m.name if m.name else c.name }}</p>
 {% if m.copy %}<p class="feat-hook">{{ m.copy }}</p>{% endif %}
-<button type="button" class="oc-view" onclick="ocToggle('{{ c.id }}')" aria-expanded="false" id="ocBtn-{{ c.id }}"><span>View course</span> <svg class="oc-chev" id="ocChev-{{ c.id }}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/></svg></button>
-<div class="oc-reveal" id="ocReveal-{{ c.id }}">
-<div class="feat-price"><span class="feat-price-main">&yen;{{ comma(total) }}</span><span class="feat-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>
-{% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
-<button onclick="openReserveModal('entry_{{ c.id }}', '{{ c.id }}')" class="feat-reserve" data-ga-event="reserve_click" data-ga-location="entry_{{ c.id }}">Reserve <span aria-hidden="true">&rarr;</span></button>
-{% elif store.tablecheck_url == 'TBD' %}
-<button onclick="openCallReserveModal('entry_{{ c.id }}')" class="feat-reserve" data-ga-event="reserve_click" data-ga-location="entry_{{ c.id }}">Reserve <span aria-hidden="true">&rarr;</span></button>
-{% else %}
-<a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="feat-reserve" data-ga-event="reserve_click" data-ga-location="entry_{{ c.id }}">Reserve <span aria-hidden="true">&rarr;</span></a>
-{% endif %}
-</div>
+<button type="button" class="oc-view" onclick="openEntryModal('{{ c.id }}')" data-ga-event="course_detail_view" data-ga-location="entry_{{ c.id }}">View course <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg></button>
 </div>
 </div>
 {% endif %}{% endfor %}
@@ -687,6 +677,39 @@ Reserve this course
 </div>
 {% endfor %}
 
+
+<!-- ENTRY COURSE MODALS (web / lunch) -->
+{% set EMETA = {
+  "sushi-wagyu-lunch": { cls: "feat-lunch", copy: "Served during lunch hours only — pick a lunch-time slot when you book." },
+  "sushi-wagyu-light": { cls: "feat-entry", name: "Sushi & Wagyu — Entry Experience", copy: "An entry course for a first taste of omakase — casual, online only." }
+} %}
+{% for c in COURSES %}{% if c.entry %}
+{% set m = EMETA[c.id] %}
+{% set etotal = c.base %}{% set eincl = ((etotal * 1.1) | round(0, "floor")) | int %}
+<div class="cc-backdrop {{ m.cls }}" id="ccEntry-{{ c.id }}" onclick="if(event.target===this)closeEntryModal('{{ c.id }}')">
+<div class="cc-modal" role="dialog" aria-modal="true">
+<button class="cc-close" onclick="closeEntryModal('{{ c.id }}')" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg></button>
+<div class="cc-course" style="border:none;background:transparent;">
+<div class="cc-course-photo" style="height:200px;"><img src="/images/course-sushi-wagyu-standard.jpg" alt="{{ m.name if m.name else c.name }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cc-course-photo-empty');"/></div>
+<div class="cc-course-body">
+<p class="cc-course-tier">{{ c.tier }}</p>
+<p class="cc-course-name">{{ m.name if m.name else c.name }}</p>
+<div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(etotal) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(eincl) }} incl. tax)</span></div>
+{% if m.copy %}<p class="cc-course-diff">{{ m.copy }}</p>{% endif %}
+<p class="cc-entry-note">* Ingredients may vary depending on the season.</p>
+{% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
+<button onclick="closeEntryModal('{{ c.id }}'); openReserveModal('entry_modal', '{{ c.id }}')" class="cc-course-reserve" data-ga-event="reserve_click" data-ga-location="entry_modal_{{ c.id }}">Reserve <span aria-hidden="true">&rarr;</span></button>
+{% elif store.tablecheck_url == 'TBD' %}
+<button onclick="closeEntryModal('{{ c.id }}'); openCallReserveModal('entry_modal_{{ c.id }}')" class="cc-course-reserve" data-ga-event="reserve_click" data-ga-location="entry_modal_{{ c.id }}">Reserve <span aria-hidden="true">&rarr;</span></button>
+{% else %}
+<a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="cc-course-reserve" data-ga-event="reserve_click" data-ga-location="entry_modal_{{ c.id }}">Reserve <span aria-hidden="true">&rarr;</span></a>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+{% endif %}{% endfor %}
+
 <style>
 /* ===== Category choice buttons ===== */
 .cat-choice-grid{display:flex;flex-direction:column;gap:14px;max-width:560px;margin:0 auto;}
@@ -763,6 +786,7 @@ Reserve this course
 .cc-course-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:#f0ede4;line-height:1.2;margin:0 0 4px;}
 .cc-course-tagline{font-family:'Epilogue',sans-serif;font-style:italic;font-weight:300;font-size:11px;line-height:1.4;color:rgba(201,169,110,0.85);margin:0 0 10px;}
 .cc-course-diff{font-family:'Epilogue',sans-serif;font-weight:300;font-size:11.5px;line-height:1.5;color:rgba(240,237,228,0.82);background:rgba(201,169,110,0.08);border-left:2px solid rgba(201,169,110,0.55);padding:7px 10px;border-radius:0 7px 7px 0;margin:2px 0 10px;}
+.cc-entry-note{font-family:'Epilogue',sans-serif;font-weight:300;font-size:10.5px;font-style:italic;color:rgba(240,237,228,0.45);margin:9px 0 2px;}
 .cc-course-price{display:flex;align-items:baseline;gap:8px;margin:6px 0 12px;}
 .cc-course-price-main{font-family:'Josefin Sans',sans-serif;font-size:19px;font-weight:700;color:var(--cat);}
 .cc-course-price-tax{font-family:'Epilogue',sans-serif;font-weight:300;font-size:10px;color:rgba(240,237,228,0.4);}
@@ -1469,5 +1493,6 @@ Open {{ store.hours }}
 
 
 <script>window.ocToggle=function(id){var r=document.getElementById("ocReveal-"+id),c=document.getElementById("ocChev-"+id),b=document.getElementById("ocBtn-"+id);if(!r)return;var o=r.classList.toggle("open");if(c)c.classList.toggle("open",o);if(b)b.setAttribute("aria-expanded",o?"true":"false");};</script>
+<script>window.openEntryModal=function(id){var el=document.getElementById("ccEntry-"+id);if(el){el.classList.add("open");document.body.style.overflow="hidden";}};window.closeEntryModal=function(id){var el=document.getElementById("ccEntry-"+id);if(el){el.classList.remove("open");document.body.style.overflow="";}};document.addEventListener("keydown",function(e){if(e.key==="Escape"){document.querySelectorAll(".cc-backdrop.open").forEach(function(el){el.classList.remove("open");});document.body.style.overflow="";}});</script>
 </body>
 </html>
