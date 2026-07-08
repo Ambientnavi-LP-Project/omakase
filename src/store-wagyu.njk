@@ -228,7 +228,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="loader-ring"></span>
     <span class="loader-sun"></span>
   </div>
-  <div class="loader-word"><span class="loader-word-1" style="font-family:'Noto Serif JP',serif;font-style:normal;font-size:38px;line-height:1;">鮨</span><span class="loader-word-2">Omakase Sushi</span></div>
+  <div class="loader-word"><span class="loader-word-1" style="font-family:'Noto Serif JP',serif;font-style:normal;font-size:38px;line-height:1;">和牛</span><span class="loader-word-2">Omakase Wagyu</span></div>
   <div class="loader-route">
     <span class="loader-plane" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L11 19v-5.5z"/></svg>
@@ -321,7 +321,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="relative z-10 w-full px-7 pb-20 text-center">
 <div class="hero-title-wrap inline-block relative">
 <span class="hinomaru" aria-hidden="true"></span>
-<p class="relative z-[1] text-ginza-gold/90 text-sm md:text-base tracking-[0.45em] mb-3" style="font-family:'Noto Serif JP',serif;">鮨 — おまかせ</p>
 <h1 class="hero-title relative font-cormorant font-semibold leading-[0.95] tracking-tight text-ginza-ivory">
 <span class="block text-6xl md:text-8xl">Wagyu</span>
 <span class="block text-lg md:text-2xl mt-3 tracking-[0.14em] font-josefin font-light uppercase text-ginza-ivory/95">Halal Omakase Experience</span>
@@ -444,15 +443,15 @@ A journey through Japan's food culture — sushi and projection-mapped dining. M
 
 <div class="text-center mb-10">
 <p class="section-label mb-4">Chef's Omakase</p>
-<h3 class="font-cormorant text-3xl mb-4 leading-snug">Sushi Omakase<br/>Course</h3>
+<h3 class="font-cormorant text-3xl mb-4 leading-snug">Wagyu Omakase<br/>Course</h3>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
-Authentic sushi, crafted piece by piece and served Muslim-friendly — a quiet journey through the season's finest fish.
+Premium wagyu &amp; Kobe beef, prepared course by course and served Muslim-friendly — sukiyaki, steak, and wagyu sushi.
 </p>
 </div>
 
 <div class="max-w-3xl mx-auto mb-10">
 <div class="relative w-full overflow-hidden rounded-2xl border border-ginza-gold/20" style="aspect-ratio:16/9;">
-<img src="/images/course.jpg" alt="" loading="lazy" class="w-full h-full object-cover"/>
+<img src="/images/course-wagyu-standard.jpg" alt="" loading="lazy" class="w-full h-full object-cover"/>
 </div>
 </div>
 
@@ -489,11 +488,11 @@ Only a few seats left today
 {% for c in COURSES %}
 {% set total = c.base + (0 if c.noadj else adj) %}
 {% set incl = ((total * 1.1) | round(0, "floor")) | int %}
-<div class="course-card cat-{{ c.cat }} relative bg-ginza-gold/5 {% if c.premium or c.popular or c.id == 'sushi-wagyu-light' %}border-2 border-ginza-gold{% else %}border border-ginza-gold/20{% endif %}"{% if c.premium or c.popular or c.id == 'sushi-wagyu-light' %} style="box-shadow:0 0 24px rgba(201,169,110,0.18);"{% endif %}>
+<div class="course-card cat-{{ c.cat }} relative bg-ginza-gold/5 {% if c.id == 'sushi-wagyu-light' or c.id == 'sushi-wagyu-lunch' or c.premium or c.popular %}border-2{% else %}border border-ginza-gold/20{% endif %}" style="{% if c.id == 'sushi-wagyu-light' %}border-color:#6fae7d;box-shadow:0 0 24px rgba(111,174,125,0.20);{% elif c.id == 'sushi-wagyu-lunch' %}border-color:#d0a24c;box-shadow:0 0 22px rgba(208,162,76,0.18);{% elif c.premium or c.popular %}border-color:#c9a96e;box-shadow:0 0 24px rgba(201,169,110,0.18);{% endif %}">
 <div class="cat-bar"></div>
 {% if not c.nophoto %}<div class="cc-photo"><img src="{{ c.img }}" alt="{{ c.name }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cc-photo-empty');"/></div>{% endif %}
 {% if c.premium %}<div class="absolute top-3 right-3 bg-gradient-to-r from-[#e3cb98] to-ginza-gold text-ginza-black text-[9px] font-josefin font-bold tracking-widest px-2.5 py-1 rounded-full z-10 shadow-[0_2px_10px_rgba(201,169,110,0.45)]">&#9733; RECOMMENDED</div>{% elif c.popular %}<div class="absolute top-3 right-3 bg-ginza-gold text-ginza-black text-[9px] font-josefin font-bold tracking-widest px-2.5 py-1 rounded-full z-10">MOST POPULAR</div>{% endif %}
-{% if c.id == 'wagyu-standard' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">PREMIUM WAGYU</div>{% elif c.id == 'sushi-wagyu-light' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">ONLINE ONLY</div>{% elif c.id == 'sushi-wagyu-lunch' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">LUNCH ONLY</div>{% endif %}
+{% if c.id == 'wagyu-standard' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">PREMIUM WAGYU</div>{% elif c.id == 'sushi-wagyu-light' %}<div class="absolute top-3 right-3 bg-ginza-black border text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10" style="color:#6fae7d;border-color:#6fae7d;">ONLINE ONLY</div>{% elif c.id == 'sushi-wagyu-lunch' %}<div class="absolute top-3 right-3 bg-ginza-black border text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10" style="color:#d0a24c;border-color:#d0a24c;">LUNCH ONLY</div>{% endif %}
 <div class="p-5 pt-6">
 <span class="cat-badge">{% if c.cat == 'sushi' %}<svg viewBox='0 0 24 24' fill='currentColor'><ellipse cx='12' cy='9' rx='9' ry='4'/><path d='M3 9v3c0 2.2 4 4 9 4s9-1.8 9-4V9' fill='none' stroke='currentColor' stroke-width='1.5'/></svg>Sushi{% elif c.cat == 'wagyu' %}<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M4 7c2-3 14-3 16 0 1.5 2 1 6-2 7-1 4-9 4-10 0-3-1-3.5-5-2-7z'/></svg>Wagyu / Beef{% else %}<svg viewBox='0 0 24 24' fill='currentColor'><circle cx='12' cy='12' r='9'/></svg>Sushi &amp; Wagyu{% endif %}</span>
 <p class="font-cormorant text-xl {% if c.tagline %}mb-1.5{% else %}mb-3{% endif %}">{{ c.name }}</p>
