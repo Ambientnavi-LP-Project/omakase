@@ -324,7 +324,7 @@ STORES.forEach(s => {
 //
 // 対象店を増やす/減らすときは SUSHI_SLUGS を編集するだけ。
 // ============================================================
-const SUSHI_SLUGS = ["gion", "higashi-shinsaibashi"];
+const SUSHI_SLUGS = STORES.map(s => s.slug); // 全店舗に寿司デザインLP(/sushi/)を展開
 const pagesSushi = STORES
   .filter(s => SUSHI_SLUGS.includes(s.slug))
   .map(s => ({
@@ -332,6 +332,18 @@ const pagesSushi = STORES
     channel_id: "sushi",
     channel_suffix: "sushi/",
     channel_utm_source: "lp-sushi"
+  }));
+
+// 和牛特化LP用ページ(全店舗)。store-wagyu.njk が使う。/{region}/{slug}/wagyu/
+// Web限定・和牛コース・寿司和牛コースを訴求。
+const WAGYU_SLUGS = STORES.map(s => s.slug);
+const pagesWagyu = STORES
+  .filter(s => WAGYU_SLUGS.includes(s.slug))
+  .map(s => ({
+    ...s,
+    channel_id: "wagyu",
+    channel_suffix: "wagyu/",
+    channel_utm_source: "lp-wagyu"
   }));
 
 module.exports = {
@@ -346,5 +358,6 @@ module.exports = {
   channels: CHANNELS,
   pages: pages,         // 本番用(default/japan/global/map)。testは含まない。
   pagesTest: pagesTest, // テスト用(新宿三丁目のtestチャンネルのみ)。store-test.njk が使う。
-  pagesSushi: pagesSushi // 寿司特化LP用(祇園四条・東心斎橋)。store-sushi.njk が使う。
+  pagesSushi: pagesSushi, // 寿司特化LP用(全店舗)。store-sushi.njk が使う。
+  pagesWagyu: pagesWagyu // 和牛特化LP用(全店舗)。store-wagyu.njk が使う。
 };

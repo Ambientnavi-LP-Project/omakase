@@ -1,6 +1,6 @@
 ---
 pagination:
-  data: stores.pagesSushi
+  data: stores.pagesWagyu
   size: 1
   alias: store
 permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}index.html"
@@ -16,7 +16,7 @@ eleventyComputed:
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>{{ store.name_full_en }}</title>
-<meta name="description" content="Muslim-friendly omakase sushi in {{ store.city }}. Pork-free and alcohol-free, served course by course and crafted for everyone.">
+<meta name="description" content="Muslim-friendly wagyu omakase in {{ store.city }}. Pork-free and alcohol-free — wagyu, Kobe beef and sushi, course by course.">
 <link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/sushi/">
 
 <!-- Google Tag Manager -->
@@ -320,7 +320,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <span class="hinomaru" aria-hidden="true"></span>
 <p class="relative z-[1] text-ginza-gold/90 text-sm md:text-base tracking-[0.45em] mb-3" style="font-family:'Noto Serif JP',serif;">鮨 — おまかせ</p>
 <h1 class="hero-title relative font-cormorant font-semibold leading-[0.95] tracking-tight text-ginza-ivory">
-<span class="block text-6xl md:text-8xl">Sushi</span>
+<span class="block text-6xl md:text-8xl">Wagyu</span>
 <span class="block text-lg md:text-2xl mt-3 tracking-[0.14em] font-josefin font-light uppercase text-ginza-ivory/95">Halal Omakase Experience</span>
 </h1>
 <p class="hero-eyebrow relative font-josefin tracking-[0.3em] uppercase text-ginza-gold/75 text-[11px] md:text-xs mt-5">Gastronomic Tour of Japan</p>
@@ -522,8 +522,8 @@ Only a few seats left today
 {% set COURSES = [
   { id: "sushi-wagyu-light", cat: "mix", noadj: true, tier: "Sushi & Wagyu · Web Exclusive", name: "Sushi & Wagyu — Web Exclusive", base: 19800, meta: "8 courses · online only", img: "/images/course-sushi-wagyu-standard.jpg", popular: false, rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Sushi", "Nigiri 3 — Lean Tuna / Salmon / Sea Bream"], ["Steak", "Wagyu Fillet Steak 50g"], ["Hot Dish", "Wagyu Sukiyaki"], ["Sushi &amp; Wagyu", "Salmon &amp; Ikura Hand Roll · Wagyu Nikuzushi (thin-sliced)"], ["Soup &amp; Sweets", "Aka-dashi Miso Soup · Matcha &amp; Sweets"]] },
   { id: "sushi-wagyu-lunch", cat: "mix", noadj: true, tier: "Sushi & Wagyu · Lunch", name: "Sushi & Wagyu — Lunch", base: 29800, meta: "8 courses · lunch time only", img: "/images/course-sushi-wagyu-standard.jpg", popular: false, rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Sushi", "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop"], ["Steak", "Wagyu Fillet Steak 50g"], ["Hot Dish", "Wagyu Sukiyaki"], ["Sushi &amp; Wagyu", "Salmon &amp; Ikura Hand Roll · Wagyu Nikuzushi (thin-sliced)"], ["Soup &amp; Sweets", "Aka-dashi Miso Soup · Matcha &amp; Sweets"]] },
-  { id: "sushi-standard", cat: "sushi", tier: "Sushi Course · Standard", name: "Sushi Course Standard", base: 49800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-standard.jpg", popular: false, tagline: "For those who'd like to savor the sushi first.", rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Temaki", "Salmon &amp; Ikura Hand Roll"], ["Nigiri · 10", "Chutoro Tuna / Salmon / Sea Bream / Shrimp / Scallop &nbsp;·&nbsp; Lean Tuna / Seared Salmon / Tamago / Seared Sea Bream / Ikura Gunkan"], ["Temaki", "Chopped Lean Tuna (Akami)"], ["Soup", "Aka-dashi Miso Soup &amp; Shrimp Chawanmushi"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
-  { id: "sushi-premium", cat: "sushi", tier: "Sushi Course · Premium", name: "Sushi Course Premium", base: 69800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-premium.jpg", popular: false, premium: true, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Temaki", "Sea Urchin Hand Roll &nbsp;·&nbsp; Salmon &amp; Ikura Hand Roll"], ["Nigiri · 10", "Chutoro Tuna / Salmon / Sea Bream / Sea Urchin Gunkan / Scallop &nbsp;·&nbsp; Lean Tuna / Seared Salmon / Tamago / Crab Gunkan / Ikura Gunkan"], ["Temaki", "Chopped Chutoro Tuna"], ["Soup", "Aka-dashi Miso Soup &amp; Snow Crab Chawanmushi"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
+  { id: "wagyu-standard", cat: "wagyu", tier: "Wagyu Course · Standard", name: "Wagyu Course Standard", base: 49800, meta: "8 courses · 60–75 min", img: "/images/course-wagyu-standard.jpg", popular: false, rows: [["Hassun", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Hot Dish", "Wagyu Sukiyaki (thin-sliced)"], ["Steak", "Wagyu Fillet Steak 100g"], ["Specialty", "Wagyu Spring Roll"], ["Wagyu Sushi", "Wagyu Nikuzushi &amp; Steak Hand Roll (20g)"], ["Soup", "Aka-dashi Miso Soup (Shijimi) &amp; Bite-Size Wagyu Gyudon"], ["Tea &amp; Sweets", "Matcha &amp; Mini Sweets"]] },
+  { id: "kobe-premium", cat: "wagyu", tier: "Kobe Beef Course · Premium", name: "Kobe Beef Course Premium", base: 69800, meta: "8 courses · 60–75 min", img: "/images/course-kobe-premium.jpg", popular: false, premium: true, rows: [["Hassun", "Kobe Beef Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Hot Dish", "Kobe Beef Sukiyaki (thin-sliced)"], ["Steak", "Kobe Beef Fillet Steak 100g"], ["Specialty", "Kobe Beef Spring Roll"], ["Kobe Sushi", "Kobe Beef Nikuzushi &amp; Steak Hand Roll (20g)"], ["Soup", "Aka-dashi Miso Soup (Shijimi) &amp; Bite-Size Kobe Beef Gyudon"], ["Tea &amp; Sweets", "Matcha &amp; Mini Sweets"]] },
   { id: "sushi-wagyu-standard", cat: "mix", tier: "Sushi & Wagyu · Standard", name: "Sushi & Wagyu Course Standard", base: 59800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-wagyu-standard.jpg", popular: false, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 5", "Chutoro Tuna / Salmon / Sea Bream / Tamago / Scallop"], ["Steak", "Wagyu Fillet Steak 100g"], ["Hot Dish", "Wagyu Sukiyaki"], ["Temaki &amp; Sushi", "Salmon &amp; Ikura Hand Roll &nbsp;·&nbsp; Wagyu Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
   { id: "sushi-kobe-premium", cat: "mix", tier: "Sushi & Kobe Beef · Premium", name: "Sushi & Kobe Beef Course Premium", base: 79800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-kobe-premium.jpg", popular: false, premium: true, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 5", "Chutoro Tuna / Salmon / Sea Bream / Tamago / Crab Gunkan"], ["Steak", "Kobe Beef Fillet Steak 100g"], ["Hot Dish", "Kobe Beef Sukiyaki"], ["Temaki &amp; Sushi", "Sea Urchin Hand Roll &nbsp;·&nbsp; Kobe Beef Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] }
 ] %}
@@ -534,7 +534,7 @@ Only a few seats left today
 <div class="course-card cat-{{ c.cat }} relative bg-ginza-gold/5 {% if c.premium or c.popular or c.id == 'sushi-wagyu-light' %}border-2 border-ginza-gold{% else %}border border-ginza-gold/20{% endif %}"{% if c.premium or c.popular or c.id == 'sushi-wagyu-light' %} style="box-shadow:0 0 24px rgba(201,169,110,0.18);"{% endif %}>
 <div class="cat-bar"></div>
 {% if c.premium %}<div class="absolute top-3 right-3 bg-gradient-to-r from-[#e3cb98] to-ginza-gold text-ginza-black text-[9px] font-josefin font-bold tracking-widest px-2.5 py-1 rounded-full z-10 shadow-[0_2px_10px_rgba(201,169,110,0.45)]">&#9733; RECOMMENDED</div>{% elif c.popular %}<div class="absolute top-3 right-3 bg-ginza-gold text-ginza-black text-[9px] font-josefin font-bold tracking-widest px-2.5 py-1 rounded-full z-10">MOST POPULAR</div>{% endif %}
-{% if c.id == 'sushi-standard' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">PURE SUSHI EXPERIENCE</div>{% elif c.id == 'sushi-wagyu-light' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">ONLINE ONLY</div>{% elif c.id == 'sushi-wagyu-lunch' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">LUNCH ONLY</div>{% endif %}
+{% if c.id == 'wagyu-standard' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">PREMIUM WAGYU</div>{% elif c.id == 'sushi-wagyu-light' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">ONLINE ONLY</div>{% elif c.id == 'sushi-wagyu-lunch' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">LUNCH ONLY</div>{% endif %}
 <div class="p-5 pt-6">
 <span class="cat-badge">{% if c.cat == 'sushi' %}<svg viewBox='0 0 24 24' fill='currentColor'><ellipse cx='12' cy='9' rx='9' ry='4'/><path d='M3 9v3c0 2.2 4 4 9 4s9-1.8 9-4V9' fill='none' stroke='currentColor' stroke-width='1.5'/></svg>Sushi{% elif c.cat == 'wagyu' %}<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M4 7c2-3 14-3 16 0 1.5 2 1 6-2 7-1 4-9 4-10 0-3-1-3.5-5-2-7z'/></svg>Wagyu / Beef{% else %}<svg viewBox='0 0 24 24' fill='currentColor'><circle cx='12' cy='12' r='9'/></svg>Sushi &amp; Wagyu{% endif %}</span>
 <p class="font-cormorant text-xl {% if c.tagline %}mb-1.5{% else %}mb-3{% endif %}">{{ c.name }}</p>
@@ -891,7 +891,7 @@ Open {{ store.hours }}
 </footer>
 
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
-  {% include "partials/reserve-form-modal-sushi.njk" %}
+  {% include "partials/reserve-form-modal-wagyu.njk" %}
 {% endif %}
 
 {% if store.is_form_reserve != 'true' and is_form_reserve != 'true' and store.tablecheck_url == 'TBD' %}
