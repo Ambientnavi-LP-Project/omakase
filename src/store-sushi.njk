@@ -115,6 +115,9 @@ body { padding-bottom: 72px; }
 .cat-mix{--cat:#c9a96e;--cat-soft:rgba(201,169,110,0.14);}
 .course-card{position:relative;}
 .course-card .cat-bar{height:4px;width:100%;background:var(--cat);}
+.course-card .cc-photo{position:relative;width:100%;height:170px;overflow:hidden;background:var(--cat-soft);}
+.course-card .cc-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.course-card .cc-photo-empty::after{content:'Photo';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Josefin Sans',sans-serif;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(240,237,228,0.3);}
 .course-card .cat-badge{display:inline-flex;align-items:center;gap:5px;background:var(--cat-soft);color:var(--cat);border:1px solid var(--cat);border-radius:999px;padding:3px 9px;font-family:'Josefin Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;}
 .course-card .cat-badge svg{width:12px;height:12px;}
 /* category legend chips */
@@ -432,51 +435,6 @@ A journey through Japan's food culture — sushi and projection-mapped dining. M
 <!-- divider -->
 <div class="pm-divider"></div>
 
-<!-- MENU -->
-<section class="reveal py-16 bg-ginza-black seigaiha" id="menu">
-<div class="text-center mb-10 px-6">
-<p class="section-label mb-4">Menu · Mastery</p>
-<h3 class="font-cormorant text-3xl mb-4 leading-snug">"The Art of Sushi"</h3>
-<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
-Beyond our omakase courses, we serve seasonal nigiri, temaki, and hand-crafted sushi — prepared with the finest fish for an extraordinary experience.
-</p>
-</div>
-
-<div class="grid grid-cols-3 gap-2 md:gap-3 px-3 md:px-6 mb-4 md:mb-5 max-w-5xl mx-auto">
-<div class="relative overflow-hidden rounded-lg group" style="aspect-ratio:3/2;">
-<img alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi1.jpg"/>
-</div>
-<div class="relative overflow-hidden rounded-lg group" style="aspect-ratio:3/2;">
-<img alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi2.jpg"/>
-</div>
-<div class="relative overflow-hidden rounded-lg group" style="aspect-ratio:3/2;">
-<img alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi3.jpg"/>
-</div>
-</div>
-
-<!-- uni + wagyu signature: side by side on PC, stacked on mobile -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 px-4 md:px-6 mb-4 md:mb-5 max-w-3xl mx-auto">
-<div class="relative aspect-square overflow-hidden rounded-lg group">
-<img alt="Sea urchin temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu-temaki-uni.jpg"/>
-</div>
-<div class="relative aspect-square overflow-hidden rounded-lg group">
-<img alt="Wagyu nigiri finished with gold leaf" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/wagyu-sushi.jpg"/>
-<div class="absolute inset-0" style="background:linear-gradient(to top,rgba(9,9,9,0.82) 0%,rgba(9,9,9,0.12) 52%,transparent 74%);"></div>
-<div class="absolute bottom-0 left-0 p-4 md:p-5 text-left">
-<p class="text-[9px] font-josefin tracking-[0.3em] text-ginza-gold uppercase mb-1">Signature</p>
-<p class="font-cormorant text-lg md:text-xl text-ginza-ivory leading-tight">Wagyu Nigiri</p>
-<p class="text-[11px] font-light text-ginza-ivory/60 mt-1 leading-snug">Authentic wagyu, hand-pressed into nigiri and finished with gold leaf.</p>
-</div>
-</div>
-</div>
-
-<!-- matcha -->
-<div class="px-4 md:px-6 mb-10 max-w-sm mx-auto">
-<div class="relative aspect-square overflow-hidden rounded-lg group">
-<img alt="Matcha &amp; dessert" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu-matcha.jpg"/>
-</div>
-</div>
-</section>
 
 <div class="pm-divider"></div>
 
@@ -520,8 +478,8 @@ Only a few seats left today
 {% set adj = store.price_adjust or 0 %}
 {% macro comma(n) %}{% set s = (n | string) %}{% set out = "" %}{% set L = s | length %}{% for i in range(0, L) %}{% set ch = s[i] %}{% set posFromEnd = L - i %}{% if i > 0 and posFromEnd % 3 == 0 %}{{ "," }}{% endif %}{{ ch }}{% endfor %}{% endmacro %}
 {% set COURSES = [
-  { id: "sushi-wagyu-light", cat: "mix", noadj: true, tier: "Sushi & Wagyu · Web Exclusive", name: "Sushi & Wagyu — Web Exclusive", base: 19800, meta: "8 courses · online only", img: "/images/course-sushi-wagyu-standard.jpg", popular: false, rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Sushi", "Nigiri 3 — Lean Tuna / Salmon / Sea Bream"], ["Steak", "Wagyu Fillet Steak 50g"], ["Hot Dish", "Wagyu Sukiyaki"], ["Sushi &amp; Wagyu", "Salmon &amp; Ikura Hand Roll · Wagyu Nikuzushi (thin-sliced)"], ["Soup &amp; Sweets", "Aka-dashi Miso Soup · Matcha &amp; Sweets"]] },
-  { id: "sushi-wagyu-lunch", cat: "mix", noadj: true, tier: "Sushi & Wagyu · Lunch", name: "Sushi & Wagyu — Lunch", base: 29800, meta: "8 courses · lunch time only", img: "/images/course-sushi-wagyu-standard.jpg", popular: false, rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Sushi", "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop"], ["Steak", "Wagyu Fillet Steak 50g"], ["Hot Dish", "Wagyu Sukiyaki"], ["Sushi &amp; Wagyu", "Salmon &amp; Ikura Hand Roll · Wagyu Nikuzushi (thin-sliced)"], ["Soup &amp; Sweets", "Aka-dashi Miso Soup · Matcha &amp; Sweets"]] },
+  { id: "sushi-wagyu-light", cat: "mix", noadj: true, nophoto: true, tier: "Sushi & Wagyu · Web Exclusive", name: "Sushi & Wagyu — Web Exclusive", base: 19800, meta: "8 courses · online only", img: "/images/course-sushi-wagyu-standard.jpg", popular: false, rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Sushi", "Nigiri 3 — Lean Tuna / Salmon / Sea Bream"], ["Steak", "Wagyu Fillet Steak 50g"], ["Hot Dish", "Wagyu Sukiyaki"], ["Sushi &amp; Wagyu", "Salmon &amp; Ikura Hand Roll · Wagyu Nikuzushi (thin-sliced)"], ["Soup &amp; Sweets", "Aka-dashi Miso Soup · Matcha &amp; Sweets"]] },
+  { id: "sushi-wagyu-lunch", cat: "mix", noadj: true, nophoto: true, tier: "Sushi & Wagyu · Lunch", name: "Sushi & Wagyu — Lunch", base: 29800, meta: "8 courses · lunch time only", img: "/images/course-sushi-wagyu-standard.jpg", popular: false, rows: [["Starter", "Chilled Tofu"], ["Appetizers", "Wagyu Hassun — Chef's Seasonal Appetizers"], ["Sushi", "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop"], ["Steak", "Wagyu Fillet Steak 50g"], ["Hot Dish", "Wagyu Sukiyaki"], ["Sushi &amp; Wagyu", "Salmon &amp; Ikura Hand Roll · Wagyu Nikuzushi (thin-sliced)"], ["Soup &amp; Sweets", "Aka-dashi Miso Soup · Matcha &amp; Sweets"]] },
   { id: "sushi-standard", cat: "sushi", tier: "Sushi Course · Standard", name: "Sushi Course Standard", base: 49800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-standard.jpg", popular: false, tagline: "For those who'd like to savor the sushi first.", rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Temaki", "Salmon &amp; Ikura Hand Roll"], ["Nigiri · 10", "Chutoro Tuna / Salmon / Sea Bream / Shrimp / Scallop &nbsp;·&nbsp; Lean Tuna / Seared Salmon / Tamago / Seared Sea Bream / Ikura Gunkan"], ["Temaki", "Chopped Lean Tuna (Akami)"], ["Soup", "Aka-dashi Miso Soup &amp; Shrimp Chawanmushi"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
   { id: "sushi-premium", cat: "sushi", tier: "Sushi Course · Premium", name: "Sushi Course Premium", base: 69800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-premium.jpg", popular: false, premium: true, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Temaki", "Sea Urchin Hand Roll &nbsp;·&nbsp; Salmon &amp; Ikura Hand Roll"], ["Nigiri · 10", "Chutoro Tuna / Salmon / Sea Bream / Sea Urchin Gunkan / Scallop &nbsp;·&nbsp; Lean Tuna / Seared Salmon / Tamago / Crab Gunkan / Ikura Gunkan"], ["Temaki", "Chopped Chutoro Tuna"], ["Soup", "Aka-dashi Miso Soup &amp; Snow Crab Chawanmushi"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
   { id: "sushi-wagyu-standard", cat: "mix", tier: "Sushi & Wagyu · Standard", name: "Sushi & Wagyu Course Standard", base: 59800, meta: "8 courses · 60–75 min", img: "/images/course-sushi-wagyu-standard.jpg", popular: false, rows: [["Hassun", "Sushi Hassun — Chef's Seasonal Appetizers"], ["Starter", "Chilled Tofu"], ["Nigiri · 5", "Chutoro Tuna / Salmon / Sea Bream / Tamago / Scallop"], ["Steak", "Wagyu Fillet Steak 100g"], ["Hot Dish", "Wagyu Sukiyaki"], ["Temaki &amp; Sushi", "Salmon &amp; Ikura Hand Roll &nbsp;·&nbsp; Wagyu Nikuzushi (thin-sliced)"], ["Soup", "Aka-dashi Miso Soup"], ["Tea &amp; Sweets", "Matcha &amp; Mini Japanese Sweets"]] },
@@ -533,6 +491,7 @@ Only a few seats left today
 {% set incl = ((total * 1.1) | round(0, "floor")) | int %}
 <div class="course-card cat-{{ c.cat }} relative bg-ginza-gold/5 {% if c.premium or c.popular or c.id == 'sushi-wagyu-light' %}border-2 border-ginza-gold{% else %}border border-ginza-gold/20{% endif %}"{% if c.premium or c.popular or c.id == 'sushi-wagyu-light' %} style="box-shadow:0 0 24px rgba(201,169,110,0.18);"{% endif %}>
 <div class="cat-bar"></div>
+{% if not c.nophoto %}<div class="cc-photo"><img src="{{ c.img }}" alt="{{ c.name }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cc-photo-empty');"/></div>{% endif %}
 {% if c.premium %}<div class="absolute top-3 right-3 bg-gradient-to-r from-[#e3cb98] to-ginza-gold text-ginza-black text-[9px] font-josefin font-bold tracking-widest px-2.5 py-1 rounded-full z-10 shadow-[0_2px_10px_rgba(201,169,110,0.45)]">&#9733; RECOMMENDED</div>{% elif c.popular %}<div class="absolute top-3 right-3 bg-ginza-gold text-ginza-black text-[9px] font-josefin font-bold tracking-widest px-2.5 py-1 rounded-full z-10">MOST POPULAR</div>{% endif %}
 {% if c.id == 'sushi-standard' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">PURE SUSHI EXPERIENCE</div>{% elif c.id == 'sushi-wagyu-light' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">ONLINE ONLY</div>{% elif c.id == 'sushi-wagyu-lunch' %}<div class="absolute top-3 right-3 bg-ginza-black border border-ginza-gold text-ginza-gold text-[8px] font-josefin font-bold tracking-widest px-2 py-1 rounded-full z-10">LUNCH ONLY</div>{% endif %}
 <div class="p-5 pt-6">
@@ -576,6 +535,68 @@ Reserve
 
 </div>
 
+</div>
+</section>
+
+<!-- MENU -->
+<section class="reveal py-16 bg-ginza-black" id="menu">
+<div class="text-center mb-10 px-6">
+<h3 class="font-cormorant text-3xl mb-4 leading-snug">"Sushi &amp; Wagyu Indulgence"</h3>
+<p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-lg mx-auto">
+Within our signature courses, you'll also find premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.
+</p>
+</div>
+<!-- SUSHI SHOWCASE -->
+<div class="max-w-4xl mx-auto px-4 md:px-6 mb-12">
+<p class="text-center text-[11px] font-josefin tracking-[0.22em] uppercase text-ginza-gold/70 mb-4">Sushi Selection</p>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg aspect-square">
+<img alt="Salmon &amp; Ikura Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi1.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Salmon &amp; Ikura Temaki</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg aspect-square">
+<img alt="Sea Urchin Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu3.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Sea Urchin Temaki</figcaption>
+</figure>
+<figure class="group col-span-2 sm:col-span-1">
+<div class="relative w-full overflow-hidden rounded-lg aspect-video sm:aspect-square">
+<img alt="Premium Nigiri" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi4.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Premium Nigiri</figcaption>
+</figure>
+</div>
+</div>
+
+<!-- SIGNATURE DISHES (compact) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 md:px-6 mb-10 max-w-3xl mx-auto">
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Wagyu Sushi" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi2.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Sushi</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Wagyu Shabu-shabu" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu2.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Shabu-shabu</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Wagyu Sukiyaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sukiyaki.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Sukiyaki</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Matcha Experience &amp; Japanese Sweets" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu4.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Matcha Experience &amp; Japanese Sweets</figcaption>
+</figure>
 </div>
 </section>
 
