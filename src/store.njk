@@ -538,6 +538,8 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 <div class="feat-body">
 <p class="feat-name">{{ m.name if m.name else c.name }}</p>
 {% if m.copy %}<p class="feat-hook">{{ m.copy }}</p>{% endif %}
+<button type="button" class="oc-view" onclick="ocToggle('{{ c.id }}')" aria-expanded="false" id="ocBtn-{{ c.id }}"><span>View course</span> <svg class="oc-chev" id="ocChev-{{ c.id }}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/></svg></button>
+<div class="oc-reveal" id="ocReveal-{{ c.id }}">
 <div class="feat-price"><span class="feat-price-main">&yen;{{ comma(total) }}</span><span class="feat-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
 <button onclick="openReserveModal('entry_{{ c.id }}', '{{ c.id }}')" class="feat-reserve" data-ga-event="reserve_click" data-ga-location="entry_{{ c.id }}">Reserve <span aria-hidden="true">&rarr;</span></button>
@@ -546,6 +548,7 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 {% else %}
 <a href="{{ tablecheck_with_utm }}" target="_blank" rel="noopener" class="feat-reserve" data-ga-event="reserve_click" data-ga-location="entry_{{ c.id }}">Reserve <span aria-hidden="true">&rarr;</span></a>
 {% endif %}
+</div>
 </div>
 </div>
 {% endif %}{% endfor %}
@@ -716,6 +719,12 @@ Reserve this course
 .oc-grid .feat-body{padding-top:44px;}
 .oc-grid .feat-ribbon{top:14px;left:16px;}
 .oc-grid .feat-reserve:hover{background:var(--fa);color:#090909;}
+.oc-view{display:inline-flex;align-items:center;gap:7px;margin-top:2px;padding:9px 18px;border:1px solid var(--fa);border-radius:999px;background:transparent;color:var(--fa);font-family:'Josefin Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s;}
+.oc-view:hover{background:var(--fa);color:#090909;}
+.oc-chev{transition:transform .3s ease;}
+.oc-chev.open{transform:rotate(180deg);}
+.oc-reveal{max-height:0;overflow:hidden;transition:max-height .35s ease,margin-top .3s ease;margin-top:0;}
+.oc-reveal.open{max-height:220px;margin-top:14px;}
 .cat-choice:hover .cat-choice-cta{gap:11px;}
 @media (min-width:768px){.cat-choice-photo{width:300px;height:200px;}.cat-choice{gap:20px;padding:18px 20px 18px 22px;}}
 
@@ -1487,5 +1496,6 @@ Open {{ store.hours }}
 </script>
 
 
+<script>window.ocToggle=function(id){var r=document.getElementById("ocReveal-"+id),c=document.getElementById("ocChev-"+id),b=document.getElementById("ocBtn-"+id);if(!r)return;var o=r.classList.toggle("open");if(c)c.classList.toggle("open",o);if(b)b.setAttribute("aria-expanded",o?"true":"false");};</script>
 </body>
 </html>
