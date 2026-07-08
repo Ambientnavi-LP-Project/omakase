@@ -524,7 +524,7 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 <!-- ===== OTHER COURSES: Lunch + Web-Exclusive (控えめ) ===== -->
 {% set EMETA = {
   "sushi-wagyu-lunch": { cls: "feat-lunch", ribbon: "Lunch Only", copy: "Served during lunch hours only — pick a lunch-time slot when you book." },
-  "sushi-wagyu-light": { cls: "feat-entry", ribbon: "Entry Experience", copy: "An entry course for a first taste of omakase — casual, online only." }
+  "sushi-wagyu-light": { cls: "feat-entry", ribbon: "Web Exclusive", icon: true, name: "Sushi & Wagyu — Entry Experience", copy: "An entry course for a first taste of omakase — casual." }
 } %}
 <div class="sp-band oc-band">
 <p class="oc-head">Other Courses</p>
@@ -534,9 +534,9 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 {% set m = EMETA[c.id] %}
 {% set total = c.base %}{% set incl = ((total * 1.1) | round(0, "floor")) | int %}
 <div class="feat-card {{ m.cls }}">
-<span class="feat-ribbon">{{ m.ribbon }}</span>
+<span class="feat-ribbon">{% if m.icon %}<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:-1px;display:inline-block;"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>{% endif %}{{ m.ribbon }}</span>
 <div class="feat-body">
-<p class="feat-name">{{ c.name }}</p>
+<p class="feat-name">{{ m.name if m.name else c.name }}</p>
 {% if m.copy %}<p class="feat-hook">{{ m.copy }}</p>{% endif %}
 <div class="feat-price"><span class="feat-price-main">&yen;{{ comma(total) }}</span><span class="feat-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
