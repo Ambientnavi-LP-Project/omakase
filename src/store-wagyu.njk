@@ -293,13 +293,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </header>
 
 <!-- HERO -->
-<section class="relative h-screen w-full flex flex-col justify-end items-center overflow-hidden" id="hero">
+<section class="relative aspect-[5/4] max-h-[82vh] md:aspect-auto md:h-[86vh] w-full flex flex-col justify-end items-center overflow-hidden" id="hero">
 <div class="absolute inset-0 z-0">
 <div id="hero-stage">
-<img src="/images/course-sushi-standard.jpg" alt="Sushi omakase selection" class="hero-bg-video hero-slide active" fetchpriority="high"/>
-<img src="/images/course-sushi-premium.jpg" alt="" class="hero-bg-video hero-slide" loading="lazy"/>
-<img src="/images/course-sushi-wagyu-standard.jpg" alt="" class="hero-bg-video hero-slide" loading="lazy"/>
-<img src="/images/course-sushi-kobe-premium.jpg" alt="" class="hero-bg-video hero-slide" loading="lazy"/>
+<img src="/images/course-wagyu-standard.jpg" alt="Wagyu omakase selection" class="hero-bg-video hero-slide active" fetchpriority="high"/>
+<img src="/images/course-kobe-premium.jpg" alt="" class="hero-bg-video hero-slide" loading="lazy"/>
 <div class="hero-scrim-top"></div>
 <div class="hero-scrim-bottom"></div>
 </div>
@@ -318,11 +316,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <span style="left:95%;animation-duration:17s;animation-delay:7s;--sway:14px;width:5px;height:5px;"></span>
 </div>
 
-<div class="relative z-10 w-full px-7 pb-20 text-center">
+<div class="relative z-10 w-full px-7 pb-10 md:pb-16 text-center">
 <div class="hero-title-wrap inline-block relative">
 <span class="hinomaru" aria-hidden="true"></span>
 <h1 class="hero-title relative font-cormorant font-semibold leading-[0.95] tracking-tight text-ginza-ivory">
-<span class="block text-6xl md:text-8xl">Wagyu</span>
+<span class="block text-5xl md:text-7xl">Wagyu</span>
 <span class="block text-lg md:text-2xl mt-3 tracking-[0.14em] font-josefin font-light uppercase text-ginza-ivory/95">Halal Omakase Experience</span>
 </h1>
 <p class="hero-eyebrow relative font-josefin tracking-[0.3em] uppercase text-ginza-gold/75 text-[11px] md:text-xs mt-5">Gastronomic Tour of Japan</p>
@@ -1232,6 +1230,7 @@ Open {{ store.hours }}
 })();
 </script>
 
+<style>
 /* ===== Category choice buttons ===== */
 .cat-choice-grid{display:flex;flex-direction:column;gap:14px;max-width:560px;margin:0 auto;}
 @media (min-width:768px){.cat-choice-grid{max-width:760px;gap:16px;}}
