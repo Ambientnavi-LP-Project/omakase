@@ -39,7 +39,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   });
 </script>
 
-
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -499,6 +498,7 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 
 <p class="text-center text-[12px] md:text-[13px] font-light text-ginza-ivory/70 max-w-md mx-auto mb-6 leading-relaxed">Choose a style — <span class="text-ginza-gold">Sushi &amp; Wagyu</span>, <span class="text-ginza-gold">Sushi</span>, or <span class="text-ginza-gold">Wagyu</span>.</p>
 
+<p class="text-center text-[11px] md:text-[12px] font-light italic text-ginza-ivory/45 mb-5 px-6">Our omakase follows the season — ingredients may vary.</p>
 <!-- CATEGORY CHOICE BUTTONS -->
 <div class="cat-choice-grid">
 {% for cat in CATS %}
@@ -548,25 +548,8 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 </div>
 {% endif %}
 
-
-
 </div>
 </section>
-
-{% if store.tablecheck_widget_id %}
-<!-- ===== RESERVATION WIDGET (TableCheck) ===== -->
-<section class="reveal py-16 md:py-20 bg-ginza-black border-t border-ginza-gold/10" id="reserve">
-<div class="px-4 md:px-6 max-w-3xl mx-auto text-center">
-<p class="font-josefin text-[12px] md:text-[13px] tracking-[0.2em] uppercase text-ginza-gold/85 mb-4">Reservations</p>
-<h3 class="font-cormorant text-3xl md:text-4xl text-ginza-ivory mb-4 leading-snug">Book Your Table</h3>
-<p class="text-[13px] md:text-sm font-light leading-relaxed text-ginza-ivory/65 max-w-md mx-auto mb-8">Choose your date, time and party size below — instant confirmation.</p>
-<div class="tc-widget-card">
-<div data-autolang="true" data-lang="en" data-layout="calendar" data-theme="dark" data-time-interval="30" data-shop-id="{{ store.tablecheck_widget_id }}" id="tc-widget"></div>
-</div>
-</div>
-</section>
-<style>.tc-widget-card{background:rgba(255,255,255,0.02);border:1px solid rgba(201,169,110,0.22);border-radius:16px;padding:20px 16px;min-height:96px;}@media(min-width:768px){.tc-widget-card{padding:26px 24px;}}#tc-widget{width:100%;}</style>
-{% endif %}
 
 <div class="pm-divider"></div>
 
@@ -668,6 +651,7 @@ Within our signature courses, you'll also find premium dishes — crafted with t
 {% endfor %}
 </div>
 </div>
+{% if store.slug != 'shinjuku-sanchome' %}
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
 <button onclick="closeCourseCat('{{ cat.key }}'); openReserveModal('course_modal', '{{ c.id }}')" class="cc-course-reserve" data-ga-event="reserve_click" data-ga-location="course_modal_{{ c.id }}">
 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -684,6 +668,7 @@ Reserve this course
 Reserve this course
 </a>
 {% endif %}
+{% endif %}
 </div>
 </div>
 {% endif %}{% endfor %}
@@ -691,7 +676,6 @@ Reserve this course
 </div>
 </div>
 {% endfor %}
-
 
 {% if store.slug != 'shinjuku-sanchome' %}
 <!-- ENTRY COURSE MODALS (web / lunch) -->
@@ -774,9 +758,9 @@ Reserve this course
 .cc-backdrop{position:fixed;inset:0;z-index:200;background:rgba(9,9,9,0.86);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:0;opacity:0;transition:opacity .3s ease;}
 @media (min-width:768px){.cc-backdrop{align-items:center;padding:24px;}}
 .cc-backdrop.open{display:flex;opacity:1;}
-.cc-modal{position:relative;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;background:linear-gradient(180deg,#0e0e0e 0%,#090909 100%);border:1px solid var(--cat,rgba(201,169,110,0.4));border-top:3px solid var(--cat,#c9a96e);border-radius:20px 20px 0 0;padding:30px 22px 28px;box-shadow:0 -10px 60px rgba(0,0,0,0.7);transform:translateY(40px);transition:transform .35s ease;}
+.cc-modal{position:relative;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;background:linear-gradient(180deg,#0e0e0e 0%,#090909 100%);border:1px solid var(--cat,rgba(201,169,110,0.4));border-top:3px solid var(--cat,#c9a96e);border-radius:20px 20px 0 0;padding:30px 22px 28px;box-shadow:0 -10px 60px rgba(0,0,0,0.7);transform:translateY(40px);opacity:0;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .45s ease;}
 @media (min-width:768px){.cc-modal{border-radius:18px;transform:translateY(20px) scale(0.98);}}
-.cc-backdrop.open .cc-modal{transform:translateY(0) scale(1);}
+.cc-backdrop.open .cc-modal{transform:translateY(0) scale(1);opacity:1;}
 .cc-modal::-webkit-scrollbar{width:0;display:none;}
 .cc-close{position:absolute;top:14px;right:14px;z-index:5;width:34px;height:34px;border-radius:50%;background:rgba(240,237,228,0.08);border:1px solid rgba(201,169,110,0.25);color:rgba(240,237,228,0.7);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;}
 .cc-close:hover{background:rgba(240,237,228,0.16);color:#c9a96e;}
@@ -784,6 +768,13 @@ Reserve this course
 .cc-head-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:#f0ede4;line-height:1.2;margin:0 0 4px;}
 .cc-head-sub{font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(201,169,110,0.65);}
 .cc-list{display:flex;flex-direction:column;gap:16px;}
+@keyframes ccFadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.cc-backdrop.open .cc-head{animation:ccFadeUp .5s ease both;}
+.cc-backdrop.open .cc-list .cc-course{animation:ccFadeUp .6s cubic-bezier(.2,.8,.2,1) both;}
+.cc-backdrop.open .cc-list .cc-course:nth-child(1){animation-delay:.14s;}
+.cc-backdrop.open .cc-list .cc-course:nth-child(2){animation-delay:.28s;}
+.cc-backdrop.open .cc-list .cc-course:nth-child(3){animation-delay:.42s;}
+.cc-seasonal-note{text-align:center;font-family:'Epilogue',sans-serif;font-weight:300;font-style:italic;font-size:10.5px;color:rgba(240,237,228,0.42);margin-top:18px;}
 .cc-course{position:relative;border:1px solid rgba(201,169,110,0.2);border-radius:14px;overflow:hidden;background:rgba(201,169,110,0.04);}
 .cc-course-pop{border:1.5px solid var(--cat);box-shadow:0 0 22px rgba(201,169,110,0.16);}
 .cc-course-pop-tag{position:absolute;top:10px;left:10px;z-index:2;background:var(--cat);color:#090909;font-family:'Josefin Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:999px;}
@@ -974,10 +965,6 @@ Reserve this course
   });
 })();
 </script>
-
-
-
-
 
 <div class="pm-divider"></div>
 
@@ -1538,9 +1525,7 @@ Open {{ store.hours }}
 })();
 </script>
 
-
 <script>window.ocToggle=function(id){var r=document.getElementById("ocReveal-"+id),c=document.getElementById("ocChev-"+id),b=document.getElementById("ocBtn-"+id);if(!r)return;var o=r.classList.toggle("open");if(c)c.classList.toggle("open",o);if(b)b.setAttribute("aria-expanded",o?"true":"false");};</script>
 <script>window.openEntryModal=function(id){var el=document.getElementById("ccEntry-"+id);if(el){el.classList.add("open");document.body.style.overflow="hidden";}};window.closeEntryModal=function(id){var el=document.getElementById("ccEntry-"+id);if(el){el.classList.remove("open");document.body.style.overflow="";}};document.addEventListener("keydown",function(e){if(e.key==="Escape"){document.querySelectorAll(".cc-backdrop.open").forEach(function(el){el.classList.remove("open");});document.body.style.overflow="";}});</script>
-{% if store.tablecheck_widget_id %}<script type="text/javascript" src="https://vesper-widget.s3.amazonaws.com/tc_widget/tc_widget.js"></script>{% endif %}
 </body>
 </html>

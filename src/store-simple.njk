@@ -39,7 +39,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   });
 </script>
 
-
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -457,7 +456,7 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 <p class="font-josefin text-[12px] md:text-[13px] tracking-[0.2em] uppercase text-ginza-gold/85 mb-4">Our Omakase</p>
 <h3 class="font-cormorant text-3xl md:text-4xl text-ginza-ivory mb-6 leading-snug">A Hand-Picked Journey<br/>of Sushi &amp; Wagyu</h3>
 <p class="text-sm md:text-[15px] font-light leading-relaxed text-ginza-ivory/75 max-w-xl mx-auto mb-4">Ever heard of &ldquo;omakase&rdquo;? It&rsquo;s the chef&rsquo;s-choice course — we hand-pick the season&rsquo;s finest ingredients and serve only what tastes best right now. From delicate nigiri and hand rolls to premium wagyu steak, sukiyaki and Kobe beef, every course unfolds piece by piece.</p>
-<p class="text-[13px] font-light leading-relaxed text-ginza-ivory/60 max-w-xl mx-auto mb-9">Every dish is Muslim-friendly — pork-free and alcohol-free — crafted for everyone to enjoy. Ask our staff about the day&rsquo;s courses when you arrive.</p>
+<p class="text-[13px] font-light leading-relaxed text-ginza-ivory/60 max-w-xl mx-auto mb-9">Every dish is Muslim-friendly — pork-free and alcohol-free — crafted for everyone to enjoy. Ask our staff about the day&rsquo;s courses when you arrive. Ingredients may vary with the season.</p>
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
 <button onclick="openReserveModal('simple', '')" class="simple-cta" data-ga-event="reserve_click" data-ga-location="simple">Reserve a Table <span aria-hidden="true">&rarr;</span></button>
 {% elif store.tablecheck_url == 'TBD' %}
@@ -468,20 +467,6 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 </div>
 </section>
 
-{% if store.tablecheck_widget_id %}
-<!-- ===== RESERVATION WIDGET (TableCheck) ===== -->
-<section class="reveal py-16 md:py-20 bg-ginza-black border-t border-ginza-gold/10" id="reserve">
-<div class="px-4 md:px-6 max-w-3xl mx-auto text-center">
-<p class="font-josefin text-[12px] md:text-[13px] tracking-[0.2em] uppercase text-ginza-gold/85 mb-4">Reservations</p>
-<h3 class="font-cormorant text-3xl md:text-4xl text-ginza-ivory mb-4 leading-snug">Book Your Table</h3>
-<p class="text-[13px] md:text-sm font-light leading-relaxed text-ginza-ivory/65 max-w-md mx-auto mb-8">Choose your date, time and party size below — instant confirmation.</p>
-<div class="tc-widget-card">
-<div data-autolang="true" data-lang="en" data-layout="calendar" data-theme="dark" data-time-interval="30" data-shop-id="{{ store.tablecheck_widget_id }}" id="tc-widget"></div>
-</div>
-</div>
-</section>
-<style>.tc-widget-card{background:rgba(255,255,255,0.02);border:1px solid rgba(201,169,110,0.22);border-radius:16px;padding:20px 16px;min-height:96px;}@media(min-width:768px){.tc-widget-card{padding:26px 24px;}}#tc-widget{width:100%;}</style>
-{% endif %}
 <style>.simple-cta{display:inline-flex;align-items:center;gap:9px;padding:15px 40px;border-radius:999px;background:linear-gradient(90deg,#e3cb98,#c9a96e);color:#090909;font-family:'Josefin Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;box-shadow:0 6px 24px rgba(201,169,110,0.35);transition:transform .2s ease;}.simple-cta:hover{transform:translateY(-2px);}</style>
 
 <div class="pm-divider"></div>
@@ -796,10 +781,6 @@ Within our signature courses, you'll also find premium dishes — crafted with t
   });
 })();
 </script>
-
-
-
-
 
 <div class="pm-divider"></div>
 
@@ -1360,9 +1341,7 @@ Open {{ store.hours }}
 })();
 </script>
 
-
 <script>window.ocToggle=function(id){var r=document.getElementById("ocReveal-"+id),c=document.getElementById("ocChev-"+id),b=document.getElementById("ocBtn-"+id);if(!r)return;var o=r.classList.toggle("open");if(c)c.classList.toggle("open",o);if(b)b.setAttribute("aria-expanded",o?"true":"false");};</script>
 <script>window.openEntryModal=function(id){var el=document.getElementById("ccEntry-"+id);if(el){el.classList.add("open");document.body.style.overflow="hidden";}};window.closeEntryModal=function(id){var el=document.getElementById("ccEntry-"+id);if(el){el.classList.remove("open");document.body.style.overflow="";}};document.addEventListener("keydown",function(e){if(e.key==="Escape"){document.querySelectorAll(".cc-backdrop.open").forEach(function(el){el.classList.remove("open");});document.body.style.overflow="";}});</script>
-{% if store.tablecheck_widget_id %}<script type="text/javascript" src="https://vesper-widget.s3.amazonaws.com/tc_widget/tc_widget.js"></script>{% endif %}
 </body>
 </html>
