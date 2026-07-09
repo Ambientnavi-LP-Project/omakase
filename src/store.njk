@@ -511,7 +511,7 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 <span class="cat-choice-body">
 <span class="cat-choice-label">{{ cat.label | safe }}</span>
 <span class="cat-choice-desc">{{ cat.desc | safe }}</span>
-<span class="cat-choice-price">From &yen;{{ comma(fromTotal) }}</span>
+{% if store.slug != 'shinjuku-sanchome' %}<span class="cat-choice-price">From &yen;{{ comma(fromTotal) }}</span>{% endif %}
 <span class="cat-choice-cta">View courses <span aria-hidden="true">&rarr;</span></span>
 </span>
 <span class="cat-choice-photo"><img src="{{ cat.img }}" alt="{{ cat.label }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cat-choice-photo-empty');"/></span>
@@ -638,7 +638,7 @@ Within our signature courses, you'll also find premium dishes — crafted with t
 <div class="cc-course-body">
 <p class="cc-course-tier">{{ c.tier }}</p>
 <p class="cc-course-name">{{ c.name }}</p>
-<div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(total) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>
+{% if store.slug != 'shinjuku-sanchome' %}<div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(total) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>{% endif %}
 {% if c.diff %}<p class="cc-course-diff">{{ c.diff | safe }}</p>{% endif %}
 <button type="button" class="cc-course-toggle" onclick="toggleCourseDetail('{{ c.id }}')" aria-expanded="false" data-ga-event="course_detail_view" data-ga-location="course_modal_{{ c.id }}">
 <span>See details</span>
@@ -692,7 +692,7 @@ Reserve this course
 <div class="cc-course-body">
 <p class="cc-course-tier">{{ c.tier }}</p>
 <p class="cc-course-name">{{ m.name if m.name else c.name }}</p>
-<div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(etotal) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(eincl) }} incl. tax)</span></div>
+{% if store.slug != 'shinjuku-sanchome' %}<div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(etotal) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(eincl) }} incl. tax)</span></div>{% endif %}
 {% if m.copy %}<p class="cc-course-diff">{{ m.copy }}</p>{% endif %}
 <p class="cc-entry-note">* Ingredients may vary depending on the season.</p>
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}

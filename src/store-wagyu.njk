@@ -499,7 +499,7 @@ Only a few seats left today
 <span class="cat-choice-body">
 <span class="cat-choice-label">{{ cat.label | safe }}</span>
 <span class="cat-choice-desc">{{ cat.desc | safe }}</span>
-<span class="cat-choice-price">From &yen;{{ comma(fromTotal) }}</span>
+{% if store.slug != 'shinjuku-sanchome' %}<span class="cat-choice-price">From &yen;{{ comma(fromTotal) }}</span>{% endif %}
 <span class="cat-choice-cta">View courses <span aria-hidden="true">&rarr;</span></span>
 </span>
 <span class="cat-choice-photo"><img src="{{ cat.img }}" alt="{{ cat.label }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cat-choice-photo-empty');"/></span>
@@ -526,7 +526,7 @@ Only a few seats left today
 <div class="feat-body">
 <p class="feat-name">{{ m.name if m.name else c.name }}</p>
 {% if m.copy %}<p class="feat-hook">{{ m.copy }}</p>{% endif %}
-<div class="feat-price"><span class="feat-price-main">&yen;{{ comma(total) }}</span><span class="feat-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>
+{% if store.slug != 'shinjuku-sanchome' %}<div class="feat-price"><span class="feat-price-main">&yen;{{ comma(total) }}</span><span class="feat-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>{% endif %}
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
 <button onclick="openReserveModal('entry_{{ c.id }}', '{{ c.id }}')" class="feat-reserve" data-ga-event="reserve_click" data-ga-location="entry_{{ c.id }}">Reserve <span aria-hidden="true">&rarr;</span></button>
 {% elif store.tablecheck_url == 'TBD' %}
@@ -567,7 +567,7 @@ Only a few seats left today
 <div class="cc-course-body">
 <p class="cc-course-tier">{{ c.tier }}</p>
 <p class="cc-course-name">{{ c.name }}</p>
-<div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(total) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>
+{% if store.slug != 'shinjuku-sanchome' %}<div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(total) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>{% endif %}
 {% if c.diff %}<p class="cc-course-diff">{{ c.diff | safe }}</p>{% endif %}
 <button type="button" class="cc-course-toggle" onclick="toggleCourseDetail('{{ c.id }}')" aria-expanded="false" data-ga-event="course_detail_view" data-ga-location="course_modal_{{ c.id }}">
 <span>See details</span>

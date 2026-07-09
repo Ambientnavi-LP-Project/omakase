@@ -516,7 +516,6 @@
     document.getElementById('r_course').value = val;
     var lbl = document.getElementById('course-trigger-label');
     if (lbl){ lbl.textContent = c.name + '  ' + cpYen_(cpCoursePrice_(c)); lbl.style.color = '#f0ede4'; }
-    window.dataLayer.push({event:'course_select', course_id:c.id, course_name:c.name, course_price:cpCoursePrice_(c)});
     closeCoursePicker();
   };
   window.openCoursePicker = function(){
@@ -696,8 +695,6 @@
     document.getElementById('confirm_check_details').checked = false;
     document.getElementById('confirm_check_policy').checked = false;
     document.getElementById('confirm_error').style.display = 'none';
-
-    window.dataLayer.push({event:'final_check_view', form_course: course, form_guests: guests, form_date: date});
 
     document.getElementById('confirmDialog').style.display = 'block';
   };

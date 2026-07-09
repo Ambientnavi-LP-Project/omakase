@@ -1,0 +1,72 @@
+---
+pagination:
+  data: stores.pagesRelocated
+  size: 1
+  alias: store
+permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}index.html"
+eleventyComputed:
+  title: "{{ store.name_short }} — We've Relocated"
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://{{ brand.domain }}/tokyo/shinjuku-sanchome/">
+<meta name="description" content="Our Asakusa restaurant has relocated. The same Muslim-friendly Sushi &amp; Wagyu omakase experience awaits you at our nearby location.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Josefin+Sans:wght@400;600;700&family=Epilogue:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --black:#090909; --ivory:#f0ede4; --gold:#c9a96e; --gold-soft:#e3cb98; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:var(--black); color:var(--ivory); font-family:'Epilogue',sans-serif; -webkit-font-smoothing:antialiased; }
+  body{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:40px 24px; position:relative; overflow-x:hidden; }
+  /* subtle radial glow */
+  body::before{ content:''; position:fixed; inset:0; background:radial-gradient(120% 80% at 70% 20%, rgba(201,169,110,0.10), transparent 60%); pointer-events:none; }
+  .rl{ position:relative; z-index:1; width:100%; max-width:1080px; display:grid; grid-template-columns:1fr; gap:44px; align-items:center; }
+  @media(min-width:900px){ .rl{ grid-template-columns:1.05fr 1fr; gap:64px; } }
+
+  /* ---- media ---- */
+  .rl-media{ position:relative; min-height:340px; }
+  .rl-media figure{ position:relative; border-radius:14px; overflow:hidden; }
+  .rl-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .rl-chef{ aspect-ratio:4/5; max-width:78%; box-shadow:0 30px 70px rgba(0,0,0,0.55); border:1px solid rgba(201,169,110,0.35); }
+  .rl-dish{ position:absolute; right:0; bottom:-6%; width:56%; aspect-ratio:1/1; box-shadow:0 24px 60px rgba(0,0,0,0.6); border:3px solid var(--black); outline:1px solid rgba(201,169,110,0.4); }
+  .rl-photo-empty{ background:rgba(201,169,110,0.06); }
+  .rl-photo-empty::after{ content:'Photo'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Josefin Sans',sans-serif; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(240,237,228,0.3); }
+
+  /* ---- content ---- */
+  .rl-kicker{ font-family:'Josefin Sans',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.34em; text-transform:uppercase; color:var(--gold); margin-bottom:22px; }
+  .rl-title{ font-family:'Cormorant Garamond',serif; font-weight:500; font-size:clamp(46px,8vw,80px); line-height:0.98; letter-spacing:0.01em; }
+  .rl-title em{ font-style:italic; color:var(--gold-soft); }
+  .rl-rule{ width:64px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin:26px 0 28px; }
+  .rl-lead{ font-size:clamp(15px,2.2vw,18px); font-weight:400; line-height:1.7; color:rgba(240,237,228,0.9); max-width:30em; }
+  .rl-body{ font-size:14px; font-weight:300; line-height:1.75; color:rgba(240,237,228,0.62); max-width:30em; margin-top:16px; }
+  .rl-cta{ display:inline-flex; align-items:center; gap:11px; margin-top:34px; padding:16px 40px; border-radius:999px; background:linear-gradient(90deg,var(--gold-soft),var(--gold)); color:var(--black); font-family:'Josefin Sans',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; text-decoration:none; box-shadow:0 10px 30px rgba(201,169,110,0.32); transition:transform .22s ease, box-shadow .22s ease; }
+  .rl-cta:hover{ transform:translateY(-2px); box-shadow:0 16px 40px rgba(201,169,110,0.42); }
+  .rl-cta span{ transition:transform .22s ease; }
+  .rl-cta:hover span{ transform:translateX(4px); }
+  .rl-foot{ margin-top:30px; font-family:'Josefin Sans',sans-serif; font-size:10.5px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(240,237,228,0.32); }
+</style>
+</head>
+<body>
+<main class="rl">
+  <div class="rl-media">
+    <figure class="rl-chef"><img src="/images/chef.jpg" alt="Our chef" loading="eager" onerror="this.style.display='none';this.parentNode.classList.add('rl-photo-empty');"/></figure>
+    <figure class="rl-dish"><img src="/images/course-sushi-premium.jpg" alt="Premium sushi course" loading="eager" onerror="this.style.display='none';this.parentNode.classList.add('rl-photo-empty');"/></figure>
+  </div>
+  <div class="rl-content">
+    <p class="rl-kicker">Omakase Wagyu &amp; Sushi</p>
+    <h1 class="rl-title">We&rsquo;ve <em>Moved</em></h1>
+    <div class="rl-rule"></div>
+    <p class="rl-lead">Thank you for your years of patronage at our Asakusa restaurant. With heartfelt gratitude, we have relocated.</p>
+    <p class="rl-body">The same hand-crafted Sushi &amp; Wagyu omakase — Muslim-friendly, pork-free and alcohol-free, served course by course — awaits you at our nearby restaurant. We would be honored to welcome you once again.</p>
+    <a href="/tokyo/shinjuku-sanchome/" class="rl-cta" data-ga-event="relocated_visit_click" data-ga-location="relocated_kominka">Visit our restaurant <span aria-hidden="true">&rarr;</span></a>
+    <p class="rl-foot">Omakase Wagyu &amp; Sushi &nbsp;·&nbsp; Halal · Muslim-Friendly</p>
+  </div>
+</main>
+</body>
+</html>

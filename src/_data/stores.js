@@ -50,6 +50,7 @@ const STORES = [
   {
     region: "tokyo",
     slug: "asakusa-kominka",
+    relocated: true,  // 閉店・移転。通常LPは生成せず、移転案内ページ(store-relocated.njk)のみ。
     same_day_reserve: false,
     time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
     max_guests: 14,
@@ -246,7 +247,7 @@ const STORES = [
     hours_note: "Open Daily",
 
     // ▼ この店はフォーム予約のまま。"tablecheck" に変えるだけでURL予約に切替可能。
-    reserve_system: "form",   // "tablecheck" | "form"
+    reserve_system: "tablecheck",   // "tablecheck" | "form"
     tablecheck_url: "https://www.tablecheck.com/shops/halal-wagyu-shinjuku-5w-tokyo/reserve",
     form_config: {
       ...FORM_DEFAULT,
@@ -283,6 +284,7 @@ const CHANNELS = [
 // 店舗 × チャネルの全組み合わせを生成
 const pages = [];
 STORES.forEach(store => {
+  if (store.relocated) return;
   CHANNELS.forEach(channel => {
     pages.push({
       ...store,
@@ -303,6 +305,7 @@ STORES.forEach(store => {
 // ============================================================
 const pagesTest = [];
 STORES.forEach(s => {
+  if (s.relocated) return;
   pagesTest.push({
     ...s,
     channel_id: "test",
@@ -324,7 +327,7 @@ STORES.forEach(s => {
 //
 // 対象店を増やす/減らすときは SUSHI_SLUGS を編集するだけ。
 // ============================================================
-const SUSHI_SLUGS = STORES.map(s => s.slug); // 全店舗に寿司デザインLP(/sushi/)を展開
+const SUSHI_SLUGS = STORES.filter(s => !s.relocated).map(s => s.slug); // 全店舗に寿司デザインLP(/sushi/)を展開
 const pagesSushi = STORES
   .filter(s => SUSHI_SLUGS.includes(s.slug))
   .map(s => ({
@@ -336,7 +339,7 @@ const pagesSushi = STORES
 
 // 和牛特化LP用ページ(全店舗)。store-wagyu.njk が使う。/{region}/{slug}/wagyu/
 // Web限定・和牛コース・寿司和牛コースを訴求。
-const WAGYU_SLUGS = STORES.map(s => s.slug);
+const WAGYU_SLUGS = STORES.filter(s => !s.relocated).map(s => s.slug);
 const pagesWagyu = STORES
   .filter(s => WAGYU_SLUGS.includes(s.slug))
   .map(s => ({
@@ -345,6 +348,23 @@ const pagesWagyu = STORES
     channel_suffix: "wagyu/",
     channel_utm_source: "lp-wagyu"
   }));
+
+// シンプル版LP(全店舗)。store-simple.njk が使う。/{region}/{slug}/simple/
+// 価格なし・コースカードなし・簡単なコース紹介＋写真数枚のみ。
+const SIMPLE_SLUGS = STORES.filter(s => !s.relocated).map(s => s.slug);
+const pagesSimple = STORES
+  .filter(s => SIMPLE_SLUGS.includes(s.slug))
+  .map(s => ({
+    ...s,
+    channel_id: "simple",
+    channel_suffix: "simple/",
+    channel_utm_source: "lp-simple"
+  }));
+
+// 移転案内ページ(relocated店舗のみ)。store-relocated.njk が使う。/{region}/{slug}/
+const pagesRelocated = STORES
+  .filter(s => s.relocated)
+  .map(s => ({ ...s, channel_id: "default", channel_suffix: "", channel_utm_source: "lp" }));
 
 module.exports = {
   brand: {
@@ -359,5 +379,7 @@ module.exports = {
   pages: pages,         // 本番用(default/japan/global/map)。testは含まない。
   pagesTest: pagesTest, // テスト用(新宿三丁目のtestチャンネルのみ)。store-test.njk が使う。
   pagesSushi: pagesSushi, // 寿司特化LP用(全店舗)。store-sushi.njk が使う。
-  pagesWagyu: pagesWagyu // 和牛特化LP用(全店舗)。store-wagyu.njk が使う。
+  pagesWagyu: pagesWagyu, // 和牛特化LP用(全店舗)。store-wagyu.njk が使う。
+  pagesSimple: pagesSimple, // シンプル版LP(全店舗)。store-simple.njk が使う。
+  pagesRelocated: pagesRelocated // 移転案内(古民家)。store-relocated.njk が使う。
 };
