@@ -553,6 +553,21 @@ Choose a style to see every course &amp; price — from a web-exclusive entry up
 </div>
 </section>
 
+{% if store.tablecheck_widget_id %}
+<!-- ===== RESERVATION WIDGET (TableCheck) ===== -->
+<section class="reveal py-16 md:py-20 bg-ginza-black border-t border-ginza-gold/10" id="reserve">
+<div class="px-4 md:px-6 max-w-3xl mx-auto text-center">
+<p class="font-josefin text-[12px] md:text-[13px] tracking-[0.2em] uppercase text-ginza-gold/85 mb-4">Reservations</p>
+<h3 class="font-cormorant text-3xl md:text-4xl text-ginza-ivory mb-4 leading-snug">Book Your Table</h3>
+<p class="text-[13px] md:text-sm font-light leading-relaxed text-ginza-ivory/65 max-w-md mx-auto mb-8">Choose your date, time and party size below — instant confirmation.</p>
+<div class="tc-widget-card">
+<div data-autolang="true" data-lang="en" data-layout="horizontal" data-theme="clear" data-time-interval="30" data-shop-id="{{ store.tablecheck_widget_id }}" id="tc-widget"></div>
+</div>
+</div>
+</section>
+<style>.tc-widget-card{background:rgba(255,255,255,0.02);border:1px solid rgba(201,169,110,0.22);border-radius:16px;padding:20px 16px;min-height:96px;}@media(min-width:768px){.tc-widget-card{padding:26px 24px;}}#tc-widget{width:100%;}</style>
+{% endif %}
+
 <div class="pm-divider"></div>
 
 <!-- MENU -->
@@ -1494,5 +1509,6 @@ Open {{ store.hours }}
 
 <script>window.ocToggle=function(id){var r=document.getElementById("ocReveal-"+id),c=document.getElementById("ocChev-"+id),b=document.getElementById("ocBtn-"+id);if(!r)return;var o=r.classList.toggle("open");if(c)c.classList.toggle("open",o);if(b)b.setAttribute("aria-expanded",o?"true":"false");};</script>
 <script>window.openEntryModal=function(id){var el=document.getElementById("ccEntry-"+id);if(el){el.classList.add("open");document.body.style.overflow="hidden";}};window.closeEntryModal=function(id){var el=document.getElementById("ccEntry-"+id);if(el){el.classList.remove("open");document.body.style.overflow="";}};document.addEventListener("keydown",function(e){if(e.key==="Escape"){document.querySelectorAll(".cc-backdrop.open").forEach(function(el){el.classList.remove("open");});document.body.style.overflow="";}});</script>
+{% if store.tablecheck_widget_id %}<script type="text/javascript" src="https://vesper-widget.s3.amazonaws.com/tc_widget/tc_widget.js"></script>{% endif %}
 </body>
 </html>

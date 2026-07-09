@@ -509,6 +509,7 @@ Only a few seats left today
 
 <p class="text-center text-[11px] text-ginza-ivory/40 font-josefin tracking-widest mt-6">All dishes Muslim-friendly · Seasonal menu</p>
 
+{% if store.slug != 'shinjuku-sanchome' %}
 <!-- ===== OTHER COURSES: Lunch + Web-Exclusive (控えめ) ===== -->
 {% set EMETA = {
   "sushi-wagyu-lunch": { cls: "feat-lunch", ribbon: "Lunch Only", copy: "Served during lunch hours only — pick a lunch-time slot when you book." },
@@ -540,9 +541,25 @@ Only a few seats left today
 {% endfor %}
 </div>
 </div>
+{% endif %}
 
 </div>
 </section>
+
+{% if store.tablecheck_widget_id %}
+<!-- ===== RESERVATION WIDGET (TableCheck) ===== -->
+<section class="reveal py-16 md:py-20 bg-ginza-black border-t border-ginza-gold/10" id="reserve">
+<div class="px-4 md:px-6 max-w-3xl mx-auto text-center">
+<p class="font-josefin text-[12px] md:text-[13px] tracking-[0.2em] uppercase text-ginza-gold/85 mb-4">Reservations</p>
+<h3 class="font-cormorant text-3xl md:text-4xl text-ginza-ivory mb-4 leading-snug">Book Your Table</h3>
+<p class="text-[13px] md:text-sm font-light leading-relaxed text-ginza-ivory/65 max-w-md mx-auto mb-8">Choose your date, time and party size below — instant confirmation.</p>
+<div class="tc-widget-card">
+<div data-autolang="true" data-lang="en" data-layout="horizontal" data-theme="clear" data-time-interval="30" data-shop-id="{{ store.tablecheck_widget_id }}" id="tc-widget"></div>
+</div>
+</div>
+</section>
+<style>.tc-widget-card{background:rgba(255,255,255,0.02);border:1px solid rgba(201,169,110,0.22);border-radius:16px;padding:20px 16px;min-height:96px;}@media(min-width:768px){.tc-widget-card{padding:26px 24px;}}#tc-widget{width:100%;}</style>
+{% endif %}
 
 <!-- COURSE CATEGORY MODALS -->
 {% for cat in CATS %}
@@ -1468,5 +1485,6 @@ Open {{ store.hours }}
   });
 })();
 </script>
+{% if store.tablecheck_widget_id %}<script type="text/javascript" src="https://vesper-widget.s3.amazonaws.com/tc_widget/tc_widget.js"></script>{% endif %}
 </body>
 </html>

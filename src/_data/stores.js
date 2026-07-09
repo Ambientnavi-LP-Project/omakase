@@ -221,6 +221,7 @@ const STORES = [
   {
     region: "tokyo",
     slug: "shinjuku-sanchome",
+    tablecheck_widget_id: "halal-wagyu-shinjuku-5w-tokyo", // TableCheck予約ウィジェット。埋め込み予約セクションを出す。
     same_day_reserve: true,
     projection_mapping: true,
     time_slots: ['13:00','15:00','17:00','19:00','21:00'],
