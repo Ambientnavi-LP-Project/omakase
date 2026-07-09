@@ -521,6 +521,7 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 
 <p class="text-center text-[11px] text-ginza-ivory/40 font-josefin tracking-widest mt-6">All dishes Muslim-friendly · Seasonal menu</p>
 
+{% if store.slug != 'shinjuku-sanchome' %}
 <!-- ===== OTHER COURSES: Lunch + Web-Exclusive (控えめ) ===== -->
 {% set EMETA = {
   "sushi-wagyu-lunch": { cls: "feat-lunch", ribbon: "Lunch Only", copy: "Served during lunch hours only — pick a lunch-time slot when you book." },
@@ -545,6 +546,7 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 {% endfor %}
 </div>
 </div>
+{% endif %}
 
 
 
@@ -559,7 +561,7 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 <h3 class="font-cormorant text-3xl md:text-4xl text-ginza-ivory mb-4 leading-snug">Book Your Table</h3>
 <p class="text-[13px] md:text-sm font-light leading-relaxed text-ginza-ivory/65 max-w-md mx-auto mb-8">Choose your date, time and party size below — instant confirmation.</p>
 <div class="tc-widget-card">
-<div data-autolang="true" data-lang="en" data-layout="horizontal" data-theme="clear" data-time-interval="30" data-shop-id="{{ store.tablecheck_widget_id }}" id="tc-widget"></div>
+<div data-autolang="true" data-lang="en" data-layout="calendar" data-theme="dark" data-time-interval="30" data-shop-id="{{ store.tablecheck_widget_id }}" id="tc-widget"></div>
 </div>
 </div>
 </section>
@@ -691,6 +693,7 @@ Reserve this course
 {% endfor %}
 
 
+{% if store.slug != 'shinjuku-sanchome' %}
 <!-- ENTRY COURSE MODALS (web / lunch) -->
 {% set EMETA = {
   "sushi-wagyu-lunch": { cls: "feat-lunch", copy: "Served during lunch hours only — pick a lunch-time slot when you book." },
@@ -722,6 +725,7 @@ Reserve this course
 </div>
 </div>
 {% endif %}{% endfor %}
+{% endif %}
 
 <style>
 /* ===== Category choice buttons ===== */
