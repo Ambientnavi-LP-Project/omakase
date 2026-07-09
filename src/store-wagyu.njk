@@ -167,15 +167,12 @@ body { padding-bottom: 72px; }
 @keyframes pmBeam{0%{transform:translateX(-120%);}50%{transform:translateX(280%);}100%{transform:translateX(-120%);}}
 
 /* ===== Hero (hero1: SP=portrait full, PC=16:11 center-crop) ===== */
-#hero-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#070707;overflow:hidden;}
-.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;filter:brightness(0.62) saturate(1.05) contrast(1.08);}
+#hero-stage{position:relative;width:100%;aspect-ratio:16/9;background:#070707;overflow:hidden;}
+.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;filter:none;}
 .hero-slide{opacity:0;transition:opacity 1.6s ease-in-out;}
 .hero-slide.active{opacity:1;}
-/* PC: show hero1 as a 16:11 window, cropping top/bottom, centered */
-@media (min-width:768px){
-  #hero{height:auto;aspect-ratio:16/11;max-height:88vh;}
-  .hero-bg-video{object-fit:cover;object-position:center 42%;}
-}
+.hero-title-band{position:relative;z-index:5;margin-top:-9vw;}
+@media (min-width:1280px){.hero-title-band{margin-top:-115px;}}
 .hero-scrim-top{position:absolute;top:0;left:0;right:0;height:34%;background:linear-gradient(to bottom,rgba(7,7,7,0.78) 0%,rgba(7,7,7,0.28) 60%,transparent 100%);pointer-events:none;z-index:2;}
 .hero-scrim-bottom{position:absolute;bottom:0;left:0;right:0;height:58%;background:linear-gradient(to top,rgba(7,7,7,0.92) 0%,rgba(7,7,7,0.48) 45%,transparent 100%);pointer-events:none;z-index:2;}
 /* ===== Experience block: hero2 + hero3 side by side ===== */
@@ -200,19 +197,15 @@ body { padding-bottom: 72px; }
 @keyframes seigaihaDrift{from{background-position:0 0;}to{background-position:84px 0;}}
 
 /* 金箔 (gold leaf) drifting slowly up through the hero */
-.gold-flakes{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden;}
-.gold-flakes span{position:absolute;bottom:-12px;width:7px;height:7px;
-  background:radial-gradient(circle at 35% 30%,#f0d99a 0%,#d9b876 45%,#b8923f 100%);
-  border-radius:60% 40% 55% 45%/55% 45% 60% 40%;
-  opacity:0;filter:drop-shadow(0 0 4px rgba(201,169,110,0.55));
-  animation:flakeFloat linear infinite;}
+
+
 @keyframes flakeFloat{
   0%{opacity:0;transform:translateY(0) translateX(0) rotate(0deg) scale(0.5);}
   12%{opacity:0.85;}
   85%{opacity:0.5;}
   100%{opacity:0;transform:translateY(-80vh) translateX(var(--sway,14px)) rotate(220deg) scale(1);}
 }
-@media (prefers-reduced-motion: reduce){ .seigaiha::before{animation:none;} .gold-flakes{display:none;} }
+@media (prefers-reduced-motion: reduce){ .seigaiha::before{animation:none;}  }
 </style>
 </head>
 
@@ -293,30 +286,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </header>
 
 <!-- HERO -->
-<section class="relative aspect-[5/4] max-h-[82vh] md:aspect-auto md:h-[86vh] w-full flex flex-col justify-end items-center overflow-hidden" id="hero">
-<div class="absolute inset-0 z-0">
+<section class="relative w-full bg-ginza-black overflow-hidden" id="hero">
 <div id="hero-stage">
 <img src="/images/course-wagyu-standard.jpg" alt="Wagyu omakase selection" class="hero-bg-video hero-slide active" fetchpriority="high"/>
 <img src="/images/course-kobe-premium.jpg" alt="" class="hero-bg-video hero-slide" loading="lazy"/>
-<div class="hero-scrim-top"></div>
-<div class="hero-scrim-bottom"></div>
-</div>
 </div>
 
-<!-- 金箔: drifting gold-leaf flakes -->
-<div class="gold-flakes" aria-hidden="true">
-<span style="left:8%;animation-duration:13s;animation-delay:0s;--sway:18px;"></span>
-<span style="left:18%;animation-duration:16s;animation-delay:3s;--sway:-14px;width:5px;height:5px;"></span>
-<span style="left:30%;animation-duration:11s;animation-delay:1.5s;--sway:22px;"></span>
-<span style="left:42%;animation-duration:14.5s;animation-delay:5s;--sway:-20px;width:9px;height:9px;"></span>
-<span style="left:55%;animation-duration:12s;animation-delay:2s;--sway:16px;"></span>
-<span style="left:66%;animation-duration:15s;animation-delay:6.5s;--sway:-12px;width:5px;height:5px;"></span>
-<span style="left:76%;animation-duration:13.5s;animation-delay:4s;--sway:20px;"></span>
-<span style="left:88%;animation-duration:10.5s;animation-delay:1s;--sway:-18px;width:6px;height:6px;"></span>
-<span style="left:95%;animation-duration:17s;animation-delay:7s;--sway:14px;width:5px;height:5px;"></span>
-</div>
-
-<div class="relative z-10 w-full px-7 pb-10 md:pb-16 text-center">
+<div class="hero-title-band w-full px-7 pb-3 text-center">
 <div class="hero-title-wrap inline-block relative">
 <span class="hinomaru" aria-hidden="true"></span>
 <h1 class="hero-title relative font-cormorant font-semibold leading-[0.95] tracking-tight text-ginza-ivory">
@@ -488,7 +464,7 @@ Only a few seats left today
 <!-- ===== Shinjuku refined layout: photo + story + expand ===== -->
 <div class="wc-wrap">
 {% for cat in CATS %}
-<div class="wc-cat">
+<div class="wc-cat cat-{{ cat.key }}">
   <div class="wc-head">
     <div class="wc-photo"><img src="{{ cat.img }}" alt="{{ cat.label }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('wc-photo-empty');"/></div>
     <div class="wc-info">
@@ -502,7 +478,8 @@ Only a few seats left today
   <div class="wc-courses" id="wc-{{ cat.key }}">
     <div class="wc-courses-inner">
     {% for c in COURSES %}{% if c.cat == cat.key and not c.entry %}
-      <div class="wc-course">
+      <div class="wc-course{% if c.premium %} wc-premium{% endif %}">
+        {% if c.premium %}<span class="wc-badge">&#9733; Recommended</span>{% endif %}
         {% if not c.nophoto %}<div class="wc-course-photo"><img src="{{ c.img }}" alt="{{ c.name }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('wc-photo-empty');"/></div>{% endif %}
         <div class="wc-course-body">
         <p class="wc-course-tier">{{ c.tier }}</p>
@@ -649,38 +626,20 @@ Reserve this course
 Within our signature courses, you'll also find premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.
 </p>
 </div>
-<!-- SUSHI SHOWCASE -->
-<div class="max-w-4xl mx-auto px-4 md:px-6 mb-12">
-<p class="text-center text-[11px] font-josefin tracking-[0.22em] uppercase text-ginza-gold/70 mb-4">Sushi Selection</p>
-<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-<figure class="group">
-<div class="relative w-full overflow-hidden rounded-lg aspect-square">
-<img alt="Salmon &amp; Ikura Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi1.jpg"/>
-</div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Salmon &amp; Ikura Temaki</figcaption>
-</figure>
-<figure class="group">
-<div class="relative w-full overflow-hidden rounded-lg aspect-square">
-<img alt="Sea Urchin Temaki" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu3.jpg"/>
-</div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Sea Urchin Temaki</figcaption>
-</figure>
-<figure class="group col-span-2 sm:col-span-1">
-<div class="relative w-full overflow-hidden rounded-lg aspect-video sm:aspect-square">
-<img alt="Premium Nigiri" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi4.jpg"/>
-</div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Premium Nigiri</figcaption>
-</figure>
-</div>
-</div>
 
 <!-- SIGNATURE DISHES (compact) -->
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 md:px-6 mb-10 max-w-3xl mx-auto">
 <figure class="group">
 <div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
-<img alt="Wagyu Sushi" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi2.jpg"/>
+<img alt="Wagyu Steak Sushi" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/sushi2.jpg"/>
 </div>
-<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Sushi</figcaption>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Steak Sushi</figcaption>
+</figure>
+<figure class="group">
+<div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+<img alt="Wagyu Steak" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/menu1.jpg"/>
+</div>
+<figcaption class="mt-2 text-center text-[10px] font-josefin tracking-[0.14em] uppercase text-ginza-gold/75">Wagyu Steak</figcaption>
 </figure>
 <figure class="group">
 <div class="relative w-full overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
@@ -1271,7 +1230,7 @@ Open {{ store.hours }}
 .cat-choice-grid{display:flex;flex-direction:column;gap:14px;max-width:560px;margin:0 auto;}
 /* ===== Shinjuku refined (photo + story + expand) ===== */
 .wc-wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:22px;}
-.wc-cat{border:1px solid rgba(201,169,110,0.3);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,rgba(201,169,110,0.05),rgba(255,255,255,0));box-shadow:0 8px 30px rgba(0,0,0,0.35);}
+.wc-cat{border:1px solid rgba(201,169,110,0.28);border-top:3px solid var(--cat,#c9a96e);border-radius:14px;overflow:hidden;background:linear-gradient(180deg,var(--cat-soft,rgba(201,169,110,0.05)),rgba(255,255,255,0));box-shadow:0 8px 30px rgba(0,0,0,0.35);}
 .wc-head{display:flex;flex-direction:column;}
 @media(min-width:768px){.wc-head{flex-direction:row;align-items:stretch;}}
 .wc-photo{position:relative;width:100%;height:210px;overflow:hidden;background:rgba(201,169,110,0.06);}
@@ -1279,19 +1238,21 @@ Open {{ store.hours }}
 .wc-photo img{width:100%;height:100%;object-fit:cover;display:block;}
 .wc-photo-empty::after{content:'Photo';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,237,228,0.3);}
 .wc-info{flex:1;padding:26px 28px;display:flex;flex-direction:column;justify-content:center;}
-.wc-kicker{font-family:'Josefin Sans',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:#c9a96e;margin:0 0 10px;}
+.wc-kicker{font-family:'Josefin Sans',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--cat,#c9a96e);margin:0 0 10px;}
 .wc-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:33px;line-height:1.05;color:#f0ede4;margin:0 0 14px;}
 .wc-story{font-family:'Epilogue',sans-serif;font-weight:300;font-size:14px;line-height:1.72;color:rgba(240,237,228,0.72);margin:0 0 12px;}
 .wc-note{font-family:'Epilogue',sans-serif;font-weight:300;font-size:13px;line-height:1.6;color:rgba(240,237,228,0.62);margin:0 0 22px;}
 .wc-note b{color:#c9a96e;font-weight:600;}
-.wc-toggle{align-self:flex-start;display:inline-flex;align-items:center;gap:9px;padding:12px 30px;border:1px solid rgba(201,169,110,0.5);border-radius:999px;background:transparent;color:#c9a96e;font-family:'Josefin Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;transition:background .25s,color .25s;}
-.wc-toggle:hover{background:#c9a96e;color:#090909;}
+.wc-toggle{align-self:flex-start;display:inline-flex;align-items:center;gap:9px;padding:12px 30px;border:1px solid var(--cat,#c9a96e);border-radius:999px;background:transparent;color:var(--cat,#c9a96e);font-family:'Josefin Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;transition:background .25s,color .25s;}
+.wc-toggle:hover{background:var(--cat,#c9a96e);color:#090909;}
 .wc-chev{transition:transform .35s ease;}
 .wc-chev.open{transform:rotate(180deg);}
 .wc-courses{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.4,0,.2,1);}
 .wc-courses.open{max-height:2400px;}
 .wc-courses-inner{padding:22px 24px 26px;display:flex;flex-direction:column;gap:18px;border-top:1px solid rgba(201,169,110,0.32);background:rgba(0,0,0,0.28);}
-.wc-course{border:1px solid rgba(201,169,110,0.38);border-radius:12px;padding:0;overflow:hidden;background:rgba(255,255,255,0.035);box-shadow:0 4px 18px rgba(0,0,0,0.3);opacity:0;transform:translateY(10px);}
+.wc-course{position:relative;border:1px solid rgba(201,169,110,0.28);border-radius:12px;padding:0;overflow:hidden;background:rgba(255,255,255,0.03);box-shadow:0 4px 18px rgba(0,0,0,0.3);opacity:0;transform:translateY(10px);}
+.wc-course.wc-premium{border:1.5px solid #c9a96e;background:rgba(201,169,110,0.09);box-shadow:0 0 28px rgba(201,169,110,0.28);}
+.wc-badge{position:absolute;top:12px;left:12px;z-index:3;background:linear-gradient(90deg,#e3cb98,#c9a96e);color:#090909;font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:4px 13px;border-radius:999px;box-shadow:0 3px 12px rgba(201,169,110,0.5);}
 .wc-course-photo{position:relative;width:100%;height:190px;overflow:hidden;background:rgba(201,169,110,0.06);}
 .wc-course-photo img{width:100%;height:100%;object-fit:cover;display:block;}
 .wc-course-body{padding:18px 20px;}
