@@ -203,7 +203,7 @@ const STORES = [
     hours_note: "Open Daily",
 
     reserve_system: "form",
-    tablecheck_url: "TBD",     // ⏳ 確定したら差し替え
+    tablecheck_url: "https://www.tablecheck.com/ja/halal-wagyu-osaka-higashi-shinsaibashi/reserve/",     // ⏳ 確定したら差し替え
     form_config: FORM_DEFAULT,
 
     maps_link: "TBD",          // ⏳ GoogleマップURLが来たら差し替え
