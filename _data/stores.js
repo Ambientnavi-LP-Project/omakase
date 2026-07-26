@@ -100,6 +100,8 @@ const STORES = [
     stations: [ { name: 'Gion-Shijo Sta. (Keihan)', line: '京阪本線', min: 2 }, { name: 'Kyoto-Kawaramachi Sta. (Hankyu)', line: '阪急京都線', min: 3 } ],
 
     name_full_en: "Kyoto Omakase Sushi & Wagyu Halal Gion Restaurant 京都寿司和牛餐厅",
+    // 寿司特化LP(/sushi/)でだけ使う店名。未設定の店は name_full_en がそのまま使われる。
+    name_full_en_sushi: "Kyoto Omakase Sushi Gion Japanese food Restaurant 京都寿司餐厅",
     name_short: "Omakase Wagyu&Sushi — Gion",
     name_jp: "Omakase Wagyu&Sushi 祇園店",
     name_zh: "",
@@ -185,6 +187,8 @@ const STORES = [
     stations: [ { name: 'Nagahoribashi Sta.', line: 'Sakaisuji / Nagahori-Tsurumiryokuchi', min: 4 }, { name: 'Shinsaibashi Sta.', line: 'Midosuji / Nagahori-Tsurumiryokuchi', min: 5 }, { name: 'Namba Sta.', line: 'Midosuji / Yotsubashi / Sennichimae', min: 12 } ],
 
     name_full_en: "Osaka Omakase Sushi & Wagyu Steak Halal Dotonbori Restaurant 大阪寿司和牛餐厅",
+    // 寿司特化LP(/sushi/)でだけ使う店名
+    name_full_en_sushi: "Osaka Omakase Sushi Dotonbori Japanese food Restaurant 大阪寿司餐厅",
     name_short: "Omakase Wagyu&Sushi — Higashi-Shinsaibashi",
     name_jp: "Omakase Wagyu&Sushi 東心斎橋店",
     name_zh: "",
@@ -230,6 +234,8 @@ const STORES = [
     price_adjust: 5000,  // 新宿三丁目のみ全コース税抜+5000(税込は×1.1で再計算)
 
     name_full_en: "Tokyo Omakase Sushi Wagyu (Muslim-Friendly) Shinjuku Restaurant 新宿寿司和牛餐厅",
+    // 寿司特化LP(/sushi/)でだけ使う店名
+    name_full_en_sushi: "Tokyo Omakase Sushi Shinjuku Japanese food Restaurant 新宿寿司餐厅",
     name_short: "Omakase Wagyu&Sushi — Shinjuku",
     name_jp: "Omakase Wagyu&Sushi 新宿三丁目店",
     name_zh: "",
@@ -333,6 +339,8 @@ const pagesSushi = STORES
   .filter(s => SUSHI_SLUGS.includes(s.slug))
   .map(s => ({
     ...s,
+    // 寿司LPだけ店名を差し替え。name_full_en_sushi が無い店は従来どおり name_full_en。
+    name_full_en: s.name_full_en_sushi || s.name_full_en,
     channel_id: "sushi",
     channel_suffix: "sushi/",
     channel_utm_source: "lp-sushi"
