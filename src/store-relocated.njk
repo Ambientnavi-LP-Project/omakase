@@ -6,6 +6,8 @@ pagination:
 permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}index.html"
 eleventyComputed:
   title: "{{ store.name_short }} — We've Relocated"
+  dest_url: "/{{ store.moved_to.region }}/{{ store.moved_to.slug }}/"
+  dest_url_utm: "/{{ store.moved_to.region }}/{{ store.moved_to.slug }}/?utm_source={{ store.channel_utm_source }}&utm_medium=referral"
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -14,8 +16,8 @@ eleventyComputed:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ title }}</title>
 <meta name="robots" content="noindex,follow">
-<link rel="canonical" href="https://{{ brand.domain }}/tokyo/shinjuku-sanchome/">
-<meta name="description" content="Our Asakusa restaurant has relocated. The same Muslim-friendly Sushi &amp; Wagyu omakase experience awaits you at our nearby location.">
+<link rel="canonical" href="https://{{ stores.brand.domain }}{{ dest_url }}">
+<meta name="description" content="Our {{ store.relocation.closed_label }} restaurant has relocated. The same Muslim-friendly Sushi &amp; Wagyu omakase experience awaits you at our {{ store.relocation.to_label }} restaurant.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Josefin+Sans:wght@400;600;700&family=Epilogue:wght@300;400;500&display=swap" rel="stylesheet">
@@ -42,6 +44,7 @@ eleventyComputed:
   .rl-kicker{ font-family:'Josefin Sans',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.34em; text-transform:uppercase; color:var(--gold); margin-bottom:22px; }
   .rl-title{ font-family:'Cormorant Garamond',serif; font-weight:500; font-size:clamp(46px,8vw,80px); line-height:0.98; letter-spacing:0.01em; }
   .rl-title em{ font-style:italic; color:var(--gold-soft); }
+  .rl-jp{ font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.16em; color:rgba(240,237,228,0.38); margin-top:14px; }
   .rl-rule{ width:64px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin:26px 0 28px; }
   .rl-lead{ font-size:clamp(15px,2.2vw,18px); font-weight:400; line-height:1.7; color:rgba(240,237,228,0.9); max-width:30em; }
   .rl-body{ font-size:14px; font-weight:300; line-height:1.75; color:rgba(240,237,228,0.62); max-width:30em; margin-top:16px; }
@@ -49,22 +52,33 @@ eleventyComputed:
   .rl-cta:hover{ transform:translateY(-2px); box-shadow:0 16px 40px rgba(201,169,110,0.42); }
   .rl-cta span{ transition:transform .22s ease; }
   .rl-cta:hover span{ transform:translateX(4px); }
+  .rl-addr{ margin-top:22px; font-size:13px; font-weight:300; line-height:1.7; color:rgba(240,237,228,0.5); font-style:normal; }
+  .rl-addr a{ color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(201,169,110,0.3); }
+  .rl-addr a:hover{ color:var(--gold-soft); }
   .rl-foot{ margin-top:30px; font-family:'Josefin Sans',sans-serif; font-size:10.5px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(240,237,228,0.32); }
 </style>
 </head>
 <body>
 <main class="rl">
   <div class="rl-media">
-    <figure class="rl-chef"><img src="/images/chef.jpg" alt="Our chef" loading="eager" onerror="this.style.display='none';this.parentNode.classList.add('rl-photo-empty');"/></figure>
-    <figure class="rl-dish"><img src="/images/course-sushi-premium.jpg" alt="Premium sushi course" loading="eager" onerror="this.style.display='none';this.parentNode.classList.add('rl-photo-empty');"/></figure>
+    <figure class="rl-chef"><img src="{{ store.relocation.photo_portrait.src }}" alt="{{ store.relocation.photo_portrait.alt }}" loading="eager" onerror="this.style.display='none';this.parentNode.classList.add('rl-photo-empty');"/></figure>
+    <figure class="rl-dish"><img src="{{ store.relocation.photo_dish.src }}" alt="{{ store.relocation.photo_dish.alt }}" loading="eager" onerror="this.style.display='none';this.parentNode.classList.add('rl-photo-empty');"/></figure>
   </div>
   <div class="rl-content">
     <p class="rl-kicker">Omakase Wagyu &amp; Sushi</p>
     <h1 class="rl-title">We&rsquo;ve <em>Moved</em></h1>
+    <p class="rl-jp">{{ store.relocation.closed_label_jp }}は{{ store.relocation.to_label_jp }}へ移転いたしました</p>
     <div class="rl-rule"></div>
-    <p class="rl-lead">Thank you for your years of patronage at our Asakusa restaurant. With heartfelt gratitude, we have relocated.</p>
-    <p class="rl-body">The same hand-crafted Sushi &amp; Wagyu omakase — Muslim-friendly, pork-free and alcohol-free, served course by course — awaits you at our nearby restaurant. We would be honored to welcome you once again.</p>
-    <a href="/tokyo/shinjuku-sanchome/" class="rl-cta" data-ga-event="relocated_visit_click" data-ga-location="relocated_kominka">Visit our restaurant <span aria-hidden="true">&rarr;</span></a>
+    <p class="rl-lead">Thank you for your years of patronage at our {{ store.relocation.closed_label }} restaurant. With heartfelt gratitude, we have relocated.</p>
+    <p class="rl-body">The same hand-crafted Sushi &amp; Wagyu omakase — Muslim-friendly, pork-free and alcohol-free, served course by course — awaits you at our {{ store.relocation.to_label }} restaurant. We would be honored to welcome you once again.</p>
+    <a href="{{ dest_url_utm }}" class="rl-cta" data-ga-event="relocated_visit_click" data-ga-location="relocated_{{ store.slug }}">Visit our restaurant <span aria-hidden="true">&rarr;</span></a>
+    <address class="rl-addr">
+      {{ store.moved_to.address_en_line1 }}<br>
+      {{ store.moved_to.station_en }} &nbsp;·&nbsp; Open {{ store.moved_to.hours }}
+      {% if store.moved_to.maps_link and store.moved_to.maps_link != "TBD" %}
+      <br><a href="{{ store.moved_to.maps_link }}" target="_blank" rel="noopener" data-ga-event="relocated_maps_click" data-ga-location="relocated_{{ store.slug }}">Open in Google Maps &rarr;</a>
+      {% endif %}
+    </address>
     <p class="rl-foot">Omakase Wagyu &amp; Sushi &nbsp;·&nbsp; Halal · Muslim-Friendly</p>
   </div>
 </main>
