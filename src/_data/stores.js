@@ -51,6 +51,17 @@ const STORES = [
     region: "tokyo",
     slug: "asakusa-kominka",
     relocated: true,  // 閉店・移転。通常LPは生成せず、移転案内ページ(store-relocated.njk)のみ。
+    // ▼ 移転案内ページ(store-relocated.njk)の中身。
+    //   to_slug で移転先店舗を指定(STORES の slug)。写真は縦長1枚＋正方形1枚。
+    relocation: {
+      to_slug: "shinjuku-sanchome",
+      to_label: "Shinjuku-sanchome",     // 英語本文に出る移転先の呼び名
+      to_label_jp: "新宿三丁目店",        // 日本語1行に出る移転先の呼び名
+      closed_label: "Asakusa",           // 英語本文に出る旧店舗の呼び名
+      closed_label_jp: "浅草店",
+      photo_portrait: { src: "/images/chef1.jpg", alt: "Our chef" },
+      photo_dish:     { src: "/images/course-sushi-wagyu-standard.jpg", alt: "Wagyu &amp; sushi omakase course" }
+    },
     same_day_reserve: false,
     time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
     max_guests: 14,
@@ -100,6 +111,8 @@ const STORES = [
     stations: [ { name: 'Gion-Shijo Sta. (Keihan)', line: '京阪本線', min: 2 }, { name: 'Kyoto-Kawaramachi Sta. (Hankyu)', line: '阪急京都線', min: 3 } ],
 
     name_full_en: "Kyoto Omakase Sushi & Wagyu Halal Gion Restaurant 京都寿司和牛餐厅",
+    // 寿司特化LP(/sushi/)でだけ使う店名。未設定の店は name_full_en がそのまま使われる。
+    name_full_en_sushi: "Kyoto Omakase Sushi Gion Japanese food Restaurant 京都寿司餐厅",
     name_short: "Omakase Wagyu&Sushi — Gion",
     name_jp: "Omakase Wagyu&Sushi 祇園店",
     name_zh: "",
@@ -136,6 +149,16 @@ const STORES = [
   {
     region: "tokyo",
     slug: "tsukiji",
+    relocated: true,  // 閉店・移転。通常LPは生成せず、移転案内ページ(store-relocated.njk)のみ。
+    relocation: {
+      to_slug: "shinjuku-sanchome",
+      to_label: "Shinjuku-sanchome",
+      to_label_jp: "新宿三丁目店",
+      closed_label: "Tsukiji",
+      closed_label_jp: "築地店",
+      photo_portrait: { src: "/images/chef2.jpg", alt: "Our chef" },
+      photo_dish:     { src: "/images/course-sushi-premium.jpg", alt: "Premium sushi course" }
+    },
     same_day_reserve: false,
     time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
     max_guests: 10,
@@ -185,6 +208,8 @@ const STORES = [
     stations: [ { name: 'Nagahoribashi Sta.', line: 'Sakaisuji / Nagahori-Tsurumiryokuchi', min: 4 }, { name: 'Shinsaibashi Sta.', line: 'Midosuji / Nagahori-Tsurumiryokuchi', min: 5 }, { name: 'Namba Sta.', line: 'Midosuji / Yotsubashi / Sennichimae', min: 12 } ],
 
     name_full_en: "Osaka Omakase Sushi & Wagyu Steak Halal Dotonbori Restaurant 大阪寿司和牛餐厅",
+    // 寿司特化LP(/sushi/)でだけ使う店名
+    name_full_en_sushi: "Osaka Omakase Sushi Dotonbori Japanese food Restaurant 大阪寿司餐厅",
     name_short: "Omakase Wagyu&Sushi — Higashi-Shinsaibashi",
     name_jp: "Omakase Wagyu&Sushi 東心斎橋店",
     name_zh: "",
@@ -203,16 +228,16 @@ const STORES = [
     hours_note: "Open Daily",
 
     reserve_system: "form",
-    tablecheck_url: "https://www.tablecheck.com/ja/halal-wagyu-osaka-higashi-shinsaibashi/reserve/",     // ⏳ 確定したら差し替え
+    tablecheck_url: "TBD",     // ⏳ 確定したら差し替え
     form_config: FORM_DEFAULT,
 
-    maps_link: "https://maps.app.goo.gl/mvV9YUvp2FvYnQoC9",
+    maps_link: "TBD",          // ⏳ GoogleマップURLが来たら差し替え
 
     rating: "4.8",
     rating_count: "100+",
     rating_source: "Google reviews",
 
-    maps_embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8621.808043106099!2d135.50321209999998!3d34.6738135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e700427c5a5f%3A0x2436d5406342bbb2!2sOsaka%20Omakase%20Sushi%20%26%20Wagyu%20Steak%20Halal%20Dotonbori%20Restaurant!5e1!3m2!1sja!2sjp!4v1785116837720!5m2!1sja!2sjp"
+    maps_embed: "TBD"          // ⏳ 埋め込みHTMLが来たら差し替え
   },
 
   // ============================================================
@@ -230,6 +255,8 @@ const STORES = [
     price_adjust: 5000,  // 新宿三丁目のみ全コース税抜+5000(税込は×1.1で再計算)
 
     name_full_en: "Tokyo Omakase Sushi Wagyu (Muslim-Friendly) Shinjuku Restaurant 新宿寿司和牛餐厅",
+    // 寿司特化LP(/sushi/)でだけ使う店名
+    name_full_en_sushi: "Tokyo Omakase Sushi Shinjuku Japanese food Restaurant 新宿寿司餐厅",
     name_short: "Omakase Wagyu&Sushi — Shinjuku",
     name_jp: "Omakase Wagyu&Sushi 新宿三丁目店",
     name_zh: "",
@@ -333,6 +360,8 @@ const pagesSushi = STORES
   .filter(s => SUSHI_SLUGS.includes(s.slug))
   .map(s => ({
     ...s,
+    // 寿司LPだけ店名を差し替え。name_full_en_sushi が無い店は従来どおり name_full_en。
+    name_full_en: s.name_full_en_sushi || s.name_full_en,
     channel_id: "sushi",
     channel_suffix: "sushi/",
     channel_utm_source: "lp-sushi"
@@ -363,9 +392,24 @@ const pagesSimple = STORES
   }));
 
 // 移転案内ページ(relocated店舗のみ)。store-relocated.njk が使う。/{region}/{slug}/
+// store.relocation.to_slug で指定した移転先店舗を moved_to に解決して埋め込む。
+// テンプレ側は moved_to.* で移転先の店名・住所・地図・予約導線をすべて参照する。
 const pagesRelocated = STORES
   .filter(s => s.relocated)
-  .map(s => ({ ...s, channel_id: "default", channel_suffix: "", channel_utm_source: "lp" }));
+  .map(s => {
+    const toSlug = s.relocation && s.relocation.to_slug;
+    const dest = STORES.find(d => d.slug === toSlug && !d.relocated);
+    if (toSlug && !dest) {
+      throw new Error(`[stores.js] "${s.slug}" の relocation.to_slug ("${toSlug}") に一致する営業中の店舗がありません。`);
+    }
+    return {
+      ...s,
+      channel_id: "default",
+      channel_suffix: "",
+      channel_utm_source: "lp-relocated-" + s.slug,  // 移転元ごとに計測できるUTM
+      moved_to: dest
+    };
+  });
 
 module.exports = {
   brand: {
@@ -382,5 +426,5 @@ module.exports = {
   pagesSushi: pagesSushi, // 寿司特化LP用(全店舗)。store-sushi.njk が使う。
   pagesWagyu: pagesWagyu, // 和牛特化LP用(全店舗)。store-wagyu.njk が使う。
   pagesSimple: pagesSimple, // シンプル版LP(全店舗)。store-simple.njk が使う。
-  pagesRelocated: pagesRelocated // 移転案内(古民家)。store-relocated.njk が使う。
+  pagesRelocated: pagesRelocated // 移転案内(古民家・築地)。store-relocated.njk が使う。
 };
