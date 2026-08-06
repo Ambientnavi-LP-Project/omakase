@@ -231,13 +231,13 @@ const STORES = [
     tablecheck_url: "TBD",     // ⏳ 確定したら差し替え
     form_config: FORM_DEFAULT,
 
-    maps_link: "TBD",          // ⏳ GoogleマップURLが来たら差し替え
+    maps_link: "https://maps.app.goo.gl/2yfLcDFM44MXbRJJ8",
 
     rating: "4.8",
     rating_count: "100+",
     rating_source: "Google reviews",
 
-    maps_embed: "TBD"          // ⏳ 埋め込みHTMLが来たら差し替え
+    maps_embed: "https://www.google.com/maps?q=Osaka+Omakase+Sushi+%26+Wagyu+Steak+Halal+Dotonbori+Restaurant&output=embed"
   },
 
   // ============================================================
