@@ -17,7 +17,7 @@ eleventyComputed:
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>{{ store.name_full_en }}</title>
 <meta name="description" content="Muslim-friendly wagyu omakase in {{ store.city }}. Pork-free and alcohol-free — wagyu, Kobe beef and sushi, course by course.">
-<link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/sushi/">
+<link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/wagyu/">
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -460,7 +460,7 @@ Only a few seats left today
 ] %}
 
 <p class="text-center text-[11px] md:text-[12px] font-light italic text-ginza-ivory/45 mb-5 px-6">Our omakase follows the season — ingredients may vary.</p>
-{% if store.slug == 'shinjuku-sanchome' %}
+{% if store.hide_prices %}
 <!-- ===== Shinjuku refined layout: photo + story + expand ===== -->
 <div class="wc-wrap">
 {% for cat in CATS %}
@@ -508,7 +508,7 @@ Only a few seats left today
 <span class="cat-choice-body">
 <span class="cat-choice-label">{{ cat.label | safe }}</span>
 <span class="cat-choice-desc">{{ cat.desc | safe }}</span>
-{% if store.slug != 'shinjuku-sanchome' %}<span class="cat-choice-price">From &yen;{{ comma(fromTotal) }}</span>{% endif %}
+{% if not store.hide_prices %}<span class="cat-choice-price">From &yen;{{ comma(fromTotal) }}</span>{% endif %}
 <span class="cat-choice-cta">View courses <span aria-hidden="true">&rarr;</span></span>
 </span>
 <span class="cat-choice-photo"><img src="{{ cat.img }}" alt="{{ cat.label }}" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('cat-choice-photo-empty');"/></span>
@@ -519,7 +519,7 @@ Only a few seats left today
 
 <p class="text-center text-[11px] text-ginza-ivory/40 font-josefin tracking-widest mt-6">All dishes Muslim-friendly · Seasonal menu</p>
 
-{% if store.slug != 'shinjuku-sanchome' %}
+{% if not store.hide_prices %}
 <!-- ===== OTHER COURSES: Lunch + Web-Exclusive (控えめ) ===== -->
 {% set EMETA = {
   "sushi-wagyu-lunch": { cls: "feat-lunch", ribbon: "Lunch Only", copy: "Served during lunch hours only — pick a lunch-time slot when you book." },
@@ -537,7 +537,7 @@ Only a few seats left today
 <div class="feat-body">
 <p class="feat-name">{{ m.name if m.name else c.name }}</p>
 {% if m.copy %}<p class="feat-hook">{{ m.copy }}</p>{% endif %}
-{% if store.slug != 'shinjuku-sanchome' %}<div class="feat-price"><span class="feat-price-main">&yen;{{ comma(total) }}</span><span class="feat-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>{% endif %}
+{% if not store.hide_prices %}<div class="feat-price"><span class="feat-price-main">&yen;{{ comma(total) }}</span><span class="feat-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>{% endif %}
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
 <button onclick="openReserveModal('entry_{{ c.id }}', '{{ c.id }}')" class="feat-reserve" data-ga-event="reserve_click" data-ga-location="entry_{{ c.id }}">Reserve <span aria-hidden="true">&rarr;</span></button>
 {% elif store.tablecheck_url == 'TBD' %}
@@ -579,7 +579,7 @@ Only a few seats left today
 <div class="cc-course-body">
 <p class="cc-course-tier">{{ c.tier }}</p>
 <p class="cc-course-name">{{ c.name }}</p>
-{% if store.slug != 'shinjuku-sanchome' %}<div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(total) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>{% endif %}
+{% if not store.hide_prices %}<div class="cc-course-price"><span class="cc-course-price-main">&yen;{{ comma(total) }}</span><span class="cc-course-price-tax">(&yen;{{ comma(incl) }} incl. tax)</span></div>{% endif %}
 {% if c.diff %}<p class="cc-course-diff">{{ c.diff | safe }}</p>{% endif %}
 <button type="button" class="cc-course-toggle" onclick="toggleCourseDetail('{{ c.id }}')" aria-expanded="false" data-ga-event="course_detail_view" data-ga-location="course_modal_{{ c.id }}">
 <span>See details</span>
@@ -592,7 +592,7 @@ Only a few seats left today
 {% endfor %}
 </div>
 </div>
-{% if store.slug != 'shinjuku-sanchome' %}
+{% if not store.hide_prices %}
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
 <button onclick="closeCourseCat('{{ cat.key }}'); openReserveModal('course_modal', '{{ c.id }}')" class="cc-course-reserve" data-ga-event="reserve_click" data-ga-location="course_modal_{{ c.id }}">
 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#090909" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>

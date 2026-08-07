@@ -22,6 +22,11 @@
  * 切り替えるときは store の reserve_system を "form" にして、
  * 必要なら form_config の値(EmailJS情報・工事休業日など)を上書きするだけ。
  *
+ * 【価格の表示/非表示】hide_prices: true にすると、その店舗の全LPで
+ * コース価格(From ¥〜 / ¥〜 incl. tax)とWeb限定・ランチ枠のセクションを出さない。
+ * コース構成の見せ方も、写真＋ストーリー＋展開型の価格なしレイアウトに切り替わる。
+ * 未設定(falsy)の店舗は従来どおり価格を表示する。
+ *
  * 【店名】name_full_en に英語+中国語をまとめて1つのフル表記で入れている。
  * ヒーロー等は name_full_en をそのまま1ブロックで表示する。
  * (name_zh は空。中国語を別行で分けたい店だけ name_zh に入れる)
@@ -105,6 +110,7 @@ const STORES = [
   {
     region: "kyoto",
     slug: "gion",
+    hide_prices: true,   // 新宿三丁目と同じく全LPで価格非表示
     same_day_reserve: false,
     time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
     max_guests: 12,
@@ -130,8 +136,8 @@ const STORES = [
     hours: "11:00 – 23:00",
     hours_note: "Open Daily",
 
-    reserve_system: "form",
-    tablecheck_url: "https://www.tablecheck.com/shops/5wshijo/reserve",
+    reserve_system: "tablecheck",
+    tablecheck_url: "https://www.tablecheck.com/shops/omakase-kyoto-shijo/reserve",
     form_config: FORM_DEFAULT,
 
     maps_link: "https://maps.app.goo.gl/TbMo3qDpCAJdZxQ28",
@@ -198,10 +204,10 @@ const STORES = [
   // ============================================================
   // 4. 東心斎橋店(大阪)
   // ============================================================
-  // ⏳ TODO: tablecheck_url / maps_link / maps_embed を確定したら差し替える
   {
     region: "osaka",
     slug: "higashi-shinsaibashi",
+    hide_prices: true,   // 新宿三丁目と同じく全LPで価格非表示
     same_day_reserve: false,
     time_slots: ['11:00','13:00','15:00','17:00','19:00','21:00'],
     max_guests: 15,
@@ -222,16 +228,16 @@ const STORES = [
     address_postal: "542-0083",
 
     tel_display: "090-4467-3409",
-    tel_raw: "+819081295414",
+    tel_raw: "+819044673409",
 
     hours: "11:00 – 23:00",
     hours_note: "Open Daily",
 
-    reserve_system: "form",
-    tablecheck_url: "TBD",     // ⏳ 確定したら差し替え
+    reserve_system: "tablecheck",
+    tablecheck_url: "https://www.tablecheck.com/ja/halal-wagyu-osaka-higashi-shinsaibashi/reserve/",
     form_config: FORM_DEFAULT,
 
-    maps_link: "https://maps.app.goo.gl/2yfLcDFM44MXbRJJ8",
+    maps_link: "https://maps.app.goo.gl/bG1aGxzCi2PACLFVA",
 
     rating: "4.8",
     rating_count: "100+",
@@ -247,6 +253,7 @@ const STORES = [
     region: "tokyo",
     slug: "shinjuku-sanchome",
     tablecheck_widget_id: "halal-wagyu-shinjuku-5w-tokyo", // TableCheck予約ウィジェット。埋め込み予約セクションを出す。
+    hide_prices: true,   // 全LPで価格非表示
     same_day_reserve: true,
     projection_mapping: true,
     time_slots: ['13:00','15:00','17:00','19:00','21:00'],
