@@ -1,343 +1,300 @@
 /**
  * コースデータ（多言語）— 全LP共通のシングルソース
  * ------------------------------------------------------------
- * これまで store.njk / store-sushi.njk / store-wagyu.njk / store-simple.njk に
- * 同じ COURSES 配列が 4〜5回ハードコードされていたものを 1ファイルに集約。
- * 11ty の _data 配下なので、テンプレートからは `courses` でそのまま参照できる。
+ * 【重要】コース名・説明・献立はすべて既存 store.njk / reserve-form-modal.njk の
+ *   COURSES 定義からそのまま持ってきています。新規に創作した表現は入れていません。
  *
- *   {{ courses.list }}   … 全コース
- *   {{ courses.cats }}   … カテゴリ定義（mix / sushi / wagyu）
+ * 対応言語: en / zhs(簡体) / zht(繁体) / ko(韓国語) / id(インドネシア語)
+ *   ※ 日本語は不要とのことなので持っていません。
+ *   ※ rows(献立の流れ)は素材名の羅列のため全言語で英語のまま出しています。
+ *      訳す場合は rows を {en,zhs,zht,ko,id} 形式に変えるだけで対応できます。
  *
  * 価格ルール（既存踏襲）
- *   実売（税抜） = base + (noadj ? 0 : store.price_adjust)
- *   税込        = floor(実売 * 1.1)
- *
- * 多言語は { en, ja, zh } の3キー。テンプレ側で lang 属性を出し分け、
- * クライアントの言語切替（data-i18n-*）で表示を差し替える。
+ *   実売(税抜) = base + (noadj ? 0 : store.price_adjust) / 税込 = floor(実売 * 1.1)
  */
 
 const CATS = [
   {
     key: "mix",
     img: "/images/cat-mix.jpg",
-    label: { en: "Sushi & Wagyu", ja: "寿司と和牛", zh: "寿司与和牛" },
+    tag: true,   // Most Popular
+    label: { en: "Sushi & Wagyu", zhs: "寿司与和牛", zht: "壽司與和牛", ko: "스시 & 와규", id: "Sushi & Wagyu" },
+    // 既存 store-sushi.njk / store-wagyu.njk の CATS[].story より
     lead: {
-      en: "Both counters in one seating — nigiri from the cutting board, wagyu from the iron plate.",
-      ja: "握りと和牛を、一度の席で。まな板と鉄板、二つの仕事を続けて味わうコース。",
-      zh: "一席之间，兼得两味。握寿司与和牛铁板，依序上桌。"
+      en: "The best of both worlds — the season\u2019s finest nigiri and hand rolls served alongside premium wagyu, course by course, in one indulgent journey.",
+      zhs: "两全其美——当季最上乘的握寿司与手卷，伴随顶级和牛逐道呈上，成就一场尽兴的旅程。",
+      zht: "兩全其美——當季最上乘的握壽司與手卷，伴隨頂級和牛逐道呈上，成就一場盡興的旅程。",
+      ko: "두 가지의 정수 — 제철 최상급 니기리와 핸드롤을 프리미엄 와규와 함께 한 코스씩, 아낌없는 여정으로.",
+      id: "Yang terbaik dari keduanya — nigiri dan hand roll terbaik musim ini disajikan bersama wagyu premium, hidangan demi hidangan, dalam satu perjalanan yang memanjakan."
+    },
+    note: {
+      en: "A Kobe beef premium course is also available.",
+      zhs: "另有神户牛尊享套餐。", zht: "另有神戶牛尊享套餐。",
+      ko: "고베규 프리미엄 코스도 준비되어 있습니다.", id: "Tersedia juga kursus premium daging Kobe."
     }
   },
   {
     key: "sushi",
     img: "/images/cat-sushi.jpg",
-    label: { en: "Sushi", ja: "寿司", zh: "寿司" },
+    label: { en: "Sushi", zhs: "寿司", zht: "壽司", ko: "스시", id: "Sushi" },
     lead: {
-      en: "Edomae nigiri and hand rolls, shaped one at a time in front of you.",
-      ja: "江戸前の握りと手巻き。目の前で一貫ずつ握ります。",
-      zh: "江户前握寿司与手卷，师傅当面逐贯捏制。"
+      en: "Edomae-style omakase — nigiri and hand rolls crafted piece by piece from the day\u2019s finest fish, each served at the peak of its flavor.",
+      zhs: "江户前风格的 omakase——以当日最上乘的鱼货逐贯捏制握寿司与手卷，在风味最佳的时刻呈上。",
+      zht: "江戶前風格的 omakase——以當日最上乘的魚貨逐貫捏製握壽司與手卷，在風味最佳的時刻呈上。",
+      ko: "에도마에 스타일 오마카세 — 그날 가장 좋은 생선으로 한 점씩 쥐어낸 니기리와 핸드롤을, 가장 맛있는 순간에.",
+      id: "Omakase gaya Edomae — nigiri dan hand roll dibuat satu per satu dari ikan terbaik hari itu, disajikan pada puncak rasanya."
+    },
+    note: {
+      en: "A Premium course with sea urchin and chutoro tuna is also available.",
+      zhs: "另有加入海胆与中脂金枪鱼的尊享套餐。", zht: "另有加入海膽與中脂鮪魚的尊享套餐。",
+      ko: "성게와 주토로를 더한 프리미엄 코스도 준비되어 있습니다.", id: "Tersedia juga kursus Premium dengan bulu babi dan tuna chutoro."
     }
   },
   {
     key: "wagyu",
     img: "/images/cat-wagyu.jpg",
-    label: { en: "Wagyu", ja: "和牛", zh: "和牛" },
+    label: { en: "Wagyu Beef", zhs: "和牛", zht: "和牛", ko: "와규", id: "Wagyu" },
     lead: {
-      en: "Sukiyaki, fillet steak and nikuzushi — three ways with the same cut.",
-      ja: "すき焼き、フィレステーキ、肉寿司。ひとつの部位を三通りで。",
-      zh: "寿喜烧、菲力牛排、肉寿司。同一部位，三种吃法。"
+      en: "Premium Japanese wagyu at its finest — fillet steak, sukiyaki and wagyu sushi, each cut chosen for its marbling and melt-in-the-mouth richness.",
+      zhs: "顶级日本和牛的极致——菲力牛排、寿喜烧与和牛寿司，每一块皆因霜降与入口即化的丰腴而选。",
+      zht: "頂級日本和牛的極致——菲力牛排、壽喜燒與和牛壽司，每一塊皆因霜降與入口即化的豐腴而選。",
+      ko: "최상급 일본 와규의 정수 — 안심 스테이크, 스키야키, 와규 스시. 마블링과 입안에서 녹는 풍미로 고른 부위만.",
+      id: "Wagyu Jepang premium terbaik — steak fillet, sukiyaki, dan sushi wagyu; setiap potongan dipilih karena marbling dan kelembutannya."
+    },
+    note: {
+      en: "A Kobe beef course is also available.",
+      zhs: "另有神户牛套餐。", zht: "另有神戶牛套餐。",
+      ko: "고베규 코스도 준비되어 있습니다.", id: "Tersedia juga kursus daging Kobe."
     }
   }
 ];
 
-/** 献立の流れ（品書き）。順番そのものが情報なので配列順＝提供順。 */
-const R = (l_en, l_ja, l_zh, t_en, t_ja, t_zh) => ({
-  label: { en: l_en, ja: l_ja, zh: l_zh },
-  text: { en: t_en, ja: t_ja, zh: t_zh }
-});
+/** 訴求テーマごとに出すカテゴリ。既存 store-sushi.njk / store-wagyu.njk と同じ組み合わせ。 */
+const THEMES = { sushi: ["mix", "sushi"], wagyu: ["mix", "wagyu"], all: ["mix", "sushi", "wagyu"] };
 
-const HASSUN_SUSHI = R("Hassun", "八寸", "八寸",
-  "Chef's seasonal appetizers", "季節の前菜盛り合わせ", "时令前菜拼盘");
-const HASSUN_WAGYU = R("Hassun", "八寸", "八寸",
-  "Wagyu hassun — seasonal appetizers", "和牛の八寸・季節の前菜", "和牛八寸・时令前菜");
-const TOFU = R("Starter", "序", "前菜",
-  "Chilled tofu", "冷やし豆腐", "冷豆腐");
-const SOUP = R("Soup", "椀", "汤品",
-  "Aka-dashi miso soup", "赤出汁", "赤味噌汤");
-const SWEETS = R("Tea & sweets", "茶と甘味", "茶与甜点",
-  "Matcha and mini Japanese sweets", "抹茶と季節の和菓子", "抹茶与迷你和果子");
+const META = {
+  en: "8 courses · 60–75 min",
+  zhs: "8 道菜 · 60–75 分钟",
+  zht: "8 道菜 · 60–75 分鐘",
+  ko: "8코스 · 60–75분",
+  id: "8 hidangan · 60–75 menit"
+};
 
 const LIST = [
-  // ---------- Sushi & Wagyu（mix） ----------
   {
-    id: "sushi-wagyu-light",
-    cat: "mix",
-    tier: "entry",
-    base: 19800,
-    noadj: true,
-    web_only: true,
+    id: "sushi-wagyu-light", cat: "mix", base: 19800, noadj: true, web_only: true,
     img: "/images/course-sushi-wagyu-standard.jpg",
-    minutes: "60–75",
     name: {
-      en: "Sushi & Wagyu — Web Exclusive",
-      ja: "寿司と和牛 — Web予約限定",
-      zh: "寿司与和牛 — 网络预约限定"
+      en: "Sushi & Wagyu Course — Web Exclusive",
+      zhs: "寿司与和牛套餐 — 网络限定",
+      zht: "壽司與和牛套餐 — 網路限定",
+      ko: "스시 & 와규 코스 — 웹 한정",
+      id: "Kursus Sushi & Wagyu — Khusus Web"
     },
     lead: {
-      en: "The full flow in lighter portions: three nigiri and a 50g fillet. Bookable online only.",
-      ja: "流れはそのまま、量を軽く。握り三貫とフィレ50g。Web予約からのみ承ります。",
-      zh: "完整流程、分量轻盈。握寿司三贯与50克菲力，仅限网络预约。"
+      en: "Online-only entry · the full sushi & wagyu flow.",
+      zhs: "仅限线上预约的入门款 · 完整的寿司与和牛流程。",
+      zht: "僅限線上預約的入門款 · 完整的壽司與和牛流程。",
+      ko: "온라인 전용 입문 코스 · 스시와 와규의 전체 흐름.",
+      id: "Hanya lewat pemesanan online · alur lengkap sushi & wagyu."
     },
     rows: [
-      HASSUN_WAGYU, TOFU,
-      R("Nigiri ×3", "握り 三貫", "握寿司 三贯",
-        "Lean tuna / salmon / sea bream", "赤身・サーモン・鯛", "赤身・三文鱼・鲷鱼"),
-      R("Steak", "和牛", "牛排",
-        "Wagyu fillet steak 50g", "和牛フィレステーキ 50g", "和牛菲力牛排 50克"),
-      R("Hot pot", "温物", "热菜",
-        "Wagyu sukiyaki", "和牛すき焼き", "和牛寿喜烧"),
-      R("Roll & nikuzushi", "手巻と肉寿司", "手卷与肉寿司",
-        "Salmon & ikura hand roll · wagyu nikuzushi", "サーモンいくら手巻・和牛の肉寿司", "三文鱼鲑鱼子手卷・和牛肉寿司"),
-      SOUP, SWEETS
+      "Wagyu Hassun — Seasonal Appetizers",
+      "Chilled Tofu",
+      "Nigiri 3 — Lean Tuna / Salmon / Sea Bream",
+      "Wagyu Fillet Steak 50g",
+      "Wagyu Sukiyaki",
+      "Salmon & Ikura Hand Roll · Wagyu Nikuzushi",
+      "Aka-dashi Miso Soup · Matcha & Sweets"
     ]
   },
   {
-    id: "sushi-wagyu-lunch",
-    cat: "mix",
-    tier: "lunch",
-    base: 29800,
-    noadj: true,
-    lunch_only: true,
+    id: "sushi-wagyu-standard", cat: "mix", base: 59800,
     img: "/images/course-sushi-wagyu-standard.jpg",
-    minutes: "60–75",
     name: {
-      en: "Sushi & Wagyu — Lunch",
-      ja: "寿司と和牛 — ランチ",
-      zh: "寿司与和牛 — 午市"
+      en: "Sushi & Wagyu Course Standard",
+      zhs: "寿司与和牛套餐 标准",
+      zht: "壽司與和牛套餐 標準",
+      ko: "스시 & 와규 코스 스탠다드",
+      id: "Kursus Sushi & Wagyu Standard"
     },
     lead: {
-      en: "Lunch seating only. Five nigiri and a 50g fillet.",
-      ja: "昼の部限定。握り五貫とフィレ50g。",
-      zh: "仅限午市。握寿司五贯与50克菲力。"
+      en: "The standard sushi + wagyu combo.",
+      zhs: "标准的寿司＋和牛组合。",
+      zht: "標準的壽司＋和牛組合。",
+      ko: "표준 스시＋와규 조합.",
+      id: "Kombinasi standar sushi + wagyu."
     },
     rows: [
-      HASSUN_WAGYU, TOFU,
-      R("Nigiri ×5", "握り 五貫", "握寿司 五贯",
-        "Chutoro / salmon / sea bream / tamago / scallop", "中トロ・サーモン・鯛・玉子・帆立", "中脂金枪鱼・三文鱼・鲷鱼・玉子・扇贝"),
-      R("Steak", "和牛", "牛排",
-        "Wagyu fillet steak 50g", "和牛フィレステーキ 50g", "和牛菲力牛排 50克"),
-      R("Hot pot", "温物", "热菜",
-        "Wagyu sukiyaki", "和牛すき焼き", "和牛寿喜烧"),
-      R("Roll & nikuzushi", "手巻と肉寿司", "手卷与肉寿司",
-        "Salmon & ikura hand roll · wagyu nikuzushi", "サーモンいくら手巻・和牛の肉寿司", "三文鱼鲑鱼子手卷・和牛肉寿司"),
-      SOUP, SWEETS
+      "Sushi Hassun — Seasonal Appetizers",
+      "Chilled Tofu",
+      "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop",
+      "Wagyu Fillet Steak 100g",
+      "Wagyu Sukiyaki",
+      "Salmon & Ikura Hand Roll · Wagyu Nikuzushi",
+      "Aka-dashi Miso Soup · Matcha & Sweets"
     ]
   },
   {
-    id: "sushi-wagyu-standard",
-    cat: "mix",
-    tier: "standard",
-    base: 59800,
-    img: "/images/course-sushi-wagyu-standard.jpg",
-    minutes: "60–75",
-    name: {
-      en: "Sushi & Wagyu — Standard",
-      ja: "寿司と和牛 — スタンダード",
-      zh: "寿司与和牛 — 标准"
-    },
-    lead: {
-      en: "Five nigiri, a 100g fillet, sukiyaki and nikuzushi. The house course.",
-      ja: "握り五貫、フィレ100g、すき焼き、肉寿司。当店の基本形。",
-      zh: "握寿司五贯、100克菲力、寿喜烧与肉寿司。本店基本款。"
-    },
-    rows: [
-      HASSUN_SUSHI, TOFU,
-      R("Nigiri ×5", "握り 五貫", "握寿司 五贯",
-        "Chutoro / salmon / sea bream / tamago / scallop", "中トロ・サーモン・鯛・玉子・帆立", "中脂金枪鱼・三文鱼・鲷鱼・玉子・扇贝"),
-      R("Steak", "和牛", "牛排",
-        "Wagyu fillet steak 100g", "和牛フィレステーキ 100g", "和牛菲力牛排 100克"),
-      R("Hot pot", "温物", "热菜",
-        "Wagyu sukiyaki", "和牛すき焼き", "和牛寿喜烧"),
-      R("Roll & nikuzushi", "手巻と肉寿司", "手卷与肉寿司",
-        "Salmon & ikura hand roll · wagyu nikuzushi", "サーモンいくら手巻・和牛の肉寿司", "三文鱼鲑鱼子手卷・和牛肉寿司"),
-      SOUP, SWEETS
-    ]
-  },
-  {
-    id: "sushi-kobe-premium",
-    cat: "mix",
-    tier: "premium",
-    base: 79800,
+    id: "sushi-kobe-premium", cat: "mix", base: 79800, premium: true,
     img: "/images/course-sushi-kobe-premium.jpg",
-    minutes: "60–75",
     name: {
-      en: "Sushi & Kobe Beef — Premium",
-      ja: "寿司と神戸牛 — プレミアム",
-      zh: "寿司与神户牛 — 尊享"
+      en: "Sushi & Kobe Beef Course Premium",
+      zhs: "寿司与神户牛套餐 尊享",
+      zht: "壽司與神戶牛套餐 尊享",
+      ko: "스시 & 고베규 코스 프리미엄",
+      id: "Kursus Sushi & Daging Kobe Premium"
     },
     lead: {
-      en: "Standard, with sea urchin and crab added and every beef cut raised to Kobe.",
-      ja: "スタンダードに雲丹と蟹を加え、牛はすべて神戸牛に。",
-      zh: "在标准之上加入海胆与蟹，牛肉全数升级为神户牛。"
+      en: "Adds Sea Urchin & Crab sushi; beef upgraded to Kobe Beef.",
+      zhs: "增加海胆与蟹寿司；牛肉升级为神户牛。",
+      zht: "增加海膽與蟹壽司；牛肉升級為神戶牛。",
+      ko: "성게와 게 스시를 추가하고, 소고기는 고베규로 업그레이드.",
+      id: "Menambah sushi bulu babi & kepiting; daging naik ke Kobe Beef."
     },
     rows: [
-      HASSUN_SUSHI, TOFU,
-      R("Nigiri ×5", "握り 五貫", "握寿司 五贯",
-        "Chutoro / salmon / sea bream / tamago / crab gunkan", "中トロ・サーモン・鯛・玉子・蟹軍艦", "中脂金枪鱼・三文鱼・鲷鱼・玉子・蟹军舰"),
-      R("Steak", "神戸牛", "牛排",
-        "Kobe beef fillet steak 100g", "神戸牛フィレステーキ 100g", "神户牛菲力牛排 100克"),
-      R("Hot pot", "温物", "热菜",
-        "Kobe beef sukiyaki", "神戸牛すき焼き", "神户牛寿喜烧"),
-      R("Roll & nikuzushi", "手巻と肉寿司", "手卷与肉寿司",
-        "Sea urchin hand roll · Kobe beef nikuzushi", "雲丹の手巻・神戸牛の肉寿司", "海胆手卷・神户牛肉寿司"),
-      SOUP, SWEETS
+      "Sushi Hassun — Seasonal Appetizers",
+      "Chilled Tofu",
+      "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Crab Gunkan",
+      "Kobe Beef Fillet Steak 100g",
+      "Kobe Beef Sukiyaki",
+      "Sea Urchin Hand Roll · Kobe Beef Nikuzushi",
+      "Aka-dashi Miso Soup · Matcha & Sweets"
     ]
   },
-
-  // ---------- Sushi ----------
   {
-    id: "sushi-standard",
-    cat: "sushi",
-    tier: "standard",
-    base: 49800,
+    id: "sushi-wagyu-lunch", cat: "mix", base: 29800, noadj: true, lunch_only: true,
+    img: "/images/course-sushi-wagyu-standard.jpg",
+    name: {
+      en: "Sushi & Wagyu Lunch Course",
+      zhs: "寿司与和牛 午间套餐",
+      zht: "壽司與和牛 午間套餐",
+      ko: "스시 & 와규 런치 코스",
+      id: "Kursus Makan Siang Sushi & Wagyu"
+    },
+    lead: {
+      en: "Lunch-only · the full sushi & wagyu flow.",
+      zhs: "仅限午间 · 完整的寿司与和牛流程。",
+      zht: "僅限午間 · 完整的壽司與和牛流程。",
+      ko: "런치 전용 · 스시와 와규의 전체 흐름.",
+      id: "Hanya saat makan siang · alur lengkap sushi & wagyu."
+    },
+    rows: [
+      "Wagyu Hassun — Seasonal Appetizers",
+      "Chilled Tofu",
+      "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop",
+      "Wagyu Fillet Steak 50g",
+      "Wagyu Sukiyaki",
+      "Salmon & Ikura Hand Roll · Wagyu Nikuzushi",
+      "Aka-dashi Miso Soup · Matcha & Sweets"
+    ]
+  },
+  {
+    id: "sushi-standard", cat: "sushi", base: 49800,
     img: "/images/course-sushi-standard.jpg",
-    minutes: "60–75",
     name: {
-      en: "Sushi — Standard",
-      ja: "寿司 — スタンダード",
-      zh: "寿司 — 标准"
+      en: "Sushi Course Standard",
+      zhs: "寿司套餐 标准", zht: "壽司套餐 標準",
+      ko: "스시 코스 스탠다드", id: "Kursus Sushi Standard"
     },
     lead: {
-      en: "Ten nigiri, two hand rolls and shrimp chawanmushi.",
-      ja: "握り十貫、手巻き二本、海老の茶碗蒸し。",
-      zh: "握寿司十贯、手卷两条、鲜虾茶碗蒸。"
+      en: "The standard sushi omakase.",
+      zhs: "标准的寿司 omakase。", zht: "標準的壽司 omakase。",
+      ko: "표준 스시 오마카세.", id: "Omakase sushi standar."
     },
     rows: [
-      HASSUN_SUSHI, TOFU,
-      R("Hand roll", "手巻", "手卷",
-        "Salmon & ikura", "サーモンいくら", "三文鱼鲑鱼子"),
-      R("Nigiri ×10", "握り 十貫", "握寿司 十贯",
-        "Chutoro / salmon / sea bream / shrimp / scallop · lean tuna / seared salmon / tamago / seared sea bream / ikura gunkan",
-        "中トロ・サーモン・鯛・海老・帆立／赤身・炙りサーモン・玉子・炙り鯛・いくら軍艦",
-        "中脂金枪鱼・三文鱼・鲷鱼・甜虾・扇贝／赤身・炙烤三文鱼・玉子・炙烤鲷鱼・鲑鱼子军舰"),
-      R("Hand roll", "手巻", "手卷",
-        "Chopped lean tuna", "赤身のたたき", "剁赤身"),
-      R("Soup", "椀", "汤品",
-        "Aka-dashi miso soup & shrimp chawanmushi", "赤出汁と海老の茶碗蒸し", "赤味噌汤与鲜虾茶碗蒸"),
-      SWEETS
+      "Sushi Hassun — Seasonal Appetizers",
+      "Chilled Tofu",
+      "Salmon & Ikura Hand Roll",
+      "Nigiri 10 — Chutoro / Salmon / Sea Bream / Shrimp / Scallop · Lean Tuna / Seared Salmon / Tamago / Seared Sea Bream / Ikura Gunkan",
+      "Chopped Lean Tuna (Akami)",
+      "Aka-dashi Miso Soup & Shrimp Chawanmushi",
+      "Matcha & Mini Japanese Sweets"
     ]
   },
   {
-    id: "sushi-premium",
-    cat: "sushi",
-    tier: "premium",
-    base: 69800,
+    id: "sushi-premium", cat: "sushi", base: 69800, premium: true,
     img: "/images/course-sushi-premium.jpg",
-    minutes: "60–75",
     name: {
-      en: "Sushi — Premium",
-      ja: "寿司 — プレミアム",
-      zh: "寿司 — 尊享"
+      en: "Sushi Course Premium",
+      zhs: "寿司套餐 尊享", zht: "壽司套餐 尊享",
+      ko: "스시 코스 프리미엄", id: "Kursus Sushi Premium"
     },
     lead: {
-      en: "Adds sea urchin and crab nigiri, an extra sea urchin roll, and snow crab chawanmushi.",
-      ja: "雲丹と蟹の握り、雲丹の手巻きを追加。茶碗蒸しは香箱蟹に。",
-      zh: "加入海胆与蟹握寿司、海胆手卷，茶碗蒸换为松叶蟹。"
+      en: "Adds Sea Urchin & Crab nigiri, an extra Sea Urchin hand roll, snow-crab chawanmushi.",
+      zhs: "增加海胆与蟹握寿司、海胆手卷，以及松叶蟹茶碗蒸。",
+      zht: "增加海膽與蟹握壽司、海膽手卷，以及松葉蟹茶碗蒸。",
+      ko: "성게·게 니기리와 성게 핸드롤, 대게 차완무시를 추가.",
+      id: "Menambah nigiri bulu babi & kepiting, hand roll bulu babi, dan chawanmushi kepiting salju."
     },
     rows: [
-      HASSUN_SUSHI, TOFU,
-      R("Hand rolls", "手巻", "手卷",
-        "Sea urchin · salmon & ikura", "雲丹／サーモンいくら", "海胆／三文鱼鲑鱼子"),
-      R("Nigiri ×10", "握り 十貫", "握寿司 十贯",
-        "Chutoro / salmon / sea bream / sea urchin gunkan / scallop · lean tuna / seared salmon / tamago / crab gunkan / ikura gunkan",
-        "中トロ・サーモン・鯛・雲丹軍艦・帆立／赤身・炙りサーモン・玉子・蟹軍艦・いくら軍艦",
-        "中脂金枪鱼・三文鱼・鲷鱼・海胆军舰・扇贝／赤身・炙烤三文鱼・玉子・蟹军舰・鲑鱼子军舰"),
-      R("Hand roll", "手巻", "手卷",
-        "Chopped chutoro", "中トロのたたき", "剁中脂金枪鱼"),
-      R("Soup", "椀", "汤品",
-        "Aka-dashi miso soup & snow crab chawanmushi", "赤出汁と香箱蟹の茶碗蒸し", "赤味噌汤与松叶蟹茶碗蒸"),
-      SWEETS
+      "Sushi Hassun — Seasonal Appetizers",
+      "Chilled Tofu",
+      "Sea Urchin Hand Roll · Salmon & Ikura Hand Roll",
+      "Nigiri 10 — Chutoro / Salmon / Sea Bream / Urchin Gunkan / Scallop · Lean Tuna / Seared Salmon / Tamago / Crab Gunkan / Ikura Gunkan",
+      "Chopped Chutoro Tuna",
+      "Aka-dashi Miso Soup & Snow Crab Chawanmushi",
+      "Matcha & Mini Japanese Sweets"
     ]
   },
-
-  // ---------- Wagyu ----------
   {
-    id: "wagyu-standard",
-    cat: "wagyu",
-    tier: "standard",
-    base: 49800,
+    id: "wagyu-standard", cat: "wagyu", base: 49800,
     img: "/images/course-wagyu-standard.jpg",
-    minutes: "60–75",
     name: {
-      en: "Wagyu — Standard",
-      ja: "和牛 — スタンダード",
-      zh: "和牛 — 标准"
+      en: "Wagyu Course Standard",
+      zhs: "和牛套餐 标准", zht: "和牛套餐 標準",
+      ko: "와규 코스 스탠다드", id: "Kursus Wagyu Standard"
     },
     lead: {
-      en: "Sukiyaki, a 100g fillet, spring roll and nikuzushi.",
-      ja: "すき焼き、フィレ100g、春巻き、肉寿司。",
-      zh: "寿喜烧、100克菲力、春卷与肉寿司。"
+      en: "The standard wagyu omakase.",
+      zhs: "标准的和牛 omakase。", zht: "標準的和牛 omakase。",
+      ko: "표준 와규 오마카세.", id: "Omakase wagyu standar."
     },
     rows: [
-      HASSUN_WAGYU, TOFU,
-      R("Hot pot", "温物", "热菜",
-        "Wagyu sukiyaki, thin-sliced", "和牛すき焼き（薄切り）", "和牛寿喜烧（薄切）"),
-      R("Steak", "和牛", "牛排",
-        "Wagyu fillet steak 100g", "和牛フィレステーキ 100g", "和牛菲力牛排 100克"),
-      R("Specialty", "逸品", "招牌",
-        "Wagyu spring roll", "和牛の春巻き", "和牛春卷"),
-      R("Nikuzushi", "鮨", "肉寿司",
-        "Wagyu nikuzushi & steak hand roll 20g", "和牛の肉寿司とステーキ手巻 20g", "和牛肉寿司与牛排手卷 20克"),
-      R("Soup", "椀", "汤品",
-        "Shijimi aka-dashi & bite-size gyudon", "しじみの赤出汁と一口牛丼", "蚬赤味噌汤与一口牛丼"),
-      SWEETS
+      "Wagyu Hassun — Seasonal Appetizers",
+      "Chilled Tofu",
+      "Wagyu Sukiyaki (thin-sliced)",
+      "Wagyu Fillet Steak 100g",
+      "Wagyu Spring Roll",
+      "Wagyu Nikuzushi & Steak Hand Roll (20g)",
+      "Aka-dashi Miso Soup — Shijimi · Bite-Size Gyudon · Matcha & Sweets"
     ]
   },
   {
-    id: "kobe-premium",
-    cat: "wagyu",
-    tier: "premium",
-    base: 69800,
+    id: "kobe-premium", cat: "wagyu", base: 69800, premium: true,
     img: "/images/course-kobe-premium.jpg",
-    minutes: "60–75",
     name: {
-      en: "Kobe Beef — Premium",
-      ja: "神戸牛 — プレミアム",
-      zh: "神户牛 — 尊享"
+      en: "Kobe Beef Course Premium",
+      zhs: "神户牛套餐 尊享", zht: "神戶牛套餐 尊享",
+      ko: "고베규 코스 프리미엄", id: "Kursus Daging Kobe Premium"
     },
     lead: {
-      en: "The same course, every cut raised to certified Kobe beef.",
-      ja: "構成はそのまま、牛をすべて神戸牛に。",
-      zh: "构成不变，牛肉全数升级为认证神户牛。"
+      en: "Same as Standard, upgraded to premium Kobe Beef.",
+      zhs: "内容与标准款相同，牛肉升级为尊享神户牛。",
+      zht: "內容與標準款相同，牛肉升級為尊享神戶牛。",
+      ko: "스탠다드와 동일한 구성, 프리미엄 고베규로 업그레이드.",
+      id: "Sama seperti Standard, ditingkatkan ke Kobe Beef premium."
     },
     rows: [
-      HASSUN_WAGYU, TOFU,
-      R("Hot pot", "温物", "热菜",
-        "Kobe beef sukiyaki, thin-sliced", "神戸牛すき焼き（薄切り）", "神户牛寿喜烧（薄切）"),
-      R("Steak", "神戸牛", "牛排",
-        "Kobe beef fillet steak 100g", "神戸牛フィレステーキ 100g", "神户牛菲力牛排 100克"),
-      R("Specialty", "逸品", "招牌",
-        "Kobe beef spring roll", "神戸牛の春巻き", "神户牛春卷"),
-      R("Nikuzushi", "鮨", "肉寿司",
-        "Kobe beef nikuzushi & steak hand roll 20g", "神戸牛の肉寿司とステーキ手巻 20g", "神户牛肉寿司与牛排手卷 20克"),
-      R("Soup", "椀", "汤品",
-        "Shijimi aka-dashi & bite-size Kobe gyudon", "しじみの赤出汁と一口神戸牛丼", "蚬赤味噌汤与一口神户牛丼"),
-      SWEETS
+      "Kobe Beef Hassun — Seasonal Appetizers",
+      "Chilled Tofu",
+      "Kobe Beef Sukiyaki (thin-sliced)",
+      "Kobe Beef Fillet Steak 100g",
+      "Kobe Beef Spring Roll",
+      "Kobe Beef Nikuzushi & Steak Hand Roll (20g)",
+      "Aka-dashi Miso Soup — Shijimi · Bite-Size Kobe Beef Gyudon · Matcha & Sweets"
     ]
   }
 ];
 
 module.exports = {
+  themes: THEMES,
+  langs: ["en", "zhs", "zht", "ko", "id"],
   cats: CATS,
   list: LIST,
-  /** 予約フォームの選択肢に出す順番 */
+  meta: META,
   order: [
-    "sushi-wagyu-light",
-    "sushi-wagyu-standard",
-    "sushi-kobe-premium",
-    "sushi-wagyu-lunch",
-    "sushi-standard",
-    "sushi-premium",
-    "wagyu-standard",
-    "kobe-premium"
+    "sushi-wagyu-light", "sushi-wagyu-standard", "sushi-kobe-premium", "sushi-wagyu-lunch",
+    "sushi-standard", "sushi-premium", "wagyu-standard", "kobe-premium"
   ]
 };

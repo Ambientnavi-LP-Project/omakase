@@ -6,10 +6,11 @@ pagination:
 permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}index.html"
 eleventyComputed:
   title: "{{ store.name_full_en }}"
-  is_form_reserve: "{{ 'true' if store.reserve_system == 'form' else 'false' }}"
   tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral{% else %}#{% endif %}"
 ---
+{% set TCATS = courses.themes[store.theme] or courses.themes.all %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
+{% macro circ() %}<span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{% endmacro %}
 {% macro yen(n) %}{% set s = (n | string) %}{% set L = s | length %}{% for i in range(0, L) %}{% if i > 0 and (L - i) % 3 == 0 %},{% endif %}{{ s[i] }}{% endfor %}{% endmacro %}
 <!DOCTYPE html>
 <html lang="en" data-lang="en" class="no-js">
@@ -17,333 +18,404 @@ eleventyComputed:
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>{{ store.name_full_en }}</title>
-<meta name="description" content="Muslim-friendly omakase in {{ store.city }} — wagyu and Edomae sushi at one counter. Alcohol-free. Reserve online."/>
+<meta name="description" content="Sushi &amp; Wagyu Halal Omakase Experience — {{ store.name_full_en }}"/>
 <meta name="robots" content="noindex,follow"/>
 <link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/"/>
 
-<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TJKTLQJ6');</script>
-<script>
-window.dataLayer = window.dataLayer || [];
-window.dataLayer.push({store_name:'{{ store.slug }}',store_area:'{{ store.region }}',brand:'{{ stores.brand.brand_slug }}',channel:'{{ store.channel_id }}',design:'test-b'});
-</script>
+<script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({store_name:'{{ store.slug }}',store_area:'{{ store.region }}',brand:'{{ stores.brand.brand_slug }}',channel:'{{ store.channel_id }}',design:'test-b',theme:'{{ store.theme }}'});</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;600;700&family=Jost:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 
 <style>
 :root{
   --paper:#f4efe5; --paper-2:#fffdf9; --paper-3:#eae2d4;
   --sumi:#191512; --sumi-2:#5b5148; --sumi-3:#8d8177;
-  --shu:#a8342a; --shu-d:#8b2820; --shu-l:#c9463a;
-  --brass:#96793f;
+  --shu:#a8342a; --shu-d:#8b2820; --shu-l:#c9463a; --brass:#96793f;
   --line:rgba(25,21,18,.13);
   --disp:'Zen Old Mincho',serif; --body:'Jost',sans-serif;
+  --gut:clamp(24px,6vw,72px);
   --rv-bg:var(--paper-2); --rv-panel:var(--paper); --rv-line:var(--line);
   --rv-text:var(--sumi); --rv-muted:var(--sumi-3); --rv-accent:var(--shu);
   --rv-on-accent:#fff; --rv-display:var(--disp); --rv-body:var(--body); --rv-radius:6px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{background:var(--paper);color:var(--sumi);font-family:var(--body);font-weight:400;
-  -webkit-font-smoothing:antialiased;line-height:1.8;overflow-x:hidden;padding-bottom:76px;}
-html[data-lang="zh"] body{font-family:'Noto Serif SC',serif;}
+body{background:var(--paper);color:var(--sumi);font-family:var(--body);line-height:1.8;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:78px;}
 img,video{display:block;max-width:100%;}
 a{color:inherit;text-decoration:none;}
 :focus-visible{outline:2px solid var(--shu);outline-offset:2px;}
-.wrap{width:min(1080px,92vw);margin-inline:auto;}
-.narrow{width:min(700px,92vw);margin-inline:auto;}
-.pad{padding:clamp(52px,7.5vw,92px) 0;}
 
-.eyebrow{display:inline-block;font-family:var(--body);font-size:10px;font-weight:600;
-  letter-spacing:.3em;text-transform:uppercase;color:var(--shu);}
-h2.sh{font-family:var(--disp);font-weight:600;font-size:clamp(23px,3.6vw,36px);line-height:1.4;margin-top:12px;}
-.lead{font-size:14.5px;line-height:2;color:var(--sumi-2);margin-top:14px;}
+.wrap{width:100%;max-width:1120px;margin-inline:auto;padding-inline:var(--gut);}
+.narrow{width:100%;max-width:740px;margin-inline:auto;padding-inline:var(--gut);}
+.pad{padding:clamp(52px,8vw,96px) 0;}
 .center{text-align:center;}
 
-/* 判子（朱印）— このページの署名要素 */
-.seal{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;
-  background:var(--shu);color:#fff;font-family:var(--disp);font-weight:600;font-size:11px;
-  line-height:1.25;text-align:center;border-radius:3px;transform:rotate(-4deg);
-  box-shadow:0 2px 0 rgba(139,40,32,.35);letter-spacing:.02em;}
-
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s cubic-bezier(.16,1,.3,1);}
+.eyebrow{display:inline-block;font-family:var(--body);font-size:10px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--shu);}
+h2.sh{font-family:var(--disp);font-weight:600;font-size:clamp(22px,3.4vw,34px);line-height:1.42;margin-top:12px;}
+.lead{font-size:14.5px;line-height:2;color:var(--sumi-2);margin-top:14px;}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.16,1,.3,1);}
 .reveal.in{opacity:1;transform:none;}
+html.no-js .reveal{opacity:1;transform:none;}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
 
-html.no-js .reveal{opacity:1;transform:none;}
-/* ---------- top strip ---------- */
-.strip{background:var(--sumi);color:var(--paper);font-size:11px;letter-spacing:.06em;
-  text-align:center;padding:8px 14px;line-height:1.5;}
-.strip b{color:#e7c98c;font-weight:500;}
+/* 判子（朱印） */
+.seal{display:inline-flex;align-items:center;justify-content:center;width:50px;height:50px;background:var(--shu);
+  color:#fff;font-family:var(--disp);font-weight:600;font-size:11px;line-height:1.25;text-align:center;
+  border-radius:3px;transform:rotate(-4deg);box-shadow:0 2px 0 rgba(139,40,32,.35);}
 
-/* ---------- header ---------- */
-.hd{position:sticky;top:0;z-index:70;background:rgba(244,239,229,.94);backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--line);}
-.hd-in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;}
+/* ---------- strip / header ---------- */
+.strip{background:var(--sumi);color:var(--paper);font-size:11px;letter-spacing:.05em;text-align:center;padding:8px 16px;line-height:1.55;}
+.strip b{color:#e7c98c;font-weight:500;}
+.hd{position:sticky;top:0;z-index:70;background:rgba(244,239,229,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+.hd-in{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;}
 .mark b{display:block;font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.04em;}
-.mark i{font-style:normal;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--sumi-3);}
-.hd-r{display:flex;align-items:center;gap:10px;}
-.langs{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden;}
-.lang{background:transparent;border:none;cursor:pointer;font-family:var(--body);font-size:10px;
-  font-weight:500;letter-spacing:.1em;color:var(--sumi-3);padding:7px 9px;}
-.lang[aria-pressed="true"]{background:var(--sumi);color:var(--paper);}
-.hd-cta{background:var(--shu);color:#fff;border:none;cursor:pointer;font-family:var(--body);
-  font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px;border-radius:4px;}
-@media(max-width:560px){.hd-cta{display:none;}}
+.mark i{font-style:normal;font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--sumi-3);}
+.hd-r{display:flex;align-items:center;gap:9px;}
+.hd-cta{background:var(--shu);color:#fff;border:none;cursor:pointer;font-family:var(--body);font-weight:600;
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:11px 16px;border-radius:4px;}
+@media(max-width:620px){.hd-cta{display:none;}}
+.burger{width:34px;height:34px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:5px;}
+.burger span{display:block;height:1.5px;background:var(--sumi);transition:transform .35s,width .35s;}
+.burger span:nth-child(1){width:22px;} .burger span:nth-child(2){width:14px;margin-left:auto;}
+
+.langs{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;max-width:min(48vw,340px);}
+.langs::-webkit-scrollbar{display:none;}
+.lang{background:none;border:none;cursor:pointer;white-space:nowrap;font-family:var(--body);font-size:13px;
+  font-weight:500;letter-spacing:.03em;color:var(--sumi-3);padding:4px 1px;transition:color .3s;}
+.lang[aria-current="true"]{color:var(--sumi);}
+.langs .sep{color:rgba(25,21,18,.25);font-size:12px;}
+.burger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;width:44px;padding:2px 0;}
+.burger .bl{width:28px;height:1.5px;background:var(--sumi);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.burger .btx{font-size:9px;font-weight:600;letter-spacing:.14em;color:var(--sumi);line-height:1;}
+.nav-open .burger .bl:nth-child(1){transform:translateY(4px) rotate(45deg);}
+.nav-open .burger .bl:nth-child(2){transform:translateY(-2.5px) rotate(-45deg);}
+
+/* circle chevron button */
+.cbtn{display:inline-flex;align-items:center;gap:16px;background:none;border:none;cursor:pointer;color:var(--sumi);font-family:var(--body);padding:0;}
+.cbtn .circ{position:relative;flex-shrink:0;width:clamp(46px,5vw,60px);height:clamp(46px,5vw,60px);border-radius:50%;
+  border:1px solid rgba(25,21,18,.3);display:grid;place-items:center;overflow:hidden;transition:border-color .4s,color .4s;}
+.cbtn .circ::before{content:'';position:absolute;inset:-1px;border-radius:50%;background:var(--shu);transform:scale(0);transition:transform .5s cubic-bezier(.16,1,.3,1);}
+.cbtn .circ svg{position:relative;z-index:1;width:18px;height:18px;transition:transform .45s cubic-bezier(.16,1,.3,1);}
+.cbtn:hover .circ{border-color:var(--shu);color:#fff;}
+.cbtn:hover .circ::before{transform:scale(1);}
+.cbtn:hover .circ svg{transform:translateX(3px);}
+.cbtn .lbl{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;}
+.final .cbtn,.final .cbtn .circ{color:var(--paper);}
+.final .cbtn .circ{border-color:rgba(244,239,229,.4);}
+
+/* ---------- overlay menu ---------- */
+.ovl{position:fixed;inset:0;z-index:90;background:rgba(25,21,18,.97);backdrop-filter:blur(6px);
+  opacity:0;visibility:hidden;transition:opacity .5s ease,visibility .5s;}
+.ovl.open{opacity:1;visibility:visible;}
+.ovl-in{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);}
+.ovl a{display:block;width:max-content;font-family:var(--disp);font-weight:600;font-size:clamp(26px,5vw,54px);
+  line-height:1.5;color:var(--paper);opacity:0;transform:translateY(16px);
+  transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1),color .3s;}
+.ovl.open a{opacity:1;transform:none;}
+.ovl.open a:nth-child(1){transition-delay:.10s;} .ovl.open a:nth-child(2){transition-delay:.16s;}
+.ovl.open a:nth-child(3){transition-delay:.22s;} .ovl.open a:nth-child(4){transition-delay:.28s;}
+.ovl.open a:nth-child(5){transition-delay:.34s;} .ovl.open a:nth-child(6){transition-delay:.40s;}
+.ovl a:hover{color:var(--shu-l);}
+.ovl-foot{position:absolute;left:0;right:0;bottom:clamp(24px,5vw,52px);}
+.ovl-foot p{font-size:12.5px;line-height:1.9;color:rgba(244,239,229,.5);}
+.ovl-foot a{color:#e7c98c;}
+
+/* ---------- interior band ---------- */
+.band-photo{position:relative;width:100%;}
+.band-photo img{width:100%;aspect-ratio:21/9;object-fit:cover;}
+@media(max-width:760px){.band-photo img{aspect-ratio:4/3;}}
+.band-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(25,21,18,.1) 0%,rgba(25,21,18,.55) 60%,rgba(25,21,18,.82) 100%);}
+@media(max-width:760px){.band-photo::after{background:linear-gradient(180deg,rgba(25,21,18,.15) 0%,rgba(25,21,18,.8) 100%);}}
+.band-txt{position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:2;width:100%;color:var(--paper);}
+.band-txt .in{max-width:500px;margin-left:auto;}
+.band-txt .lead{color:rgba(244,239,229,.78);}
+.band-txt h2{color:var(--paper);}
+.collage{display:grid;gap:clamp(20px,3vw,40px);align-items:center;}
+@media(min-width:1000px){.collage{grid-template-columns:.9fr 1.1fr;}}
+.collage-imgs{position:relative;}
+.collage-imgs .a{width:100%;aspect-ratio:16/10;object-fit:cover;}
+.collage-imgs .b{position:absolute;right:calc(var(--gut) * -0.5);bottom:-30px;width:44%;aspect-ratio:4/3;object-fit:cover;border:6px solid var(--paper);}
+@media(max-width:760px){.collage-imgs .b{position:static;width:70%;margin:12px 0 0 auto;border:none;}}
 
 /* ---------- hero ---------- */
 .hero-media{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;}
-@media(min-width:1000px){.hero-media{max-height:74vh;}}
+@media(min-width:1000px){.hero-media{max-height:72vh;}}
 .hero-media video{width:100%;height:100%;object-fit:cover;}
-.hero-badge{position:absolute;left:14px;top:14px;z-index:2;display:flex;align-items:center;gap:7px;
-  background:rgba(25,21,18,.72);backdrop-filter:blur(6px);color:#fff;font-size:10.5px;font-weight:500;
-  letter-spacing:.1em;padding:7px 12px;border-radius:100px;}
-.dot{width:7px;height:7px;border-radius:50%;background:#4ea36c;box-shadow:0 0 0 0 rgba(78,163,108,.6);animation:pl 2s infinite;}
-@keyframes pl{70%{box-shadow:0 0 0 8px rgba(78,163,108,0);}100%{box-shadow:0 0 0 0 rgba(78,163,108,0);}}
-@media(prefers-reduced-motion:reduce){.dot{animation:none;}}
-
-.hero-body{padding:26px 0 6px;}
-.hero-h{font-family:var(--disp);font-weight:700;font-size:clamp(26px,5.2vw,44px);line-height:1.35;letter-spacing:.01em;}
+.hero-body{padding-top:26px;padding-bottom:8px;}
+.hero-h{font-family:var(--disp);font-weight:700;font-size:clamp(25px,5vw,42px);line-height:1.34;}
 .hero-h em{font-style:normal;color:var(--shu);}
-.hero-p{margin-top:14px;font-size:14.5px;line-height:1.95;color:var(--sumi-2);}
-.trust{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+.hero-p{margin-top:12px;font-size:14.5px;line-height:1.95;color:var(--sumi-2);}
+.hero-name{margin-top:20px;padding-top:18px;border-top:1px solid var(--line);
+  font-family:var(--disp);font-weight:600;font-size:clamp(15px,2.2vw,20px);line-height:1.5;color:var(--shu);}
+.trust{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
 .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper-2);
   border-radius:100px;padding:7px 13px;font-size:11.5px;font-weight:500;color:var(--sumi-2);}
 .chip b{color:var(--shu);font-weight:600;}
 
 .cta-lg{display:inline-flex;flex-direction:column;align-items:center;gap:2px;width:100%;max-width:420px;
-  background:var(--shu);color:#fff;border:none;cursor:pointer;padding:17px 24px;border-radius:6px;
-  font-family:var(--body);box-shadow:0 4px 0 var(--shu-d);transition:transform .12s,box-shadow .12s;}
+  background:var(--shu);color:#fff;border:none;cursor:pointer;padding:17px 22px;border-radius:6px;
+  font-family:var(--body);box-shadow:0 4px 0 var(--shu-d);transition:transform .12s,box-shadow .12s,background .2s;}
 .cta-lg:hover{background:var(--shu-l);}
 .cta-lg:active{transform:translateY(3px);box-shadow:0 1px 0 var(--shu-d);}
-.cta-lg strong{font-size:15px;font-weight:600;letter-spacing:.08em;}
-.cta-lg span{font-size:10.5px;opacity:.86;letter-spacing:.04em;}
+.cta-lg strong{font-size:15px;font-weight:600;letter-spacing:.06em;}
+.cta-lg span{font-size:10.5px;opacity:.85;}
 .cta-sub{margin-top:10px;font-size:11.5px;color:var(--sumi-3);}
 
-/* ---------- reasons ---------- */
+/* ---------- cards ---------- */
 .grid3{display:grid;gap:14px;}
-@media(min-width:800px){.grid3{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:820px){.grid3{grid-template-columns:repeat(3,1fr);}}
 .card{background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:24px 22px;}
-.card h3{font-family:var(--disp);font-weight:600;font-size:17px;line-height:1.5;margin-bottom:9px;}
+.card h3{font-family:var(--disp);font-weight:600;font-size:16.5px;line-height:1.5;margin:15px 0 9px;}
 .card p{font-size:13px;line-height:1.95;color:var(--sumi-2);}
-.card .seal{margin-bottom:16px;}
 
 /* ---------- courses ---------- */
 .pick{display:grid;gap:16px;}
-@media(min-width:840px){.pick{grid-template-columns:repeat(3,1fr);align-items:start;}}
-.pc{position:relative;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;overflow:hidden;
-  display:flex;flex-direction:column;}
+@media(min-width:860px){.pick{grid-template-columns:repeat(3,1fr);align-items:start;}}
+.pc{position:relative;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;}
 .pc.best{border:2px solid var(--shu);box-shadow:0 8px 30px rgba(168,52,42,.13);}
-.pc-flag{position:absolute;right:0;top:0;z-index:2;background:var(--shu);color:#fff;font-size:10px;
-  font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:6px 12px;border-radius:0 0 0 6px;}
+.pc-flag{position:absolute;right:0;top:0;z-index:2;background:var(--shu);color:#fff;font-size:10px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border-radius:0 0 0 6px;}
 .pc-img{aspect-ratio:16/10;overflow:hidden;background:var(--paper-3);}
 .pc-img img{width:100%;height:100%;object-fit:cover;}
 .pc-in{padding:20px 20px 22px;display:flex;flex-direction:column;flex:1;}
 .pc-cat{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);}
-.pc-name{font-family:var(--disp);font-weight:600;font-size:18.5px;line-height:1.45;margin-top:7px;}
-.pc-price{margin-top:12px;font-family:var(--disp);font-size:27px;font-weight:600;color:var(--shu);line-height:1;}
+.pc-name{font-family:var(--disp);font-weight:600;font-size:18px;line-height:1.45;margin-top:7px;}
+.pc-price{margin-top:11px;font-family:var(--disp);font-size:26px;font-weight:600;color:var(--shu);line-height:1;}
 .pc-price small{font-family:var(--body);font-size:11px;font-weight:400;color:var(--sumi-3);margin-left:6px;}
-.pc-lead{margin-top:12px;font-size:12.8px;line-height:1.9;color:var(--sumi-2);flex:1;}
-.pc-list{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;}
-.pc-list li{list-style:none;display:flex;gap:8px;font-size:12.2px;line-height:1.75;color:var(--sumi-2);padding:3px 0;}
-.pc-list li::before{content:'—';color:var(--shu);flex-shrink:0;}
-.pc-btn{margin-top:18px;width:100%;background:var(--sumi);color:var(--paper);border:none;cursor:pointer;
-  font-family:var(--body);font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-  padding:15px;border-radius:5px;transition:background .2s;}
+.pc-lead{margin-top:11px;font-size:12.8px;line-height:1.9;color:var(--sumi-2);}
+.pc-list{margin-top:13px;border-top:1px solid var(--line);padding-top:11px;flex:1;}
+.pc-list li{list-style:none;display:flex;gap:8px;font-size:12.2px;line-height:1.7;color:var(--sumi-2);padding:3px 0;}
+.pc-list li::before{content:'\2014';color:var(--shu);flex-shrink:0;}
+.pc-btn{margin-top:16px;width:100%;background:var(--sumi);color:var(--paper);border:none;cursor:pointer;
+  font-family:var(--body);font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:15px;border-radius:5px;transition:background .2s;}
 .pc-btn:hover{background:#000;}
 .pc.best .pc-btn{background:var(--shu);box-shadow:0 3px 0 var(--shu-d);}
 .pc.best .pc-btn:hover{background:var(--shu-l);}
-.pc-more{margin-top:9px;background:none;border:none;cursor:pointer;font-family:var(--body);font-size:11px;
-  color:var(--sumi-3);text-decoration:underline;text-underline-offset:3px;padding:4px;}
 
-.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:28px;}
-table.cmp{width:100%;min-width:520px;border-collapse:collapse;background:var(--paper-2);
-  border:1px solid var(--line);font-size:12.6px;}
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:26px;}
+table.cmp{width:100%;min-width:540px;border-collapse:collapse;background:var(--paper-2);border:1px solid var(--line);font-size:12.6px;}
 table.cmp th,table.cmp td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;}
 table.cmp thead th{background:var(--paper-3);font-family:var(--disp);font-weight:600;font-size:13px;}
-table.cmp tbody th{font-weight:500;color:var(--sumi-3);font-size:11px;letter-spacing:.1em;
-  text-transform:uppercase;white-space:nowrap;width:1%;}
+table.cmp tbody th{font-weight:500;color:var(--sumi-3);font-size:11px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;width:1%;}
 table.cmp .hi{color:var(--shu);font-weight:600;}
 
 /* ---------- reviews ---------- */
 .rev-wrap{display:grid;gap:14px;margin-top:26px;}
-@media(min-width:800px){.rev-wrap{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:820px){.rev-wrap{grid-template-columns:repeat(2,1fr);}}
 .rev{background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:22px 21px;}
 .stars{color:#d99b20;font-size:14px;letter-spacing:2px;}
 .rev-src{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--sumi-3);margin-left:8px;}
 .rev p{font-family:var(--disp);font-size:14.5px;line-height:1.95;margin:12px 0 14px;}
-.rev cite{font-style:normal;font-size:11.5px;color:var(--sumi-3);letter-spacing:.06em;}
-.score{display:flex;flex-wrap:wrap;justify-content:center;gap:28px;align-items:center;margin-top:30px;
-  border-top:1px solid var(--line);padding-top:26px;}
-.score b{display:block;font-family:var(--disp);font-size:33px;font-weight:600;line-height:1;}
-.score span{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--sumi-3);margin-top:6px;}
+.rev cite{font-style:normal;font-size:11.5px;color:var(--sumi-3);}
+.score{display:flex;flex-wrap:wrap;justify-content:center;gap:28px;align-items:center;margin-top:28px;border-top:1px solid var(--line);padding-top:24px;}
+.score b{display:block;font-family:var(--disp);font-size:32px;font-weight:600;line-height:1;}
+.score span{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--sumi-3);margin-top:6px;}
 
-/* ---------- steps ---------- */
-.steps{display:grid;gap:2px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:26px;}
-@media(min-width:800px){.steps{grid-template-columns:repeat(3,1fr);}}
-.step{background:var(--paper-2);padding:26px 22px;}
-.step b{display:block;font-family:var(--disp);font-size:12px;color:var(--shu);letter-spacing:.14em;margin-bottom:10px;}
-.step h4{font-family:var(--disp);font-weight:600;font-size:16px;margin-bottom:8px;}
-.step p{font-size:12.6px;line-height:1.9;color:var(--sumi-2);}
-
-/* ---------- faq ---------- */
-.faq{border-top:1px solid var(--line);margin-top:26px;}
+/* ---------- faq / access ---------- */
+.faq{border-top:1px solid var(--line);margin-top:24px;}
 .faq details{border-bottom:1px solid var(--line);}
-.faq summary{cursor:pointer;list-style:none;padding:17px 30px 17px 0;position:relative;
-  font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.6;}
+.faq summary{cursor:pointer;list-style:none;padding:17px 32px 17px 0;position:relative;font-family:var(--disp);font-weight:600;font-size:15px;line-height:1.6;}
 .faq summary::-webkit-details-marker{display:none;}
-.faq summary::after{content:'+';position:absolute;right:4px;top:16px;color:var(--shu);font-size:19px;font-weight:400;}
+.faq summary::after{content:'+';position:absolute;right:4px;top:15px;color:var(--shu);font-size:20px;font-weight:400;}
 .faq details[open] summary::after{content:'\2212';}
 .faq p{padding:0 0 19px;font-size:13px;line-height:1.95;color:var(--sumi-2);}
-
-/* ---------- access ---------- */
-.acc{display:grid;gap:22px;margin-top:26px;}
-@media(min-width:840px){.acc{grid-template-columns:1fr 1fr;}}
+.acc{display:grid;gap:22px;margin-top:24px;}
+@media(min-width:860px){.acc{grid-template-columns:1fr 1fr;}}
 .dl{border-top:1px solid var(--line);}
-.dl div{display:grid;grid-template-columns:88px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);}
-.dl dt{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--sumi-3);padding-top:4px;}
+.dl div{display:grid;grid-template-columns:104px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);}
+@media(max-width:520px){.dl div{grid-template-columns:1fr;gap:4px;}}
+.dl dt{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--sumi-3);padding-top:4px;}
 .dl dd{font-size:13.4px;line-height:1.8;}
 .dl dd a{color:var(--shu);border-bottom:1px solid rgba(168,52,42,.3);}
 .mapbox{position:relative;width:100%;aspect-ratio:4/3;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
 .mapbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
 
-/* ---------- final ---------- */
+/* ---------- final / footer ---------- */
 .final{background:var(--sumi);color:var(--paper);}
-.final h2{color:var(--paper);}
+.final h2,.final .sh{color:var(--paper);}
 .final .lead{color:rgba(244,239,229,.72);}
 .final .cta-sub{color:rgba(244,239,229,.55);}
+footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw,104px) 0 clamp(28px,4vw,48px);font-size:12.5px;}
+.ft-grid{display:grid;gap:clamp(32px,5vw,58px);}
+@media(min-width:820px){.ft-grid{grid-template-columns:1.4fr 1fr;}}
+.ft-seal{margin-bottom:20px;}
+.ft-small{font-size:12px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,239,229,.5);}
+.ft-name{font-family:var(--disp);font-weight:600;font-size:clamp(22px,3.4vw,38px);line-height:1.22;color:var(--paper);margin-top:4px;}
+.ft-addr{margin-top:20px;line-height:2;color:rgba(244,239,229,.5);}
+.ft-addr a{color:#e7c98c;}
+.ft-nav{display:grid;gap:2px;}
+@media(min-width:820px){.ft-nav{justify-items:start;margin-left:auto;}}
+.ft-nav a{font-family:var(--disp);font-weight:600;font-size:clamp(15px,1.8vw,19px);letter-spacing:.05em;padding:9px 0;color:rgba(244,239,229,.75);transition:color .3s;}
+.ft-nav a:hover{color:#fff;}
+.ft-bar{margin-top:clamp(34px,5vw,60px);padding-top:20px;border-top:1px solid rgba(244,239,229,.14);
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:rgba(244,239,229,.32);}
 
-footer{background:var(--sumi);color:rgba(244,239,229,.5);padding:0 0 40px;font-size:11px;letter-spacing:.05em;}
-footer a{color:rgba(244,239,229,.75);}
-
-/* ---------- sticky bar ---------- */
-.sticky{position:fixed;left:0;right:0;bottom:0;z-index:75;background:rgba(25,21,18,.96);
-  backdrop-filter:blur(12px);border-top:1px solid rgba(244,239,229,.16);
-  display:flex;align-items:center;gap:12px;padding:10px 14px;
+/* ---------- sticky ---------- */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:75;background:rgba(25,21,18,.96);backdrop-filter:blur(12px);
+  border-top:1px solid rgba(244,239,229,.16);display:flex;align-items:center;gap:12px;padding:10px var(--gut);
   transform:translateY(110%);transition:transform .4s cubic-bezier(.16,1,.3,1);}
 .sticky.show{transform:none;}
 .sticky-t{flex:1;min-width:0;color:var(--paper);line-height:1.35;}
-.sticky-t b{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;}
+.sticky-t b{display:block;font-size:12px;font-weight:600;}
 .sticky-t span{display:block;font-size:10px;color:rgba(244,239,229,.6);}
-.sticky-b{flex-shrink:0;background:var(--shu);color:#fff;border:none;cursor:pointer;font-family:var(--body);
-  font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:14px 22px;border-radius:5px;
-  box-shadow:0 3px 0 var(--shu-d);}
+.sticky-b{flex-shrink:0;background:var(--shu);color:#fff;border:none;cursor:pointer;font-family:var(--body);font-weight:600;
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:14px 20px;border-radius:5px;box-shadow:0 3px 0 var(--shu-d);}
 .sticky-b:active{transform:translateY(2px);box-shadow:0 1px 0 var(--shu-d);}
-
-/* ---------- exit ---------- */
-.exit{position:fixed;inset:0;z-index:9980;background:rgba(25,21,18,.7);display:none;
-  align-items:center;justify-content:center;padding:20px;}
-.exit.open{display:flex;}
-.exit-in{background:var(--paper-2);border-radius:8px;max-width:400px;width:100%;padding:30px 26px;text-align:center;position:relative;}
-.exit-x{position:absolute;top:10px;right:10px;background:none;border:none;font-size:22px;color:var(--sumi-3);cursor:pointer;}
 </style>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TJKTLQJ6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-<div class="strip"><span data-i18n="strip">Counter seats only &#183; <b>Free cancellation up to 48 hours before</b> &#183; No payment online</span></div>
+<div class="strip"><span data-i18n="strip.line"><b>Reservations recommended 2 weeks in advance.</b> Walk-ins welcome subject to availability.</span></div>
 
 <header class="hd">
   <div class="wrap hd-in">
-    <a class="mark" href="#top"><b>Omakase</b><i data-i18n="brand.sub">Wagyu &amp; Sushi</i></a>
+    <a class="mark" href="#top"><b>Omakase</b><i>Wagyu &amp; Sushi</i></a>
     <div class="hd-r">
       <div class="langs" role="group" aria-label="Language">
-        <button class="lang" data-lang-btn="en" aria-pressed="true">EN</button>
-        <button class="lang" data-lang-btn="ja" aria-pressed="false">JA</button>
-        <button class="lang" data-lang-btn="zh" aria-pressed="false">中文</button>
+        {% for l in ui.langs %}{% if not loop.first %}<span class="sep" aria-hidden="true">/</span>{% endif %}<button class="lang" data-lang-btn="{{ l.code }}"{% if l.code == 'en' %} aria-current="true"{% endif %}>{{ l.short }}</button>{% endfor %}
       </div>
       <button class="hd-cta" onclick="openReserve('header')" data-i18n="nav.reserve">Reserve</button>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span class="bl"></span><span class="bl"></span><span class="btx" id="btx">MENU</span></button>
     </div>
   </div>
 </header>
 
-<!-- ============ HERO ============ -->
+<div class="ovl" id="ovl">
+  <div class="ovl-in wrap">
+    <nav>
+      <a href="#courses" data-nav data-i18n="nav.menu">Menu</a>
+      <a href="#interior" data-nav data-i18n="nav.interior">Interior</a>
+      <a href="#voices" data-nav data-i18n="voices.label">Guest Voices</a>
+      <a href="#halal" data-nav data-i18n="nav.halal">Muslim-Friendly</a>
+      <a href="#faq" data-nav>FAQ</a>
+      <a href="#access" data-nav data-i18n="nav.access">Access</a>
+    </nav>
+  </div>
+  <div class="ovl-foot wrap">
+    <p>{{ store.name_full_en }}<br/>{{ store.address_en_line1 }}{% if store.tel_display != 'TBD' %} &middot; <a href="tel:{{ store.tel_raw }}">{{ store.tel_display }}</a>{% endif %}</p>
+  </div>
+</div>
+
+<!-- ================= HERO ================= -->
 <section id="top">
   <div class="hero-media">
-    <video autoplay muted loop playsinline preload="metadata" poster="/images/top.jpg">
-      <source src="/images/hero1.mp4" type="video/mp4"/>
-    </video>
-    <span class="hero-badge"><span class="dot"></span><span data-i18n="hero.badge">Seats open this week</span></span>
+    <video autoplay muted loop playsinline preload="metadata" poster="/images/top.jpg"><source src="/images/hero1.mp4" type="video/mp4"/></video>
   </div>
   <div class="wrap hero-body">
-    <p class="eyebrow">{{ store.region_label }}</p>
-    <h1 class="hero-h" data-i18n="hero.h">Wagyu <em>and</em> Edomae sushi,<br/>at the same counter.</h1>
-    <p class="hero-p" data-i18n="hero.p">Muslim-friendly omakase — no pork, no alcohol, not even in the sauces. Eight dishes in about seventy minutes, {{ store.station_en }} nearby.</p>
+    <p class="eyebrow" data-i18n="hero.tour">Gastronomic Tour of Japan</p>
+    <h1 class="hero-h"><em data-i18n="theme.{{ store.theme }}">{{ store.theme | capitalize }}</em> <span data-i18n="hero.halal">Halal Omakase Experience</span></h1>
+    <p class="hero-p" data-i18n="menu.{{ store.theme }}P">Authentic omakase, served Muslim-friendly.</p>
+    <p class="hero-name">{{ store.name_full_en }}</p>
     <div class="trust">
-      <span class="chip"><b>&#9733; {{ store.rating }}</b> Google · {{ store.rating_count }}</span>
-      <span class="chip" data-i18n="chip.halal">Halal-conscious kitchen</span>
-      <span class="chip" data-i18n="chip.lang">English &amp; Chinese</span>
-      <span class="chip" data-i18n="chip.walk">{{ store.stations[0].min }} min from {{ store.station_en }}</span>
+      <span class="chip"><b>&#9733; {{ store.rating }}</b> Google &middot; {{ store.rating_count }}</span>
+      <span class="chip" data-i18n="badge.mf">Muslim-friendly</span>
+      <span class="chip" data-i18n="badge.nopork">No pork</span>
+      <span class="chip" data-i18n="badge.noalc">No alcohol in food</span>
     </div>
-    <div style="margin-top:24px;">
-      <button class="cta-lg" onclick="openReserve('hero')">
-        <strong data-i18n="cta.main">Check available seats</strong>
-        <span data-i18n="cta.mainSub">Takes about 60 seconds · no payment now</span>
+    <div style="margin-top:22px;">
+      <button class="cta-lg" onclick="openReserve('hero')" data-ga-event="reserve_click" data-ga-location="hero">
+        <strong data-i18n="{% if store.reserve_system == 'form' %}reserve.btn{{ store.theme | capitalize }}{% else %}reserve.btnTc{% endif %}">{% if store.reserve_system == 'form' %}Reserve Your Omakase{% else %}Reserve on TableCheck{% endif %}</strong>
+        <span data-i18n="menu.note">All Muslim-friendly &middot; Seasonal menu</span>
       </button>
-      <p class="cta-sub" data-i18n="cta.underHero">We reply by email once the counter is confirmed.</p>
+      <p class="cta-sub" data-i18n="{% if store.reserve_system == 'form' %}reserve.noteForm{% else %}reserve.noteTc{% endif %}">{% if store.reserve_system == 'form' %}* Reservation is confirmed after email from {{ stores.brand.brand_name }}.{% else %}* Reservation handled by TableCheck — secure &amp; instant.{% endif %}</p>
     </div>
   </div>
 </section>
 
-<!-- ============ WHY ============ -->
+<!-- ================= EXPERIENCE ================= -->
 <section class="pad">
   <div class="wrap">
-    <div class="center reveal" style="max-width:640px;margin-inline:auto;">
-      <span class="eyebrow" data-i18n="why.eye">Why guests book here</span>
-      <h2 class="sh" data-i18n="why.h">Three things you will not find together anywhere else</h2>
+    <div class="center reveal" style="max-width:660px;margin-inline:auto;">
+      <span class="eyebrow" data-i18n="exp.label">The Experience</span>
+      {% if store.projection_mapping %}
+      <h2 class="sh" data-i18n="exp.pm.h">Sushi &amp; Wagyu Course &times; Projection Mapping</h2>
+      <p class="lead" data-i18n="exp.pm.p">Not just a meal — a journey through Japan.</p>
+      {% else %}
+      <h2 class="sh" data-i18n="exp.h">A Journey Through Japan</h2>
+      <p class="lead" data-i18n="exp.p">A journey through Japan's food culture — wagyu, sushi, and projection-mapped dining. Muslim-friendly omakase, crafted for travelers from around the world.</p>
+      {% endif %}
     </div>
-    <div class="grid3 reveal" style="margin-top:32px;">
+    <div class="grid3 reveal" style="margin-top:30px;">
       <div class="card">
-        <span class="seal" data-i18n="why.s1">寿司<br/>和牛</span>
-        <h3 data-i18n="why.h1">Both, in one sitting</h3>
-        <p data-i18n="why.p1">Nigiri shaped on the board and wagyu finished on the iron plate, served as one continuous course. Nobody at the table has to compromise.</p>
+        <span class="seal" data-i18n="seal.1">和牛<br/>五代</span>
+        <h3 data-i18n="story.q.label">Our Commitment to Quality</h3>
+        <p data-i18n="story.q.p">I visit livestock farms all over Japan and purchase only Wagyu that I truly accept by the whole head.</p>
       </div>
       <div class="card">
-        <span class="seal" data-i18n="why.s2">無<br/>酒精</span>
-        <h3 data-i18n="why.h2">Alcohol-free throughout</h3>
-        <p data-i18n="why.p2">Mirin and cooking sake are replaced in every dish, marinade and sauce. No pork, no lard. You will not need to ask about a single plate.</p>
+        <span class="seal" data-i18n="seal.2">無<br/>酒精</span>
+        <h3 data-i18n="halal.label">Muslim-Friendly Dining</h3>
+        <p data-i18n="halal.p1">We thoughtfully prepare pork-free, alcohol-free dishes.</p>
       </div>
       <div class="card">
-        <span class="seal" data-i18n="why.s3">対面<br/>調理</span>
-        <h3 data-i18n="why.h3">Cooked in front of you</h3>
-        <p data-i18n="why.p3">Counter seating only, {{ store.max_guests }} places. The chef hands each piece over directly and answers in English or Chinese.</p>
+        <span class="seal" data-i18n="seal.3">世界<br/>へ</span>
+        <h3 data-i18n="story.w.label">For Everyone in the World</h3>
+        <p data-i18n="story.w.p">This restaurant was born to share authentic Japanese food culture with everyone.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ COURSES ============ -->
+<!-- ================= INTERIOR ================= -->
+<section id="interior">
+  <div class="band-photo reveal">
+    <img src="/images/chef1.jpg" alt="" loading="lazy"/>
+    <div class="band-txt"><div class="wrap"><div class="in">
+      <span class="eyebrow" data-i18n="nav.interior">Interior</span>
+      <h2 class="sh" data-i18n="menu.premiumH">&ldquo;Sushi &amp; Wagyu Indulgence&rdquo;</h2>
+      <p class="lead" data-i18n="menu.premiumP">Within our signature courses, you'll also find premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.</p>
+    </div></div></div>
+  </div>
+  <div class="wrap pad">
+    <div class="collage reveal">
+      <div>
+        <span class="eyebrow" data-i18n="exp.label">The Experience</span>
+        <h3 class="sh" style="font-size:clamp(20px,2.8vw,30px);" data-i18n="exp.h">A Journey Through Japan</h3>
+        <p class="lead" data-i18n="exp.p">A journey through Japan's food culture — wagyu, sushi, and projection-mapped dining. Muslim-friendly omakase, crafted for travelers from around the world.</p>
+        <div style="margin-top:22px;"><a class="cbtn" href="#courses">{{ circ() }}<span class="lbl" data-i18n="nav.menu">Menu</span></a></div>
+      </div>
+      <div class="collage-imgs">
+        <img class="a" src="/images/chef2.jpg" alt="" loading="lazy"/>
+        <img class="b" src="/images/chef3.jpg" alt="" loading="lazy"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COURSES ================= -->
 <section class="pad" style="background:var(--paper-3);" id="courses">
   <div class="wrap">
-    <div class="center reveal" style="max-width:640px;margin-inline:auto;">
-      <span class="eyebrow" data-i18n="cs.eye">Choose your course</span>
-      <h2 class="sh" data-i18n="cs.h">Three ways in</h2>
-      <p class="lead" data-i18n="cs.p">Every course runs eight dishes over about seventy minutes. Pick one now — you can change it later by replying to your confirmation email.</p>
+    <div class="center reveal" style="max-width:660px;margin-inline:auto;">
+      <span class="eyebrow" data-i18n="menu.chefs">Chef&rsquo;s Omakase</span>
+      <h2 class="sh" data-i18n="menu.{{ store.theme }}H">Omakase Course</h2>
+      <p class="lead" data-i18n="menu.{{ store.theme }}P">Authentic omakase, served Muslim-friendly.</p>
     </div>
 
-    {% set FEATURED = ["sushi-wagyu-light","sushi-wagyu-standard","sushi-kobe-premium"] %}
-    <div class="pick reveal" style="margin-top:32px;">
+    {% if store.theme == "wagyu" %}
+    {% set FEATURED = ["sushi-wagyu-light","wagyu-standard","kobe-premium"] %}
+    {% else %}
+    {% set FEATURED = ["sushi-wagyu-light","sushi-standard","sushi-premium"] %}
+    {% endif %}
+    <div class="pick reveal" style="margin-top:30px;">
       {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}
       {% set p = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}
       <div class="pc{% if loop.index0 == 1 %} best{% endif %}">
-        {% if c.web_only %}<span class="pc-flag" data-i18n="flag.web">Web only</span>{% endif %}
+        {% if c.web_only %}<span class="pc-flag" data-i18n="tag.web">Web exclusive</span>{% endif %}
+        {% if c.premium %}<span class="pc-flag" data-i18n="tag.recommended">Recommended</span>{% endif %}
         <div class="pc-img"><img src="{{ c.img }}" alt="" loading="lazy"/></div>
         <div class="pc-in">
           <span class="pc-cat" data-i18n="cat.{{ c.cat }}.label">{% for cc in courses.cats %}{% if cc.key == c.cat %}{{ cc.label.en }}{% endif %}{% endfor %}</span>
           <h3 class="pc-name" data-i18n="course.{{ c.id }}.name">{{ c.name.en }}</h3>
-          {% if showPrice %}
-          <p class="pc-price">&yen;{{ yen(p) }}<small>&yen;{{ yen((p * 1.1) | round(0,"floor") | int) }} <span data-i18n="course.incl">incl. tax</span></small></p>
-          {% endif %}
+          {% if showPrice %}<p class="pc-price">&yen;{{ yen(p) }}<small>&yen;{{ yen((p * 1.1) | round(0,"floor") | int) }} <span data-i18n="course.incl">incl. tax</span></small></p>{% endif %}
           <p class="pc-lead" data-i18n="course.{{ c.id }}.lead">{{ c.lead.en }}</p>
           <ul class="pc-list">
-            {% for r in c.rows %}{% if loop.index0 == 2 or loop.index0 == 3 or loop.index0 == 5 %}
-            <li data-i18n="course.{{ c.id }}.r{{ loop.index0 }}.t">{{ r.text.en }}</li>
-            {% endif %}{% endfor %}
+            {% for r in c.rows %}{% if loop.index0 == 2 or loop.index0 == 3 or loop.index0 == 4 %}<li>{{ r }}</li>{% endif %}{% endfor %}
           </ul>
-          <button class="pc-btn" onclick="openReserve('course_{{ c.id }}','{{ c.id }}')" data-i18n="cs.btn">Reserve this course</button>
-          <button class="pc-more" onclick="document.getElementById('cmp').scrollIntoView({behavior:'smooth'})" data-i18n="cs.more">See the full comparison</button>
+          <button class="pc-btn" onclick="openReserve('course_{{ c.id }}','{{ c.id }}')" data-i18n="course.reserve">Reserve this course</button>
         </div>
       </div>
       {% endif %}{% endfor %}{% endfor %}
@@ -351,146 +423,132 @@ footer a{color:rgba(244,239,229,.75);}
 
     <div class="tbl-scroll reveal" id="cmp">
       <table class="cmp">
-        <thead>
-          <tr>
-            <th></th>
-            {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}
-            <th data-i18n="course.{{ c.id }}.name">{{ c.name.en }}</th>
-            {% endif %}{% endfor %}{% endfor %}
-          </tr>
-        </thead>
+        <thead><tr><th></th>
+          {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}<th data-i18n="course.{{ c.id }}.name">{{ c.name.en }}</th>{% endif %}{% endfor %}{% endfor %}
+        </tr></thead>
         <tbody>
-          <tr><th data-i18n="cmp.nigiri">Nigiri</th><td>3</td><td class="hi">5</td><td class="hi">5 + crab</td></tr>
-          <tr><th data-i18n="cmp.steak">Steak</th><td>50g</td><td class="hi">100g</td><td class="hi">100g Kobe</td></tr>
-          <tr><th data-i18n="cmp.beef">Beef grade</th><td data-i18n="cmp.wagyu">Wagyu</td><td data-i18n="cmp.wagyu2">Wagyu</td><td class="hi" data-i18n="cmp.kobe">Certified Kobe</td></tr>
-          <tr><th data-i18n="cmp.extra">Sea urchin</th><td>—</td><td>—</td><td class="hi" data-i18n="cmp.yes">Hand roll</td></tr>
-          <tr><th data-i18n="cmp.book">Booking</th><td class="hi" data-i18n="cmp.webonly">Online only</td><td data-i18n="cmp.any">Any time</td><td data-i18n="cmp.any2">Any time</td></tr>
+          {% if store.theme == "wagyu" %}
+          <tr><th data-i18n="cmp.steak">Fillet steak</th><td>50g</td><td class="hi">100g</td><td class="hi">100g Kobe Beef</td></tr>
+          <tr><th data-i18n="cmp.sukiyaki">Sukiyaki</th><td>Wagyu</td><td>Wagyu</td><td class="hi">Kobe Beef</td></tr>
+          <tr><th data-i18n="cmp.beef">Beef</th><td>Wagyu</td><td>Wagyu</td><td class="hi">Kobe Beef</td></tr>
+          <tr><th data-i18n="cmp.nigiri">Nigiri</th><td>3</td><td>&mdash;</td><td>&mdash;</td></tr>
+          {% else %}
+          <tr><th data-i18n="cmp.nigiri">Nigiri</th><td>3</td><td class="hi">10</td><td class="hi">10</td></tr>
+          <tr><th data-i18n="cmp.roll">Hand roll</th><td>Salmon &amp; Ikura</td><td>Salmon &amp; Ikura</td><td class="hi">Sea Urchin</td></tr>
+          <tr><th data-i18n="cmp.extra">Sea urchin &amp; crab</th><td>&mdash;</td><td>&mdash;</td><td class="hi">&#10003;</td></tr>
+          <tr><th data-i18n="cmp.steak">Fillet steak</th><td>50g</td><td>&mdash;</td><td>&mdash;</td></tr>
+          {% endif %}
+          <tr><th data-i18n="cmp.book">Booking</th><td class="hi" data-i18n="tag.web">Web exclusive</td><td>&mdash;</td><td>&mdash;</td></tr>
           {% if showPrice %}
           <tr><th data-i18n="cmp.price">Price</th>
-            {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}
-            {% set p = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}
-            <td>&yen;{{ yen(p) }}</td>
-            {% endif %}{% endfor %}{% endfor %}
-          </tr>
-          {% endif %}
+            {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}{% set p = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}<td>&yen;{{ yen(p) }}</td>{% endif %}{% endfor %}{% endfor %}
+          </tr>{% endif %}
         </tbody>
       </table>
     </div>
 
-    <p class="lead center reveal" style="margin-top:22px;font-size:12.5px;" data-i18n="cs.foot">Sushi-only and wagyu-only courses are also available. Choose them in the reservation form.</p>
+    <div class="center reveal">
+      <p class="lead" style="font-size:12.5px;" data-i18n="menu.season">* Ingredients may vary depending on the season.</p>
+      <a class="cbtn" href="#faq" style="margin-top:8px;">{{ circ() }}<span class="lbl" data-i18n="ui.viewMore">View more</span></a>
+    </div>
   </div>
 </section>
 
-<!-- ============ REVIEWS ============ -->
-<section class="pad">
+<!-- ================= VOICES ================= -->
+<section class="pad" id="voices">
   <div class="wrap">
     <div class="center reveal" style="max-width:620px;margin-inline:auto;">
-      <span class="eyebrow" data-i18n="rev.eye">Guest reviews</span>
-      <h2 class="sh" data-i18n="rev.h">What people say after the last piece</h2>
+      <span class="eyebrow" data-i18n="voices.label">Guest Voices</span>
+      <h2 class="sh" data-i18n="voices.h">From Around the World</h2>
+      <p class="lead" data-i18n="voices.p">A selection of impressions shared by our guests.</p>
     </div>
     <div class="rev-wrap reveal">
-      <div class="rev">
-        <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span>
-        <p data-i18n="rev.1">Beautifully presented wagyu, thoughtfully served. The Muslim-friendly menu meant my family from Dubai could enjoy the whole course. We felt at home.</p>
-        <cite>Ahmed K. — Dubai</cite>
-      </div>
-      <div class="rev">
-        <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span>
-        <p data-i18n="rev.2">Watching the chef carve the wagyu was half the meal. The quality of the beef is on another level — worth every yen.</p>
-        <cite>Jennifer M. — New York</cite>
-      </div>
-      <div class="rev">
-        <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span>
-        <p data-i18n="rev.3">As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail really showed.</p>
-        <cite>Farah S. — Kuala Lumpur</cite>
-      </div>
-      <div class="rev">
-        <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span>
-        <p data-i18n="rev.4">真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。</p>
-        <cite>Lin H. — Hong Kong</cite>
-      </div>
+      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span>
+        <p>Beautifully presented Wagyu, thoughtfully served. The Muslim-friendly menu meant my family from Dubai could fully enjoy the experience. Truly felt at home.</p><cite>Ahmed K. &mdash; Dubai, UAE</cite></div>
+      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span>
+        <p>The course was theatrical — watching the chef carve the wagyu felt like a performance. The quality of the beef is on another level. Worth every yen.</p><cite>Jennifer M. &mdash; New York, USA</cite></div>
+      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span>
+        <p>真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。</p><cite>Lin H. &mdash; Hong Kong</cite></div>
+      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span>
+        <p>As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail and respect for our needs really showed. The wagyu itself was sublime.</p><cite>Farah S. &mdash; Kuala Lumpur</cite></div>
     </div>
     <div class="score reveal">
-      <div class="center"><b>{{ store.rating }}</b><span>Google · {{ store.rating_count }} reviews</span></div>
-      <div class="center"><b>No.1</b><span data-i18n="score.tripadvisor">Tripadvisor Tokyo &#183; flagship</span></div>
+      <div class="center"><b>{{ store.rating }}</b><span>Google &middot; {{ store.rating_count }} <span data-i18n="ui.reviews">reviews</span></span></div>
+      <div class="center"><b>No.1</b><span data-i18n="voices.tripadvisor">Tripadvisor Tokyo &middot; Aug 2025 — Mar 2026 (flagship)</span></div>
     </div>
   </div>
 </section>
 
-<!-- ============ STEPS ============ -->
-<section class="pad" style="background:var(--paper-3);">
-  <div class="wrap">
-    <div class="center reveal" style="max-width:620px;margin-inline:auto;">
-      <span class="eyebrow" data-i18n="st.eye">How booking works</span>
-      <h2 class="sh" data-i18n="st.h">Three steps, about a minute</h2>
-    </div>
-    <div class="steps reveal">
-      <div class="step"><b>01</b><h4 data-i18n="st.h1">Send your request</h4><p data-i18n="st.p1">Pick a date, time, party size and course. No card details, no account.</p></div>
-      <div class="step"><b>02</b><h4 data-i18n="st.h2">We confirm the counter</h4><p data-i18n="st.p2">You get a confirmation email once your seats are held — usually within a few hours.</p></div>
-      <div class="step"><b>03</b><h4 data-i18n="st.h3">Just arrive</h4><p data-i18n="st.p3">Pay at the restaurant. Cancel free of charge up to 48 hours before.</p></div>
-    </div>
-    <div class="center" style="margin-top:32px;">
-      <button class="cta-lg" onclick="openReserve('steps')">
-        <strong data-i18n="cta.main">Check available seats</strong>
-        <span data-i18n="cta.mainSub">Takes about 60 seconds · no payment now</span>
-      </button>
+<!-- ================= MUSLIM-FRIENDLY ================= -->
+<section class="pad" style="background:var(--paper-3);" id="halal">
+  <div class="narrow center reveal">
+    <span class="eyebrow" data-i18n="halal.label">Muslim-Friendly Dining</span>
+    <h2 class="sh" data-i18n="halal.h">A Muslim-Friendly Dining Experience in {{ store.city.split(',')[0] }}</h2>
+    <p class="lead" data-i18n="halal.p1">Welcome to our restaurant — a warm, inclusive space where guests from all cultures can dine with peace of mind.</p>
+    <p class="lead" data-i18n="halal.p2">Please feel free to share any dietary preferences or restrictions when making your reservation — we will do our best to accommodate.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px;">
+      <span class="chip" data-i18n="badge.nopork">No pork</span>
+      <span class="chip" data-i18n="badge.noalc">No alcohol in food</span>
+      <span class="chip" data-i18n="badge.mf">Muslim-friendly</span>
     </div>
   </div>
 </section>
 
-<!-- ============ FAQ ============ -->
-<section class="pad">
+<!-- ================= FAQ ================= -->
+<section class="pad" id="faq">
   <div class="narrow">
     <div class="center reveal">
-      <span class="eyebrow" data-i18n="faq.eye">Questions</span>
-      <h2 class="sh" data-i18n="faq.h">Before you book</h2>
+      <span class="eyebrow">FAQ</span>
+      <h2 class="sh" data-i18n="faq.h">Before you reserve</h2>
     </div>
     <div class="faq reveal">
-      <details><summary data-i18n="faq.q1">Is the restaurant halal certified?</summary><p data-i18n="faq.a1">We describe ourselves as Muslim-friendly rather than certified. No pork or lard is used anywhere in the kitchen, and alcohol — including mirin and cooking sake — is replaced in every dish, sauce and dessert. If you have a specific requirement, tell us in the reservation notes and we will answer honestly before you come.</p></details>
-      <details><summary data-i18n="faq.q2">Can you handle allergies?</summary><p data-i18n="faq.a2">Yes, in most cases. Write the allergy in the request form and the chef will adjust the course. For severe shellfish or sesame allergies please also call us, since the counter handles these ingredients constantly.</p></details>
-      <details><summary data-i18n="faq.q3">How long does the course take?</summary><p data-i18n="faq.a3">About seventy minutes for eight dishes. Arriving on time matters — the course is served in sequence and the counter turns over between seatings.</p></details>
-      <details><summary data-i18n="faq.q4">Can I book for today?</summary><p data-i18n="faq.a4">{% if store.same_day_reserve %}Same-day requests are accepted online for slots that have not started yet. If the form shows nothing available, call us and we will check the counter directly.{% else %}Same-day bookings are taken by phone only. Please call the restaurant and we will check the counter for you.{% endif %}</p></details>
-      <details><summary data-i18n="faq.q5">What if my plans change?</summary><p data-i18n="faq.a5">Cancel free of charge up to 48 hours before. Within 48 hours the fee is ¥5,000 per person, and within 24 hours ¥10,000 per person. Reply to your confirmation email to change the date instead.</p></details>
-      <details><summary data-i18n="faq.q6">Is there a prayer space?</summary><p data-i18n="faq.a6">We can arrange a quiet space on request, and time your seating around prayer. Mention it in the reservation notes.</p></details>
+      <details><summary data-i18n="faq.q1">Is the food Muslim-friendly?</summary><p data-i18n="halal.p1">We thoughtfully prepare pork-free, alcohol-free dishes.</p></details>
+      <details><summary data-i18n="faq.q2">Can you accommodate dietary restrictions?</summary><p data-i18n="halal.p2">Please feel free to share any dietary preferences or restrictions when making your reservation.</p></details>
+      <details><summary data-i18n="faq.q3">How far in advance should I book?</summary><p data-i18n="reserve.p">Reservations recommended 2 weeks in advance. Walk-ins welcome subject to availability.</p></details>
+      <details><summary data-i18n="faq.q4">What is the cancellation policy?</summary><p><span data-i18n="rv.cx48">Within 48 hours: &yen;5,000 / person</span><br/><span data-i18n="rv.cx24">Within 24 hours: &yen;10,000 / person</span></p></details>
+      <details><summary data-i18n="faq.q5">Do the courses change?</summary><p data-i18n="menu.season">* Ingredients may vary depending on the season.</p></details>
     </div>
   </div>
 </section>
 
-<!-- ============ ACCESS ============ -->
+<!-- ================= ACCESS ================= -->
 <section class="pad" style="background:var(--paper-3);" id="access">
   <div class="wrap">
     <div class="center reveal" style="max-width:620px;margin-inline:auto;">
-      <span class="eyebrow" data-i18n="ac.eye">Getting here</span>
-      <h2 class="sh">{{ store.region_label }}</h2>
+      <span class="eyebrow" data-i18n="access.label">Access</span>
+      <h2 class="sh" data-i18n="access.h">Find Us</h2>
     </div>
     <div class="acc reveal">
       <div>
         <dl class="dl">
-          <div><dt data-i18n="ac.addr">Address</dt><dd>&#12306;{{ store.address_postal }}<br/>{{ store.address_en_line1 }}<br/><span style="color:var(--sumi-3);">{{ store.address_jp_line1 }}</span></dd></div>
-          <div><dt data-i18n="ac.hours">Hours</dt><dd>{{ store.hours }} <span style="color:var(--sumi-3);" data-i18n="ac.hoursNote">(open daily)</span></dd></div>
-          {% if store.tel_display != 'TBD' %}<div><dt data-i18n="ac.tel">Tel</dt><dd><a href="tel:{{ store.tel_raw }}" data-ga-event="tel_click" data-ga-location="access">{{ store.tel_display }}</a></dd></div>{% endif %}
-          <div><dt data-i18n="ac.train">Stations</dt><dd>{% for s in store.stations %}{{ s.name }} — {{ s.min }} min{% if not loop.last %}<br/>{% endif %}{% endfor %}</dd></div>
+          <div><dt data-i18n="access.name">Restaurant</dt><dd>{{ store.name_full_en }}</dd></div>
+          <div><dt data-i18n="access.addr">Address</dt><dd>&#12306;{{ store.address_postal }}<br/>{{ store.address_en_line1 }}<br/><span style="color:var(--sumi-3);">{{ store.address_jp_line1 }}</span></dd></div>
+          <div><dt data-i18n="access.hours">Hours</dt><dd>{{ store.hours }}</dd></div>
+          {% if store.tel_display != 'TBD' %}<div><dt data-i18n="access.tel">Tel</dt><dd><a href="tel:{{ store.tel_raw }}" data-ga-event="tel_click" data-ga-location="access">{{ store.tel_display }}</a></dd></div>{% endif %}
+          <div><dt data-i18n="access.stations">Nearest station</dt><dd>{% for s in store.stations %}{{ s.name }} &mdash; {{ s.min }} <span data-i18n="access.min">min</span>{% if not loop.last %}<br/>{% endif %}{% endfor %}</dd></div>
         </dl>
-        <a class="pc-btn" style="display:block;text-align:center;margin-top:20px;" href="{{ store.maps_link }}" target="_blank" rel="noopener" data-ga-event="maps_click" data-i18n="ac.maps">Open in Google Maps</a>
+        {% if store.maps_link != 'TBD' %}
+        <a class="cbtn" href="{{ store.maps_link }}" target="_blank" rel="noopener" data-ga-event="directions_click" data-ga-location="access">{{ circ() }}<span class="lbl" data-i18n="access.maps">Open in Google Maps</span></a>
+        {% endif %}
       </div>
       <div class="mapbox"><iframe src="{{ store.maps_embed }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map"></iframe></div>
     </div>
   </div>
 </section>
 
-<!-- ============ FINAL ============ -->
+<!-- ================= FINAL ================= -->
 <section class="pad final" id="reserve">
   <div class="narrow center reveal">
-    <span class="eyebrow" style="color:#e7c98c;" data-i18n="fin.eye">Reservation</span>
-    <h2 class="sh" data-i18n="fin.h">The counter seats {{ store.max_guests }}</h2>
-    <p class="lead" data-i18n="fin.p">Send your date and we will confirm by email. No payment now, and free cancellation up to 48 hours before.</p>
-    <div style="margin-top:28px;">
-      <button class="cta-lg" onclick="openReserve('final')">
-        <strong data-i18n="cta.main">Check available seats</strong>
-        <span data-i18n="cta.mainSub">Takes about 60 seconds · no payment now</span>
+    <span class="eyebrow" style="color:#e7c98c;" data-i18n="reserve.label">Reserve</span>
+    <h2 class="sh" data-i18n="reserve.h">Begin Your Experience</h2>
+    <p class="lead" data-i18n="reserve.p">Reservations recommended 2 weeks in advance. Walk-ins welcome subject to availability.</p>
+    <p class="ft-name" style="margin-top:18px;color:#e7c98c;">{{ store.name_full_en }}</p>
+    <div style="margin-top:24px;">
+      <button class="cta-lg" onclick="openReserve('reservation_section')" data-ga-event="reserve_click" data-ga-location="reservation_section">
+        <strong data-i18n="{% if store.reserve_system == 'form' %}reserve.btn{{ store.theme | capitalize }}{% else %}reserve.btnTc{% endif %}">{% if store.reserve_system == 'form' %}Reserve Your Omakase{% else %}Reserve on TableCheck{% endif %}</strong>
       </button>
       {% if store.tel_display != 'TBD' %}
-      <p class="cta-sub"><span data-i18n="fin.tel">Same-day or a large party?</span> <a href="tel:{{ store.tel_raw }}" style="color:#e7c98c;">{{ store.tel_display }}</a></p>
+      <p class="cta-sub"><span data-i18n="reserve.tel">Prefer to call?</span> <a href="tel:{{ store.tel_raw }}" style="color:#e7c98c;" data-ga-event="tel_click" data-ga-location="reservation_section">{{ store.tel_display }}</a></p>
       {% endif %}
     </div>
   </div>
@@ -498,302 +556,164 @@ footer a{color:rgba(244,239,229,.75);}
 
 <footer>
   <div class="wrap">
-    <p>{{ store.name_full_en }}<br/>{{ store.address_en_line1 }}{% if store.tel_display != 'TBD' %} · <a href="tel:{{ store.tel_raw }}">{{ store.tel_display }}</a>{% endif %}</p>
-    <p style="margin-top:14px;opacity:.6;">&copy; {{ stores.brand.brand_name }}</p>
+    <div class="ft-grid">
+      <div>
+        <span class="seal ft-seal" aria-hidden="true" style="width:58px;height:58px;font-size:15px;">和牛</span>
+        <p class="ft-small">Omakase</p>
+        <p class="ft-name">{{ store.name_full_en }}</p>
+        <p class="ft-addr">
+          &#12306;{{ store.address_postal }}<br/>{{ store.address_en_line1 }}<br/>
+          {{ store.hours }}{% if store.tel_display != 'TBD' %}<br/><a href="tel:{{ store.tel_raw }}">{{ store.tel_display }}</a>{% endif %}<br/>
+          <span style="opacity:.7;">&copy; {{ stores.brand.brand_name }} all rights reserved.</span>
+        </p>
+      </div>
+      <nav class="ft-nav">
+        <a href="#courses" data-i18n="nav.menu">Menu</a>
+        <a href="#interior" data-i18n="nav.interior">Interior</a>
+        <a href="#voices" data-i18n="voices.label">Guest Voices</a>
+        <a href="#halal" data-i18n="nav.halal">Muslim-Friendly</a>
+        <a href="#faq">FAQ</a>
+        <a href="#access" data-i18n="nav.access">Access</a>
+        <a href="#reserve" data-i18n="nav.reserve">Reserve</a>
+      </nav>
+    </div>
+    <div class="ft-bar">
+      <span>{{ store.region_label }}</span>
+      <span>{% for l in ui.langs %}{% if not loop.first %} / {% endif %}<a href="#" data-lang-btn="{{ l.code }}">{{ l.short }}</a>{% endfor %}</span>
+    </div>
   </div>
 </footer>
 
 <div class="sticky" id="sticky">
   <div class="sticky-t">
-    <b data-i18n="sticky.t">Counter seats, {{ store.hours }}</b>
-    <span data-i18n="sticky.s">Free cancellation up to 48h before</span>
+    <b>{{ store.name_full_en }}</b>
+    <span>{{ store.hours }} &middot; {{ store.station_en }}</span>
   </div>
-  <button class="sticky-b" onclick="openReserve('sticky')" data-i18n="sticky.b">Reserve</button>
-</div>
-
-<div class="exit" id="exit">
-  <div class="exit-in">
-    <button class="exit-x" onclick="closeExit()" aria-label="Close">&#215;</button>
-    <span class="seal" data-i18n="exit.seal">残席<br/>あり</span>
-    <h3 style="font-family:var(--disp);font-weight:600;font-size:19px;margin:16px 0 10px;" data-i18n="exit.h">Still deciding?</h3>
-    <p style="font-size:13px;line-height:1.9;color:var(--sumi-2);" data-i18n="exit.p">Sending a request does not commit you to anything. There is no payment, and you can cancel free of charge up to 48 hours before.</p>
-    <button class="cta-lg" style="margin-top:20px;" onclick="closeExit();openReserve('exit_intent');">
-      <strong data-i18n="cta.main">Check available seats</strong>
-      <span data-i18n="cta.mainSub">Takes about 60 seconds · no payment now</span>
-    </button>
-  </div>
+  <button class="sticky-b" onclick="openReserve('sticky')" data-i18n="nav.reserve" data-ga-event="reserve_click" data-ga-location="sticky">Reserve</button>
 </div>
 
 <script>
 document.documentElement.classList.remove('no-js');
 
-window.I18N = {
- en:{
-  "brand.sub":"Wagyu &amp; Sushi","nav.reserve":"Reserve",
-  "strip":"Counter seats only &#183; <b>Free cancellation up to 48 hours before</b> &#183; No payment online",
-  "hero.badge":"Seats open this week",
-  "hero.h":"Wagyu <em>and</em> Edomae sushi,<br/>at the same counter.",
-  "hero.p":"Muslim-friendly omakase — no pork, no alcohol, not even in the sauces. Eight dishes in about seventy minutes, {{ store.station_en }} nearby.",
-  "chip.halal":"Halal-conscious kitchen","chip.lang":"English &amp; Chinese","chip.walk":"{{ store.stations[0].min }} min from {{ store.station_en }}",
-  "cta.main":"Check available seats","cta.mainSub":"Takes about 60 seconds · no payment now",
-  "cta.underHero":"We reply by email once the counter is confirmed.",
-  "why.eye":"Why guests book here","why.h":"Three things you will not find together anywhere else",
-  "why.s1":"寿司<br/>和牛","why.h1":"Both, in one sitting",
-  "why.p1":"Nigiri shaped on the board and wagyu finished on the iron plate, served as one continuous course. Nobody at the table has to compromise.",
-  "why.s2":"無<br/>酒精","why.h2":"Alcohol-free throughout",
-  "why.p2":"Mirin and cooking sake are replaced in every dish, marinade and sauce. No pork, no lard. You will not need to ask about a single plate.",
-  "why.s3":"対面<br/>調理","why.h3":"Cooked in front of you",
-  "why.p3":"Counter seating only, {{ store.max_guests }} places. The chef hands each piece over directly and answers in English or Chinese.",
-  "cs.eye":"Choose your course","cs.h":"Three ways in",
-  "cs.p":"Every course runs eight dishes over about seventy minutes. Pick one now — you can change it later by replying to your confirmation email.",
-  "cs.btn":"Reserve this course","cs.more":"See the full comparison",
-  "cs.foot":"Sushi-only and wagyu-only courses are also available. Choose them in the reservation form.",
-  "flag.web":"Web only","course.incl":"incl. tax",
-  "cmp.nigiri":"Nigiri","cmp.steak":"Steak","cmp.beef":"Beef grade","cmp.wagyu":"Wagyu","cmp.wagyu2":"Wagyu",
-  "cmp.kobe":"Certified Kobe","cmp.extra":"Sea urchin","cmp.yes":"Hand roll","cmp.book":"Booking",
-  "cmp.webonly":"Online only","cmp.any":"Any time","cmp.any2":"Any time","cmp.price":"Price",
-  "rev.eye":"Guest reviews","rev.h":"What people say after the last piece",
-  "rev.1":"Beautifully presented wagyu, thoughtfully served. The Muslim-friendly menu meant my family from Dubai could enjoy the whole course. We felt at home.",
-  "rev.2":"Watching the chef carve the wagyu was half the meal. The quality of the beef is on another level — worth every yen.",
-  "rev.3":"As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail really showed.",
-  "rev.4":"真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。",
-  "score.tripadvisor":"Tripadvisor Tokyo &#183; flagship",
-  "st.eye":"How booking works","st.h":"Three steps, about a minute",
-  "st.h1":"Send your request","st.p1":"Pick a date, time, party size and course. No card details, no account.",
-  "st.h2":"We confirm the counter","st.p2":"You get a confirmation email once your seats are held — usually within a few hours.",
-  "st.h3":"Just arrive","st.p3":"Pay at the restaurant. Cancel free of charge up to 48 hours before.",
-  "faq.eye":"Questions","faq.h":"Before you book",
-  "faq.q1":"Is the restaurant halal certified?",
-  "faq.a1":"We describe ourselves as Muslim-friendly rather than certified. No pork or lard is used anywhere in the kitchen, and alcohol — including mirin and cooking sake — is replaced in every dish, sauce and dessert. If you have a specific requirement, tell us in the reservation notes and we will answer honestly before you come.",
-  "faq.q2":"Can you handle allergies?",
-  "faq.a2":"Yes, in most cases. Write the allergy in the request form and the chef will adjust the course. For severe shellfish or sesame allergies please also call us, since the counter handles these ingredients constantly.",
-  "faq.q3":"How long does the course take?",
-  "faq.a3":"About seventy minutes for eight dishes. Arriving on time matters — the course is served in sequence and the counter turns over between seatings.",
-  "faq.q4":"Can I book for today?",
-  "faq.a4":"{% if store.same_day_reserve %}Same-day requests are accepted online for slots that have not started yet. If the form shows nothing available, call us and we will check the counter directly.{% else %}Same-day bookings are taken by phone only. Please call the restaurant and we will check the counter for you.{% endif %}",
-  "faq.q5":"What if my plans change?",
-  "faq.a5":"Cancel free of charge up to 48 hours before. Within 48 hours the fee is ¥5,000 per person, and within 24 hours ¥10,000 per person. Reply to your confirmation email to change the date instead.",
-  "faq.q6":"Is there a prayer space?",
-  "faq.a6":"We can arrange a quiet space on request, and time your seating around prayer. Mention it in the reservation notes.",
-  "ac.eye":"Getting here","ac.addr":"Address","ac.hours":"Hours","ac.hoursNote":"(open daily)","ac.tel":"Tel","ac.train":"Stations","ac.maps":"Open in Google Maps",
-  "fin.eye":"Reservation","fin.h":"The counter seats {{ store.max_guests }}",
-  "fin.p":"Send your date and we will confirm by email. No payment now, and free cancellation up to 48 hours before.",
-  "fin.tel":"Same-day or a large party?",
-  "sticky.t":"Counter seats, {{ store.hours }}","sticky.s":"Free cancellation up to 48h before","sticky.b":"Reserve",
-  "exit.seal":"残席<br/>あり","exit.h":"Still deciding?",
-  "exit.p":"Sending a request does not commit you to anything. There is no payment, and you can cancel free of charge up to 48 hours before."
- },
- ja:{
-  "brand.sub":"和牛と寿司","nav.reserve":"予約する",
-  "strip":"カウンター席のみ &#183; <b>48時間前まで無料キャンセル</b> &#183; 事前決済なし",
-  "hero.badge":"今週の空席あり",
-  "hero.h":"和牛<em>と</em>江戸前寿司を、<br/>ひとつのカウンターで。",
-  "hero.p":"ムスリムフレンドリーの omakase。豚もアルコールも、タレにいたるまで一切使いません。八品を約70分、{{ store.station_en }}すぐ。",
-  "chip.halal":"ハラル配慮の厨房","chip.lang":"英語・中国語対応","chip.walk":"{{ store.station_en }}から徒歩{{ store.stations[0].min }}分",
-  "cta.main":"空席を確認する","cta.mainSub":"入力は約60秒・事前決済なし",
-  "cta.underHero":"カウンターを確保でき次第、メールでご連絡します。",
-  "why.eye":"選ばれている理由","why.h":"この三つが揃う店は、ほとんどありません",
-  "why.s1":"寿司<br/>和牛","why.h1":"寿司も和牛も、一席で",
-  "why.p1":"まな板で握る寿司と、鉄板で焼き上げる和牛を、ひと続きのコースで。誰かが我慢する必要がありません。",
-  "why.s2":"無<br/>酒精","why.h2":"全品ノンアルコール",
-  "why.p2":"みりん・料理酒はすべて代替品に。漬け込みにもタレにも使いません。豚・ラードも不使用です。一皿ずつ確認する必要はありません。",
-  "why.s3":"対面<br/>調理","why.h3":"目の前で焼き、握る",
-  "why.p3":"カウンター{{ store.max_guests }}席のみ。板前が直接お渡しし、英語・中国語でお答えします。",
-  "cs.eye":"コースを選ぶ","cs.h":"三つの入口",
-  "cs.p":"いずれも八品・約70分。まずは一つお選びください。確認メールへの返信で後から変更できます。",
-  "cs.btn":"このコースで予約する","cs.more":"比較表を見る",
-  "cs.foot":"寿司のみ・和牛のみのコースもございます。予約フォームからお選びいただけます。",
-  "flag.web":"Web限定","course.incl":"税込",
-  "cmp.nigiri":"握り","cmp.steak":"ステーキ","cmp.beef":"牛の等級","cmp.wagyu":"和牛","cmp.wagyu2":"和牛",
-  "cmp.kobe":"認証神戸牛","cmp.extra":"雲丹","cmp.yes":"手巻あり","cmp.book":"予約方法",
-  "cmp.webonly":"Web予約のみ","cmp.any":"随時","cmp.any2":"随時","cmp.price":"価格",
-  "rev.eye":"お客様の声","rev.h":"最後の一貫のあとに、いただいた言葉",
-  "rev.1":"美しく供された和牛と、細やかな心配り。ムスリムフレンドリーのお品書きのおかげで、ドバイから来た家族全員がコースを楽しめました。",
-  "rev.2":"板前が和牛を切り分けるのを見ているだけで、もう食事の半分。肉の質が別次元でした。",
-  "rev.3":"ムスリムとして、日本で本格的なムスリムフレンドリーの omakase に出会えたのは夢のようでした。食事制限への配慮が細部まで行き届いていました。",
-  "rev.4":"真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。",
-  "score.tripadvisor":"Tripadvisor 東京 &#183; 旗艦店",
-  "st.eye":"ご予約の流れ","st.h":"三ステップ・約1分",
-  "st.h1":"リクエストを送る","st.p1":"日付・時間・人数・コースを選ぶだけ。カード情報も会員登録も不要です。",
-  "st.h2":"店舗が席を確保","st.p2":"席を確保でき次第、確認メールをお送りします（通常数時間以内）。",
-  "st.h3":"当日ご来店","st.p3":"お支払いは店頭で。48時間前まで無料でキャンセルいただけます。",
-  "faq.eye":"よくあるご質問","faq.h":"ご予約の前に",
-  "faq.q1":"ハラル認証は取得していますか",
-  "faq.a1":"認証店ではなく「ムスリムフレンドリー」としてご案内しています。厨房で豚・ラードは一切使用せず、みりんや料理酒を含むアルコールは、料理・タレ・甘味のすべてで代替品に置き換えています。個別のご要望があれば、ご来店前に正直にお答えします。",
-  "faq.q2":"アレルギーには対応できますか",
-  "faq.a2":"多くの場合対応いたします。予約フォームにご記入いただければ、板前が献立を調整します。甲殻類・ごまの重度のアレルギーの場合は、カウンターで常時扱う食材のため、お電話でもご相談ください。",
-  "faq.q3":"食事にかかる時間は",
-  "faq.a3":"八品で約70分です。順に供するコースのため、また席の入れ替えがあるため、時間どおりのご来店にご協力ください。",
-  "faq.q4":"当日でも予約できますか",
-  "faq.a4":"{% if store.same_day_reserve %}まだ開始していない時間枠であれば、当日もオンラインで承ります。フォームに空きが出ない場合はお電話ください。カウンターの状況を直接お調べします。{% else %}当日のご予約はお電話のみで承っております。店舗までお電話いただければ、カウンターの状況をお調べします。{% endif %}",
-  "faq.q5":"予定が変わった場合は",
-  "faq.a5":"48時間前まで無料でキャンセルいただけます。48時間前以内は1名様 ¥5,000、24時間前以内は1名様 ¥10,000を頂戴します。日程変更をご希望の場合は、確認メールへご返信ください。",
-  "faq.q6":"礼拝スペースはありますか",
-  "faq.a6":"ご相談に応じて静かなスペースをご用意できます。礼拝の時間に合わせた席のご用意も可能です。ご予約の備考欄にお書き添えください。",
-  "ac.eye":"アクセス","ac.addr":"住所","ac.hours":"営業時間","ac.hoursNote":"（年中無休）","ac.tel":"電話","ac.train":"最寄駅","ac.maps":"Googleマップで開く",
-  "fin.eye":"ご予約","fin.h":"カウンターは{{ store.max_guests }}席です",
-  "fin.p":"ご希望日をお送りください。メールで確定のご連絡をいたします。事前決済はなく、48時間前まで無料でキャンセルいただけます。",
-  "fin.tel":"当日・大人数のご相談は",
-  "sticky.t":"カウンター席 {{ store.hours }}","sticky.s":"48時間前まで無料キャンセル","sticky.b":"予約する",
-  "exit.seal":"残席<br/>あり","exit.h":"迷われていますか",
-  "exit.p":"リクエストの送信で確定するわけではありません。事前決済はなく、48時間前まで無料でキャンセルいただけます。"
- },
- zh:{
-  "brand.sub":"和牛与寿司","nav.reserve":"预约",
-  "strip":"仅设吧台席 &#183; <b>用餐前48小时免费取消</b> &#183; 无需线上付款",
-  "hero.badge":"本周尚有空席",
-  "hero.h":"和牛<em>与</em>江户前寿司，<br/>同一张吧台。",
-  "hero.p":"穆斯林友善的 omakase。不使用猪肉与酒精，连酱汁也不例外。八道料理约70分钟，{{ store.station_en }}近在咫尺。",
-  "chip.halal":"清真友善厨房","chip.lang":"中英文服务","chip.walk":"距{{ store.station_en }}步行{{ store.stations[0].min }}分钟",
-  "cta.main":"查看可预约时段","cta.mainSub":"填写约60秒・无需预先付款",
-  "cta.underHero":"确认吧台座位后，我们会以邮件通知您。",
-  "why.eye":"选择这里的理由","why.h":"三者兼备的店，并不多见",
-  "why.s1":"寿司<br/>和牛","why.h1":"一席之间，两者兼得",
-  "why.p1":"案板上手捏的握寿司，与铁板上完成的和牛，串成一套连续套餐。同桌无人需要将就。",
-  "why.s2":"無<br/>酒精","why.h2":"全程不含酒精",
-  "why.p2":"味醂与料理酒全数以替代品取代，醃料与酱汁亦然。不使用猪肉与猪油。您无需逐盘询问。",
-  "why.s3":"對面<br/>調理","why.h3":"在您眼前烹调",
-  "why.p3":"仅设吧台{{ store.max_guests }}席。师傅亲手递上，并以英语或中文作答。",
-  "cs.eye":"选择套餐","cs.h":"三种入口",
-  "cs.p":"每套皆为八道、约70分钟。请先选一套，之后回覆确认邮件即可更改。",
-  "cs.btn":"预约此套餐","cs.more":"查看完整比较",
-  "cs.foot":"另有纯寿司与纯和牛套餐，可于预约表单中选择。",
-  "flag.web":"网络限定","course.incl":"含税",
-  "cmp.nigiri":"握寿司","cmp.steak":"牛排","cmp.beef":"牛肉等级","cmp.wagyu":"和牛","cmp.wagyu2":"和牛",
-  "cmp.kobe":"认证神户牛","cmp.extra":"海胆","cmp.yes":"附手卷","cmp.book":"预约方式",
-  "cmp.webonly":"仅限网络","cmp.any":"不限","cmp.any2":"不限","cmp.price":"价格",
-  "rev.eye":"顾客评价","rev.h":"最后一贯之后，他们这么说",
-  "rev.1":"和牛摆盘精美、服务体贴。穆斯林友善的菜单让我从杜拜来的家人得以享用整套料理，宾至如归。",
-  "rev.2":"看师傅分切和牛已是这餐的一半享受。牛肉品质完全是另一个层次，物有所值。",
-  "rev.3":"身为穆斯林美食爱好者，能在日本找到道地的穆斯林友善 omakase 犹如美梦成真。对饮食细节的用心显而易见。",
-  "rev.4":"真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。",
-  "score.tripadvisor":"Tripadvisor 东京 &#183; 旗舰店",
-  "st.eye":"预约流程","st.h":"三个步骤，约一分钟",
-  "st.h1":"送出预约申请","st.p1":"选择日期、时间、人数与套餐。无需信用卡资料，也无需注册。",
-  "st.h2":"我们确认座位","st.p2":"座位确保后即寄出确认邮件，通常在数小时内。",
-  "st.h3":"当天前来","st.p3":"于店内付款。用餐前48小时可免费取消。",
-  "faq.eye":"常见问题","faq.h":"预约前须知",
-  "faq.q1":"是否取得清真认证？",
-  "faq.a1":"我们以「穆斯林友善」而非认证店的方式说明。厨房完全不使用猪肉与猪油，包含味醂、料理酒在内的酒精，在所有料理、酱汁与甜点中皆以替代品取代。若您有特定需求，请于备注告知，我们会在您到店前如实答覆。",
-  "faq.q2":"能配合过敏需求吗？",
-  "faq.a2":"多数情况可以。请于预约表单填写过敏项目，师傅会调整菜单。若为严重的甲壳类或芝麻过敏，请另行来电，因吧台会持续处理这些食材。",
-  "faq.q3":"用餐需要多久？",
-  "faq.a3":"八道料理约70分钟。由于依序供应且席次会轮替，敬请准时到店。",
-  "faq.q4":"可以当日预约吗？",
-  "faq.a4":"{% if store.same_day_reserve %}尚未开始的时段，当日亦可于线上预约。若表单显示无空位，请来电，我们会直接确认吧台状况。{% else %}当日预约仅接受电话受理。请致电店铺，我们会为您确认吧台状况。{% endif %}",
-  "faq.q5":"若计画有变？",
-  "faq.a5":"用餐前48小时可免费取消。48小时内每位 ¥5,000，24小时内每位 ¥10,000。若希望改期，请直接回覆确认邮件。",
-  "faq.q6":"有祈祷空间吗？",
-  "faq.a6":"可应要求安排安静的空间，也能配合祈祷时间安排入座。请于预约备注中告知。",
-  "ac.eye":"交通方式","ac.addr":"地址","ac.hours":"营业时间","ac.hoursNote":"（全年无休）","ac.tel":"电话","ac.train":"最近车站","ac.maps":"在 Google 地图开启",
-  "fin.eye":"预约","fin.h":"吧台共{{ store.max_guests }}席",
-  "fin.p":"请传送您希望的日期，我们会以邮件确认。无需预先付款，用餐前48小时可免费取消。",
-  "fin.tel":"当日或多人预约请洽",
-  "sticky.t":"吧台席 {{ store.hours }}","sticky.s":"用餐前48小时免费取消","sticky.b":"预约",
-  "exit.seal":"尚有<br/>空席","exit.h":"还在考虑吗？",
-  "exit.p":"送出申请并不代表确定。无需付款，用餐前48小时可免费取消。"
- }
-};
-
-{% for L in ["en","ja","zh"] %}
+window.I18N = {{ ui.dict | dump | safe }};
+window.LANGS = {{ ui.langs | dump | safe }};
+{% for L in courses.langs %}
 {% for cat in courses.cats %}
 window.I18N["{{ L }}"]["cat.{{ cat.key }}.label"] = {{ cat.label[L] | dump | safe }};
 {% endfor %}
+window.I18N["{{ L }}"]["course.meta"] = {{ courses.meta[L] | dump | safe }};
 {% for c in courses.list %}
 window.I18N["{{ L }}"]["course.{{ c.id }}.name"] = {{ c.name[L] | dump | safe }};
 window.I18N["{{ L }}"]["course.{{ c.id }}.opt"]  = {{ c.name[L] | dump | safe }};
 window.I18N["{{ L }}"]["course.{{ c.id }}.lead"] = {{ c.lead[L] | dump | safe }};
-{% for r in c.rows %}window.I18N["{{ L }}"]["course.{{ c.id }}.r{{ loop.index0 }}.t"] = {{ r.text[L] | dump | safe }};
-{% endfor %}
 {% endfor %}
 {% endfor %}
 
+/* このページ固有の見出し（既存コピーの範囲内で組み替えたもの） */
+var EXTRA = {
+  en:{"strip.line":"<b>Reservations recommended 2 weeks in advance.</b> Walk-ins welcome subject to availability.",
+      "faq.h":"Before you reserve","faq.q1":"Is the food Muslim-friendly?","faq.q2":"Can you accommodate dietary restrictions?",
+      "faq.q3":"How far in advance should I book?","faq.q4":"What is the cancellation policy?","faq.q5":"Do the courses change?",
+      "cmp.extra":"Sea urchin & crab","cmp.beef":"Beef","cmp.nigiri":"Nigiri","cmp.steak":"Fillet steak","cmp.sukiyaki":"Sukiyaki","cmp.roll":"Hand roll","cmp.book":"Booking","cmp.price":"Price",
+      "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"},
+  zhs:{"strip.line":"<b>建议提前两周预约。</b>现场候位视空位情况欢迎光临。",
+      "faq.h":"预约前须知","faq.q1":"料理是穆斯林友善的吗？","faq.q2":"可以配合饮食限制吗？",
+      "faq.q3":"需要提前多久预约？","faq.q4":"取消规定为何？","faq.q5":"套餐内容会变动吗？",
+      "cmp.extra":"海胆与蟹","cmp.beef":"牛肉","cmp.nigiri":"握寿司","cmp.steak":"菲力牛排","cmp.sukiyaki":"寿喜烧","cmp.roll":"手卷","cmp.book":"预约方式","cmp.price":"价格",
+      "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"},
+  zht:{"strip.line":"<b>建議提前兩週預約。</b>現場候位視空位情況歡迎光臨。",
+      "faq.h":"預約前須知","faq.q1":"料理是穆斯林友善的嗎？","faq.q2":"可以配合飲食限制嗎？",
+      "faq.q3":"需要提前多久預約？","faq.q4":"取消規定為何？","faq.q5":"套餐內容會變動嗎？",
+      "cmp.extra":"海膽與蟹","cmp.beef":"牛肉","cmp.nigiri":"握壽司","cmp.steak":"菲力牛排","cmp.sukiyaki":"壽喜燒","cmp.roll":"手卷","cmp.book":"預約方式","cmp.price":"價格",
+      "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"},
+  ko:{"strip.line":"<b>2주 전 예약을 권장합니다.</b> 워크인은 좌석 상황에 따라 안내해 드립니다.",
+      "faq.h":"예약 전 확인","faq.q1":"음식은 무슬림 프렌들리인가요?","faq.q2":"식이 제한도 배려해 주시나요?",
+      "faq.q3":"얼마나 미리 예약해야 하나요?","faq.q4":"취소 규정은 어떻게 되나요?","faq.q5":"코스 내용이 바뀌나요?",
+      "cmp.extra":"성게 & 게","cmp.beef":"소고기","cmp.nigiri":"니기리","cmp.steak":"안심 스테이크","cmp.sukiyaki":"스키야키","cmp.roll":"핸드롤","cmp.book":"예약","cmp.price":"가격",
+      "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"},
+  id:{"strip.line":"<b>Reservasi disarankan 2 minggu sebelumnya.</b> Tamu tanpa reservasi kami terima sesuai ketersediaan.",
+      "faq.h":"Sebelum Anda memesan","faq.q1":"Apakah makanannya ramah Muslim?","faq.q2":"Bisakah menyesuaikan pantangan makanan?",
+      "faq.q3":"Seberapa jauh hari sebaiknya memesan?","faq.q4":"Bagaimana kebijakan pembatalannya?","faq.q5":"Apakah isi kursus berubah?",
+      "cmp.extra":"Bulu babi & kepiting","cmp.beef":"Daging sapi","cmp.nigiri":"Nigiri","cmp.steak":"Steak fillet","cmp.sukiyaki":"Sukiyaki","cmp.roll":"Hand roll","cmp.book":"Pemesanan","cmp.price":"Harga",
+      "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"}
+};
+Object.keys(EXTRA).forEach(function(L){ Object.keys(EXTRA[L]).forEach(function(k){ window.I18N[L][k] = EXTRA[L][k]; }); });
+
+var VARS = { brand: {{ stores.brand.brand_name | dump | safe }}, city: {{ (store.city.split(',')[0]) | dump | safe }}, tel: {{ store.tel_display | dump | safe }} };
+function fill(s){ return String(s).replace(/\{brand\}/g,VARS.brand).replace(/\{city\}/g,VARS.city).replace(/\{tel\}/g,VARS.tel); }
+
 window.CURRENT_LANG = 'en';
-function applyLang(l){
-  if(!window.I18N[l]) l = 'en';
-  window.CURRENT_LANG = l;
-  var d = window.I18N[l];
-  document.documentElement.setAttribute('lang', l === 'zh' ? 'zh-Hans' : l);
-  document.documentElement.setAttribute('data-lang', l);
-  document.querySelectorAll('[data-i18n]').forEach(function(el){
-    var v = d[el.getAttribute('data-i18n')]; if(v != null) el.innerHTML = v;
-  });
-  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
-    var v = d[el.getAttribute('data-i18n-ph')]; if(v != null) el.setAttribute('placeholder', v);
-  });
-  document.querySelectorAll('[data-i18n-og]').forEach(function(el){
-    var v = d[el.getAttribute('data-i18n-og')]; if(v != null) el.setAttribute('label', v);
-  });
-  document.querySelectorAll('[data-lang-btn]').forEach(function(b){
-    b.setAttribute('aria-pressed', String(b.getAttribute('data-lang-btn') === l));
-  });
-  try{ localStorage.setItem('omakase_lang', l); }catch(e){}
+function applyLang(code){
+  var meta = window.LANGS.filter(function(l){ return l.code === code; })[0];
+  if(!meta || !window.I18N[code]) { code = 'en'; meta = window.LANGS[0]; }
+  window.CURRENT_LANG = code;
+  var d = window.I18N[code];
+  document.documentElement.setAttribute('lang', meta.html);
+  document.documentElement.setAttribute('data-lang', code);
+  if(meta.font) loadFont(meta.font, code);
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ var v = d[el.getAttribute('data-i18n')]; if(v != null) el.innerHTML = fill(v); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){ var v = d[el.getAttribute('data-i18n-ph')]; if(v != null) el.setAttribute('placeholder', fill(v)); });
+  document.querySelectorAll('[data-i18n-og]').forEach(function(el){ var v = d[el.getAttribute('data-i18n-og')]; if(v != null) el.setAttribute('label', fill(v)); });
+  document.querySelectorAll('[data-lang-btn]').forEach(function(b){ b.setAttribute('aria-current', String(b.getAttribute('data-lang-btn') === code)); });
+  try{ localStorage.setItem('omakase_lang', code); }catch(e){}
   window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({event:'lang_switch', lang:l});
+  window.dataLayer.push({event:'lang_switch', lang:code});
+}
+var FONTS = {};
+function loadFont(family, code){
+  if(FONTS[family]) return; FONTS[family] = 1;
+  var l = document.createElement('link'); l.rel='stylesheet';
+  l.href = 'https://fonts.googleapis.com/css2?family=' + family + '&display=swap';
+  document.head.appendChild(l);
+  var st = document.createElement('style');
+  st.textContent = 'html[data-lang="' + code + '"] body{font-family:"' + family.split(':')[0].replace(/\+/g,' ') + '",serif;}';
+  document.head.appendChild(st);
 }
 function initLang(){
   var q = new URLSearchParams(location.search).get('lang');
   var saved = null; try{ saved = localStorage.getItem('omakase_lang'); }catch(e){}
-  var nav = (navigator.language || 'en').toLowerCase();
-  var auto = nav.indexOf('ja') === 0 ? 'ja' : (nav.indexOf('zh') === 0 ? 'zh' : 'en');
+  var n = (navigator.language || 'en').toLowerCase(), auto = 'en';
+  if(n.indexOf('ko') === 0) auto = 'ko';
+  else if(n.indexOf('id') === 0 || n.indexOf('in') === 0) auto = 'id';
+  else if(n.indexOf('zh') === 0) auto = (n.indexOf('tw') > -1 || n.indexOf('hk') > -1 || n.indexOf('hant') > -1) ? 'zht' : 'zhs';
   applyLang(q || saved || auto);
 }
 document.querySelectorAll('[data-lang-btn]').forEach(function(b){
-  b.addEventListener('click', function(){ applyLang(b.getAttribute('data-lang-btn')); });
+  b.addEventListener('click', function(e){ e.preventDefault(); applyLang(b.getAttribute('data-lang-btn')); });
 });
+
+/* overlay menu */
+var ovl = document.getElementById('ovl'), burger = document.getElementById('burger'), btx = document.getElementById('btx');
+function openMenu(){ ovl.classList.add('open'); document.body.classList.add('nav-open'); document.body.style.overflow='hidden'; burger.setAttribute('aria-expanded','true'); btx.textContent='CLOSE'; }
+window.closeMenu = function(){ ovl.classList.remove('open'); document.body.classList.remove('nav-open'); document.body.style.overflow=''; burger.setAttribute('aria-expanded','false'); btx.textContent='MENU'; };
+burger.addEventListener('click', function(){ ovl.classList.contains('open') ? closeMenu() : openMenu(); });
+document.querySelectorAll('[data-nav]').forEach(function(a){ a.addEventListener('click', closeMenu); });
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeMenu(); });
 
 /* reveal */
 (function(){
-  var io = new IntersectionObserver(function(es){
-    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 })();
 
-/* sticky bar — appears once the hero CTA scrolls away */
+/* sticky bar */
 (function(){
-  var bar = document.getElementById('sticky');
-  var anchor = document.querySelector('.hero-body .cta-lg');
+  var bar = document.getElementById('sticky'), anchor = document.querySelector('.hero-body .cta-lg');
   if(!bar || !anchor) return;
-  new IntersectionObserver(function(es){
-    bar.classList.toggle('show', !es[0].isIntersecting);
-  }, {threshold:0}).observe(anchor);
+  new IntersectionObserver(function(es){ bar.classList.toggle('show', !es[0].isIntersecting); }, {threshold:0}).observe(anchor);
 })();
 
-/* exit intent — desktop pointer-out, mobile after 45s. Once per session. */
-(function(){
-  var el = document.getElementById('exit'), fired = false;
-  function seen(){ try{ return sessionStorage.getItem('omakase_exit') === '1'; }catch(e){ return false; } }
-  function mark(){ try{ sessionStorage.setItem('omakase_exit','1'); }catch(e){} }
-  window.closeExit = function(){ el.classList.remove('open'); document.body.style.overflow=''; };
-  function show(){
-    if(fired || seen()) return;
-    if(document.getElementById('reserveModal').classList.contains('open')) return;
-    fired = true; mark();
-    el.classList.add('open'); document.body.style.overflow='hidden';
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({event:'exit_intent_view'});
-  }
-  document.addEventListener('mouseout', function(e){ if(!e.relatedTarget && e.clientY < 12) show(); });
-  if(matchMedia('(pointer:coarse)').matches) setTimeout(show, 45000);
-  el.addEventListener('click', function(e){ if(e.target === el) closeExit(); });
-})();
-
-/* GA4 helper */
 document.addEventListener('click', function(e){
   var t = e.target.closest('[data-ga-event]'); if(!t) return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({event:t.getAttribute('data-ga-event'), event_label:t.getAttribute('data-ga-location')||''});
 });
-
 document.addEventListener('DOMContentLoaded', initLang);
 </script>
 
 {% if store.reserve_system == 'form' %}
-  {# ページ内フォーム予約 #}
   {% include "partials/reserve-v2.njk" %}
 {% else %}
-  {# TableCheck予約。onclick="openReserve(...)" はそのままに、遷移だけ差し替える #}
   <script>
   window.openReserve = window.openReserveModal = function(label, courseId){
     window.dataLayer = window.dataLayer || [];

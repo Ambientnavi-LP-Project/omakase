@@ -18,7 +18,7 @@
       --rv-body      本文フォント
       --rv-radius    角丸
 
-  ・文言は window.I18N（ja/en/zh）に統合される。data-i18n / data-i18n-ph。
+  ・文言は src/_data/ui.js に集約。ページ側が window.I18N に展開する。data-i18n / data-i18n-ph。
   ・入力欄の id は既存と同一（r_name, r_email … ）なので
     EmailJS テンプレートと GAS 側は無変更で動く。
   ============================================================
@@ -121,8 +121,8 @@
    <button class="rv-x" onclick="closeReserveModal()" aria-label="Close">&#215;</button>
 
    <p class="rv-eyebrow" data-i18n="rv.eyebrow">Reservation</p>
-   <h3 class="rv-title" id="rvTitle" data-i18n="rv.title">Request a seat</h3>
-   <p class="rv-sub" data-i18n="rv.sub">We reply by email once the counter is confirmed.</p>
+   <h3 class="rv-title" id="rvTitle" data-i18n="rv.title">Reservation Request</h3>
+   <p class="rv-sub" data-i18n="rv.sub">Reservation is confirmed after email from {{ stores.brand.brand_name }}.</p>
 
    <div id="reserveForm">
     <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
@@ -130,15 +130,15 @@
       <input id="r_website" name="website" type="text" tabindex="-1" autocomplete="off"/>
     </div>
 
-    <div class="rv-step"><span class="rv-step-n">01</span><span class="rv-step-t" data-i18n="rv.s1">When</span><span class="rv-step-rule"></span></div>
+    <div class="rv-step"><span class="rv-step-n">01</span><span class="rv-step-t" data-i18n="rv.s1">Date &amp; time</span><span class="rv-step-rule"></span></div>
 
     <div class="rv-field">
-      <label class="rv-lab" for="r_date" data-i18n="rv.date">Date<span class="rv-req">*</span></label>
+      <label class="rv-lab" for="r_date" data-i18n="rv.date">Preferred date<span class="rv-req">*</span></label>
       <input id="r_date" class="rv-in" type="date"/>
       <p class="rv-note" id="r_date_note"></p>
       {% if store.tel_raw and store.tel_raw != "TBD" %}
       <a class="rv-tel" href="tel:{{ store.tel_raw }}" data-ga-event="tel_click" data-ga-location="reserve_form">
-        <b data-i18n="rv.sameday">Today? Please call</b>
+        <b data-i18n="rv.sameday">Same-day? Call us</b>
         <span>{{ store.tel_display }}</span>
       </a>
       {% endif %}
@@ -170,14 +170,14 @@
         {% endfor %}
       </select>
       <input type="hidden" id="r_course" value=""/>
-      <p class="rv-hint" data-i18n="rv.courseHint">Per person. Every dish is Muslim-friendly and alcohol-free.</p>
+      <p class="rv-hint" data-i18n="rv.courseHint">Prices are per person. All Muslim-friendly &middot; Seasonal menu.</p>
     </div>
 
-    <div class="rv-step"><span class="rv-step-n">03</span><span class="rv-step-t" data-i18n="rv.s3">You</span><span class="rv-step-rule"></span></div>
+    <div class="rv-step"><span class="rv-step-n">03</span><span class="rv-step-t" data-i18n="rv.s3">Your details</span><span class="rv-step-rule"></span></div>
 
     <div class="rv-field">
       <label class="rv-lab" for="r_name" data-i18n="rv.name">Name<span class="rv-req">*</span></label>
-      <input id="r_name" class="rv-in" type="text" autocomplete="name" placeholder="Yamada Taro"/>
+      <input id="r_name" class="rv-in" type="text" autocomplete="name" placeholder="John Smith"/>
     </div>
     <div class="rv-field">
       <label class="rv-lab" for="r_email" data-i18n="rv.email">Email<span class="rv-req">*</span></label>
@@ -192,20 +192,20 @@
       <input id="r_referrer" class="rv-in" type="text" autocomplete="off" data-i18n-ph="rv.optional" placeholder="Optional"/>
     </div>
     <div class="rv-field">
-      <label class="rv-lab" for="r_message" data-i18n="rv.msg">Allergies &amp; requests</label>
-      <textarea id="r_message" class="rv-ta" rows="3" data-i18n-ph="rv.msgPh" placeholder="Allergies, dietary needs, celebrations…"></textarea>
+      <label class="rv-lab" for="r_message" data-i18n="rv.msg">Special requests</label>
+      <textarea id="r_message" class="rv-ta" rows="3" data-i18n-ph="rv.msgPh" placeholder="Allergies, dietary requirements, special occasions..."></textarea>
     </div>
 
     <p class="rv-err" id="r_error"></p>
     <button type="button" class="rv-go" id="r_submit" onclick="openConfirmDialog()" data-i18n="rv.next">Review &amp; send</button>
-    <p class="rv-fine" data-i18n="rv.fine">No payment now. You can cancel free of charge up to 48 hours before.</p>
+    <p class="rv-fine" data-i18n="menu.season">* Ingredients may vary depending on the season.</p>
    </div>
 
    <div id="reserveSuccess" style="display:none;">
     <div class="rv-ok">
       <div class="rv-seal">&#10003;</div>
       <h4 class="rv-title" style="font-size:22px;" data-i18n="rv.okTitle">Request received</h4>
-      <p class="rv-sub" style="margin-bottom:18px;" data-i18n="rv.okBody">We will email you a confirmation shortly. Please check your spam folder if it does not arrive.</p>
+      <p class="rv-sub" style="margin-bottom:18px;" data-i18n="rv.okBody">Please wait for a confirmation from {{ stores.brand.brand_name }}.</p>
       <button class="rv-ghost" style="width:auto;padding:13px 34px;" onclick="closeReserveModal()" data-i18n="rv.close">Close</button>
     </div>
    </div>
@@ -218,8 +218,8 @@
   <div class="rv-panel" style="max-width:460px;">
    <button class="rv-x" onclick="closeConfirmDialog()" aria-label="Close">&#215;</button>
    <p class="rv-eyebrow" data-i18n="rv.finalEyebrow">Final check</p>
-   <h3 class="rv-title" style="font-size:22px;" data-i18n="rv.finalTitle">Is this right?</h3>
-   <p class="rv-sub" data-i18n="rv.finalSub">Ingredients and seating are prepared per reservation, so please confirm before sending.</p>
+   <h3 class="rv-title" style="font-size:22px;" data-i18n="rv.finalTitle">Please confirm your reservation</h3>
+   <p class="rv-sub" data-i18n="rv.finalSub">We prepare ingredients and seating based on your reservation. Please confirm details are correct.</p>
 
    <div class="rv-recap">
      <div class="rv-recap-row"><span class="rv-recap-k" data-i18n="rv.date2">Date</span><span class="rv-recap-v" id="confirm_date">—</span></div>
@@ -229,29 +229,29 @@
    </div>
 
    <div class="rv-policy">
-     <b data-i18n="rv.cxTitle">Cancellation</b>
-     <span data-i18n="rv.cx48">Within 48 hours: ¥5,000 per person</span><br/>
-     <span data-i18n="rv.cx24">Within 24 hours: ¥10,000 per person</span>
-     {% if store.tel_display != 'TBD' %}<br/><span data-i18n="rv.cxTel">For urgent changes, call</span> <a href="tel:{{ store.tel_raw }}" style="color:var(--rv-accent);">{{ store.tel_display }}</a>{% endif %}
+     <b data-i18n="rv.cxTitle">Cancellation Policy</b>
+     <span data-i18n="rv.cx48">Within 48 hours: &yen;5,000 / person</span><br/>
+     <span data-i18n="rv.cx24">Within 24 hours: &yen;10,000 / person</span>
+     {% if store.tel_display != 'TBD' %}<br/><span data-i18n="rv.cxTel">For urgent inquiries, please call us at</span> <a href="tel:{{ store.tel_raw }}" style="color:var(--rv-accent);">{{ store.tel_display }}</a>{% endif %}
    </div>
    <div class="rv-policy">
-     <b data-i18n="rv.pvTitle">Privacy</b>
+     <b data-i18n="rv.pvTitle">Privacy Policy</b>
      <span data-i18n="rv.pvBody">Your details are used only to confirm and manage this reservation, and are never shared with third parties except where required by law.</span>
    </div>
 
    <label class="rv-check">
      <input class="rv-box" type="checkbox" id="confirm_check_details"/>
-     <span class="rv-check-t" data-i18n="rv.ck1">Date, time and party size are correct.</span>
+     <span class="rv-check-t" data-i18n="rv.ck1">I have confirmed the date, time and number of guests are correct.</span>
    </label>
    <label class="rv-check">
      <input class="rv-box" type="checkbox" id="confirm_check_policy"/>
-     <span class="rv-check-t" data-i18n="rv.ck2">I have read the cancellation policy.</span>
+     <span class="rv-check-t" data-i18n="rv.ck2">I have read and agree to the cancellation policy.</span>
    </label>
 
    <p class="rv-err" id="confirm_error" style="margin-top:12px;"></p>
    <div class="rv-pair">
      <button class="rv-ghost" onclick="closeConfirmDialog()" data-i18n="rv.edit">Edit</button>
-     <button class="rv-go" id="confirm_submit_btn" onclick="confirmAndSubmit()" data-i18n="rv.send">Send request</button>
+     <button class="rv-go" id="confirm_submit_btn" onclick="confirmAndSubmit()" data-i18n="rv.send">Confirm &amp; send</button>
    </div>
   </div>
  </div>
@@ -260,105 +260,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 (function(){
-  /* ---------- 文言を window.I18N に合流 ---------- */
-  var D = {
-    en:{
-      "rv.eyebrow":"Reservation","rv.title":"Request a seat",
-      "rv.sub":"Tell us when — we confirm your counter by email, usually within a few hours.",
-      "rv.s1":"When","rv.s2":"Course","rv.s3":"You",
-      "rv.date":"Date","rv.time":"Time","rv.guests":"Guests","rv.course":"Course",
-      "rv.coursePick":"Select a course","rv.courseHint":"Price per person. Every dish is Muslim-friendly and alcohol-free.",
-      "rv.name":"Name","rv.email":"Email","rv.phone":"Phone","rv.ref":"Referred by",
-      "rv.optional":"Optional","rv.msg":"Allergies & requests","rv.msgPh":"Allergies, dietary needs, celebrations…",
-      "rv.sameday":"Booking for today? Please call","rv.next":"Review & send",
-      "rv.fine":"No payment now. Free cancellation up to 48 hours before.",
-      "rv.okTitle":"Request received","rv.okBody":"We will email your confirmation shortly. Please check your spam folder if it does not arrive.",
-      "rv.close":"Close","rv.finalEyebrow":"Final check","rv.finalTitle":"Is this right?",
-      "rv.finalSub":"Ingredients and seats are prepared per reservation, so please confirm before sending.",
-      "rv.date2":"Date","rv.time2":"Time","rv.guests2":"Guests","rv.course2":"Course",
-      "rv.cxTitle":"Cancellation","rv.cx48":"Within 48 hours: ¥5,000 per person","rv.cx24":"Within 24 hours: ¥10,000 per person",
-      "rv.cxTel":"For urgent changes, call","rv.pvTitle":"Privacy",
-      "rv.pvBody":"Your details are used only to confirm and manage this reservation, and are never shared with third parties except where required by law.",
-      "rv.ck1":"Date, time and party size are correct.","rv.ck2":"I have read the cancellation policy.",
-      "rv.edit":"Edit","rv.send":"Send request","rv.sending":"Sending…",
-      "rv.eRequired":"Please fill in every required field.",
-      "rv.ePast":"Please choose today or a later date.",
-      "rv.eSameday":"Same-day bookings are taken by phone.",
-      "rv.ePassed":"That time has passed for today. Please choose another slot.",
-      "rv.eBlocked":"That date is not available. Please choose another.",
-      "rv.eCheck":"Please tick both boxes.",
-      "rv.eFull":"That time slot is fully booked. Please choose another time.",
-      "rv.eNet":"We could not check availability. Please check your connection and try again.",
-      "rv.eGeneric":"Something went wrong. Please try again.",
-      "rv.closedSlot":" (closed)","rv.fullSlot":" (full)"
-    },
-    ja:{
-      "rv.eyebrow":"ご予約","rv.title":"席をリクエストする",
-      "rv.sub":"ご希望日をお知らせください。カウンターを確保でき次第、メールでご連絡します（通常数時間以内）。",
-      "rv.s1":"日時","rv.s2":"コース","rv.s3":"お客様情報",
-      "rv.date":"ご希望日","rv.time":"時間","rv.guests":"人数","rv.course":"コース",
-      "rv.coursePick":"コースを選ぶ","rv.courseHint":"表示は1名様あたり。全品ムスリムフレンドリー・ノンアルコールです。",
-      "rv.name":"お名前","rv.email":"メールアドレス","rv.phone":"電話番号","rv.ref":"紹介者",
-      "rv.optional":"任意","rv.msg":"アレルギー・ご要望","rv.msgPh":"アレルギー、食事制限、記念日など",
-      "rv.sameday":"当日のご予約はお電話で","rv.next":"内容を確認する",
-      "rv.fine":"事前決済はありません。48時間前まで無料でキャンセルいただけます。",
-      "rv.okTitle":"リクエストを承りました","rv.okBody":"確認メールをお送りします。届かない場合は迷惑メールフォルダをご確認ください。",
-      "rv.close":"閉じる","rv.finalEyebrow":"最終確認","rv.finalTitle":"この内容でよろしいですか",
-      "rv.finalSub":"ご予約に合わせて食材とお席をご用意します。送信前にご確認ください。",
-      "rv.date2":"日付","rv.time2":"時間","rv.guests2":"人数","rv.course2":"コース",
-      "rv.cxTitle":"キャンセルポリシー","rv.cx48":"48時間前以内：1名様 ¥5,000","rv.cx24":"24時間前以内：1名様 ¥10,000",
-      "rv.cxTel":"お急ぎの変更はお電話で","rv.pvTitle":"個人情報の取り扱い",
-      "rv.pvBody":"ご記入いただいた情報は、本予約の確認・連絡・店舗からのご案内にのみ使用します。法令に基づく場合を除き第三者に提供しません。",
-      "rv.ck1":"日付・時間・人数を確認しました","rv.ck2":"キャンセルポリシーを確認しました",
-      "rv.edit":"修正する","rv.send":"この内容で送信","rv.sending":"送信中…",
-      "rv.eRequired":"必須項目をご入力ください。",
-      "rv.ePast":"過去の日付は選択できません。",
-      "rv.eSameday":"本日のご予約はお電話で承ります。",
-      "rv.ePassed":"本日のこの時間枠は受付を終了しました。別の時間をお選びください。",
-      "rv.eBlocked":"選択された日は受付しておりません。別の日をお選びください。",
-      "rv.eCheck":"両方にチェックを入れてください。",
-      "rv.eFull":"選択された時間枠は満席です。別の時間をお選びください。",
-      "rv.eNet":"空き状況の確認に失敗しました。通信環境をご確認のうえ、もう一度お試しください。",
-      "rv.eGeneric":"エラーが発生しました。もう一度お試しください。",
-      "rv.closedSlot":"（受付終了）","rv.fullSlot":"（満席）"
-    },
-    zh:{
-      "rv.eyebrow":"预约","rv.title":"预约座位",
-      "rv.sub":"请告知您希望的日期。确认吧台座位后，我们会以邮件回覆（通常数小时内）。",
-      "rv.s1":"日期与时间","rv.s2":"套餐","rv.s3":"您的资料",
-      "rv.date":"日期","rv.time":"时间","rv.guests":"人数","rv.course":"套餐",
-      "rv.coursePick":"请选择套餐","rv.courseHint":"价格为每位。全部料理为穆斯林友善、无酒精。",
-      "rv.name":"姓名","rv.email":"电子邮件","rv.phone":"电话","rv.ref":"介绍人",
-      "rv.optional":"选填","rv.msg":"过敏与需求","rv.msgPh":"过敏、饮食限制、纪念日等",
-      "rv.sameday":"当日预约请来电","rv.next":"确认内容",
-      "rv.fine":"无需预先付款。用餐前48小时可免费取消。",
-      "rv.okTitle":"已收到您的预约申请","rv.okBody":"我们将尽快寄出确认邮件。若未收到，请查看垃圾邮件匣。",
-      "rv.close":"关闭","rv.finalEyebrow":"最终确认","rv.finalTitle":"以下内容是否正确？",
-      "rv.finalSub":"我们会依预约准备食材与座位，送出前请再次确认。",
-      "rv.date2":"日期","rv.time2":"时间","rv.guests2":"人数","rv.course2":"套餐",
-      "rv.cxTitle":"取消规定","rv.cx48":"48小时内：每位 ¥5,000","rv.cx24":"24小时内：每位 ¥10,000",
-      "rv.cxTel":"紧急变更请来电","rv.pvTitle":"个人资料",
-      "rv.pvBody":"您提供的资料仅用于本次预约的确认与联络，除法律要求外不会提供给第三方。",
-      "rv.ck1":"已确认日期、时间与人数","rv.ck2":"已阅读并同意取消规定",
-      "rv.edit":"修改","rv.send":"送出预约","rv.sending":"传送中…",
-      "rv.eRequired":"请填写所有必填项目。",
-      "rv.ePast":"无法选择过去的日期。",
-      "rv.eSameday":"当日预约请来电洽询。",
-      "rv.ePassed":"今日该时段已截止，请选择其他时间。",
-      "rv.eBlocked":"该日期暂不接受预约，请选择其他日期。",
-      "rv.eCheck":"请勾选两个项目。",
-      "rv.eFull":"该时段已满席，请选择其他时间。",
-      "rv.eNet":"无法确认空位状况，请检查网路后再试。",
-      "rv.eGeneric":"发生错误，请再试一次。",
-      "rv.closedSlot":"（已截止）","rv.fullSlot":"（满席）"
-    }
-  };
-  window.I18N = window.I18N || {en:{},ja:{},zh:{}};
-  ['en','ja','zh'].forEach(function(L){
-    window.I18N[L] = window.I18N[L] || {};
-    Object.keys(D[L]).forEach(function(k){ if(!(k in window.I18N[L])) window.I18N[L][k] = D[L][k]; });
-  });
-
+  /* 文言は _data/ui.js（ページ側で window.I18N に展開済み）を参照する */
   function T(k){
     var L = (window.CURRENT_LANG || 'en');
     return (window.I18N[L] && window.I18N[L][k]) || (window.I18N.en && window.I18N.en[k]) || k;

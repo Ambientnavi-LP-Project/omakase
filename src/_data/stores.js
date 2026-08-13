@@ -401,16 +401,18 @@ const pagesSimple = STORES
 // ============================================================
 // 【新デザイン検証用】test-a / test-b
 // 本番URLに一切影響しない検証チャンネル。
-//   test-a → /{region}/{slug}/test-a/  … HP型（参考サイト寄せ・広告感なし）
-//   test-b → /{region}/{slug}/test-b/  … 広告LP型（CV重視）
+//   test-a-sushi / test-a-wagyu … HP型（参考サイト寄せ）を寿司訴求／和牛訴求で分けたもの
+//   test-b-sushi / test-b-wagyu … 広告LP型（CV重視）を寿司訴求／和牛訴求で分けたもの
 // channel_id が "default" 以外なのでテンプレ側で noindex + canonical が付く。
 //
 // force_prices: true にすると、その店の hide_prices を無視して価格を表示する。
 // （稼働3店はすべて hide_prices:true のため、価格ありの見え方を確認したいとき用）
 // ------------------------------------------------------------
 const TEST_DESIGNS = [
-  { id: "test-a", suffix: "test-a/", utm_source: "lp-test-a" },
-  { id: "test-b", suffix: "test-b/", utm_source: "lp-test-b" }
+  { id: "test-a-sushi", suffix: "test-a-sushi/", utm_source: "lp-test-a-sushi", design: "a", theme: "sushi" },
+  { id: "test-a-wagyu", suffix: "test-a-wagyu/", utm_source: "lp-test-a-wagyu", design: "a", theme: "wagyu" },
+  { id: "test-b-sushi", suffix: "test-b-sushi/", utm_source: "lp-test-b-sushi", design: "b", theme: "sushi" },
+  { id: "test-b-wagyu", suffix: "test-b-wagyu/", utm_source: "lp-test-b-wagyu", design: "b", theme: "wagyu" }
 ];
 const FORCE_PRICES = false;   // ← true にすると test-a / test-b で価格を表示
 
@@ -431,13 +433,13 @@ STORES.forEach(s => {
       channel_id: d.id,
       channel_suffix: d.suffix,
       channel_utm_source: d.utm_source,
+      theme: d.theme,               // "sushi" | "wagyu" — 掲載コースと訴求文言を切り替える
       force_prices: FORCE_PRICES,
-      // 本番の reserve_system は変更せず、検証ページの分だけ差し替える
       reserve_system: (TEST_RESERVE === "store")
         ? (s.reserve_system || "tablecheck")
         : TEST_RESERVE
     };
-    (d.id === "test-a" ? pagesTestA : pagesTestB).push(page);
+    (d.design === "a" ? pagesTestA : pagesTestB).push(page);
   });
 });
 
