@@ -398,6 +398,49 @@ const pagesSimple = STORES
     channel_utm_source: "lp-simple"
   }));
 
+// ============================================================
+// 【新デザイン検証用】test-a / test-b
+// 本番URLに一切影響しない検証チャンネル。
+//   test-a → /{region}/{slug}/test-a/  … HP型（参考サイト寄せ・広告感なし）
+//   test-b → /{region}/{slug}/test-b/  … 広告LP型（CV重視）
+// channel_id が "default" 以外なのでテンプレ側で noindex + canonical が付く。
+//
+// force_prices: true にすると、その店の hide_prices を無視して価格を表示する。
+// （稼働3店はすべて hide_prices:true のため、価格ありの見え方を確認したいとき用）
+// ------------------------------------------------------------
+const TEST_DESIGNS = [
+  { id: "test-a", suffix: "test-a/", utm_source: "lp-test-a" },
+  { id: "test-b", suffix: "test-b/", utm_source: "lp-test-b" }
+];
+const FORCE_PRICES = false;   // ← true にすると test-a / test-b で価格を表示
+
+// 検証ページの予約導線。
+//   "form"       … ページ内フォーム(EmailJS)。新デザインの予約UIを確認したいとき（既定）
+//   "tablecheck" … 予約ボタンで外部TableCheckへ遷移
+//   "store"      … 各店舗の本番設定(store.reserve_system)をそのまま使う
+// どれを選んでも本番LPの挙動は変わりません。
+const TEST_RESERVE = "form";
+
+const pagesTestA = [];
+const pagesTestB = [];
+STORES.forEach(s => {
+  if (s.relocated) return;
+  TEST_DESIGNS.forEach(d => {
+    const page = {
+      ...s,
+      channel_id: d.id,
+      channel_suffix: d.suffix,
+      channel_utm_source: d.utm_source,
+      force_prices: FORCE_PRICES,
+      // 本番の reserve_system は変更せず、検証ページの分だけ差し替える
+      reserve_system: (TEST_RESERVE === "store")
+        ? (s.reserve_system || "tablecheck")
+        : TEST_RESERVE
+    };
+    (d.id === "test-a" ? pagesTestA : pagesTestB).push(page);
+  });
+});
+
 // 移転案内ページ(relocated店舗のみ)。store-relocated.njk が使う。/{region}/{slug}/
 // store.relocation.to_slug で指定した移転先店舗を moved_to に解決して埋め込む。
 // テンプレ側は moved_to.* で移転先の店名・住所・地図・予約導線をすべて参照する。
@@ -433,5 +476,7 @@ module.exports = {
   pagesSushi: pagesSushi, // 寿司特化LP用(全店舗)。store-sushi.njk が使う。
   pagesWagyu: pagesWagyu, // 和牛特化LP用(全店舗)。store-wagyu.njk が使う。
   pagesSimple: pagesSimple, // シンプル版LP(全店舗)。store-simple.njk が使う。
+  pagesTestA: pagesTestA, // 【新デザイン検証】HP型。store-test-a.njk が使う。/{region}/{slug}/test-a/
+  pagesTestB: pagesTestB, // 【新デザイン検証】広告LP型。store-test-b.njk が使う。/{region}/{slug}/test-b/
   pagesRelocated: pagesRelocated // 移転案内(古民家・築地)。store-relocated.njk が使う。
 };

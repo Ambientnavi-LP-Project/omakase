@@ -1,124 +1,133 @@
-# Japan Omakase LP
+# 新デザインLP 2案（test-a / test-b）
 
-業態: **Halal Omakase Sushi & Wagyu(おまかせ 墨)**
-ドメイン: `japan-omakase.wagyu-sushi.com`
-GA4測定ID: `G-71QJSRH923`
+`src/` にそのまま上書き・追加してデプロイすれば、既存URLに一切影響せず2種類のLPが増えます。
 
-Eleventy(11ty)製の静的サイト。1つのテンプレ + 店舗データ × チャネルから、全ページを自動生成。
+## 1. 入れるファイル
 
-## 店舗一覧(4店舗 × 4チャネル = 16ページ生成)
+| ファイル | 種別 | 説明 |
+|---|---|---|
+| `src/_data/stores.js` | **上書き** | `pagesTestA` / `pagesTestB` を追加しただけ。既存の定義・店舗データは無変更 |
+| `src/_data/courses.js` | 新規 | コースデータ（日英中）のシングルソース。従来 njk に4〜5回重複していたもの |
+| `src/store-test-a.njk` | 新規 | A案：HP型（参考サイト寄せ） |
+| `src/store-test-b.njk` | 新規 | B案：広告LP型（CV重視） |
+| `src/_includes/partials/reserve-v2.njk` | 新規 | 予約フォーム（両案で共有・多言語対応） |
 
-| 店舗 | URL | 予約導線 | TableCheck slug |
-|---|---|---|---|
-| 🍣 浅草古民家店 | `/tokyo/asakusa-kominka/` | ✅ TableCheck | `halal-omakase-asakusa` |
-| 🥢 京都祇園店 | `/kyoto/gion/` | ✅ TableCheck | `5wshijo` |
-| 🐟 築地店 | `/tokyo/tsukiji/` | ✅ TableCheck | `yakiniku-burger-ramen-zen` |
-| 🏯 大阪東心斎橋店 | `/osaka/higashi-shinsaibashi/` | ⏳ TBD(stores.js書き換えで反映) | TBD |
+既存の `store.njk` / `store-sushi.njk` などには一切触れていません。
 
-## 予約導線の切り替え機構
+## 2. プレビューURL
 
-各店舗の `reserve_system` で予約ボタンの挙動を切り替えられる:
+デプロイ後、以下で開けます（`{{domain}}` = `japan-omakase.wagyu-sushi.com`）。
 
-| 値 | 挙動 |
-|---|---|
-| `"tablecheck"` | 予約ボタンが TableCheck 予約画面に外部遷移する(現状の全店構成) |
-| `"form"` | ページ内モーダルでフォーム(EmailJS送信)を表示する |
+**A案（HP型）**
+- https://japan-omakase.wagyu-sushi.com/tokyo/shinjuku-sanchome/test-a/
+- https://japan-omakase.wagyu-sushi.com/kyoto/gion/test-a/
+- https://japan-omakase.wagyu-sushi.com/osaka/higashi-shinsaibashi/test-a/
 
-**切り替え方法:**
+**B案（広告LP型）**
+- https://japan-omakase.wagyu-sushi.com/tokyo/shinjuku-sanchome/test-b/
+- https://japan-omakase.wagyu-sushi.com/kyoto/gion/test-b/
+- https://japan-omakase.wagyu-sushi.com/osaka/higashi-shinsaibashi/test-b/
 
-```javascript
-// src/_data/stores.js
-{
-  slug: "asakusa-kominka",
-  reserve_system: "form",   // "tablecheck" → "form" に変えるだけ
-  ...
-  form_config: FORM_DEFAULT  // EmailJS設定・予約不可日など
-}
-最終更新: 2026/05/22
+言語を指定して開くこともできます：`...?lang=ja` / `?lang=en` / `?lang=zh`
+
+いずれも `channel_id` が `default` 以外なので **noindex + canonical（本番URL）** が自動で付き、本番SEOには影響しません。
+
+## 3. 設定スイッチ
+
+`src/_data/stores.js` の上のほうにあります。
+
+```js
+const FORCE_PRICES = false;   // true にすると test-a / test-b で価格を表示
 ```
 
-フォーム版に必要なEmailJS設定・予約不可日(工事休業など)は `form_config` にまとめてある。
-店舗ごとに異なる設定にしたい場合は `FORM_DEFAULT` を spread して上書きする:
+稼働3店（新宿三丁目・祇園・東心斎橋）はすべて `hide_prices: true` なので、既定では価格が出ません。
+価格ありの見え方を比較したいときだけ `true` にしてください（本番LPには影響しません）。
 
-```javascript
-form_config: { ...FORM_DEFAULT, blocked_dates: ['2026-05-25', '2026-05-26'] }
+## 4. 予約導線
+
+`src/_data/stores.js` で切り替えられます（本番LPの挙動は変わりません）。
+
+```js
+const TEST_RESERVE = "form";
+//   "form"       … ページ内フォーム(EmailJS)。新デザインの予約UIを確認したいとき（既定）
+//   "tablecheck" … 予約ボタンで外部TableCheckへ遷移
+//   "store"      … 各店舗の本番設定をそのまま使う（現状=全店TableCheck）
 ```
 
-## チャネル別ページ生成
+"tablecheck" / "store" にすると、`openReserve()` の中身だけがTableCheckへの遷移に差し替わります。
+ボタンのマークアップは共通なので、どちらに切り替えてもレイアウトは変わりません。
 
-1店舗あたり4つのページを自動生成:
+**form の場合**（既定）
 
-| URL | チャネル | TableCheck UTM | SEO |
-|---|---|---|---|
-| `/{region}/{slug}/` | default | `utm_source=lp` | index |
-| `/{region}/{slug}/japan/` | japan | `utm_source=lp-japan` | noindex(canonical→default) |
-| `/{region}/{slug}/global/` | global | `utm_source=lp-global` | noindex(canonical→default) |
-| `/{region}/{slug}/map/` | map | `utm_source=lp-map` | noindex(canonical→default) |
+- 送信ロジックは既存 `reserve-form-modal.njk` と同一：GASで空席・上限判定 → EmailJSで店舗＋ゲストへ送信
+- 入力欄のIDも同一（`r_name` `r_email` …）なので **EmailJSテンプレートとGAS側は無変更で動きます**
+- 追加で `lang` パラメータ（`ja`/`en`/`zh`）を送っているので、必要なら店舗側メールで言語を出し分けられます
 
-すべて共通: `utm_medium=referral`
+**tablecheck / store の場合**
 
-## ディレクトリ
+予約ボタンが `{{ store.tablecheck_url }}?utm_source=lp-test-a|lp-test-b&utm_medium=referral` へ遷移します。
+`reserve-v2.njk` はページに出力されません（読み込みも走りません）。
 
-```
-.
-├── .eleventy.js                            ← Eleventy設定(images/ をパススルー)
-├── package.json
-├── vercel.json                             ← / → /tokyo/asakusa-kominka/ リダイレクト
-├── src/
-│   ├── _data/stores.js                     ← 業態設定 + 店舗データ + チャネル定義 + 予約導線設定
-│   ├── _includes/
-│   │   └── partials/
-│   │       └── reserve-form-modal.njk      ← フォーム版予約モーダル(reserve_system="form"時のみ)
-│   ├── store.njk                           ← 全店舗・全チャネル共通テンプレ
-│   └── images/                             ← 画像(配信)
-└── _site/                                  ← ビルド成果物
-```
+## 5. 計測
 
-## ⚠️ 画像フォルダ名は `images/`(この業態だけ)
+両案とも既存GTM（`GTM-TJKTLQJ6`）をそのまま読み込み、dataLayer に `design: 'test-a' | 'test-b'`、`channel: 'test-a' | 'test-b'` を積んでいます。GA4で並べて比較できます。
 
-- ✅ `omakase` → `src/images/`
-- ✅ `tofu-vegan` → `src/tofu-image/`
-- ✅ `steak`, `sandwich` → `src/assets/`
-- ✅ `japanese-burger` → `src/image/`
+主なイベント：
+`reserve_open` / `course_select` / `course_detail_view` / `final_check_view` / `reservation_form_submit` / `lang_switch` / `tel_click` / `maps_click` / `exit_intent_view`（B案のみ）
 
-## 予約リンクの差し替え方法(店舗追加時 / 東心斎橋確定時など)
+## 6. 動画について
 
-`src/_data/stores.js` を開いて、該当店舗の `tablecheck_url: "TBD"` を本物のリンクに書き換えるだけ。
+ヒーローは `/images/hero1.mp4` を **16:9のまま**大きく出す設計です（切り抜かず、動きを潰さないため）。
+スマホでも横長のまま全幅で出し、見出しとCTAは動画の**下**に置いています。
 
-```javascript
-// 変更前
-tablecheck_url: "TBD",
+- 差し替えるときは `store-test-a.njk` / `store-test-b.njk` の `<source src="/images/hero1.mp4">` を変更
+- ポスター画像は `/images/top.jpg`。動画読み込み前に一瞬表示されるので、動画1コマ目に近い画像にするとより滑らかです
+- A案の下部セクションでは `hero2.mp4`（コンセプト）と `hero3.mp4`（カウンター）も使っています
 
-// 変更後
-tablecheck_url: "https://www.tablecheck.com/shops/halal-omakase-shinsaibashi/reserve",
-```
+**推奨**：ヒーロー動画は 1920×1080 / 8〜15秒ループ / 音なし / 3MB以下にエンコードし直すと、モバイルの初期表示が目に見えて速くなります。
 
-コミットすると、Vercelが自動デプロイして即反映。
+## 7. 2案の設計意図
 
-## Muslim-Friendly統一表示
+### A案 `/test-a/` — HP型
+参考サイトの構造に寄せています。全幅動画 → コンセプト → お品書き → カウンター → ハラル → 店舗情報 → 予約。
 
-全店舗、ハラール認証ではなく「Muslim-Friendly」として統一表示:
-- NO PORK
-- NO ALCOHOL IN FOOD
-- MUSLIM-FRIENDLY
+- 配色：温かみのある墨黒 `#12100e` × 生成り `#e9e3d6` × くすんだ真鍮 `#a98a52`（既存の金 `#c9a96e` より彩度を落とし、別ブランドに見えるように）
+- 書体：見出し Marcellus（英）／ Shippori Mincho（和）、キャプション Jost
+- 署名要素：ヒーロー左端の**縦書き**「旬を、握る。」と、見出しの下で1本だけ引かれる真鍮の罫線
+- 番号は「献立の流れ（01→08）」にだけ使用。順序が意味を持つ箇所以外では使っていません
+- CTAは控えめ（ヘッダー・各コース・最下部の3箇所のみ、スティッキーバーなし）
 
-## GA4の計測内容
+### B案 `/test-b/` — 広告LP型
+CV導線を前面に。**背景を明るくして朱赤のCTAを最大コントラストで置く**構成にしています（黒地に金より、広告流入のCVRは明色地＋高彩度CTAのほうが安定します）。
 
-すべてのイベントに `store_name`, `store_area`, `brand`, `channel` を付与。
+構成：オファー帯 → 動画 → 見出し＋CTA＋信頼バッジ → 選ばれる理由3点 → コース3枚＋比較表 → レビュー → 予約の流れ3ステップ → FAQ → アクセス → 最終CTA
+- 配色：生成り `#f4efe5` × 墨 `#191512` × 朱 `#a8342a`
+- 書体：Zen Old Mincho ＋ Jost
+- 署名要素：**判子（朱印）**モチーフ。理由カード・離脱防止ダイアログで使用
+- 追加装置：スティッキー下部CTA（ヒーローのCTAが画面外に出たら出現）、離脱防止ダイアログ（PCはマウスアウト／スマホは45秒、1セッション1回まで）
 
-### カスタムイベント
-- `reserve_click`: sticky_cta, header, hero, reservation_section, footer
-- `reserve_modal_open`: フォーム版で予約モーダルが開かれたとき
-- `reservation_form_submit`: フォーム版で予約送信が成功したとき(conversion扱い)
-- `tel_click`: access
-- `directions_click`: access, footer
-- `map_click`: hero
+### 予約したくなる構造として両案に入れているもの
+- CTAの文言を「予約する」ではなく **「空席を確認する」**（心理的コストが低い）
+- ボタン直下に必ず **「約60秒・事前決済なし」**
+- フォームを **01 日時 → 02 コース → 03 連絡先** の3ブロックに分割。最初の質問が一番答えやすい「日付」
+- コースはサブモーダルではなく **ネイティブselect**（optgroup付き）。タップ数を減らし、スマホで確実に動く
+- 送信前の最終確認と **48時間前まで無料キャンセル** の明示
 
-## ビルド・開発
+## 8. 多言語
+
+日本語・英語・中国語（簡体）をクライアント側で切替。
+- ヘッダーの EN / 日本語 / 中文 ボタン
+- 初回は `?lang=` → localStorage → ブラウザ言語 の順で自動判定
+- `<html lang>` と `data-lang` を切り替え、中国語のときは Noto Serif SC に自動で差し替わります
+- 翻訳は各njk下部の `window.I18N` にキー単位でまとまっています。文言修正はここだけ触ればOK
+- コース名・献立の翻訳は `_data/courses.js` の `{ en, ja, zh }` から自動生成されます
+
+> 注：現状はクライアント側切替なので、3言語別のURLは生成していません。SEO用に `/ja/` `/zh/` を別URLで持ちたい場合は、チャンネルと同じ要領でページ複製に切り替えられます。ご要望があればそちらに変更します。
+
+## 9. ローカルで確認する場合
 
 ```bash
-npm install
-npm run dev      # http://localhost:8080
-npm run build    # _site/ に出力
+npx @11ty/eleventy --serve
 ```
-最終更新5/22
+
+画像・動画は `src/images/`（または既存の配置）に置いてください。本zipには含めていません。

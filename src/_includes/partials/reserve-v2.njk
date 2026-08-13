@@ -1,0 +1,596 @@
+{#
+  ============================================================
+  reserve-v2.njk — 予約フォーム（新デザイン用 / 多言語対応）
+  ------------------------------------------------------------
+  ・送信ロジックは既存 reserve-form-modal.njk と同一
+    （GAS で空席・上限判定 → EmailJS で店舗＋ゲストへ送信）
+  ・見た目は呼び出し元ページが定義する CSS 変数で決まる。
+    ページ側の :root に以下を定義してから include すること。
+
+      --rv-bg        モーダル背景（オーバーレイの内側）
+      --rv-panel     入力欄の背景
+      --rv-line      罫線
+      --rv-text      本文色
+      --rv-muted     補助テキスト色
+      --rv-accent    アクセント（ボタン背景・見出し）
+      --rv-on-accent アクセント上の文字色
+      --rv-display   見出しフォント
+      --rv-body      本文フォント
+      --rv-radius    角丸
+
+  ・文言は window.I18N（ja/en/zh）に統合される。data-i18n / data-i18n-ph。
+  ・入力欄の id は既存と同一（r_name, r_email … ）なので
+    EmailJS テンプレートと GAS 側は無変更で動く。
+  ============================================================
+#}
+{% set showPrice = (not store.hide_prices) or store.force_prices %}
+
+<style>
+  .rv-scrim{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.72);
+    backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+    display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .rv-scrim.open{display:block;}
+  .rv-wrap{min-height:100%;display:flex;align-items:flex-end;justify-content:center;padding:0;}
+  @media(min-width:640px){.rv-wrap{align-items:center;padding:32px 20px;}}
+  .rv-panel{position:relative;width:100%;max-width:520px;box-sizing:border-box;
+    background:var(--rv-bg);color:var(--rv-text);font-family:var(--rv-body);
+    border:1px solid var(--rv-line);border-radius:var(--rv-radius) var(--rv-radius) 0 0;
+    padding:26px 20px 34px;animation:rvUp .34s cubic-bezier(.16,1,.3,1) both;}
+  @media(min-width:640px){.rv-panel{border-radius:var(--rv-radius);padding:34px 34px 38px;}}
+  @keyframes rvUp{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:none;}}
+  @media(prefers-reduced-motion:reduce){.rv-panel{animation:none;}}
+
+  .rv-x{position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;
+    background:transparent;color:var(--rv-muted);font-size:24px;line-height:1;cursor:pointer;border-radius:50%;}
+  .rv-x:hover{color:var(--rv-text);}
+  .rv-eyebrow{font-family:var(--rv-body);font-size:10px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--rv-accent);margin:0 0 10px;}
+  .rv-title{font-family:var(--rv-display);font-size:26px;line-height:1.25;margin:0 0 6px;color:var(--rv-text);font-weight:400;}
+  .rv-sub{font-size:12.5px;line-height:1.7;color:var(--rv-muted);margin:0 0 22px;}
+
+  .rv-step{display:flex;align-items:baseline;gap:9px;margin:24px 0 12px;}
+  .rv-step:first-of-type{margin-top:0;}
+  .rv-step-n{font-family:var(--rv-display);font-size:12px;color:var(--rv-accent);letter-spacing:.1em;}
+  .rv-step-t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rv-muted);}
+  .rv-step-rule{flex:1;height:1px;background:var(--rv-line);}
+
+  .rv-field{margin-bottom:14px;}
+  .rv-lab{display:block;font-size:11px;letter-spacing:.1em;color:var(--rv-muted);margin-bottom:7px;}
+  .rv-req{color:#d05b4d;margin-left:3px;font-weight:700;}
+  .rv-in,.rv-sel,.rv-ta{width:100%;box-sizing:border-box;background:var(--rv-panel);
+    border:1px solid var(--rv-line);border-radius:8px;padding:12px 13px;
+    color:var(--rv-text);font-size:16px;font-family:var(--rv-body);-webkit-appearance:none;appearance:none;}
+  .rv-in:focus,.rv-sel:focus,.rv-ta:focus{outline:2px solid var(--rv-accent);outline-offset:1px;border-color:var(--rv-accent);}
+  .rv-ta{resize:vertical;min-height:76px;}
+  .rv-sel{background-image:linear-gradient(45deg,transparent 50%,var(--rv-accent) 50%),linear-gradient(135deg,var(--rv-accent) 50%,transparent 50%);
+    background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:34px;}
+  .rv-2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+  .rv-hint{font-size:10.5px;color:var(--rv-muted);margin:6px 0 0;line-height:1.6;}
+  .rv-note{display:none;font-size:11px;color:#e08276;margin:7px 0 0;line-height:1.6;}
+
+  .rv-tel{display:flex;align-items:center;gap:10px;margin-top:11px;padding:11px 13px;
+    border:1px solid var(--rv-line);border-radius:8px;text-decoration:none;background:var(--rv-panel);}
+  .rv-tel b{display:block;font-size:11px;color:var(--rv-accent);font-weight:600;}
+  .rv-tel span{display:block;font-size:13px;color:var(--rv-text);letter-spacing:.03em;}
+
+  .rv-err{color:#e08276;font-size:12px;margin:0 0 12px;display:none;line-height:1.6;}
+  .rv-go{width:100%;background:var(--rv-accent);color:var(--rv-on-accent);border:none;cursor:pointer;
+    font-family:var(--rv-body);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+    padding:16px;border-radius:8px;transition:transform .15s,filter .15s;}
+  .rv-go:hover{filter:brightness(1.06);}
+  .rv-go:active{transform:translateY(1px);}
+  .rv-fine{font-size:10.5px;color:var(--rv-muted);text-align:center;margin:11px 0 0;line-height:1.7;}
+
+  /* ---- confirm ---- */
+  .rv-recap{border:1px solid var(--rv-line);border-radius:10px;overflow:hidden;margin-bottom:16px;}
+  .rv-recap-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    padding:11px 14px;border-bottom:1px solid var(--rv-line);}
+  .rv-recap-row:last-child{border-bottom:none;}
+  .rv-recap-k{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--rv-muted);flex-shrink:0;}
+  .rv-recap-v{font-family:var(--rv-display);font-size:19px;color:var(--rv-accent);text-align:right;line-height:1.3;}
+  .rv-recap-v.sm{font-size:13.5px;font-family:var(--rv-body);color:var(--rv-text);}
+  .rv-policy{border:1px solid var(--rv-line);border-radius:8px;padding:12px 14px;margin-bottom:12px;
+    font-size:11px;color:var(--rv-muted);line-height:1.8;}
+  .rv-policy b{display:block;color:var(--rv-accent);font-weight:600;margin-bottom:5px;font-size:11px;letter-spacing:.06em;}
+  .rv-check{display:flex;gap:11px;align-items:flex-start;cursor:pointer;padding:11px 0;border-top:1px solid var(--rv-line);}
+  .rv-check:first-of-type{border-top:none;}
+  .rv-box{appearance:none;-webkit-appearance:none;width:19px;height:19px;flex-shrink:0;margin-top:1px;
+    border:1.5px solid var(--rv-line);border-radius:4px;background:var(--rv-panel);cursor:pointer;position:relative;}
+  .rv-box:checked{background:var(--rv-accent);border-color:var(--rv-accent);}
+  .rv-box:checked::after{content:'';position:absolute;left:6px;top:2px;width:5px;height:10px;
+    border:solid var(--rv-on-accent);border-width:0 2px 2px 0;transform:rotate(45deg);}
+  .rv-check-t{font-size:12.5px;color:var(--rv-text);line-height:1.55;}
+  .rv-check-t small{display:block;color:var(--rv-muted);font-size:11px;}
+  .rv-pair{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:16px;}
+  .rv-ghost{background:transparent;border:1px solid var(--rv-line);color:var(--rv-text);
+    font-family:var(--rv-body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    padding:14px 8px;border-radius:8px;cursor:pointer;}
+
+  /* ---- success ---- */
+  .rv-ok{text-align:center;padding:14px 4px 6px;}
+  .rv-seal{width:64px;height:64px;margin:0 auto 20px;border-radius:50%;border:1px solid var(--rv-accent);
+    display:flex;align-items:center;justify-content:center;color:var(--rv-accent);font-size:28px;
+    animation:rvSeal .6s cubic-bezier(.34,1.56,.64,1) both;}
+  @keyframes rvSeal{from{transform:scale(.4);opacity:0;}to{transform:scale(1);opacity:1;}}
+  @media(prefers-reduced-motion:reduce){.rv-seal{animation:none;}}
+</style>
+
+<div class="rv-scrim" id="reserveModal" role="dialog" aria-modal="true" aria-labelledby="rvTitle">
+ <div class="rv-wrap">
+  <div class="rv-panel">
+   <button class="rv-x" onclick="closeReserveModal()" aria-label="Close">&#215;</button>
+
+   <p class="rv-eyebrow" data-i18n="rv.eyebrow">Reservation</p>
+   <h3 class="rv-title" id="rvTitle" data-i18n="rv.title">Request a seat</h3>
+   <p class="rv-sub" data-i18n="rv.sub">We reply by email once the counter is confirmed.</p>
+
+   <div id="reserveForm">
+    <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+      <label for="r_website">Website</label>
+      <input id="r_website" name="website" type="text" tabindex="-1" autocomplete="off"/>
+    </div>
+
+    <div class="rv-step"><span class="rv-step-n">01</span><span class="rv-step-t" data-i18n="rv.s1">When</span><span class="rv-step-rule"></span></div>
+
+    <div class="rv-field">
+      <label class="rv-lab" for="r_date" data-i18n="rv.date">Date<span class="rv-req">*</span></label>
+      <input id="r_date" class="rv-in" type="date"/>
+      <p class="rv-note" id="r_date_note"></p>
+      {% if store.tel_raw and store.tel_raw != "TBD" %}
+      <a class="rv-tel" href="tel:{{ store.tel_raw }}" data-ga-event="tel_click" data-ga-location="reserve_form">
+        <b data-i18n="rv.sameday">Today? Please call</b>
+        <span>{{ store.tel_display }}</span>
+      </a>
+      {% endif %}
+    </div>
+
+    <div class="rv-2">
+      <div class="rv-field">
+        <label class="rv-lab" for="r_time" data-i18n="rv.time">Time<span class="rv-req">*</span></label>
+        <select id="r_time" class="rv-sel"><option value="">—</option>{% for t in store.time_slots %}<option value="{{ t }}">{{ t }}</option>{% endfor %}</select>
+      </div>
+      <div class="rv-field">
+        <label class="rv-lab" for="r_guests" data-i18n="rv.guests">Guests<span class="rv-req">*</span></label>
+        <select id="r_guests" class="rv-sel"><option value="">—</option>{% for n in range(1, (store.max_guests or 8) + 1) %}<option>{{ n }}</option>{% endfor %}</select>
+      </div>
+    </div>
+
+    <div class="rv-step"><span class="rv-step-n">02</span><span class="rv-step-t" data-i18n="rv.s2">Course</span><span class="rv-step-rule"></span></div>
+
+    <div class="rv-field">
+      <label class="rv-lab" for="r_course_sel" data-i18n="rv.course">Course<span class="rv-req">*</span></label>
+      <select id="r_course_sel" class="rv-sel" onchange="rvPickCourse(this.value)">
+        <option value="" data-i18n="rv.coursePick">Select a course</option>
+        {% for cat in courses.cats %}
+        <optgroup label="{{ cat.label.en }}" data-i18n-og="cat.{{ cat.key }}.label">
+        {% for c in courses.list %}{% if c.cat == cat.key %}
+          <option value="{{ c.id }}" data-i18n="course.{{ c.id }}.opt">{{ c.name.en }}</option>
+        {% endif %}{% endfor %}
+        </optgroup>
+        {% endfor %}
+      </select>
+      <input type="hidden" id="r_course" value=""/>
+      <p class="rv-hint" data-i18n="rv.courseHint">Per person. Every dish is Muslim-friendly and alcohol-free.</p>
+    </div>
+
+    <div class="rv-step"><span class="rv-step-n">03</span><span class="rv-step-t" data-i18n="rv.s3">You</span><span class="rv-step-rule"></span></div>
+
+    <div class="rv-field">
+      <label class="rv-lab" for="r_name" data-i18n="rv.name">Name<span class="rv-req">*</span></label>
+      <input id="r_name" class="rv-in" type="text" autocomplete="name" placeholder="Yamada Taro"/>
+    </div>
+    <div class="rv-field">
+      <label class="rv-lab" for="r_email" data-i18n="rv.email">Email<span class="rv-req">*</span></label>
+      <input id="r_email" class="rv-in" type="email" autocomplete="email" placeholder="you@example.com"/>
+    </div>
+    <div class="rv-field">
+      <label class="rv-lab" for="r_phone" data-i18n="rv.phone">Phone<span class="rv-req">*</span></label>
+      <input id="r_phone" class="rv-in" type="tel" autocomplete="tel" placeholder="+81 90 0000 0000"/>
+    </div>
+    <div class="rv-field">
+      <label class="rv-lab" for="r_referrer" data-i18n="rv.ref">Referred by</label>
+      <input id="r_referrer" class="rv-in" type="text" autocomplete="off" data-i18n-ph="rv.optional" placeholder="Optional"/>
+    </div>
+    <div class="rv-field">
+      <label class="rv-lab" for="r_message" data-i18n="rv.msg">Allergies &amp; requests</label>
+      <textarea id="r_message" class="rv-ta" rows="3" data-i18n-ph="rv.msgPh" placeholder="Allergies, dietary needs, celebrations…"></textarea>
+    </div>
+
+    <p class="rv-err" id="r_error"></p>
+    <button type="button" class="rv-go" id="r_submit" onclick="openConfirmDialog()" data-i18n="rv.next">Review &amp; send</button>
+    <p class="rv-fine" data-i18n="rv.fine">No payment now. You can cancel free of charge up to 48 hours before.</p>
+   </div>
+
+   <div id="reserveSuccess" style="display:none;">
+    <div class="rv-ok">
+      <div class="rv-seal">&#10003;</div>
+      <h4 class="rv-title" style="font-size:22px;" data-i18n="rv.okTitle">Request received</h4>
+      <p class="rv-sub" style="margin-bottom:18px;" data-i18n="rv.okBody">We will email you a confirmation shortly. Please check your spam folder if it does not arrive.</p>
+      <button class="rv-ghost" style="width:auto;padding:13px 34px;" onclick="closeReserveModal()" data-i18n="rv.close">Close</button>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="rv-scrim" id="confirmDialog" role="dialog" aria-modal="true">
+ <div class="rv-wrap">
+  <div class="rv-panel" style="max-width:460px;">
+   <button class="rv-x" onclick="closeConfirmDialog()" aria-label="Close">&#215;</button>
+   <p class="rv-eyebrow" data-i18n="rv.finalEyebrow">Final check</p>
+   <h3 class="rv-title" style="font-size:22px;" data-i18n="rv.finalTitle">Is this right?</h3>
+   <p class="rv-sub" data-i18n="rv.finalSub">Ingredients and seating are prepared per reservation, so please confirm before sending.</p>
+
+   <div class="rv-recap">
+     <div class="rv-recap-row"><span class="rv-recap-k" data-i18n="rv.date2">Date</span><span class="rv-recap-v" id="confirm_date">—</span></div>
+     <div class="rv-recap-row"><span class="rv-recap-k" data-i18n="rv.time2">Time</span><span class="rv-recap-v" id="confirm_time">—</span></div>
+     <div class="rv-recap-row"><span class="rv-recap-k" data-i18n="rv.guests2">Guests</span><span class="rv-recap-v" id="confirm_guests">—</span></div>
+     <div class="rv-recap-row"><span class="rv-recap-k" data-i18n="rv.course2">Course</span><span class="rv-recap-v sm" id="confirm_course">—</span></div>
+   </div>
+
+   <div class="rv-policy">
+     <b data-i18n="rv.cxTitle">Cancellation</b>
+     <span data-i18n="rv.cx48">Within 48 hours: ¥5,000 per person</span><br/>
+     <span data-i18n="rv.cx24">Within 24 hours: ¥10,000 per person</span>
+     {% if store.tel_display != 'TBD' %}<br/><span data-i18n="rv.cxTel">For urgent changes, call</span> <a href="tel:{{ store.tel_raw }}" style="color:var(--rv-accent);">{{ store.tel_display }}</a>{% endif %}
+   </div>
+   <div class="rv-policy">
+     <b data-i18n="rv.pvTitle">Privacy</b>
+     <span data-i18n="rv.pvBody">Your details are used only to confirm and manage this reservation, and are never shared with third parties except where required by law.</span>
+   </div>
+
+   <label class="rv-check">
+     <input class="rv-box" type="checkbox" id="confirm_check_details"/>
+     <span class="rv-check-t" data-i18n="rv.ck1">Date, time and party size are correct.</span>
+   </label>
+   <label class="rv-check">
+     <input class="rv-box" type="checkbox" id="confirm_check_policy"/>
+     <span class="rv-check-t" data-i18n="rv.ck2">I have read the cancellation policy.</span>
+   </label>
+
+   <p class="rv-err" id="confirm_error" style="margin-top:12px;"></p>
+   <div class="rv-pair">
+     <button class="rv-ghost" onclick="closeConfirmDialog()" data-i18n="rv.edit">Edit</button>
+     <button class="rv-go" id="confirm_submit_btn" onclick="confirmAndSubmit()" data-i18n="rv.send">Send request</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+(function(){
+  /* ---------- 文言を window.I18N に合流 ---------- */
+  var D = {
+    en:{
+      "rv.eyebrow":"Reservation","rv.title":"Request a seat",
+      "rv.sub":"Tell us when — we confirm your counter by email, usually within a few hours.",
+      "rv.s1":"When","rv.s2":"Course","rv.s3":"You",
+      "rv.date":"Date","rv.time":"Time","rv.guests":"Guests","rv.course":"Course",
+      "rv.coursePick":"Select a course","rv.courseHint":"Price per person. Every dish is Muslim-friendly and alcohol-free.",
+      "rv.name":"Name","rv.email":"Email","rv.phone":"Phone","rv.ref":"Referred by",
+      "rv.optional":"Optional","rv.msg":"Allergies & requests","rv.msgPh":"Allergies, dietary needs, celebrations…",
+      "rv.sameday":"Booking for today? Please call","rv.next":"Review & send",
+      "rv.fine":"No payment now. Free cancellation up to 48 hours before.",
+      "rv.okTitle":"Request received","rv.okBody":"We will email your confirmation shortly. Please check your spam folder if it does not arrive.",
+      "rv.close":"Close","rv.finalEyebrow":"Final check","rv.finalTitle":"Is this right?",
+      "rv.finalSub":"Ingredients and seats are prepared per reservation, so please confirm before sending.",
+      "rv.date2":"Date","rv.time2":"Time","rv.guests2":"Guests","rv.course2":"Course",
+      "rv.cxTitle":"Cancellation","rv.cx48":"Within 48 hours: ¥5,000 per person","rv.cx24":"Within 24 hours: ¥10,000 per person",
+      "rv.cxTel":"For urgent changes, call","rv.pvTitle":"Privacy",
+      "rv.pvBody":"Your details are used only to confirm and manage this reservation, and are never shared with third parties except where required by law.",
+      "rv.ck1":"Date, time and party size are correct.","rv.ck2":"I have read the cancellation policy.",
+      "rv.edit":"Edit","rv.send":"Send request","rv.sending":"Sending…",
+      "rv.eRequired":"Please fill in every required field.",
+      "rv.ePast":"Please choose today or a later date.",
+      "rv.eSameday":"Same-day bookings are taken by phone.",
+      "rv.ePassed":"That time has passed for today. Please choose another slot.",
+      "rv.eBlocked":"That date is not available. Please choose another.",
+      "rv.eCheck":"Please tick both boxes.",
+      "rv.eFull":"That time slot is fully booked. Please choose another time.",
+      "rv.eNet":"We could not check availability. Please check your connection and try again.",
+      "rv.eGeneric":"Something went wrong. Please try again.",
+      "rv.closedSlot":" (closed)","rv.fullSlot":" (full)"
+    },
+    ja:{
+      "rv.eyebrow":"ご予約","rv.title":"席をリクエストする",
+      "rv.sub":"ご希望日をお知らせください。カウンターを確保でき次第、メールでご連絡します（通常数時間以内）。",
+      "rv.s1":"日時","rv.s2":"コース","rv.s3":"お客様情報",
+      "rv.date":"ご希望日","rv.time":"時間","rv.guests":"人数","rv.course":"コース",
+      "rv.coursePick":"コースを選ぶ","rv.courseHint":"表示は1名様あたり。全品ムスリムフレンドリー・ノンアルコールです。",
+      "rv.name":"お名前","rv.email":"メールアドレス","rv.phone":"電話番号","rv.ref":"紹介者",
+      "rv.optional":"任意","rv.msg":"アレルギー・ご要望","rv.msgPh":"アレルギー、食事制限、記念日など",
+      "rv.sameday":"当日のご予約はお電話で","rv.next":"内容を確認する",
+      "rv.fine":"事前決済はありません。48時間前まで無料でキャンセルいただけます。",
+      "rv.okTitle":"リクエストを承りました","rv.okBody":"確認メールをお送りします。届かない場合は迷惑メールフォルダをご確認ください。",
+      "rv.close":"閉じる","rv.finalEyebrow":"最終確認","rv.finalTitle":"この内容でよろしいですか",
+      "rv.finalSub":"ご予約に合わせて食材とお席をご用意します。送信前にご確認ください。",
+      "rv.date2":"日付","rv.time2":"時間","rv.guests2":"人数","rv.course2":"コース",
+      "rv.cxTitle":"キャンセルポリシー","rv.cx48":"48時間前以内：1名様 ¥5,000","rv.cx24":"24時間前以内：1名様 ¥10,000",
+      "rv.cxTel":"お急ぎの変更はお電話で","rv.pvTitle":"個人情報の取り扱い",
+      "rv.pvBody":"ご記入いただいた情報は、本予約の確認・連絡・店舗からのご案内にのみ使用します。法令に基づく場合を除き第三者に提供しません。",
+      "rv.ck1":"日付・時間・人数を確認しました","rv.ck2":"キャンセルポリシーを確認しました",
+      "rv.edit":"修正する","rv.send":"この内容で送信","rv.sending":"送信中…",
+      "rv.eRequired":"必須項目をご入力ください。",
+      "rv.ePast":"過去の日付は選択できません。",
+      "rv.eSameday":"本日のご予約はお電話で承ります。",
+      "rv.ePassed":"本日のこの時間枠は受付を終了しました。別の時間をお選びください。",
+      "rv.eBlocked":"選択された日は受付しておりません。別の日をお選びください。",
+      "rv.eCheck":"両方にチェックを入れてください。",
+      "rv.eFull":"選択された時間枠は満席です。別の時間をお選びください。",
+      "rv.eNet":"空き状況の確認に失敗しました。通信環境をご確認のうえ、もう一度お試しください。",
+      "rv.eGeneric":"エラーが発生しました。もう一度お試しください。",
+      "rv.closedSlot":"（受付終了）","rv.fullSlot":"（満席）"
+    },
+    zh:{
+      "rv.eyebrow":"预约","rv.title":"预约座位",
+      "rv.sub":"请告知您希望的日期。确认吧台座位后，我们会以邮件回覆（通常数小时内）。",
+      "rv.s1":"日期与时间","rv.s2":"套餐","rv.s3":"您的资料",
+      "rv.date":"日期","rv.time":"时间","rv.guests":"人数","rv.course":"套餐",
+      "rv.coursePick":"请选择套餐","rv.courseHint":"价格为每位。全部料理为穆斯林友善、无酒精。",
+      "rv.name":"姓名","rv.email":"电子邮件","rv.phone":"电话","rv.ref":"介绍人",
+      "rv.optional":"选填","rv.msg":"过敏与需求","rv.msgPh":"过敏、饮食限制、纪念日等",
+      "rv.sameday":"当日预约请来电","rv.next":"确认内容",
+      "rv.fine":"无需预先付款。用餐前48小时可免费取消。",
+      "rv.okTitle":"已收到您的预约申请","rv.okBody":"我们将尽快寄出确认邮件。若未收到，请查看垃圾邮件匣。",
+      "rv.close":"关闭","rv.finalEyebrow":"最终确认","rv.finalTitle":"以下内容是否正确？",
+      "rv.finalSub":"我们会依预约准备食材与座位，送出前请再次确认。",
+      "rv.date2":"日期","rv.time2":"时间","rv.guests2":"人数","rv.course2":"套餐",
+      "rv.cxTitle":"取消规定","rv.cx48":"48小时内：每位 ¥5,000","rv.cx24":"24小时内：每位 ¥10,000",
+      "rv.cxTel":"紧急变更请来电","rv.pvTitle":"个人资料",
+      "rv.pvBody":"您提供的资料仅用于本次预约的确认与联络，除法律要求外不会提供给第三方。",
+      "rv.ck1":"已确认日期、时间与人数","rv.ck2":"已阅读并同意取消规定",
+      "rv.edit":"修改","rv.send":"送出预约","rv.sending":"传送中…",
+      "rv.eRequired":"请填写所有必填项目。",
+      "rv.ePast":"无法选择过去的日期。",
+      "rv.eSameday":"当日预约请来电洽询。",
+      "rv.ePassed":"今日该时段已截止，请选择其他时间。",
+      "rv.eBlocked":"该日期暂不接受预约，请选择其他日期。",
+      "rv.eCheck":"请勾选两个项目。",
+      "rv.eFull":"该时段已满席，请选择其他时间。",
+      "rv.eNet":"无法确认空位状况，请检查网路后再试。",
+      "rv.eGeneric":"发生错误，请再试一次。",
+      "rv.closedSlot":"（已截止）","rv.fullSlot":"（满席）"
+    }
+  };
+  window.I18N = window.I18N || {en:{},ja:{},zh:{}};
+  ['en','ja','zh'].forEach(function(L){
+    window.I18N[L] = window.I18N[L] || {};
+    Object.keys(D[L]).forEach(function(k){ if(!(k in window.I18N[L])) window.I18N[L][k] = D[L][k]; });
+  });
+
+  function T(k){
+    var L = (window.CURRENT_LANG || 'en');
+    return (window.I18N[L] && window.I18N[L][k]) || (window.I18N.en && window.I18N.en[k]) || k;
+  }
+  window.rvT = T;
+
+  /* ---------- 店舗設定（stores.js から） ---------- */
+  var EMAILJS_CFG = {
+    public_key:        '{{ store.form_config.emailjs.public_key }}',
+    service_id:        '{{ store.form_config.emailjs.service_id }}',
+    template_id_owner: '{{ store.form_config.emailjs.template_id_owner }}',
+    template_id_guest: '{{ store.form_config.emailjs.template_id_guest }}'
+  };
+  var STORE_INFO = {
+    location:'{{ store.name_jp }}', location_key:'{{ store.slug }}',
+    address_jp:'{{ store.address_jp_line1 }}', address_en:'{{ store.address_en_line1 }}'
+  };
+  var SAME_DAY_RESERVE = ('{{ store.same_day_reserve }}' === 'true');
+  var TIME_SLOTS = [{% for t in store.time_slots %}'{{ t }}'{% if not loop.last %},{% endif %}{% endfor %}];
+  var TEL_DISPLAY = '{{ store.tel_display }}', TEL_RAW = '{{ store.tel_raw }}';
+  var GAS_ENDPOINT = '{{ stores.brand.gas_endpoint or "" }}';
+  var PRICE_ADJUST = parseInt('{{ store.price_adjust or 0 }}',10) || 0;
+  var SHOW_PRICE = {{ 'true' if showPrice else 'false' }};
+  var BLOCKED = [{% if store.form_config and store.form_config.blocked_dates %}{% for d in store.form_config.blocked_dates %}'{{ d }}'{% if not loop.last %},{% endif %}{% endfor %}{% endif %}];
+
+  var COURSES = {
+  {% for c in courses.list %}'{{ c.id }}':{base:{{ c.base }},noadj:{{ 'true' if c.noadj else 'false' }}}{% if not loop.last %},{% endif %}
+  {% endfor %}};
+
+  if (typeof emailjs !== 'undefined' && EMAILJS_CFG.public_key) emailjs.init(EMAILJS_CFG.public_key);
+
+  function yen(n){ return '¥' + n.toLocaleString('en-US'); }
+  function ymd(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function todayStr(){ return ymd(new Date()); }
+
+  /* ---------- コース選択 ---------- */
+  window.rvPickCourse = function(id){
+    var hidden = document.getElementById('r_course');
+    var sel = document.getElementById('r_course_sel');
+    if (!id){ hidden.value=''; return; }
+    var opt = sel.querySelector('option[value="'+id+'"]');
+    var label = opt ? opt.textContent.trim() : id;
+    var c = COURSES[id];
+    var val = label;
+    if (c && SHOW_PRICE){
+      var p = c.base + (c.noadj ? 0 : PRICE_ADJUST);
+      val = label + ' - ' + yen(p) + ' (' + yen(Math.floor(p*1.1)) + ' incl.tax)';
+    }
+    hidden.value = val;
+    if (sel.value !== id) sel.value = id;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({event:'course_select', course_id:id});
+  };
+
+  /* ---------- 時間枠の絞り込み ---------- */
+  function refreshSlots(dateStr){
+    var sel = document.getElementById('r_time'); if(!sel) return;
+    var now = new Date(), isToday = (dateStr === todayStr());
+    var nowMin = now.getHours()*60 + now.getMinutes(), cur = sel.value, html = '<option value="">—</option>';
+    TIME_SLOTS.forEach(function(t){
+      var p=t.split(':'), m=parseInt(p[0],10)*60+parseInt(p[1]||'0',10);
+      var off = isToday && m <= nowMin;
+      html += '<option value="'+t+'"'+(off?' disabled':'')+'>'+t+(off?T('rv.closedSlot'):'')+'</option>';
+    });
+    sel.innerHTML = html;
+    sel.value = (cur && TIME_SLOTS.indexOf(cur)!==-1) ? cur : '';
+  }
+
+  async function refreshAvailability(){
+    var date = document.getElementById('r_date').value, sel = document.getElementById('r_time');
+    if(!date || !sel || !GAS_ENDPOINT) return;
+    try{
+      var res = await fetch(GAS_ENDPOINT+'?store='+encodeURIComponent(STORE_INFO.location_key)+'&date='+encodeURIComponent(date));
+      var j = await res.json(); if(!j || !j.ok) return;
+      Array.prototype.forEach.call(sel.options, function(o){
+        if(!o.value) return;
+        var s = j.slots[o.value]; if(!s) return;
+        if(s.full){ o.disabled=true; o.textContent=o.value+T('rv.fullSlot'); if(sel.value===o.value) sel.value=''; }
+        else { o.disabled=false; o.textContent=o.value; }
+      });
+    }catch(e){ console.warn('availability fetch failed', e); }
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var di = document.getElementById('r_date');
+    if(di) di.addEventListener('change', function(){
+      var note = document.getElementById('r_date_note');
+      if(this.value && BLOCKED.indexOf(this.value)!==-1){
+        this.value=''; if(note){ note.textContent=T('rv.eBlocked'); note.style.display='block'; }
+        return;
+      }
+      if(note) note.style.display='none';
+      refreshSlots(this.value);
+      refreshAvailability();
+    });
+    var m=document.getElementById('reserveModal');
+    if(m) m.addEventListener('click', function(e){ if(e.target===this) closeReserveModal(); });
+    var cd=document.getElementById('confirmDialog');
+    if(cd) cd.addEventListener('click', function(e){ if(e.target===this) closeConfirmDialog(); });
+    document.addEventListener('keydown', function(e){
+      if(e.key!=='Escape') return;
+      if(document.getElementById('confirmDialog').classList.contains('open')) closeConfirmDialog();
+      else if(document.getElementById('reserveModal').classList.contains('open')) closeReserveModal();
+    });
+  });
+
+  /* ---------- 開閉 ---------- */
+  window.openReserveModal = function(label, preselect){
+    document.getElementById('reserveModal').classList.add('open');
+    document.body.style.overflow='hidden';
+    window._rvOpenedAt = Date.now();
+    var min = new Date(); min.setHours(0,0,0,0);
+    if(!SAME_DAY_RESERVE) min.setDate(min.getDate()+1);
+    var g=0; while(BLOCKED.indexOf(ymd(min))!==-1 && g<366){ min.setDate(min.getDate()+1); g++; }
+    document.getElementById('r_date').setAttribute('min', ymd(min));
+    if(preselect && COURSES[preselect]){
+      document.getElementById('r_course_sel').value = preselect;
+      window.rvPickCourse(preselect);
+    }
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({event:'reserve_open', event_label: label || 'unknown'});
+  };
+  window.openReserve = window.openReserveModal;
+
+  window.closeReserveModal = function(){
+    document.getElementById('reserveModal').classList.remove('open');
+    document.getElementById('confirmDialog').classList.remove('open');
+    document.body.style.overflow='';
+    document.getElementById('reserveForm').style.display='block';
+    document.getElementById('reserveSuccess').style.display='none';
+    ['r_name','r_email','r_phone','r_referrer','r_course','r_course_sel','r_guests','r_time','r_date','r_message','r_website'].forEach(function(id){
+      var el=document.getElementById(id); if(el) el.value='';
+    });
+    ['confirm_check_details','confirm_check_policy'].forEach(function(id){ var c=document.getElementById(id); if(c) c.checked=false; });
+    var e=document.getElementById('r_error'); if(e){ e.style.display='none'; e.textContent=''; }
+    var b=document.getElementById('r_submit'); if(b){ b.textContent=T('rv.next'); b.disabled=false; }
+  };
+  window.closeConfirmDialog = function(){ document.getElementById('confirmDialog').classList.remove('open'); };
+
+  /* ---------- 確認ダイアログ ---------- */
+  window.openConfirmDialog = function(){
+    var g = function(id){ return (document.getElementById(id).value||'').trim(); };
+    var err = document.getElementById('r_error');
+    function fail(msg, html){ if(html){ err.innerHTML=msg; } else { err.textContent=msg; } err.style.display='block'; err.scrollIntoView({block:'center',behavior:'smooth'}); }
+
+    if(g('r_website') !== ''){ showSuccess(); return; }
+    if(Date.now() - (window._rvOpenedAt||0) < 3000){ showSuccess(); return; }
+
+    var name=g('r_name'), email=g('r_email'), phone=g('r_phone'), course=g('r_course'),
+        guests=g('r_guests'), time=g('r_time'), date=g('r_date');
+    if(!name||!email||!phone||!course||!guests||!time||!date){ return fail(T('rv.eRequired')); }
+    var today = todayStr();
+    if(date < today){ return fail(T('rv.ePast')); }
+    if(!SAME_DAY_RESERVE && date === today){
+      return fail(T('rv.eSameday') + (TEL_DISPLAY ? ' <a href="tel:'+TEL_RAW+'" style="color:var(--rv-accent);text-decoration:underline;">'+TEL_DISPLAY+'</a>' : ''), true);
+    }
+    if(SAME_DAY_RESERVE && date === today){
+      var n=new Date(), nowMin=n.getHours()*60+n.getMinutes();
+      var sm=parseInt(time.split(':')[0],10)*60+parseInt(time.split(':')[1]||'0',10);
+      if(sm <= nowMin){ return fail(T('rv.ePassed')); }
+    }
+    if(BLOCKED.indexOf(date)!==-1){ return fail(T('rv.eBlocked')); }
+    err.style.display='none';
+
+    var d=new Date(date+'T00:00:00');
+    var wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+    document.getElementById('confirm_date').textContent =
+      d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+' ('+wd+')';
+    document.getElementById('confirm_time').textContent = time;
+    document.getElementById('confirm_guests').textContent = guests;
+    document.getElementById('confirm_course').textContent = course.split(' - ')[0];
+    document.getElementById('confirm_check_details').checked=false;
+    document.getElementById('confirm_check_policy').checked=false;
+    document.getElementById('confirm_error').style.display='none';
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({event:'final_check_view', form_course:course, form_guests:guests, form_date:date});
+    document.getElementById('confirmDialog').classList.add('open');
+  };
+
+  function showSuccess(){
+    document.getElementById('confirmDialog').classList.remove('open');
+    document.getElementById('reserveForm').style.display='none';
+    document.getElementById('reserveSuccess').style.display='block';
+    document.querySelector('#reserveModal .rv-panel').scrollIntoView({block:'center'});
+  }
+
+  /* ---------- 送信 ---------- */
+  window.confirmAndSubmit = async function(){
+    var err=document.getElementById('confirm_error');
+    var btn=document.getElementById('confirm_submit_btn');
+    if(!document.getElementById('confirm_check_details').checked ||
+       !document.getElementById('confirm_check_policy').checked){
+      err.textContent=T('rv.eCheck'); err.style.display='block'; return;
+    }
+    err.style.display='none';
+    btn.textContent=T('rv.sending'); btn.disabled=true;
+    function reset(){ btn.textContent=T('rv.send'); btn.disabled=false; }
+    var v=function(id){ return (document.getElementById(id).value||'').trim(); };
+
+    var params = {
+      name:v('r_name'), email:v('r_email'), phone:v('r_phone'), referrer:v('r_referrer'),
+      course:v('r_course'), guests:v('r_guests'), time:v('r_time'), date:v('r_date'),
+      message:v('r_message'), source_path:window.location.pathname,
+      store_slug:STORE_INFO.location_key, location:STORE_INFO.location,
+      location_key:STORE_INFO.location_key,
+      address_jp:STORE_INFO.address_jp, address_en:STORE_INFO.address_en,
+      lang:(window.CURRENT_LANG||'en')
+    };
+
+    if(GAS_ENDPOINT){
+      var cap;
+      try{
+        var r = await fetch(GAS_ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(params)});
+        cap = await r.json();
+      }catch(e){ err.textContent=T('rv.eNet'); err.style.display='block'; reset(); return; }
+      if(!cap || !cap.ok){
+        err.textContent = (cap && cap.reason==='full') ? T('rv.eFull') : T('rv.eGeneric');
+        err.style.display='block'; reset(); await refreshAvailability(); return;
+      }
+      params.booking_id = cap.booking_id;
+    }
+
+    if(typeof emailjs!=='undefined' && EMAILJS_CFG.public_key){
+      emailjs.send(EMAILJS_CFG.service_id, EMAILJS_CFG.template_id_owner, params).catch(function(e){console.warn('owner mail failed',e);});
+      emailjs.send(EMAILJS_CFG.service_id, EMAILJS_CFG.template_id_guest, params).catch(function(e){console.warn('guest mail failed',e);});
+    }
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({event:'reservation_form_submit', form_guests:params.guests,
+      form_date:params.date, form_course:params.course, booking_id:params.booking_id||''});
+    showSuccess();
+  };
+})();
+</script>
