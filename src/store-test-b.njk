@@ -6,7 +6,7 @@ pagination:
 permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}index.html"
 eleventyComputed:
   title: "{{ store.name_full_en }}"
-  tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral{% else %}#{% endif %}"
+  tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_content=lp_cta{% else %}#{% endif %}"
 ---
 {% set TCATS = courses.themes[store.theme] or courses.themes.all %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
