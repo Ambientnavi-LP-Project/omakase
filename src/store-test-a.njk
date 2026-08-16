@@ -192,11 +192,15 @@ html.no-js .reveal{opacity:1;transform:none;}
 /* 写真をずらして重ねるコラージュ */
 .collage{display:grid;gap:clamp(20px,3vw,40px);align-items:center;}
 @media(min-width:1000px){.collage{grid-template-columns:.9fr 1.1fr;}}
-.collage-imgs{position:relative;}
-.collage-imgs .a{width:100%;aspect-ratio:16/10;object-fit:cover;}
-.collage-imgs .b{position:absolute;right:calc(var(--gut) * -0.5);bottom:-34px;width:44%;aspect-ratio:4/3;
-  object-fit:cover;border:6px solid var(--navy);}
-@media(max-width:760px){.collage-imgs .b{position:static;width:70%;margin:12px 0 0 auto;border:none;}}
+.collage-imgs{position:relative;padding-bottom:clamp(30px,4vw,52px);}
+.collage-imgs .a{width:76%;aspect-ratio:4/3;object-fit:cover;}
+.collage-imgs .b{position:absolute;right:0;bottom:0;width:42%;aspect-ratio:4/3;object-fit:cover;
+  border:5px solid var(--navy);box-shadow:0 18px 44px -22px rgba(0,0,0,.9);}
+@media(max-width:760px){
+  .collage-imgs{padding-bottom:0;}
+  .collage-imgs .a{width:100%;aspect-ratio:16/10;}
+  .collage-imgs .b{position:static;width:62%;margin:10px 0 0 auto;border:none;box-shadow:none;}
+}
 
 /* ---------- menu ---------- */
 .cg{border-top:1px solid var(--line);padding-top:clamp(30px,4.5vw,54px);margin-top:clamp(30px,4.5vw,54px);}

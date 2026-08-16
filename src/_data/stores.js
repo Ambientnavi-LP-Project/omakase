@@ -417,11 +417,12 @@ const TEST_DESIGNS = [
 const FORCE_PRICES = false;   // ← true にすると test-a / test-b で価格を表示
 
 // 検証ページの予約導線。
-//   "form"       … ページ内フォーム(EmailJS)。新デザインの予約UIを確認したいとき（既定）
-//   "tablecheck" … 予約ボタンで外部TableCheckへ遷移
-//   "store"      … 各店舗の本番設定(store.reserve_system)をそのまま使う
+//   "store"      … 各店舗の本番設定(store.reserve_system)をそのまま使う（既定）
+//                  稼働3店はすべて "tablecheck" なので、予約ボタンはTableCheckへ遷移します
+//   "tablecheck" … 本番設定にかかわらず全店TableCheckへ遷移
+//   "form"       … ページ内フォーム(EmailJS)。新デザインの予約UIを確認したいとき
 // どれを選んでも本番LPの挙動は変わりません。
-const TEST_RESERVE = "form";
+const TEST_RESERVE = "store";
 
 const pagesTestA = [];
 const pagesTestB = [];
