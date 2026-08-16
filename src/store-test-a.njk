@@ -671,5 +671,17 @@ document.addEventListener('DOMContentLoaded', initLang);
   };
   </script>
 {% endif %}
+<!-- ACQ-FORWARD: 本当の獲得元(utm/gclid)をTableCheck予約リンクへ転記。TableCheck側のクロスドメイン受入待ちの代替。 -->
+<script>
+(function(){
+  var KEYS=['utm_source','utm_medium','utm_campaign','utm_term','gclid','gbraid','wbraid'];
+  try{var qs=new URLSearchParams(location.search);KEYS.forEach(function(k){var v=qs.get(k);if(v&&!sessionStorage.getItem('acq_'+k))sessionStorage.setItem('acq_'+k,v);});}catch(e){}
+  function extra(){var p=[];KEYS.forEach(function(k){var v=null;try{v=sessionStorage.getItem('acq_'+k);}catch(e){}if(v)p.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});return p.join('&');}
+  function one(a){if(!a||a.getAttribute('data-acq'))return;var h=a.getAttribute('href');if(!h||h.indexOf('tablecheck.com')<0)return;var e=extra();if(!e)return;a.setAttribute('href',h+(h.indexOf('?')>-1?'&':'?')+e);a.setAttribute('data-acq','1');}
+  function all(){var l=document.querySelectorAll('a[href*="tablecheck.com"]');for(var i=0;i<l.length;i++)one(l[i]);}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',all);else all();
+  document.addEventListener('click',function(e){var a=e.target.closest?e.target.closest('a[href*="tablecheck.com"]'):null;if(a)one(a);},true);
+})();
+</script>
 </body>
 </html>
