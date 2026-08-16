@@ -39,17 +39,23 @@
 
 ### 寿司／和牛での出し分け
 
-既存の `store-sushi.njk` / `store-wagyu.njk` と同じ組み合わせにしています。
+**テーマ外のコースは一切出しません。** 寿司LPには和牛のステーキ・すき焼きが載らず、和牛LPには寿司コースが載りません。
+掲載カテゴリは `src/_data/courses.js` の `THEMES` で定義しています。
 
-| | 掲載カテゴリ | ヒーロー見出し | メニュー見出し |
-|---|---|---|---|
-| sushi | Sushi & Wagyu → Sushi | Sushi / Halal Omakase Experience | Sushi Omakase Course |
-| wagyu | Sushi & Wagyu → Wagyu | Wagyu / Halal Omakase Experience | Wagyu Omakase Course |
+| | 掲載カテゴリ | 掲載コース | ヒーロー見出し | メニュー見出し |
+|---|---|---|---|---|
+| sushi | Sushi のみ | Sushi Standard / Sushi Premium | Sushi / Halal Omakase Experience | Sushi Omakase Course |
+| wagyu | Wagyu のみ | Wagyu Standard / Kobe Beef Premium | Wagyu / Halal Omakase Experience | Wagyu Omakase Course |
 
-- 広告LP型のコース3枚は、寿司＝Sushi Standard / Sushi Premium / Sushi & Kobe Premium、和牛＝Wagyu Standard / Kobe Premium / Sushi & Kobe Premium。比較表の項目もテーマごとに切り替わります
+- **予約フォームのコース選択肢もテーマで絞られます**（寿司LPの予約からは和牛コースを選べません）
+- 広告LP型のコースカードは2枚（プレミアム側を強調枠）。比較表もテーマ別の項目に切替
+  - 寿司：握り数 / 手巻 / 雲丹・蟹 / 茶碗蒸し
+  - 和牛：牛の等級 / フィレg数 / すき焼き / 春巻き / 肉寿司
 - 予約ボタンは `Reserve Your Sushi Omakase` / `Reserve Your Wagyu Omakase`
-- カテゴリ紹介文は既存LPの `story` / `note` をそのまま使用（`Most Popular` バッジ含む）
+- カテゴリ紹介文は既存LPの `story` / `note` をそのまま使用
 - dataLayer に `theme: 'sushi' | 'wagyu'` を追加したので、GA4で4本を並べて比較できます
+
+> `THEMES` を `sushi: ["mix", "sushi"]` に戻せば、Sushi & Wagyu の複合コースも併載できます。
 
 ## 3. 掲載情報のルール
 
@@ -64,27 +70,31 @@
 - `"Sushi & Wagyu Indulgence"` とその本文
 - `Our Story` 1962年〜五代目のストーリー全文
 - `Muslim-Friendly Dining` とその本文、`NO PORK` / `NO ALCOHOL IN FOOD` / `MUSLIM-FRIENDLY`
-- `Guest Voices` / `From Around the World` と4件のレビュー、評価スコア、Tripadvisor No.1
+- `Guest Voices` / `From Around the World` と4件のレビュー、Google評価スコア
 - `Access` / `Find Us` / `Open in Google Maps`
 - `Reserve` / `Begin Your Experience` / `Reservations recommended 2 weeks in advance. Walk-ins welcome subject to availability.`
 - `* Reservation is confirmed after email from ...` / `* Reservation handled by TableCheck — secure & instant.`
 - キャンセルポリシー（48時間前以内 ¥5,000 / 24時間前以内 ¥10,000）
 - コース名・説明・献立7コース分（`courses.js` に転記）
 
+`stores.js` の `rating_count`（新宿三丁目 = `1,000+`）を表示しています。件数が変わったらここを直せば全LPに反映されます。
+
 **削除した創作コピー**（前回入れてしまっていたもの）：席数の記載、調理場の描写、礼拝スペースの案内、英語・中国語対応の明記、「みりん・料理酒を代替」の詳細、「今週の空席あり」バッジ、「約60秒」「数時間以内に返信」、独自に書いたFAQ回答。
 
 ## 4. 多言語
 
-英語 / 简体中文 / 繁體中文 / 한국어 / Indonesia の5言語。日本語は持っていません。
+英語 / 简体中文 / 繁體中文 / 한국어 / Bahasa Indonesia の5言語。日本語は持っていません。
 
-- ヘッダー右上の**言語ドロップダウン**で切替（5言語でも横幅を圧迫しません）
-- フッターにも言語リストあり
+- ヘッダーの**地球アイコン付きボタン**（現在の言語を表示）→ タップで**言語選択シート**が中央に開く
+- シートには各言語のネイティブ表記＋略号を一覧表示。選択中はハイライト
+- 背景クリック / Esc で閉じる。狭い画面ではボタンがアイコンのみになる
+- フッターの言語リンクからも直接切り替え可能
 - 初回は `?lang=` → localStorage → ブラウザ言語 の順で自動判定。既定は英語
 - 中国語・韓国語のフォント（Noto Serif SC / TC / KR）は**その言語を選んだ時だけ**動的に読み込むので、英語表示時の速度に影響しません
-- 文言は `src/_data/ui.js` の1ファイルに集約。修正はここだけ触ればOK
+- 文言は `src/_data/ui.js` の1ファイルに集約。言語リスト（表示名・略号・フォント）も同ファイルの `langs`
 - コース名・説明は `src/_data/courses.js`
 
-> 献立の各行（`Nigiri 10 — Chutoro / Salmon / ...` など）は素材名の羅列なので、全言語で英語のまま出しています。各言語に訳す場合は `courses.js` の `rows` を `{en,zhs,zht,ko,id}` 形式に変えれば対応できます。ご希望あれば翻訳します。
+> 献立の各行（`Nigiri 10 — Chutoro / Salmon / ...` など）は素材名の羅列なので、全言語で英語のまま出しています。各言語に訳す場合は `courses.js` の `rows` を `{en,zhs,zht,ko,id}` 形式に変えれば対応できます。
 
 ## 5. 今回の修正（①〜⑤）
 
@@ -96,17 +106,26 @@
 
 ## 6. 予約導線
 
+**検証ページは全店TableCheck遷移になっています**（稼働3店の本番設定に合わせています）。
+
 `src/_data/stores.js`：
 
 ```js
-const TEST_RESERVE = "form";
-//   "form"       … ページ内フォーム（既定・新しい予約UIを確認できる）
-//   "tablecheck" … 予約ボタンで外部TableCheckへ遷移
-//   "store"      … 各店舗の本番設定に従う（現状=全店TableCheck）
+const TEST_RESERVE = "store";
+//   "store"      … 各店舗の本番設定に従う（既定・現状=全店TableCheck）
+//   "tablecheck" … 本番設定にかかわらず全店TableCheckへ遷移
+//   "form"       … ページ内フォーム(EmailJS)。新デザインの予約UIを確認したいとき
 ```
 
-`"form"` のとき、送信ロジックは既存 `reserve-form-modal.njk` と同一（GASで空席判定 → EmailJSで送信）。
-入力欄のIDも同一なので EmailJSテンプレートとGAS側は無変更で動きます。
+**TableCheck時**（現在）
+- 予約ボタンが `{{ store.tablecheck_url }}?utm_source=lp-test-a-sushi&utm_medium=referral` へ遷移します（UTMは4チャンネル別）
+- `reserve-v2.njk` はページに出力されず、EmailJSのSDKも読み込まれません
+- ボタンの文言は `Reserve on TableCheck`
+
+**form時**
+- 送信ロジックは既存 `reserve-form-modal.njk` と同一（GASで空席判定 → EmailJSで送信）
+- 入力欄のIDも同一なので EmailJSテンプレートとGAS側は無変更で動きます
+- コース選択肢はテーマで絞られます（寿司LPからは和牛コースを選べません）
 
 ## 7. 価格表示
 
@@ -143,17 +162,28 @@ dataLayer に `design: 'test-a' | 'test-b'` と `channel` を積んでいます�
 **A案の配色を参考サイトに寄せました**
 黒×金 → **濃紺 `#111a2b` + 同心円の微細なテクスチャ + 朱印の赤**。書体も Marcellus → **Zilla Slab**（参考サイトのスラブ系セリフに近いもの）に変更しています。B案は広告LPなのでCTAのコントラストを優先し、明色地＋朱赤のままです。
 
-### 内観の写真とコピーについて
+### 写真の割り当て
 
-内観写真がリポジトリにないため、暫定で `chef1.jpg` / `chef2.jpg` / `chef3.jpg` を当てています。差し替え箇所は両ファイルの `<section id="interior">` 内、3箇所です。
+テーマごとに使う画像を、各テンプレ冒頭の `IMG` で一括管理しています。差し替えはここ7行だけです。
 
+```njk
+{% if store.theme == "wagyu" %}
+{% set IMG = {
+  lead:    "/images/sukiyaki.jpg",              // ヒーロー右の写真
+  concept: "/images/course-kobe-premium.jpg",   // コンセプト動画のポスター
+  band:    "/images/cat-wagyu.jpg",             // 内観の全幅21:9
+  col_a:   "/images/course-wagyu-standard.jpg", // コラージュ大
+  col_b:   "/images/chef2.jpg",                 // コラージュ小
+  story:   "/images/chef1.jpg",                 // Our Story
+  halal:   "/images/chef3.jpg"                  // Muslim-Friendly
+} %}
+{% else %}  // sushi は sushi1 / sushi2 / cat-sushi / course-sushi-premium / chef2 / chef1 / sushi4
 ```
-band-photo の img       … 全幅の横長写真（21:9で使うので横長推奨）
-collage-imgs .a         … 大きい方
-collage-imgs .b         … 重ねる小さい方
-```
 
-またこのセクションの文言は、①のルールに従い**既存LPにある文言（"Sushi & Wagyu Indulgence" と "A Journey Through Japan"）を流用**しています。参考サイトのように内観そのものを描写する文章を入れる場合は、原稿をいただければ差し替えます。
+**内観写真がリポジトリにないため、`band` には暫定で `cat-sushi.jpg` / `cat-wagyu.jpg` を当てています。**
+21:9で使うので横長の内観写真をご用意いただければ差し替えます。`col_a` / `col_b` も同様です。
+
+またこのセクションの文言は、①のルールに従い既存LPにある文言（"Sushi & Wagyu Indulgence" と "A Journey Through Japan"）を流用しています。内観を描写する文章を入れる場合は原稿をいただければ差し替えます。
 
 ## 10. ローカル確認
 
