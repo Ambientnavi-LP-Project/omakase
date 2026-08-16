@@ -6,7 +6,7 @@ pagination:
 permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}index.html"
 eleventyComputed:
   title: "{{ store.name_full_en }}"
-  tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_content=lp_cta{% else %}#{% endif %}"
+  tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral{% else %}#{% endif %}"
 ---
 {% set TCATS = courses.themes[store.theme] or courses.themes.all %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
@@ -22,9 +22,8 @@ eleventyComputed:
 <meta name="robots" content="noindex,follow"/>
 <link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/"/>
 
-<script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({store_name:'{{ store.slug }}',store_area:'{{ store.region }}',brand:'{{ stores.brand.brand_slug }}',channel:'{{ store.channel_id }}',design:'test-a',theme:'{{ store.theme }}'});</script>
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TJKTLQJ6');</script>
-
+<script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({store_name:'{{ store.slug }}',store_area:'{{ store.region }}',brand:'{{ stores.brand.brand_slug }}',channel:'{{ store.channel_id }}',design:'test-a',theme:'{{ store.theme }}'});</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -62,9 +61,6 @@ a{color:inherit;text-decoration:none;}
 html.no-js .reveal{opacity:1;transform:none;}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
 
-/* 朱印 */
-.seal{display:inline-flex;align-items:center;justify-content:center;width:58px;height:58px;background:var(--shu);
-  color:#fff;font-family:var(--disp);font-weight:500;font-size:15px;line-height:1.1;text-align:center;letter-spacing:.02em;}
 
 /* ---------- header ---------- */
 .hd{position:fixed;top:0;left:0;right:0;z-index:95;padding:14px 0;transition:background .4s,padding .4s;}
@@ -242,7 +238,6 @@ html.no-js .reveal{opacity:1;transform:none;}
 footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,52px);}
 .ft-grid{display:grid;gap:clamp(34px,5vw,60px);}
 @media(min-width:820px){.ft-grid{grid-template-columns:1.4fr 1fr;}}
-.ft-seal{margin-bottom:22px;}
 .ft-small{font-family:var(--body);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--w-f);}
 .ft-name{font-family:var(--disp);font-weight:500;font-size:clamp(24px,3.6vw,40px);line-height:1.2;margin-top:4px;}
 .ft-addr{margin-top:22px;font-size:12.5px;line-height:2;color:var(--w-f);}
@@ -302,8 +297,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
   <div class="wrap lead-sec">
     <div class="lead-grid">
       <div>
-        <span class="seal" aria-hidden="true">和牛</span>
-        <p class="eyebrow" style="margin-top:clamp(18px,3vw,34px);" data-i18n="hero.tour">Gastronomic Tour of Japan</p>
+        <p class="eyebrow" data-i18n="hero.tour">Gastronomic Tour of Japan</p>
         <h1 class="lead-h" style="margin-top:10px;">
           <span data-i18n="theme.{{ store.theme }}">{{ store.theme | capitalize }}</span><em data-i18n="hero.halal">Halal Omakase Experience</em>
         </h1>
@@ -406,7 +400,8 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
             <div class="item-inner">
               <p class="p" style="font-size:13.5px;margin-bottom:16px;" data-i18n="course.{{ c.id }}.lead">{{ c.lead.en }}</p>
               <div class="flow">{% for r in c.rows %}<div class="flow-row"><span class="fl-n"></span><span class="fl-t">{{ r }}</span></div>{% endfor %}</div>
-              <p class="item-note"><span data-i18n="course.meta">{{ courses.meta.en }}</span>{% if showPrice %}{% set p2 = c.base + (0 if c.noadj else (store.price_adjust or 0)) %} &middot; &yen;{{ yen((p2 * 1.1) | round(0,"floor") | int) }} <span data-i18n="course.incl">incl. tax</span>{% endif %}</p>
+{% if showPrice %}{% set p2 = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}
+              <p class="item-note">&yen;{{ yen((p2 * 1.1) | round(0,"floor") | int) }} <span data-i18n="course.incl">incl. tax</span></p>{% endif %}
               <div style="margin-top:16px;"><button class="cbtn sm" type="button" onclick="openReserve('menu_{{ c.id }}','{{ c.id }}')" data-ga-event="reserve_click" data-ga-location="menu_{{ c.id }}">{{ circ() }}<span class="lbl" data-i18n="course.reserve">Reserve this course</span></button></div>
             </div>
           </div>
@@ -469,10 +464,10 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
       <p class="p" style="margin-top:18px;" data-i18n="voices.p">A selection of impressions shared by our guests.</p>
     </div>
     <div class="rev-grid reveal">
-      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span><p>Beautifully presented Wagyu, thoughtfully served. The Muslim-friendly menu meant my family from Dubai could fully enjoy the experience. Truly felt at home.</p><cite>Ahmed K. &mdash; Dubai, UAE</cite></div>
-      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span><p>The course was theatrical — watching the chef carve the wagyu felt like a performance. The quality of the beef is on another level. Worth every yen.</p><cite>Jennifer M. &mdash; New York, USA</cite></div>
-      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span><p>真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。</p><cite>Lin H. &mdash; Hong Kong</cite></div>
-      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span><p>As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail and respect for our needs really showed. The wagyu itself was sublime.</p><cite>Farah S. &mdash; Kuala Lumpur</cite></div>
+      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span><p>Beautifully presented Wagyu, thoughtfully served. The Muslim-friendly menu meant my family from Dubai could fully enjoy the experience. Truly felt at home.</p><cite>Dubai, UAE</cite></div>
+      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span><p>The course was theatrical — watching the chef carve the wagyu felt like a performance. The quality of the beef is on another level. Worth every yen.</p><cite>New York, USA</cite></div>
+      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span><p>真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。</p><cite>Hong Kong</cite></div>
+      <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span><p>As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail and respect for our needs really showed. The wagyu itself was sublime.</p><cite>Kuala Lumpur</cite></div>
     </div>
     <div class="score reveal">
       <div><b>{{ store.rating }}</b><span>Google &middot; {{ store.rating_count }} <span data-i18n="ui.reviews">reviews</span></span></div>
@@ -528,7 +523,6 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
   <div class="wrap">
     <div class="ft-grid">
       <div>
-        <span class="seal ft-seal" aria-hidden="true">和牛</span>
         <p class="ft-small">Omakase</p>
         <p class="ft-name">{{ store.name_full_en }}</p>
         <p class="ft-addr">
@@ -565,7 +559,6 @@ window.I18N["{{ L }}"]["cat.{{ cat.key }}.label"] = {{ cat.label[L] | dump | saf
 window.I18N["{{ L }}"]["cat.{{ cat.key }}.lead"]  = {{ cat.lead[L] | dump | safe }};
 window.I18N["{{ L }}"]["cat.{{ cat.key }}.note"]  = {{ cat.note[L] | dump | safe }};
 {% endfor %}
-window.I18N["{{ L }}"]["course.meta"] = {{ courses.meta[L] | dump | safe }};
 {% for c in courses.list %}
 window.I18N["{{ L }}"]["course.{{ c.id }}.name"] = {{ c.name[L] | dump | safe }};
 window.I18N["{{ L }}"]["course.{{ c.id }}.opt"]  = {{ c.name[L] | dump | safe }};
@@ -672,17 +665,5 @@ document.addEventListener('DOMContentLoaded', initLang);
   };
   </script>
 {% endif %}
-<!-- ACQ-FORWARD: 本当の獲得元(utm/gclid)をTableCheck予約リンクへ転記。TableCheck側のクロスドメイン受入待ちの代替。 -->
-<script>
-(function(){
-  var KEYS=['utm_source','utm_medium','utm_campaign','utm_term','gclid','gbraid','wbraid'];
-  try{var qs=new URLSearchParams(location.search);KEYS.forEach(function(k){var v=qs.get(k);if(v&&!sessionStorage.getItem('acq_'+k))sessionStorage.setItem('acq_'+k,v);});}catch(e){}
-  function extra(){var p=[];KEYS.forEach(function(k){var v=null;try{v=sessionStorage.getItem('acq_'+k);}catch(e){}if(v)p.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});return p.join('&');}
-  function one(a){if(!a||a.getAttribute('data-acq'))return;var h=a.getAttribute('href');if(!h||h.indexOf('tablecheck.com')<0)return;var e=extra();if(!e)return;a.setAttribute('href',h+(h.indexOf('?')>-1?'&':'?')+e);a.setAttribute('data-acq','1');}
-  function all(){var l=document.querySelectorAll('a[href*="tablecheck.com"]');for(var i=0;i<l.length;i++)one(l[i]);}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',all);else all();
-  document.addEventListener('click',function(e){var a=e.target.closest?e.target.closest('a[href*="tablecheck.com"]'):null;if(a)one(a);},true);
-})();
-</script>
 </body>
 </html>

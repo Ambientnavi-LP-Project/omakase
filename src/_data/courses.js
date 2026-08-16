@@ -72,42 +72,7 @@ const CATS = [
 /** 訴求テーマごとに出すカテゴリ。既存 store-sushi.njk / store-wagyu.njk と同じ組み合わせ。 */
 const THEMES = { sushi: ["mix", "sushi"], wagyu: ["mix", "wagyu"], all: ["mix", "sushi", "wagyu"] };
 
-const META = {
-  en: "8 courses · 60–75 min",
-  zhs: "8 道菜 · 60–75 分钟",
-  zht: "8 道菜 · 60–75 分鐘",
-  ko: "8코스 · 60–75분",
-  id: "8 hidangan · 60–75 menit"
-};
-
 const LIST = [
-  {
-    id: "sushi-wagyu-light", cat: "mix", base: 19800, noadj: true, web_only: true,
-    img: "/images/course-sushi-wagyu-standard.jpg",
-    name: {
-      en: "Sushi & Wagyu Course — Web Exclusive",
-      zhs: "寿司与和牛套餐 — 网络限定",
-      zht: "壽司與和牛套餐 — 網路限定",
-      ko: "스시 & 와규 코스 — 웹 한정",
-      id: "Kursus Sushi & Wagyu — Khusus Web"
-    },
-    lead: {
-      en: "Online-only entry · the full sushi & wagyu flow.",
-      zhs: "仅限线上预约的入门款 · 完整的寿司与和牛流程。",
-      zht: "僅限線上預約的入門款 · 完整的壽司與和牛流程。",
-      ko: "온라인 전용 입문 코스 · 스시와 와규의 전체 흐름.",
-      id: "Hanya lewat pemesanan online · alur lengkap sushi & wagyu."
-    },
-    rows: [
-      "Wagyu Hassun — Seasonal Appetizers",
-      "Chilled Tofu",
-      "Nigiri 3 — Lean Tuna / Salmon / Sea Bream",
-      "Wagyu Fillet Steak 50g",
-      "Wagyu Sukiyaki",
-      "Salmon & Ikura Hand Roll · Wagyu Nikuzushi",
-      "Aka-dashi Miso Soup · Matcha & Sweets"
-    ]
-  },
   {
     id: "sushi-wagyu-standard", cat: "mix", base: 59800,
     img: "/images/course-sushi-wagyu-standard.jpg",
@@ -292,9 +257,8 @@ module.exports = {
   langs: ["en", "zhs", "zht", "ko", "id"],
   cats: CATS,
   list: LIST,
-  meta: META,
   order: [
-    "sushi-wagyu-light", "sushi-wagyu-standard", "sushi-kobe-premium", "sushi-wagyu-lunch",
+    "sushi-wagyu-standard", "sushi-kobe-premium", "sushi-wagyu-lunch",
     "sushi-standard", "sushi-premium", "wagyu-standard", "kobe-premium"
   ]
 };

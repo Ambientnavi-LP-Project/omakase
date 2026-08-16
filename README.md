@@ -46,7 +46,7 @@
 | sushi | Sushi & Wagyu → Sushi | Sushi / Halal Omakase Experience | Sushi Omakase Course |
 | wagyu | Sushi & Wagyu → Wagyu | Wagyu / Halal Omakase Experience | Wagyu Omakase Course |
 
-- 広告LP型のコース3枚は、寿司＝Web限定 / Sushi Standard / Sushi Premium、和牛＝Web限定 / Wagyu Standard / Kobe Premium。比較表の項目もテーマごとに切り替わります
+- 広告LP型のコース3枚は、寿司＝Sushi Standard / Sushi Premium / Sushi & Kobe Premium、和牛＝Wagyu Standard / Kobe Premium / Sushi & Kobe Premium。比較表の項目もテーマごとに切り替わります
 - 予約ボタンは `Reserve Your Sushi Omakase` / `Reserve Your Wagyu Omakase`
 - カテゴリ紹介文は既存LPの `story` / `note` をそのまま使用（`Most Popular` バッジ含む）
 - dataLayer に `theme: 'sushi' | 'wagyu'` を追加したので、GA4で4本を並べて比較できます
@@ -69,7 +69,7 @@
 - `Reserve` / `Begin Your Experience` / `Reservations recommended 2 weeks in advance. Walk-ins welcome subject to availability.`
 - `* Reservation is confirmed after email from ...` / `* Reservation handled by TableCheck — secure & instant.`
 - キャンセルポリシー（48時間前以内 ¥5,000 / 24時間前以内 ¥10,000）
-- コース名・説明・献立8コース分（`courses.js` に転記）
+- コース名・説明・献立7コース分（`courses.js` に転記）
 
 **削除した創作コピー**（前回入れてしまっていたもの）：席数の記載、調理場の描写、礼拝スペースの案内、英語・中国語対応の明記、「みりん・料理酒を代替」の詳細、「今週の空席あり」バッジ、「約60秒」「数時間以内に返信」、独自に書いたFAQ回答。
 

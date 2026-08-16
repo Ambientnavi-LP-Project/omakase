@@ -6,7 +6,7 @@ pagination:
 permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}index.html"
 eleventyComputed:
   title: "{{ store.name_full_en }}"
-  tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_content=lp_cta{% else %}#{% endif %}"
+  tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral{% else %}#{% endif %}"
 ---
 {% set TCATS = courses.themes[store.theme] or courses.themes.all %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
@@ -22,9 +22,8 @@ eleventyComputed:
 <meta name="robots" content="noindex,follow"/>
 <link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/"/>
 
-<script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({store_name:'{{ store.slug }}',store_area:'{{ store.region }}',brand:'{{ stores.brand.brand_slug }}',channel:'{{ store.channel_id }}',design:'test-b',theme:'{{ store.theme }}'});</script>
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TJKTLQJ6');</script>
-
+<script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({store_name:'{{ store.slug }}',store_area:'{{ store.region }}',brand:'{{ stores.brand.brand_slug }}',channel:'{{ store.channel_id }}',design:'test-b',theme:'{{ store.theme }}'});</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -63,10 +62,6 @@ h2.sh{font-family:var(--disp);font-weight:600;font-size:clamp(22px,3.4vw,34px);l
 html.no-js .reveal{opacity:1;transform:none;}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
 
-/* 判子（朱印） */
-.seal{display:inline-flex;align-items:center;justify-content:center;width:50px;height:50px;background:var(--shu);
-  color:#fff;font-family:var(--disp);font-weight:600;font-size:11px;line-height:1.25;text-align:center;
-  border-radius:3px;transform:rotate(-4deg);box-shadow:0 2px 0 rgba(139,40,32,.35);}
 
 /* ---------- strip / header ---------- */
 .strip{background:var(--sumi);color:var(--paper);font-size:11px;letter-spacing:.05em;text-align:center;padding:8px 16px;line-height:1.55;}
@@ -170,7 +165,7 @@ html.no-js .reveal{opacity:1;transform:none;}
 .grid3{display:grid;gap:14px;}
 @media(min-width:820px){.grid3{grid-template-columns:repeat(3,1fr);}}
 .card{background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:24px 22px;}
-.card h3{font-family:var(--disp);font-weight:600;font-size:16.5px;line-height:1.5;margin:15px 0 9px;}
+.card h3{font-family:var(--disp);font-weight:600;font-size:16.5px;line-height:1.5;margin:0 0 9px;}
 .card p{font-size:13px;line-height:1.95;color:var(--sumi-2);}
 
 /* ---------- courses ---------- */
@@ -243,7 +238,6 @@ table.cmp .hi{color:var(--shu);font-weight:600;}
 footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw,104px) 0 clamp(28px,4vw,48px);font-size:12.5px;}
 .ft-grid{display:grid;gap:clamp(32px,5vw,58px);}
 @media(min-width:820px){.ft-grid{grid-template-columns:1.4fr 1fr;}}
-.ft-seal{margin-bottom:20px;}
 .ft-small{font-size:12px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,239,229,.5);}
 .ft-name{font-family:var(--disp);font-weight:600;font-size:clamp(22px,3.4vw,38px);line-height:1.22;color:var(--paper);margin-top:4px;}
 .ft-addr{margin-top:20px;line-height:2;color:rgba(244,239,229,.5);}
@@ -343,17 +337,14 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
     </div>
     <div class="grid3 reveal" style="margin-top:30px;">
       <div class="card">
-        <span class="seal" data-i18n="seal.1">和牛<br/>五代</span>
         <h3 data-i18n="story.q.label">Our Commitment to Quality</h3>
         <p data-i18n="story.q.p">I visit livestock farms all over Japan and purchase only Wagyu that I truly accept by the whole head.</p>
       </div>
       <div class="card">
-        <span class="seal" data-i18n="seal.2">無<br/>酒精</span>
         <h3 data-i18n="halal.label">Muslim-Friendly Dining</h3>
         <p data-i18n="halal.p1">We thoughtfully prepare pork-free, alcohol-free dishes.</p>
       </div>
       <div class="card">
-        <span class="seal" data-i18n="seal.3">世界<br/>へ</span>
         <h3 data-i18n="story.w.label">For Everyone in the World</h3>
         <p data-i18n="story.w.p">This restaurant was born to share authentic Japanese food culture with everyone.</p>
       </div>
@@ -397,9 +388,9 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
     </div>
 
     {% if store.theme == "wagyu" %}
-    {% set FEATURED = ["sushi-wagyu-light","wagyu-standard","kobe-premium"] %}
+    {% set FEATURED = ["wagyu-standard","kobe-premium","sushi-kobe-premium"] %}
     {% else %}
-    {% set FEATURED = ["sushi-wagyu-light","sushi-standard","sushi-premium"] %}
+    {% set FEATURED = ["sushi-standard","sushi-premium","sushi-kobe-premium"] %}
     {% endif %}
     <div class="pick reveal" style="margin-top:30px;">
       {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}
@@ -429,17 +420,16 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
         </tr></thead>
         <tbody>
           {% if store.theme == "wagyu" %}
-          <tr><th data-i18n="cmp.steak">Fillet steak</th><td>50g</td><td class="hi">100g</td><td class="hi">100g Kobe Beef</td></tr>
-          <tr><th data-i18n="cmp.sukiyaki">Sukiyaki</th><td>Wagyu</td><td>Wagyu</td><td class="hi">Kobe Beef</td></tr>
-          <tr><th data-i18n="cmp.beef">Beef</th><td>Wagyu</td><td>Wagyu</td><td class="hi">Kobe Beef</td></tr>
-          <tr><th data-i18n="cmp.nigiri">Nigiri</th><td>3</td><td>&mdash;</td><td>&mdash;</td></tr>
+          <tr><th data-i18n="cmp.beef">Beef</th><td>Wagyu</td><td class="hi">Kobe Beef</td><td class="hi">Kobe Beef</td></tr>
+          <tr><th data-i18n="cmp.steak">Fillet steak</th><td>100g</td><td class="hi">100g</td><td class="hi">100g</td></tr>
+          <tr><th data-i18n="cmp.sukiyaki">Sukiyaki</th><td>Wagyu</td><td class="hi">Kobe Beef</td><td class="hi">Kobe Beef</td></tr>
+          <tr><th data-i18n="cmp.nigiri">Nigiri</th><td>&mdash;</td><td>&mdash;</td><td class="hi">5</td></tr>
           {% else %}
-          <tr><th data-i18n="cmp.nigiri">Nigiri</th><td>3</td><td class="hi">10</td><td class="hi">10</td></tr>
-          <tr><th data-i18n="cmp.roll">Hand roll</th><td>Salmon &amp; Ikura</td><td>Salmon &amp; Ikura</td><td class="hi">Sea Urchin</td></tr>
-          <tr><th data-i18n="cmp.extra">Sea urchin &amp; crab</th><td>&mdash;</td><td>&mdash;</td><td class="hi">&#10003;</td></tr>
-          <tr><th data-i18n="cmp.steak">Fillet steak</th><td>50g</td><td>&mdash;</td><td>&mdash;</td></tr>
+          <tr><th data-i18n="cmp.nigiri">Nigiri</th><td>10</td><td class="hi">10</td><td>5</td></tr>
+          <tr><th data-i18n="cmp.roll">Hand roll</th><td>Salmon &amp; Ikura</td><td class="hi">Sea Urchin</td><td class="hi">Sea Urchin</td></tr>
+          <tr><th data-i18n="cmp.extra">Sea urchin &amp; crab</th><td>&mdash;</td><td class="hi">&#10003;</td><td class="hi">&#10003;</td></tr>
+          <tr><th data-i18n="cmp.beef">Beef</th><td>&mdash;</td><td>&mdash;</td><td class="hi">Kobe Beef</td></tr>
           {% endif %}
-          <tr><th data-i18n="cmp.book">Booking</th><td class="hi" data-i18n="tag.web">Web exclusive</td><td>&mdash;</td><td>&mdash;</td></tr>
           {% if showPrice %}
           <tr><th data-i18n="cmp.price">Price</th>
             {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}{% set p = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}<td>&yen;{{ yen(p) }}</td>{% endif %}{% endfor %}{% endfor %}
@@ -465,13 +455,13 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
     </div>
     <div class="rev-wrap reveal">
       <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span>
-        <p>Beautifully presented Wagyu, thoughtfully served. The Muslim-friendly menu meant my family from Dubai could fully enjoy the experience. Truly felt at home.</p><cite>Ahmed K. &mdash; Dubai, UAE</cite></div>
+        <p>Beautifully presented Wagyu, thoughtfully served. The Muslim-friendly menu meant my family from Dubai could fully enjoy the experience. Truly felt at home.</p><cite>Dubai, UAE</cite></div>
       <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span>
-        <p>The course was theatrical — watching the chef carve the wagyu felt like a performance. The quality of the beef is on another level. Worth every yen.</p><cite>Jennifer M. &mdash; New York, USA</cite></div>
+        <p>The course was theatrical — watching the chef carve the wagyu felt like a performance. The quality of the beef is on another level. Worth every yen.</p><cite>New York, USA</cite></div>
       <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span>
-        <p>真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。</p><cite>Lin H. &mdash; Hong Kong</cite></div>
+        <p>真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。</p><cite>Hong Kong</cite></div>
       <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span>
-        <p>As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail and respect for our needs really showed. The wagyu itself was sublime.</p><cite>Farah S. &mdash; Kuala Lumpur</cite></div>
+        <p>As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail and respect for our needs really showed. The wagyu itself was sublime.</p><cite>Kuala Lumpur</cite></div>
     </div>
     <div class="score reveal">
       <div class="center"><b>{{ store.rating }}</b><span>Google &middot; {{ store.rating_count }} <span data-i18n="ui.reviews">reviews</span></span></div>
@@ -559,7 +549,6 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
   <div class="wrap">
     <div class="ft-grid">
       <div>
-        <span class="seal ft-seal" aria-hidden="true" style="width:58px;height:58px;font-size:15px;">和牛</span>
         <p class="ft-small">Omakase</p>
         <p class="ft-name">{{ store.name_full_en }}</p>
         <p class="ft-addr">
@@ -602,7 +591,6 @@ window.LANGS = {{ ui.langs | dump | safe }};
 {% for cat in courses.cats %}
 window.I18N["{{ L }}"]["cat.{{ cat.key }}.label"] = {{ cat.label[L] | dump | safe }};
 {% endfor %}
-window.I18N["{{ L }}"]["course.meta"] = {{ courses.meta[L] | dump | safe }};
 {% for c in courses.list %}
 window.I18N["{{ L }}"]["course.{{ c.id }}.name"] = {{ c.name[L] | dump | safe }};
 window.I18N["{{ L }}"]["course.{{ c.id }}.opt"]  = {{ c.name[L] | dump | safe }};
@@ -616,27 +604,27 @@ var EXTRA = {
       "faq.h":"Before you reserve","faq.q1":"Is the food Muslim-friendly?","faq.q2":"Can you accommodate dietary restrictions?",
       "faq.q3":"How far in advance should I book?","faq.q4":"What is the cancellation policy?","faq.q5":"Do the courses change?",
       "cmp.extra":"Sea urchin & crab","cmp.beef":"Beef","cmp.nigiri":"Nigiri","cmp.steak":"Fillet steak","cmp.sukiyaki":"Sukiyaki","cmp.roll":"Hand roll","cmp.book":"Booking","cmp.price":"Price",
-      "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"},
+      },
   zhs:{"strip.line":"<b>建议提前两周预约。</b>现场候位视空位情况欢迎光临。",
       "faq.h":"预约前须知","faq.q1":"料理是穆斯林友善的吗？","faq.q2":"可以配合饮食限制吗？",
       "faq.q3":"需要提前多久预约？","faq.q4":"取消规定为何？","faq.q5":"套餐内容会变动吗？",
       "cmp.extra":"海胆与蟹","cmp.beef":"牛肉","cmp.nigiri":"握寿司","cmp.steak":"菲力牛排","cmp.sukiyaki":"寿喜烧","cmp.roll":"手卷","cmp.book":"预约方式","cmp.price":"价格",
-      "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"},
+      },
   zht:{"strip.line":"<b>建議提前兩週預約。</b>現場候位視空位情況歡迎光臨。",
       "faq.h":"預約前須知","faq.q1":"料理是穆斯林友善的嗎？","faq.q2":"可以配合飲食限制嗎？",
       "faq.q3":"需要提前多久預約？","faq.q4":"取消規定為何？","faq.q5":"套餐內容會變動嗎？",
       "cmp.extra":"海膽與蟹","cmp.beef":"牛肉","cmp.nigiri":"握壽司","cmp.steak":"菲力牛排","cmp.sukiyaki":"壽喜燒","cmp.roll":"手卷","cmp.book":"預約方式","cmp.price":"價格",
-      "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"},
+      },
   ko:{"strip.line":"<b>2주 전 예약을 권장합니다.</b> 워크인은 좌석 상황에 따라 안내해 드립니다.",
       "faq.h":"예약 전 확인","faq.q1":"음식은 무슬림 프렌들리인가요?","faq.q2":"식이 제한도 배려해 주시나요?",
       "faq.q3":"얼마나 미리 예약해야 하나요?","faq.q4":"취소 규정은 어떻게 되나요?","faq.q5":"코스 내용이 바뀌나요?",
       "cmp.extra":"성게 & 게","cmp.beef":"소고기","cmp.nigiri":"니기리","cmp.steak":"안심 스테이크","cmp.sukiyaki":"스키야키","cmp.roll":"핸드롤","cmp.book":"예약","cmp.price":"가격",
-      "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"},
+      },
   id:{"strip.line":"<b>Reservasi disarankan 2 minggu sebelumnya.</b> Tamu tanpa reservasi kami terima sesuai ketersediaan.",
       "faq.h":"Sebelum Anda memesan","faq.q1":"Apakah makanannya ramah Muslim?","faq.q2":"Bisakah menyesuaikan pantangan makanan?",
       "faq.q3":"Seberapa jauh hari sebaiknya memesan?","faq.q4":"Bagaimana kebijakan pembatalannya?","faq.q5":"Apakah isi kursus berubah?",
       "cmp.extra":"Bulu babi & kepiting","cmp.beef":"Daging sapi","cmp.nigiri":"Nigiri","cmp.steak":"Steak fillet","cmp.sukiyaki":"Sukiyaki","cmp.roll":"Hand roll","cmp.book":"Pemesanan","cmp.price":"Harga",
-      "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"}
+      }
 };
 Object.keys(EXTRA).forEach(function(L){ Object.keys(EXTRA[L]).forEach(function(k){ window.I18N[L][k] = EXTRA[L][k]; }); });
 
@@ -723,17 +711,5 @@ document.addEventListener('DOMContentLoaded', initLang);
   };
   </script>
 {% endif %}
-<!-- ACQ-FORWARD: 本当の獲得元(utm/gclid)をTableCheck予約リンクへ転記。TableCheck側のクロスドメイン受入待ちの代替。 -->
-<script>
-(function(){
-  var KEYS=['utm_source','utm_medium','utm_campaign','utm_term','gclid','gbraid','wbraid'];
-  try{var qs=new URLSearchParams(location.search);KEYS.forEach(function(k){var v=qs.get(k);if(v&&!sessionStorage.getItem('acq_'+k))sessionStorage.setItem('acq_'+k,v);});}catch(e){}
-  function extra(){var p=[];KEYS.forEach(function(k){var v=null;try{v=sessionStorage.getItem('acq_'+k);}catch(e){}if(v)p.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});return p.join('&');}
-  function one(a){if(!a||a.getAttribute('data-acq'))return;var h=a.getAttribute('href');if(!h||h.indexOf('tablecheck.com')<0)return;var e=extra();if(!e)return;a.setAttribute('href',h+(h.indexOf('?')>-1?'&':'?')+e);a.setAttribute('data-acq','1');}
-  function all(){var l=document.querySelectorAll('a[href*="tablecheck.com"]');for(var i=0;i<l.length;i++)one(l[i]);}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',all);else all();
-  document.addEventListener('click',function(e){var a=e.target.closest?e.target.closest('a[href*="tablecheck.com"]'):null;if(a)one(a);},true);
-})();
-</script>
 </body>
 </html>
