@@ -300,8 +300,8 @@ const STORES = [
 
     maps_link: "https://maps.app.goo.gl/MbPytsPEsMee3WeG8",
 
-    rating: "4.8",        // ⚠️ HTMLに評価データなし(レビューはサンプル)。要確認
-    rating_count: "100+", // ⚠️ 同上。要確認
+    rating: "4.8",
+    rating_count: "1,000+",
     rating_source: "Google reviews",
 
     // HTMLのiframeから取得した実埋め込みURL

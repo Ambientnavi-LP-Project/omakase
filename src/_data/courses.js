@@ -70,7 +70,11 @@ const CATS = [
 ];
 
 /** 訴求テーマごとに出すカテゴリ。既存 store-sushi.njk / store-wagyu.njk と同じ組み合わせ。 */
-const THEMES = { sushi: ["mix", "sushi"], wagyu: ["mix", "wagyu"], all: ["mix", "sushi", "wagyu"] };
+const THEMES = {
+  sushi: ["sushi"],   // 寿司LPに和牛のステーキ・すき焼きを出さないため mix は含めない
+  wagyu: ["wagyu"],   // 同様に和牛LPには寿司コースを出さない
+  all:   ["mix", "sushi", "wagyu"]
+};
 
 const LIST = [
   {

@@ -35,13 +35,13 @@ const EN = {
   "nav.interior": "Interior",
   "nav.reserve": "Reserve",
   "ui.language": "Language",
+  "lang.h": "Language",
+  "lang.p": "The menu and information are the same in every language.",
   "ui.viewMore": "View more",
   "ui.viewLess": "Close",
   "ui.close": "Close",
   "ui.menu": "Menu",
   "ui.reviews": "reviews",
-  "ui.soundOn": "Sound on",
-  "ui.soundOff": "Sound off",
 
   // --- hero (既存: "Gastronomic Tour of JAPAN" / "Sushi & Wagyu Halal Omakase Experience") ---
   "hero.h1a": "Gastronomic Tour",
@@ -95,7 +95,6 @@ const EN = {
   "voices.label": "Guest Voices",
   "voices.h": "From Around the World",
   "voices.p": "A selection of impressions shared by our guests.",
-  "voices.tripadvisor": "Tripadvisor Tokyo · Aug 2025 — Mar 2026 (flagship)",
 
   // --- access ---
   "access.label": "Access",
@@ -188,8 +187,8 @@ const ZHS = {
   "tag.popular": "最受欢迎",
   "nav.experience": "用餐体验", "nav.menu": "菜单", "nav.story": "品牌故事",
   "nav.halal": "穆斯林友善", "nav.access": "交通方式", "nav.reserve": "预约", "nav.interior": "店内",
-  "ui.language": "语言", "ui.viewMore": "查看更多", "ui.viewLess": "收起", "ui.close": "关闭",
-  "ui.menu": "选单", "ui.reviews": "则评价", "ui.soundOn": "开启声音", "ui.soundOff": "关闭声音",
+  "ui.language": "语言", "lang.h": "语言", "lang.p": "各语言的菜单与资讯完全相同。", "ui.viewMore": "查看更多", "ui.viewLess": "收起", "ui.close": "关闭",
+  "ui.menu": "选单", "ui.reviews": "则评价",
   "hero.h1a": "日本美食之旅", "hero.h1b": "GASTRONOMIC TOUR OF JAPAN",
   "hero.sub": "寿司与和牛 清真 Omakase 体验",
   "exp.label": "用餐体验", "exp.h": "一场穿越日本的旅程",
@@ -217,7 +216,6 @@ const ZHS = {
   "halal.p2": "预约时欢迎告知任何饮食偏好或限制，我们会尽力配合。",
   "badge.nopork": "不含猪肉", "badge.noalc": "料理不含酒精", "badge.mf": "穆斯林友善",
   "voices.label": "顾客评价", "voices.h": "来自世界各地", "voices.p": "以下是宾客分享的部分感想。",
-  "voices.tripadvisor": "Tripadvisor 东京 · 2025年8月—2026年3月（旗舰店）",
   "access.label": "交通方式", "access.h": "如何前往", "access.name": "店名", "access.addr": "地址",
   "access.hours": "营业时间", "access.open": "营业", "access.tel": "电话",
   "access.stations": "最近车站", "access.min": "分钟", "access.maps": "在 Google 地图开启",
@@ -265,8 +263,8 @@ const ZHT = {
   "tag.popular": "最受歡迎",
   "nav.experience": "用餐體驗", "nav.menu": "菜單", "nav.story": "品牌故事",
   "nav.halal": "穆斯林友善", "nav.access": "交通方式", "nav.reserve": "預約", "nav.interior": "店內",
-  "ui.language": "語言", "ui.viewMore": "查看更多", "ui.viewLess": "收合", "ui.close": "關閉",
-  "ui.menu": "選單", "ui.reviews": "則評價", "ui.soundOn": "開啟聲音", "ui.soundOff": "關閉聲音",
+  "ui.language": "語言", "lang.h": "語言", "lang.p": "各語言的菜單與資訊完全相同。", "ui.viewMore": "查看更多", "ui.viewLess": "收合", "ui.close": "關閉",
+  "ui.menu": "選單", "ui.reviews": "則評價",
   "hero.h1a": "日本美食之旅", "hero.h1b": "GASTRONOMIC TOUR OF JAPAN",
   "hero.sub": "壽司與和牛 清真 Omakase 體驗",
   "exp.label": "用餐體驗", "exp.h": "一場穿越日本的旅程",
@@ -294,7 +292,6 @@ const ZHT = {
   "halal.p2": "預約時歡迎告知任何飲食偏好或限制，我們會盡力配合。",
   "badge.nopork": "不含豬肉", "badge.noalc": "料理不含酒精", "badge.mf": "穆斯林友善",
   "voices.label": "顧客評價", "voices.h": "來自世界各地", "voices.p": "以下是賓客分享的部分感想。",
-  "voices.tripadvisor": "Tripadvisor 東京 · 2025年8月—2026年3月（旗艦店）",
   "access.label": "交通方式", "access.h": "如何前往", "access.name": "店名", "access.addr": "地址",
   "access.hours": "營業時間", "access.open": "營業", "access.tel": "電話",
   "access.stations": "最近車站", "access.min": "分鐘", "access.maps": "在 Google 地圖開啟",
@@ -342,8 +339,8 @@ const KO = {
   "tag.popular": "가장 인기",
   "nav.experience": "다이닝 경험", "nav.menu": "메뉴", "nav.story": "브랜드 스토리",
   "nav.halal": "무슬림 프렌들리", "nav.access": "오시는 길", "nav.reserve": "예약", "nav.interior": "매장 내부",
-  "ui.language": "언어", "ui.viewMore": "더 보기", "ui.viewLess": "닫기", "ui.close": "닫기",
-  "ui.menu": "메뉴", "ui.reviews": "개의 리뷰", "ui.soundOn": "소리 켜기", "ui.soundOff": "소리 끄기",
+  "ui.language": "언어", "lang.h": "언어", "lang.p": "어떤 언어에서도 메뉴와 정보는 동일합니다.", "ui.viewMore": "더 보기", "ui.viewLess": "닫기", "ui.close": "닫기",
+  "ui.menu": "메뉴", "ui.reviews": "개의 리뷰",
   "hero.h1a": "일본 미식 여행", "hero.h1b": "GASTRONOMIC TOUR OF JAPAN",
   "hero.sub": "스시 & 와규 할랄 오마카세 경험",
   "exp.label": "다이닝 경험", "exp.h": "일본을 가로지르는 여정",
@@ -371,7 +368,6 @@ const KO = {
   "halal.p2": "예약 시 식사 취향이나 제한 사항을 편하게 알려 주세요. 최대한 맞춰 드리겠습니다.",
   "badge.nopork": "돼지고기 무사용", "badge.noalc": "요리에 알코올 무사용", "badge.mf": "무슬림 프렌들리",
   "voices.label": "고객 후기", "voices.h": "세계 각지에서", "voices.p": "손님들이 남겨 주신 감상 중 일부입니다.",
-  "voices.tripadvisor": "Tripadvisor 도쿄 · 2025년 8월—2026년 3월 (플래그십)",
   "access.label": "오시는 길", "access.h": "찾아오시는 길", "access.name": "매장명", "access.addr": "주소",
   "access.hours": "영업시간", "access.open": "영업", "access.tel": "전화",
   "access.stations": "가까운 역", "access.min": "분", "access.maps": "Google 지도에서 열기",
@@ -420,8 +416,8 @@ const ID = {
   "tag.popular": "Paling Populer",
   "nav.experience": "Pengalaman", "nav.menu": "Menu", "nav.story": "Kisah Kami",
   "nav.halal": "Ramah Muslim", "nav.access": "Lokasi", "nav.reserve": "Reservasi", "nav.interior": "Interior",
-  "ui.language": "Bahasa", "ui.viewMore": "Lihat selengkapnya", "ui.viewLess": "Tutup", "ui.close": "Tutup",
-  "ui.menu": "Menu", "ui.reviews": "ulasan", "ui.soundOn": "Nyalakan suara", "ui.soundOff": "Matikan suara",
+  "ui.language": "Bahasa", "lang.h": "Bahasa", "lang.p": "Menu dan informasi sama dalam setiap bahasa.", "ui.viewMore": "Lihat selengkapnya", "ui.viewLess": "Tutup", "ui.close": "Tutup",
+  "ui.menu": "Menu", "ui.reviews": "ulasan",
   "hero.h1a": "Perjalanan Kuliner", "hero.h1b": "KELILING JEPANG",
   "hero.sub": "Pengalaman Omakase Halal Sushi & Wagyu",
   "exp.label": "Pengalaman", "exp.h": "Perjalanan Menyusuri Jepang",
@@ -449,7 +445,6 @@ const ID = {
   "halal.p2": "Silakan sampaikan preferensi atau pantangan makanan Anda saat memesan — kami akan berusaha sebaik mungkin memenuhinya.",
   "badge.nopork": "Tanpa babi", "badge.noalc": "Tanpa alkohol dalam makanan", "badge.mf": "Ramah Muslim",
   "voices.label": "Suara Tamu", "voices.h": "Dari Seluruh Dunia", "voices.p": "Sebagian kesan yang dibagikan oleh tamu kami.",
-  "voices.tripadvisor": "Tripadvisor Tokyo · Agu 2025 — Mar 2026 (flagship)",
   "access.label": "Lokasi", "access.h": "Temukan Kami", "access.name": "Restoran", "access.addr": "Alamat",
   "access.hours": "Jam buka", "access.open": "Buka", "access.tel": "Telepon",
   "access.stations": "Stasiun terdekat", "access.min": "menit", "access.maps": "Buka di Google Maps",
@@ -493,12 +488,14 @@ const ID = {
 
 module.exports = {
   // 言語切替UIの並び。code は <html lang> に、font は動的読み込みする Google Fonts family。
+  // 言語切替UI。ヘッダーのボタンには short、選択シートには label を出す。
+  // font はその言語を選んだときだけ動的に読み込む Google Fonts family。
   langs: [
-    { code: "en",  html: "en",      short: "EN",   label: "English",    font: null },
-    { code: "zhs", html: "zh-Hans", short: "简",   label: "简体中文",    font: "Noto+Serif+SC:wght@400;600" },
-    { code: "zht", html: "zh-Hant", short: "繁",   label: "繁體中文",    font: "Noto+Serif+TC:wght@400;600" },
-    { code: "ko",  html: "ko",      short: "한",   label: "한국어",      font: "Noto+Serif+KR:wght@400;600" },
-    { code: "id",  html: "id",      short: "ID",   label: "Indonesia",  font: null }
+    { code: "en",  html: "en",      short: "English",  label: "English",           font: null },
+    { code: "zhs", html: "zh-Hans", short: "简中",     label: "简体中文",           font: "Noto+Serif+SC:wght@400;600" },
+    { code: "zht", html: "zh-Hant", short: "繁中",     label: "繁體中文",           font: "Noto+Serif+TC:wght@400;600" },
+    { code: "ko",  html: "ko",      short: "한국어",   label: "한국어",             font: "Noto+Serif+KR:wght@400;600" },
+    { code: "id",  html: "id",      short: "ID",       label: "Bahasa Indonesia",  font: null }
   ],
   dict: { en: EN, zhs: ZHS, zht: ZHT, ko: KO, id: ID }
 };

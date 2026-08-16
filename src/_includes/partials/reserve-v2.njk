@@ -23,6 +23,7 @@
     EmailJS テンプレートと GAS 側は無変更で動く。
   ============================================================
 #}
+{% set TCATS = courses.themes[store.theme] or courses.themes.all %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
 
 <style>
@@ -161,13 +162,13 @@
       <label class="rv-lab" for="r_course_sel" data-i18n="rv.course">Course<span class="rv-req">*</span></label>
       <select id="r_course_sel" class="rv-sel" onchange="rvPickCourse(this.value)">
         <option value="" data-i18n="rv.coursePick">Select a course</option>
-        {% for cat in courses.cats %}
+        {% for ck in TCATS %}{% for cat in courses.cats %}{% if cat.key == ck %}
         <optgroup label="{{ cat.label.en }}" data-i18n-og="cat.{{ cat.key }}.label">
         {% for c in courses.list %}{% if c.cat == cat.key %}
           <option value="{{ c.id }}" data-i18n="course.{{ c.id }}.opt">{{ c.name.en }}</option>
         {% endif %}{% endfor %}
         </optgroup>
-        {% endfor %}
+        {% endif %}{% endfor %}{% endfor %}
       </select>
       <input type="hidden" id="r_course" value=""/>
       <p class="rv-hint" data-i18n="rv.courseHint">Prices are per person. All Muslim-friendly &middot; Seasonal menu.</p>
@@ -287,8 +288,8 @@
   var BLOCKED = [{% if store.form_config and store.form_config.blocked_dates %}{% for d in store.form_config.blocked_dates %}'{{ d }}'{% if not loop.last %},{% endif %}{% endfor %}{% endif %}];
 
   var COURSES = {
-  {% for c in courses.list %}'{{ c.id }}':{base:{{ c.base }},noadj:{{ 'true' if c.noadj else 'false' }}}{% if not loop.last %},{% endif %}
-  {% endfor %}};
+  {% for c in courses.list %}{% if c.cat in TCATS %}'{{ c.id }}':{base:{{ c.base }},noadj:{{ 'true' if c.noadj else 'false' }}},{% endif %}{% endfor %}
+  };
 
   if (typeof emailjs !== 'undefined' && EMAILJS_CFG.public_key) emailjs.init(EMAILJS_CFG.public_key);
 

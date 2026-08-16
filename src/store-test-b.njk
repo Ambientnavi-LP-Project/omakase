@@ -8,6 +8,27 @@ eleventyComputed:
   title: "{{ store.name_full_en }}"
   tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral{% else %}#{% endif %}"
 ---
+{% if store.theme == "wagyu" %}
+{% set IMG = {
+  lead:    "/images/sukiyaki.jpg",
+  concept: "/images/course-kobe-premium.jpg",
+  band:    "/images/cat-wagyu.jpg",
+  col_a:   "/images/course-wagyu-standard.jpg",
+  col_b:   "/images/chef2.jpg",
+  story:   "/images/chef1.jpg",
+  halal:   "/images/chef3.jpg"
+} %}
+{% else %}
+{% set IMG = {
+  lead:    "/images/sushi1.jpg",
+  concept: "/images/sushi2.jpg",
+  band:    "/images/cat-sushi.jpg",
+  col_a:   "/images/course-sushi-premium.jpg",
+  col_b:   "/images/chef2.jpg",
+  story:   "/images/chef1.jpg",
+  halal:   "/images/sushi4.jpg"
+} %}
+{% endif %}
 {% set TCATS = courses.themes[store.theme] or courses.themes.all %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
 {% macro circ() %}<span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{% endmacro %}
@@ -78,12 +99,25 @@ html.no-js .reveal{opacity:1;transform:none;}
 .burger span{display:block;height:1.5px;background:var(--sumi);transition:transform .35s,width .35s;}
 .burger span:nth-child(1){width:22px;} .burger span:nth-child(2){width:14px;margin-left:auto;}
 
-.langs{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;max-width:min(48vw,340px);}
-.langs::-webkit-scrollbar{display:none;}
-.lang{background:none;border:none;cursor:pointer;white-space:nowrap;font-family:var(--body);font-size:13px;
-  font-weight:500;letter-spacing:.03em;color:var(--sumi-3);padding:4px 1px;transition:color .3s;}
-.lang[aria-current="true"]{color:var(--sumi);}
-.langs .sep{color:rgba(25,21,18,.25);font-size:12px;}
+.langbtn{display:flex;align-items:center;gap:7px;background:var(--paper-2);border:1px solid var(--line);border-radius:4px;
+  cursor:pointer;color:var(--sumi-2);font-family:var(--body);font-size:12.5px;font-weight:500;padding:10px 13px;transition:border-color .3s;}
+.langbtn:hover{border-color:var(--sumi-3);}
+.langbtn svg{width:15px;height:15px;flex-shrink:0;color:var(--shu);}
+@media(max-width:560px){.langbtn span{display:none;} .langbtn{padding:10px 11px;}}
+.sheet{position:fixed;inset:0;z-index:96;display:none;place-items:center;padding:20px;background:rgba(25,21,18,.5);}
+.sheet.open{display:grid;}
+.sheet-in{background:var(--paper-2);border-radius:8px;width:100%;max-width:400px;padding:26px;
+  box-shadow:0 30px 70px -20px rgba(25,21,18,.45);animation:sheetUp .34s cubic-bezier(.16,1,.3,1) both;}
+@keyframes sheetUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+@media(prefers-reduced-motion:reduce){.sheet-in{animation:none;}}
+.sheet-in h4{font-family:var(--disp);font-weight:600;font-size:19px;}
+.sheet-in p{font-size:12.5px;line-height:1.8;color:var(--sumi-3);margin:5px 0 16px;}
+.sheet-list{display:grid;gap:3px;}
+.sheet-list button{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;background:none;border:none;
+  border-radius:6px;cursor:pointer;font-family:var(--body);font-size:15px;color:var(--sumi);text-align:left;padding:12px 13px;transition:background .25s;}
+.sheet-list button:hover{background:var(--paper-3);}
+.sheet-list button[aria-current="true"]{background:rgba(168,52,42,.09);color:var(--shu);font-weight:600;}
+.sheet-list .code{font-size:11px;letter-spacing:.12em;color:var(--sumi-3);}
 .burger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;width:44px;padding:2px 0;}
 .burger .bl{width:28px;height:1.5px;background:var(--sumi);transition:transform .4s cubic-bezier(.16,1,.3,1);}
 .burger .btx{font-size:9px;font-weight:600;letter-spacing:.14em;color:var(--sumi);line-height:1;}
@@ -170,7 +204,7 @@ html.no-js .reveal{opacity:1;transform:none;}
 
 /* ---------- courses ---------- */
 .pick{display:grid;gap:16px;}
-@media(min-width:860px){.pick{grid-template-columns:repeat(3,1fr);align-items:start;}}
+@media(min-width:700px){.pick{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start;max-width:840px;margin-inline:auto;}}
 .pc{position:relative;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;}
 .pc.best{border:2px solid var(--shu);box-shadow:0 8px 30px rgba(168,52,42,.13);}
 .pc-flag{position:absolute;right:0;top:0;z-index:2;background:var(--shu);color:#fff;font-size:10px;font-weight:600;
@@ -193,7 +227,7 @@ html.no-js .reveal{opacity:1;transform:none;}
 .pc.best .pc-btn:hover{background:var(--shu-l);}
 
 .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:26px;}
-table.cmp{width:100%;min-width:540px;border-collapse:collapse;background:var(--paper-2);border:1px solid var(--line);font-size:12.6px;}
+table.cmp{width:100%;min-width:420px;max-width:840px;margin-inline:auto;border-collapse:collapse;background:var(--paper-2);border:1px solid var(--line);font-size:12.6px;}
 table.cmp th,table.cmp td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;}
 table.cmp thead th{background:var(--paper-3);font-family:var(--disp);font-weight:600;font-size:13px;}
 table.cmp tbody th{font-weight:500;color:var(--sumi-3);font-size:11px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;width:1%;}
@@ -207,9 +241,15 @@ table.cmp .hi{color:var(--shu);font-weight:600;}
 .rev-src{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--sumi-3);margin-left:8px;}
 .rev p{font-family:var(--disp);font-size:14.5px;line-height:1.95;margin:12px 0 14px;}
 .rev cite{font-style:normal;font-size:11.5px;color:var(--sumi-3);}
-.score{display:flex;flex-wrap:wrap;justify-content:center;gap:28px;align-items:center;margin-top:28px;border-top:1px solid var(--line);padding-top:24px;}
-.score b{display:block;font-family:var(--disp);font-size:32px;font-weight:600;line-height:1;}
-.score span{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--sumi-3);margin-top:6px;}
+.score{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(18px,4vw,42px);
+  margin-top:clamp(26px,4vw,44px);padding:clamp(26px,4vw,40px) clamp(20px,3vw,34px);
+  background:var(--paper-2);border:1px solid var(--line);border-radius:8px;}
+.score-n{font-family:var(--disp);font-weight:600;font-size:clamp(56px,10vw,98px);line-height:.9;color:var(--shu);letter-spacing:-.02em;}
+.score-r{display:flex;flex-direction:column;gap:7px;}
+.score-stars{color:#d99b20;font-size:clamp(17px,2.2vw,22px);letter-spacing:4px;line-height:1;}
+.score-src{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--sumi-2);}
+.score-count{font-family:var(--disp);font-weight:600;font-size:clamp(19px,2.6vw,26px);line-height:1.2;color:var(--sumi);}
+.score-count small{display:block;font-family:var(--body);font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--sumi-3);margin-top:5px;}
 
 /* ---------- faq / access ---------- */
 .faq{border-top:1px solid var(--line);margin-top:24px;}
@@ -271,14 +311,23 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
   <div class="wrap hd-in">
     <a class="mark" href="#top"><b>Omakase</b><i>Wagyu &amp; Sushi</i></a>
     <div class="hd-r">
-      <div class="langs" role="group" aria-label="Language">
-        {% for l in ui.langs %}{% if not loop.first %}<span class="sep" aria-hidden="true">/</span>{% endif %}<button class="lang" data-lang-btn="{{ l.code }}"{% if l.code == 'en' %} aria-current="true"{% endif %}>{{ l.short }}</button>{% endfor %}
-      </div>
+      <button class="langbtn" id="langOpen" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2M12 3.4c2.5 2.6 2.5 15 0 17.2M12 3.4c-2.5 2.6-2.5 15 0 17.2"/></svg>
+        <span id="langNow">English</span>
+      </button>
       <button class="hd-cta" onclick="openReserve('header')" data-i18n="nav.reserve">Reserve</button>
       <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span class="bl"></span><span class="bl"></span><span class="btx" id="btx">MENU</span></button>
     </div>
   </div>
 </header>
+
+<div class="sheet" id="langSheet" role="dialog" aria-modal="true" aria-label="Language">
+  <div class="sheet-in">
+    <h4 data-i18n="lang.h">Language</h4>
+    <p data-i18n="lang.p">The menu and information are the same in every language.</p>
+    <div class="sheet-list" id="langList"></div>
+  </div>
+</div>
 
 <div class="ovl" id="ovl">
   <div class="ovl-in wrap">
@@ -307,7 +356,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
     <p class="hero-p" data-i18n="menu.{{ store.theme }}P">Authentic omakase, served Muslim-friendly.</p>
     <p class="hero-name">{{ store.name_full_en }}</p>
     <div class="trust">
-      <span class="chip"><b>&#9733; {{ store.rating }}</b> Google &middot; {{ store.rating_count }}</span>
+      <span class="chip"><b>&#9733; {{ store.rating }}</b> Google &middot; {{ store.rating_count }} <span data-i18n="ui.reviews">reviews</span></span>
       <span class="chip" data-i18n="badge.mf">Muslim-friendly</span>
       <span class="chip" data-i18n="badge.nopork">No pork</span>
       <span class="chip" data-i18n="badge.noalc">No alcohol in food</span>
@@ -355,7 +404,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
 <!-- ================= INTERIOR ================= -->
 <section id="interior">
   <div class="band-photo reveal">
-    <img src="/images/chef1.jpg" alt="" loading="lazy"/>
+    <img src="{{ IMG.band }}" alt="" loading="lazy"/>
     <div class="band-txt"><div class="wrap"><div class="in">
       <span class="eyebrow" data-i18n="nav.interior">Interior</span>
       <h2 class="sh" data-i18n="menu.premiumH">&ldquo;Sushi &amp; Wagyu Indulgence&rdquo;</h2>
@@ -371,8 +420,8 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
         <div style="margin-top:22px;"><a class="cbtn" href="#courses">{{ circ() }}<span class="lbl" data-i18n="nav.menu">Menu</span></a></div>
       </div>
       <div class="collage-imgs">
-        <img class="a" src="/images/chef2.jpg" alt="" loading="lazy"/>
-        <img class="b" src="/images/chef3.jpg" alt="" loading="lazy"/>
+        <img class="a" src="{{ IMG.col_a }}" alt="" loading="lazy"/>
+        <img class="b" src="{{ IMG.col_b }}" alt="" loading="lazy"/>
       </div>
     </div>
   </div>
@@ -388,9 +437,9 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
     </div>
 
     {% if store.theme == "wagyu" %}
-    {% set FEATURED = ["wagyu-standard","kobe-premium","sushi-kobe-premium"] %}
+    {% set FEATURED = ["wagyu-standard","kobe-premium"] %}
     {% else %}
-    {% set FEATURED = ["sushi-standard","sushi-premium","sushi-kobe-premium"] %}
+    {% set FEATURED = ["sushi-standard","sushi-premium"] %}
     {% endif %}
     <div class="pick reveal" style="margin-top:30px;">
       {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}
@@ -420,15 +469,16 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
         </tr></thead>
         <tbody>
           {% if store.theme == "wagyu" %}
-          <tr><th data-i18n="cmp.beef">Beef</th><td>Wagyu</td><td class="hi">Kobe Beef</td><td class="hi">Kobe Beef</td></tr>
-          <tr><th data-i18n="cmp.steak">Fillet steak</th><td>100g</td><td class="hi">100g</td><td class="hi">100g</td></tr>
-          <tr><th data-i18n="cmp.sukiyaki">Sukiyaki</th><td>Wagyu</td><td class="hi">Kobe Beef</td><td class="hi">Kobe Beef</td></tr>
-          <tr><th data-i18n="cmp.nigiri">Nigiri</th><td>&mdash;</td><td>&mdash;</td><td class="hi">5</td></tr>
+          <tr><th data-i18n="cmp.beef">Beef</th><td>Wagyu</td><td class="hi">Kobe Beef</td></tr>
+          <tr><th data-i18n="cmp.steak">Fillet steak</th><td>100g</td><td class="hi">100g</td></tr>
+          <tr><th data-i18n="cmp.sukiyaki">Sukiyaki</th><td>Wagyu</td><td class="hi">Kobe Beef</td></tr>
+          <tr><th data-i18n="cmp.spring">Spring roll</th><td>Wagyu</td><td class="hi">Kobe Beef</td></tr>
+          <tr><th data-i18n="cmp.nikuzushi">Nikuzushi</th><td>Wagyu 20g</td><td class="hi">Kobe Beef 20g</td></tr>
           {% else %}
-          <tr><th data-i18n="cmp.nigiri">Nigiri</th><td>10</td><td class="hi">10</td><td>5</td></tr>
-          <tr><th data-i18n="cmp.roll">Hand roll</th><td>Salmon &amp; Ikura</td><td class="hi">Sea Urchin</td><td class="hi">Sea Urchin</td></tr>
-          <tr><th data-i18n="cmp.extra">Sea urchin &amp; crab</th><td>&mdash;</td><td class="hi">&#10003;</td><td class="hi">&#10003;</td></tr>
-          <tr><th data-i18n="cmp.beef">Beef</th><td>&mdash;</td><td>&mdash;</td><td class="hi">Kobe Beef</td></tr>
+          <tr><th data-i18n="cmp.nigiri">Nigiri</th><td>10</td><td>10</td></tr>
+          <tr><th data-i18n="cmp.roll">Hand roll</th><td>Salmon &amp; Ikura</td><td class="hi">Sea Urchin &middot; Salmon &amp; Ikura</td></tr>
+          <tr><th data-i18n="cmp.extra">Sea urchin &amp; crab</th><td>&mdash;</td><td class="hi">&#10003;</td></tr>
+          <tr><th data-i18n="cmp.chawan">Chawanmushi</th><td>Shrimp</td><td class="hi">Snow Crab</td></tr>
           {% endif %}
           {% if showPrice %}
           <tr><th data-i18n="cmp.price">Price</th>
@@ -464,8 +514,12 @@ footer{background:var(--sumi);color:rgba(244,239,229,.55);padding:clamp(52px,8vw
         <p>As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail and respect for our needs really showed. The wagyu itself was sublime.</p><cite>Kuala Lumpur</cite></div>
     </div>
     <div class="score reveal">
-      <div class="center"><b>{{ store.rating }}</b><span>Google &middot; {{ store.rating_count }} <span data-i18n="ui.reviews">reviews</span></span></div>
-      <div class="center"><b>No.1</b><span data-i18n="voices.tripadvisor">Tripadvisor Tokyo &middot; Aug 2025 — Mar 2026 (flagship)</span></div>
+      <span class="score-n">{{ store.rating }}</span>
+      <span class="score-r">
+        <span class="score-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="score-src">Google</span>
+      </span>
+      <span class="score-count">{{ store.rating_count }}<small data-i18n="ui.reviews">reviews</small></span>
     </div>
   </div>
 </section>
@@ -603,27 +657,27 @@ var EXTRA = {
   en:{"strip.line":"<b>Reservations recommended 2 weeks in advance.</b> Walk-ins welcome subject to availability.",
       "faq.h":"Before you reserve","faq.q1":"Is the food Muslim-friendly?","faq.q2":"Can you accommodate dietary restrictions?",
       "faq.q3":"How far in advance should I book?","faq.q4":"What is the cancellation policy?","faq.q5":"Do the courses change?",
-      "cmp.extra":"Sea urchin & crab","cmp.beef":"Beef","cmp.nigiri":"Nigiri","cmp.steak":"Fillet steak","cmp.sukiyaki":"Sukiyaki","cmp.roll":"Hand roll","cmp.book":"Booking","cmp.price":"Price",
+      "cmp.extra":"Sea urchin & crab","cmp.beef":"Beef","cmp.spring":"Spring roll","cmp.nikuzushi":"Nikuzushi","cmp.chawan":"Chawanmushi","cmp.nigiri":"Nigiri","cmp.steak":"Fillet steak","cmp.sukiyaki":"Sukiyaki","cmp.roll":"Hand roll","cmp.book":"Booking","cmp.price":"Price",
       },
   zhs:{"strip.line":"<b>建议提前两周预约。</b>现场候位视空位情况欢迎光临。",
       "faq.h":"预约前须知","faq.q1":"料理是穆斯林友善的吗？","faq.q2":"可以配合饮食限制吗？",
       "faq.q3":"需要提前多久预约？","faq.q4":"取消规定为何？","faq.q5":"套餐内容会变动吗？",
-      "cmp.extra":"海胆与蟹","cmp.beef":"牛肉","cmp.nigiri":"握寿司","cmp.steak":"菲力牛排","cmp.sukiyaki":"寿喜烧","cmp.roll":"手卷","cmp.book":"预约方式","cmp.price":"价格",
+      "cmp.extra":"海胆与蟹","cmp.beef":"牛肉","cmp.spring":"春卷","cmp.nikuzushi":"肉寿司","cmp.chawan":"茶碗蒸","cmp.nigiri":"握寿司","cmp.steak":"菲力牛排","cmp.sukiyaki":"寿喜烧","cmp.roll":"手卷","cmp.book":"预约方式","cmp.price":"价格",
       },
   zht:{"strip.line":"<b>建議提前兩週預約。</b>現場候位視空位情況歡迎光臨。",
       "faq.h":"預約前須知","faq.q1":"料理是穆斯林友善的嗎？","faq.q2":"可以配合飲食限制嗎？",
       "faq.q3":"需要提前多久預約？","faq.q4":"取消規定為何？","faq.q5":"套餐內容會變動嗎？",
-      "cmp.extra":"海膽與蟹","cmp.beef":"牛肉","cmp.nigiri":"握壽司","cmp.steak":"菲力牛排","cmp.sukiyaki":"壽喜燒","cmp.roll":"手卷","cmp.book":"預約方式","cmp.price":"價格",
+      "cmp.extra":"海膽與蟹","cmp.beef":"牛肉","cmp.spring":"春捲","cmp.nikuzushi":"肉壽司","cmp.chawan":"茶碗蒸","cmp.nigiri":"握壽司","cmp.steak":"菲力牛排","cmp.sukiyaki":"壽喜燒","cmp.roll":"手卷","cmp.book":"預約方式","cmp.price":"價格",
       },
   ko:{"strip.line":"<b>2주 전 예약을 권장합니다.</b> 워크인은 좌석 상황에 따라 안내해 드립니다.",
       "faq.h":"예약 전 확인","faq.q1":"음식은 무슬림 프렌들리인가요?","faq.q2":"식이 제한도 배려해 주시나요?",
       "faq.q3":"얼마나 미리 예약해야 하나요?","faq.q4":"취소 규정은 어떻게 되나요?","faq.q5":"코스 내용이 바뀌나요?",
-      "cmp.extra":"성게 & 게","cmp.beef":"소고기","cmp.nigiri":"니기리","cmp.steak":"안심 스테이크","cmp.sukiyaki":"스키야키","cmp.roll":"핸드롤","cmp.book":"예약","cmp.price":"가격",
+      "cmp.extra":"성게 & 게","cmp.beef":"소고기","cmp.spring":"춘권","cmp.nikuzushi":"니쿠즈시","cmp.chawan":"차완무시","cmp.nigiri":"니기리","cmp.steak":"안심 스테이크","cmp.sukiyaki":"스키야키","cmp.roll":"핸드롤","cmp.book":"예약","cmp.price":"가격",
       },
   id:{"strip.line":"<b>Reservasi disarankan 2 minggu sebelumnya.</b> Tamu tanpa reservasi kami terima sesuai ketersediaan.",
       "faq.h":"Sebelum Anda memesan","faq.q1":"Apakah makanannya ramah Muslim?","faq.q2":"Bisakah menyesuaikan pantangan makanan?",
       "faq.q3":"Seberapa jauh hari sebaiknya memesan?","faq.q4":"Bagaimana kebijakan pembatalannya?","faq.q5":"Apakah isi kursus berubah?",
-      "cmp.extra":"Bulu babi & kepiting","cmp.beef":"Daging sapi","cmp.nigiri":"Nigiri","cmp.steak":"Steak fillet","cmp.sukiyaki":"Sukiyaki","cmp.roll":"Hand roll","cmp.book":"Pemesanan","cmp.price":"Harga",
+      "cmp.extra":"Bulu babi & kepiting","cmp.beef":"Daging sapi","cmp.spring":"Lumpia","cmp.nikuzushi":"Nikuzushi","cmp.chawan":"Chawanmushi","cmp.nigiri":"Nigiri","cmp.steak":"Steak fillet","cmp.sukiyaki":"Sukiyaki","cmp.roll":"Hand roll","cmp.book":"Pemesanan","cmp.price":"Harga",
       }
 };
 Object.keys(EXTRA).forEach(function(L){ Object.keys(EXTRA[L]).forEach(function(k){ window.I18N[L][k] = EXTRA[L][k]; }); });
@@ -644,6 +698,7 @@ function applyLang(code){
   document.querySelectorAll('[data-i18n-ph]').forEach(function(el){ var v = d[el.getAttribute('data-i18n-ph')]; if(v != null) el.setAttribute('placeholder', fill(v)); });
   document.querySelectorAll('[data-i18n-og]').forEach(function(el){ var v = d[el.getAttribute('data-i18n-og')]; if(v != null) el.setAttribute('label', fill(v)); });
   document.querySelectorAll('[data-lang-btn]').forEach(function(b){ b.setAttribute('aria-current', String(b.getAttribute('data-lang-btn') === code)); });
+  document.getElementById('langNow').textContent = meta.short;
   try{ localStorage.setItem('omakase_lang', code); }catch(e){}
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({event:'lang_switch', lang:code});
@@ -667,7 +722,23 @@ function initLang(){
   else if(n.indexOf('zh') === 0) auto = (n.indexOf('tw') > -1 || n.indexOf('hk') > -1 || n.indexOf('hant') > -1) ? 'zht' : 'zhs';
   applyLang(q || saved || auto);
 }
-document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+/* 言語選択シート */
+(function(){
+  var list = document.getElementById('langList');
+  window.LANGS.forEach(function(l){
+    var b = document.createElement('button');
+    b.setAttribute('data-lang-btn', l.code);
+    b.innerHTML = '<span>' + l.label + '</span><span class="code">' + l.short + '</span>';
+    b.addEventListener('click', function(){ applyLang(l.code); closeSheet(); });
+    list.appendChild(b);
+  });
+})();
+var sheet = document.getElementById('langSheet');
+function closeSheet(){ sheet.classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('langOpen').addEventListener('click', function(){ sheet.classList.add('open'); document.body.style.overflow = 'hidden'; });
+sheet.addEventListener('click', function(e){ if(e.target === sheet) closeSheet(); });
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeSheet(); });
+document.querySelectorAll('[data-lang-btn]:not(.sheet-list button)').forEach(function(b){
   b.addEventListener('click', function(e){ e.preventDefault(); applyLang(b.getAttribute('data-lang-btn')); });
 });
 

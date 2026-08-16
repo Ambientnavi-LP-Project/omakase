@@ -8,6 +8,27 @@ eleventyComputed:
   title: "{{ store.name_full_en }}"
   tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral{% else %}#{% endif %}"
 ---
+{% if store.theme == "wagyu" %}
+{% set IMG = {
+  lead:    "/images/sukiyaki.jpg",
+  concept: "/images/course-kobe-premium.jpg",
+  band:    "/images/cat-wagyu.jpg",
+  col_a:   "/images/course-wagyu-standard.jpg",
+  col_b:   "/images/chef2.jpg",
+  story:   "/images/chef1.jpg",
+  halal:   "/images/chef3.jpg"
+} %}
+{% else %}
+{% set IMG = {
+  lead:    "/images/sushi1.jpg",
+  concept: "/images/sushi2.jpg",
+  band:    "/images/cat-sushi.jpg",
+  col_a:   "/images/course-sushi-premium.jpg",
+  col_b:   "/images/chef2.jpg",
+  story:   "/images/chef1.jpg",
+  halal:   "/images/sushi4.jpg"
+} %}
+{% endif %}
 {% set TCATS = courses.themes[store.theme] or courses.themes.all %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
 {% macro yen(n) %}{% set s = (n | string) %}{% set L = s | length %}{% for i in range(0, L) %}{% if i > 0 and (L - i) % 3 == 0 %},{% endif %}{{ s[i] }}{% endfor %}{% endmacro %}
@@ -63,22 +84,34 @@ html.no-js .reveal{opacity:1;transform:none;}
 
 
 /* ---------- header ---------- */
-.hd{position:fixed;top:0;left:0;right:0;z-index:95;padding:14px 0;transition:background .4s,padding .4s;}
-.hd.solid{background:rgba(17,26,43,.94);backdrop-filter:blur(14px);padding:10px 0;}
+.hd{position:sticky;top:0;z-index:95;padding:14px 0;background:var(--navy);
+  border-bottom:1px solid var(--line);transition:padding .4s,box-shadow .4s;}
+.hd.solid{padding:10px 0;box-shadow:0 10px 30px -18px rgba(0,0,0,.9);}
 .hd-in{display:flex;align-items:center;justify-content:space-between;gap:14px;}
 .mark b{display:block;font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em;}
 .mark i{font-style:normal;display:block;font-family:var(--body);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);}
 .hd-r{display:flex;align-items:center;gap:clamp(10px,1.6vw,26px);}
 
-/* 言語：参考サイトと同じスラッシュ区切り。5言語なので横スクロール可 */
-.langs{display:flex;align-items:center;gap:9px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;max-width:min(46vw,340px);}
-.langs::-webkit-scrollbar{display:none;}
-.lang{background:none;border:none;cursor:pointer;white-space:nowrap;font-family:var(--body);font-size:13px;
-  letter-spacing:.04em;color:var(--w-f);padding:4px 1px;transition:color .3s;}
-.lang:hover{color:var(--w-d);}
-.lang[aria-current="true"]{color:var(--w);}
-.langs .sep{color:rgba(242,240,236,.25);font-size:12px;}
-
+/* 言語：ボタン＋選択シート */
+.langbtn{display:flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--line);
+  cursor:pointer;color:var(--w-d);font-family:var(--body);font-size:12.5px;letter-spacing:.04em;padding:10px 14px;transition:color .3s,border-color .3s;}
+.langbtn:hover{color:var(--w);border-color:rgba(242,240,236,.35);}
+.langbtn svg{width:15px;height:15px;flex-shrink:0;color:var(--gold);}
+@media(max-width:560px){.langbtn span{display:none;} .langbtn{padding:10px 12px;}}
+.sheet{position:fixed;inset:0;z-index:96;display:none;place-items:center;padding:20px;background:rgba(10,15,26,.72);backdrop-filter:blur(4px);}
+.sheet.open{display:grid;}
+.sheet-in{background:var(--navy-2);border:1px solid var(--line);width:100%;max-width:400px;padding:26px;
+  animation:sheetUp .34s cubic-bezier(.16,1,.3,1) both;}
+@keyframes sheetUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+@media(prefers-reduced-motion:reduce){.sheet-in{animation:none;}}
+.sheet-in h4{font-family:var(--disp);font-weight:500;font-size:20px;}
+.sheet-in p{font-size:12.5px;line-height:1.8;color:var(--w-f);margin:5px 0 18px;}
+.sheet-list{display:grid;gap:2px;}
+.sheet-list button{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;
+  background:none;border:none;cursor:pointer;font-family:var(--body);font-size:15px;color:var(--w);text-align:left;padding:13px 14px;transition:background .25s;}
+.sheet-list button:hover{background:rgba(242,240,236,.06);}
+.sheet-list button[aria-current="true"]{background:rgba(200,168,106,.14);color:var(--gold);}
+.sheet-list .code{font-family:var(--body);font-size:11px;letter-spacing:.14em;color:var(--w-f);}
 .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(242,240,236,.55);background:transparent;
   color:var(--w);cursor:pointer;font-family:var(--body);font-weight:500;font-size:13px;letter-spacing:.06em;
   padding:10px 20px;transition:background .3s,color .3s,border-color .3s;}
@@ -127,12 +160,10 @@ html.no-js .reveal{opacity:1;transform:none;}
 
 /* ---------- hero ---------- */
 .hero-media{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#000;}
-@media(min-width:900px){.hero-media{max-height:88vh;}}
+@media(min-width:900px){.hero-media{max-height:calc(92vh - 72px);}}
 .hero-media video{width:100%;height:100%;object-fit:cover;}
 .hero-media::after{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(10,15,26,.45) 0%,rgba(10,15,26,0) 26%,rgba(10,15,26,0) 62%,rgba(17,26,43,.6) 92%,var(--navy) 100%);}
-.sound{position:absolute;right:14px;bottom:14px;z-index:4;background:rgba(10,15,26,.5);border:1px solid var(--line);
-  color:var(--w-d);font-family:var(--body);font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:7px 12px;cursor:pointer;}
+  background:linear-gradient(to bottom,rgba(10,15,26,0) 0%,rgba(10,15,26,0) 60%,rgba(17,26,43,.55) 90%,var(--navy) 100%);}
 
 /* 参考サイトのコンセプト面：見出し左・写真右 */
 .lead-sec{position:relative;padding-top:clamp(30px,5vw,70px);}
@@ -210,9 +241,15 @@ html.no-js .reveal{opacity:1;transform:none;}
 .rev-src{font-family:var(--body);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--w-f);margin-left:9px;}
 .rev p{font-family:var(--disp);font-size:15px;line-height:1.85;margin:13px 0 14px;}
 .rev cite{font-style:normal;font-family:var(--body);font-size:11px;color:var(--w-f);}
-.score{display:flex;flex-wrap:wrap;gap:30px;align-items:center;justify-content:center;text-align:center;margin-top:34px;padding-top:30px;border-top:1px solid var(--line);}
-.score b{display:block;font-family:var(--disp);font-size:32px;color:var(--gold);font-weight:500;line-height:1;}
-.score span{display:block;margin-top:8px;font-family:var(--body);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--w-f);}
+.score{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(20px,4vw,44px);
+  margin-top:clamp(30px,4.5vw,52px);padding:clamp(28px,4vw,44px) clamp(20px,3vw,36px);
+  border:1px solid rgba(200,168,106,.32);background:rgba(200,168,106,.05);}
+.score-n{font-family:var(--disp);font-weight:500;font-size:clamp(58px,10vw,104px);line-height:.9;color:var(--gold);letter-spacing:-.02em;}
+.score-r{display:flex;flex-direction:column;gap:7px;}
+.score-stars{color:var(--gold);font-size:clamp(17px,2.2vw,22px);letter-spacing:4px;line-height:1;}
+.score-src{font-family:var(--body);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--w-d);}
+.score-count{font-family:var(--disp);font-size:clamp(19px,2.6vw,26px);line-height:1.2;color:var(--w);}
+.score-count small{display:block;font-family:var(--body);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--w-f);margin-top:5px;}
 
 /* ---------- story / access ---------- */
 .split{display:grid;gap:clamp(28px,5vw,66px);align-items:center;}
@@ -257,9 +294,10 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
   <div class="wrap hd-in">
     <a class="mark" href="#top"><b>Omakase</b><i>Wagyu &amp; Sushi</i></a>
     <div class="hd-r">
-      <div class="langs" role="group" aria-label="Language">
-        {% for l in ui.langs %}{% if not loop.first %}<span class="sep" aria-hidden="true">/</span>{% endif %}<button class="lang" data-lang-btn="{{ l.code }}"{% if l.code == 'en' %} aria-current="true"{% endif %}>{{ l.short }}</button>{% endfor %}
-      </div>
+      <button class="langbtn" id="langOpen" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2M12 3.4c2.5 2.6 2.5 15 0 17.2M12 3.4c-2.5 2.6-2.5 15 0 17.2"/></svg>
+        <span id="langNow">English</span>
+      </button>
       <button class="pill" onclick="openReserve('header')" data-ga-event="reserve_click" data-ga-location="header">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v3M16 3v3M3.5 9h17M5 5.5h14A1.5 1.5 0 0 1 20.5 7v12A1.5 1.5 0 0 1 19 20.5H5A1.5 1.5 0 0 1 3.5 19V7A1.5 1.5 0 0 1 5 5.5z" stroke-linecap="round"/></svg>
         <span data-i18n="nav.reserve">Reserve</span>
@@ -270,6 +308,14 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
     </div>
   </div>
 </header>
+
+<div class="sheet" id="langSheet" role="dialog" aria-modal="true" aria-label="Language">
+  <div class="sheet-in">
+    <h4 data-i18n="lang.h">Language</h4>
+    <p data-i18n="lang.p">The menu and information are the same in every language.</p>
+    <div class="sheet-list" id="langList"></div>
+  </div>
+</div>
 
 <div class="ovl" id="ovl">
   <div class="ovl-in wrap">
@@ -290,8 +336,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 <!-- ================= HERO ================= -->
 <section id="top">
   <div class="hero-media">
-    <video id="heroVid" autoplay muted loop playsinline preload="metadata" poster="/images/top.jpg"><source src="/images/hero1.mp4" type="video/mp4"/></video>
-    <button class="sound" id="soundBtn" data-i18n="ui.soundOn">Sound on</button>
+    <video autoplay muted loop playsinline preload="metadata" poster="/images/top.jpg"><source src="/images/hero1.mp4" type="video/mp4"/></video>
   </div>
 
   <div class="wrap lead-sec">
@@ -312,7 +357,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
           <a class="cbtn" href="#concept">{{ circ() }}<span class="lbl" data-i18n="nav.experience">The Experience</span></a>
         </div>
       </div>
-      <div class="lead-shot"><img src="/images/menu1.jpg" alt="" loading="lazy"/></div>
+      <div class="lead-shot"><img src="{{ IMG.lead }}" alt="" loading="lazy"/></div>
     </div>
   </div>
 </section>
@@ -321,7 +366,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 <section class="pad" id="concept">
   <div class="wrap split">
     <div class="frame reveal">
-      <video autoplay muted loop playsinline preload="none" poster="/images/sushi1.jpg" style="width:100%;aspect-ratio:4/5;object-fit:cover;"><source src="/images/hero2.mp4" type="video/mp4"/></video>
+      <video autoplay muted loop playsinline preload="none" poster="{{ IMG.concept }}" style="width:100%;aspect-ratio:4/5;object-fit:cover;"><source src="/images/hero2.mp4" type="video/mp4"/></video>
     </div>
     <div class="reveal">
       <span class="eyebrow" data-i18n="exp.label">The Experience</span>
@@ -340,7 +385,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 <!-- ================= INTERIOR ================= -->
 <section id="interior">
   <div class="band-photo reveal">
-    <img src="/images/chef1.jpg" alt="" loading="lazy"/>
+    <img src="{{ IMG.band }}" alt="" loading="lazy"/>
     <div class="band-txt"><div class="wrap"><div class="in">
       <span class="eyebrow" data-i18n="nav.interior">Interior</span>
       <h2 class="h-en" style="margin-top:12px;font-size:clamp(22px,3.2vw,38px);" data-i18n="menu.premiumH">&ldquo;Sushi &amp; Wagyu Indulgence&rdquo;</h2>
@@ -357,8 +402,8 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
         <div style="margin-top:24px;"><a class="cbtn sm" href="#access">{{ circ() }}<span class="lbl" data-i18n="nav.access">Access</span></a></div>
       </div>
       <div class="collage-imgs">
-        <img class="a" src="/images/chef2.jpg" alt="" loading="lazy"/>
-        <img class="b" src="/images/chef3.jpg" alt="" loading="lazy"/>
+        <img class="a" src="{{ IMG.col_a }}" alt="" loading="lazy"/>
+        <img class="b" src="{{ IMG.col_b }}" alt="" loading="lazy"/>
       </div>
     </div>
   </div>
@@ -424,7 +469,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
       <blockquote class="quote" data-i18n="story.quote">Wagyu was never a &lsquo;special occasion treat&rsquo; for me.</blockquote>
       <p class="by" data-i18n="story.by">— 5th Generation Owner</p>
     </div>
-    <div class="frame reveal"><img src="/images/sukiyaki.jpg" alt="" loading="lazy"/></div>
+    <div class="frame reveal"><img src="{{ IMG.story }}" alt="" loading="lazy"/></div>
   </div>
   <div class="wrap blocks reveal">
     <div><h4 data-i18n="story.t.label">The Turning Point</h4>
@@ -440,7 +485,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 <!-- ================= MUSLIM-FRIENDLY ================= -->
 <section class="pad" id="halal" style="background:var(--navy-2);">
   <div class="wrap split">
-    <div class="frame reveal"><img src="/images/menu2.jpg" alt="" loading="lazy" style="aspect-ratio:16/11;"/></div>
+    <div class="frame reveal"><img src="{{ IMG.halal }}" alt="" loading="lazy" style="aspect-ratio:16/11;"/></div>
     <div class="reveal">
       <span class="eyebrow" data-i18n="halal.label">Muslim-Friendly Dining</span>
       <h2 class="h-en" style="margin-top:14px;" data-i18n="halal.h">A Muslim-Friendly Dining Experience in {{ store.city.split(',')[0] }}</h2>
@@ -470,8 +515,12 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
       <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span><p>As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail and respect for our needs really showed. The wagyu itself was sublime.</p><cite>Kuala Lumpur</cite></div>
     </div>
     <div class="score reveal">
-      <div><b>{{ store.rating }}</b><span>Google &middot; {{ store.rating_count }} <span data-i18n="ui.reviews">reviews</span></span></div>
-      <div><b>No.1</b><span data-i18n="voices.tripadvisor">Tripadvisor Tokyo &middot; Aug 2025 — Mar 2026 (flagship)</span></div>
+      <span class="score-n">{{ store.rating }}</span>
+      <span class="score-r">
+        <span class="score-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="score-src">Google</span>
+      </span>
+      <span class="score-count">{{ store.rating_count }}<small data-i18n="ui.reviews">reviews</small></span>
     </div>
   </div>
 </section>
@@ -582,6 +631,7 @@ function applyLang(code){
   document.querySelectorAll('[data-i18n-ph]').forEach(function(el){ var v = d[el.getAttribute('data-i18n-ph')]; if(v != null) el.setAttribute('placeholder', fill(v)); });
   document.querySelectorAll('[data-i18n-og]').forEach(function(el){ var v = d[el.getAttribute('data-i18n-og')]; if(v != null) el.setAttribute('label', fill(v)); });
   document.querySelectorAll('[data-lang-btn]').forEach(function(b){ b.setAttribute('aria-current', String(b.getAttribute('data-lang-btn') === code)); });
+  document.getElementById('langNow').textContent = meta.short;
   try{ localStorage.setItem('omakase_lang', code); }catch(e){}
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({event:'lang_switch', lang:code});
@@ -605,7 +655,23 @@ function initLang(){
   else if(n.indexOf('zh') === 0) auto = (n.indexOf('tw') > -1 || n.indexOf('hk') > -1 || n.indexOf('hant') > -1) ? 'zht' : 'zhs';
   applyLang(q || saved || auto);
 }
-document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+/* 言語選択シート */
+(function(){
+  var list = document.getElementById('langList');
+  window.LANGS.forEach(function(l){
+    var b = document.createElement('button');
+    b.setAttribute('data-lang-btn', l.code);
+    b.innerHTML = '<span>' + l.label + '</span><span class="code">' + l.short + '</span>';
+    b.addEventListener('click', function(){ applyLang(l.code); closeSheet(); });
+    list.appendChild(b);
+  });
+})();
+var sheet = document.getElementById('langSheet');
+function closeSheet(){ sheet.classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('langOpen').addEventListener('click', function(){ sheet.classList.add('open'); document.body.style.overflow = 'hidden'; });
+sheet.addEventListener('click', function(e){ if(e.target === sheet) closeSheet(); });
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeSheet(); });
+document.querySelectorAll('[data-lang-btn]:not(.sheet-list button)').forEach(function(b){
   b.addEventListener('click', function(e){ e.preventDefault(); applyLang(b.getAttribute('data-lang-btn')); });
 });
 
@@ -628,17 +694,6 @@ document.querySelectorAll('[data-item]').forEach(function(btn){
     if(!open){ window.dataLayer = window.dataLayer || []; window.dataLayer.push({event:'course_detail_view', event_label: btn.getAttribute('data-item')}); }
   });
 });
-
-/* hero sound */
-(function(){
-  var v = document.getElementById('heroVid'), b = document.getElementById('soundBtn');
-  b.addEventListener('click', function(){
-    v.muted = !v.muted;
-    b.setAttribute('data-i18n', v.muted ? 'ui.soundOn' : 'ui.soundOff');
-    b.textContent = window.I18N[window.CURRENT_LANG][v.muted ? 'ui.soundOn' : 'ui.soundOff'];
-    if(!v.muted) v.play();
-  });
-})();
 
 /* reveal */
 (function(){
