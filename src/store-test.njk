@@ -8,7 +8,7 @@ eleventyComputed:
   title: "{{ store.name_full_en }}"
   is_reserve_ready: "{{ 'true' if store.tablecheck_url != 'TBD' else 'false' }}"
   is_form_reserve: "{{ 'true' if store.reserve_system == 'form' else 'false' }}"
-  tablecheck_with_utm: "{% if store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_content=lp_cta{% else %}#{% endif %}"
+  tablecheck_with_utm: "{% if store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}{% else %}#{% endif %}"
 ---
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
