@@ -57,7 +57,7 @@ module.exports = class {
         let tcUrl = "";
         if (p.tablecheck_url && p.tablecheck_url !== "TBD") {
           const src = p.channel_utm_source || "lp";
-          tcUrl = `${p.tablecheck_url}?utm_content=lp_cta`;
+          tcUrl = p.tablecheck_url;
         }
         rows.push([
           p.name_jp || p.slug, p.region, p.slug, state, ch, USE[ch] || "",
