@@ -234,7 +234,7 @@ const STORES = [
     hours_note: "Open Daily",
 
     reserve_system: "tablecheck",
-    tablecheck_url: "https://www.tablecheck.com/ja/halal-wagyu-osaka-higashi-shinsaibashi/reserve/",
+    tablecheck_url: "https://www.tablecheck.com/ja/halal-wagyu-osaka-higashi-shinsaibashi/reserve/landing",
     form_config: FORM_DEFAULT,
 
     maps_link: "https://maps.app.goo.gl/bG1aGxzCi2PACLFVA",
