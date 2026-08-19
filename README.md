@@ -118,7 +118,8 @@ const TEST_RESERVE = "store";
 ```
 
 **TableCheck時**（現在）
-- 予約ボタンが `{{ store.tablecheck_url }}?utm_source=lp-test-a-sushi&utm_medium=referral` へ遷移します（UTMは4チャンネル別）
+- 予約ボタンが `{{ store.tablecheck_url }}` へ遷移します（UTMは付与しません）
+  - **重要**：TableCheckへのリンクに `utm_source` / `utm_medium` を付けてはいけません。付けるとGA4が流入元を上書きし、広告経由（chatgpt/cpc、gclid等）の流入が予約完了地点で失われます。流入元の引き継ぎはGA4クロスドメイン計測（`_gl`）が担当します
 - `reserve-v2.njk` はページに出力されず、EmailJSのSDKも読み込まれません
 - ボタンの文言は `Reserve on TableCheck`
 
