@@ -92,7 +92,7 @@ const STORES = [
 
     // ▼ 予約導線
     reserve_system: "form",  // 全店フォーム予約に統一
-    tablecheck_url: "https://www.tablecheck.com/en/halal-omakase-asakusa/reserve/message",
+    tablecheck_url: "https://www.tablecheck.com/shops/halal-omakase-asakusa/reserve",
     form_config: FORM_DEFAULT,
 
     maps_link: "https://maps.app.goo.gl/pxiMce5bhj1WMLpo9",
@@ -137,7 +137,7 @@ const STORES = [
     hours_note: "Open Daily",
 
     reserve_system: "tablecheck",
-    tablecheck_url: "https://www.tablecheck.com/en/omakase-kyoto-shijo/reserve/message",
+    tablecheck_url: "https://www.tablecheck.com/shops/omakase-kyoto-shijo/reserve",
     form_config: FORM_DEFAULT,
 
     maps_link: "https://maps.app.goo.gl/TbMo3qDpCAJdZxQ28",
@@ -189,7 +189,7 @@ const STORES = [
     hours_note: "Open Daily",
 
     reserve_system: "form",
-    tablecheck_url: "https://www.tablecheck.com/en/yakiniku-burger-ramen-zen/reserve/message",
+    tablecheck_url: "https://www.tablecheck.com/shops/yakiniku-burger-ramen-zen/reserve",
     form_config: FORM_DEFAULT,
 
     maps_link: "https://maps.app.goo.gl/dUzfn2z9UQnkC8k57",
@@ -234,7 +234,7 @@ const STORES = [
     hours_note: "Open Daily",
 
     reserve_system: "tablecheck",
-    tablecheck_url: "https://www.tablecheck.com/en/halal-wagyu-osaka-higashi-shinsaibashi/reserve/landing",
+    tablecheck_url: "https://www.tablecheck.com/ja/halal-wagyu-osaka-higashi-shinsaibashi/reserve/",
     form_config: FORM_DEFAULT,
 
     maps_link: "https://maps.app.goo.gl/bG1aGxzCi2PACLFVA",
@@ -283,7 +283,7 @@ const STORES = [
 
     // ▼ この店はフォーム予約のまま。"tablecheck" に変えるだけでURL予約に切替可能。
     reserve_system: "tablecheck",   // "tablecheck" | "form"
-    tablecheck_url: "https://www.tablecheck.com/en/halal-wagyu-shinjuku-5w-tokyo/reserve/message",
+    tablecheck_url: "https://www.tablecheck.com/shops/halal-wagyu-shinjuku-5w-tokyo/reserve",
     form_config: {
       ...FORM_DEFAULT,
       // 店舗工事のため休業(YYYY-MM-DD)
@@ -435,6 +435,8 @@ STORES.forEach(s => {
       channel_suffix: d.suffix,
       channel_utm_source: d.utm_source,
       theme: d.theme,               // "sushi" | "wagyu" — 掲載コースと訴求文言を切り替える
+      // 寿司LPは name_full_en_sushi があればそちらを使う（本番の /sushi/ と同じ扱い）
+      name_full_en: (d.theme === "sushi" && s.name_full_en_sushi) ? s.name_full_en_sushi : s.name_full_en,
       force_prices: FORCE_PRICES,
       reserve_system: (TEST_RESERVE === "store")
         ? (s.reserve_system || "tablecheck")
