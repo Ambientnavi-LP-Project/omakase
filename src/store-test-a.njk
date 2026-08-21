@@ -264,17 +264,6 @@ html.no-js .reveal{opacity:1;transform:none;}
   letter-spacing:.08em;color:var(--gold);border-bottom:1px solid rgba(200,168,106,.4);padding-bottom:2px;}
 
 
-/* ---------- ヒーロー左下の目次 ---------- */
-.hero-nav{display:flex;flex-wrap:wrap;gap:8px 0;margin-top:clamp(24px,3.6vw,40px);
-  border-top:1px solid var(--line);padding-top:18px;}
-.hero-nav a{position:relative;font-family:var(--body);font-weight:500;font-size:13px;letter-spacing:.06em;
-  color:var(--w-d);padding:6px 18px 6px 0;margin-right:18px;transition:color .3s;white-space:nowrap;}
-.hero-nav a::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
-  width:1px;height:11px;background:var(--line);}
-.hero-nav a:last-child::after{display:none;}
-.hero-nav a:hover{color:var(--gold);}
-@media(max-width:640px){.hero-nav a{font-size:12.5px;padding-right:14px;margin-right:14px;}}
-
 /* ---------- 常時表示の予約ボタン（右下・シャイン） ---------- */
 .fab{position:fixed;right:clamp(14px,2.4vw,30px);bottom:clamp(14px,2.4vw,30px);z-index:78;
   display:inline-flex;flex-direction:column;align-items:center;gap:2px;
@@ -298,6 +287,30 @@ html.no-js .reveal{opacity:1;transform:none;}
 .halal-icon{width:42px;height:42px;color:var(--gold);margin:0 auto 18px;display:block;}
 .halal-center{max-width:720px;margin-inline:auto;text-align:center;}
 .halal-center .badges{justify-content:center;margin-top:26px;}
+
+
+/* ---------- ヒーロー左の目次（動画に重ねる） ---------- */
+.hero-stage{position:relative;}
+.hero-nav a{display:block;font-family:var(--disp);font-weight:400;text-transform:uppercase;
+  letter-spacing:.045em;color:#fff;transition:color .3s,transform .4s cubic-bezier(.16,1,.3,1);
+  text-shadow:0 2px 22px rgba(0,0,0,.75);}
+.hero-nav a:hover{color:var(--gold);transform:translateX(8px);}
+@media(min-width:900px){
+  .hero-nav{position:absolute;inset:0;z-index:4;display:flex;align-items:center;pointer-events:none;}
+  .hero-nav .wrap{pointer-events:auto;}
+  .hero-nav a{font-size:clamp(21px,2.5vw,36px);line-height:1;padding:clamp(9px,1.1vw,15px) 0;width:max-content;}
+}
+@media(max-width:899px){
+  .hero-nav{padding-block:clamp(20px,5vw,30px) 0;}
+  .hero-nav .wrap{display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;}
+  .hero-nav a{font-size:17px;line-height:1.35;padding:8px 0;color:var(--w);text-shadow:none;
+    border-bottom:1px solid var(--line);}
+  .hero-nav a:hover{transform:none;}
+}
+/* 左端を少し落として文字を読ませる */
+.hero-media::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(90deg,rgba(10,15,26,.62) 0%,rgba(10,15,26,.30) 34%,rgba(10,15,26,0) 58%);}
+@media(max-width:899px){.hero-media::before{display:none;}}
 
 /* ---------- menu ---------- */
 .cg{border-top:1px solid var(--line);padding-top:clamp(30px,4.5vw,54px);margin-top:clamp(30px,4.5vw,54px);}
@@ -429,8 +442,21 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 
 <!-- ================= HERO ================= -->
 <section id="top">
+  <div class="hero-stage">
   <div class="hero-media">
     <video autoplay muted loop playsinline preload="metadata" poster="{{ IMG.poster }}"><source src="{{ IMG.hero }}" type="video/mp4"/></video>
+  </div>
+  <nav class="hero-nav">
+    <div class="wrap">
+      <a href="#menu" data-i18n="nav.menu">Menu</a>
+      <a href="#interior" data-i18n="nav.interior">Interior</a>
+      {% if SHOW_PERFORMANCE %}<a href="#performance" data-i18n="nav.performance">Performance</a>{% endif %}
+      <a href="#voices" data-i18n="voices.label">Guest Voices</a>
+      <a href="#halal" data-i18n="nav.halal">Muslim-Friendly</a>
+      <a href="#access" data-i18n="nav.access">Access</a>
+      <a href="#reserve" data-i18n="nav.reserve">Reserve</a>
+    </div>
+  </nav>
   </div>
 
   <div class="wrap lead-sec">
@@ -444,16 +470,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
           <span>{{ store.hours }}</span>
           <span>{{ store.station_en }}</span>
         </div>
-        <nav class="hero-nav">
-          <a href="#menu" data-i18n="nav.menu">Menu</a>
-          <a href="#interior" data-i18n="nav.interior">Interior</a>
-          {% if SHOW_PERFORMANCE %}<a href="#performance" data-i18n="nav.performance">Performance</a>{% endif %}
-          <a href="#voices" data-i18n="voices.label">Guest Voices</a>
-          <a href="#halal" data-i18n="nav.halal">Muslim-Friendly</a>
-          <a href="#access" data-i18n="nav.access">Access</a>
-          <a href="#reserve" data-i18n="nav.reserve">Reserve</a>
-        </nav>
-      </div>
+          </div>
       <div class="lead-shot"><img src="{{ IMG.lead }}" alt="" loading="lazy"/></div>
     </div>
   </div>
