@@ -59,12 +59,12 @@ const CATS = [
     img: "/images/cat-wagyu.jpg",
     label: { en: "Wagyu Beef", ja: "和牛", zhs: "和牛", zht: "和牛", ko: "와규", id: "Wagyu" },
     lead: {
-      ja: "上質な和牛の真髄を。フィレステーキ、すき焼き、和牛寿司。いずれも霜降りと口どけで選び抜いた部位です。",
-      en: "Premium Japanese wagyu at its finest — fillet steak, sukiyaki and wagyu sushi, each cut chosen for its marbling and melt-in-the-mouth richness.",
-      zhs: "顶级日本和牛的极致——菲力牛排、寿喜烧与和牛寿司，每一块皆因霜降与入口即化的丰腴而选。",
-      zht: "頂級日本和牛的極致——菲力牛排、壽喜燒與和牛壽司，每一塊皆因霜降與入口即化的豐腴而選。",
-      ko: "최상급 일본 와규의 정수 — 안심 스테이크, 스키야키, 와규 스시. 마블링과 입안에서 녹는 풍미로 고른 부위만.",
-      id: "Wagyu Jepang premium terbaik — steak fillet, sukiyaki, dan sushi wagyu; setiap potongan dipilih karena marbling dan kelembutannya."
+      ja: "上質な和牛の真髄を。フィレステーキと和牛寿司。いずれも霜降りと口どけで選び抜いた部位です。",
+      en: "Premium Japanese wagyu at its finest — fillet steak and wagyu sushi, each cut chosen for its marbling and melt-in-the-mouth richness.",
+      zhs: "顶级日本和牛的极致——菲力牛排与和牛寿司，每一块皆因霜降与入口即化的丰腴而选。",
+      zht: "頂級日本和牛的極致——菲力牛排與和牛壽司，每一塊皆因霜降與入口即化的豐腴而選。",
+      ko: "최상급 일본 와규의 정수 — 안심 스테이크와 와규 스시. 마블링과 입안에서 녹는 풍미로 고른 부위만.",
+      id: "Wagyu Jepang premium terbaik — steak fillet dan sushi wagyu; setiap potongan dipilih karena marbling dan kelembutannya."
     },
     note: {
       ja: "神戸牛のコースもご用意しています。",
@@ -77,7 +77,7 @@ const CATS = [
 
 /** 訴求テーマごとに出すカテゴリ。既存 store-sushi.njk / store-wagyu.njk と同じ組み合わせ。 */
 const THEMES = {
-  sushi: ["sushi"],   // 寿司LPに和牛のステーキ・すき焼きを出さないため mix は含めない
+  sushi: ["sushi"],   // 寿司LPに和牛のコースを出さないため mix は含めない
   wagyu: ["wagyu"],   // 同様に和牛LPには寿司コースを出さない
   all:   ["mix", "sushi", "wagyu"]
 };
@@ -107,7 +107,6 @@ const LIST = [
       "Chilled Tofu",
       "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop",
       "Wagyu Fillet Steak 100g",
-      "Wagyu Sukiyaki",
       "Salmon & Ikura Hand Roll · Wagyu Nikuzushi",
       "Aka-dashi Miso Soup · Matcha & Sweets"
     ]
@@ -136,7 +135,6 @@ const LIST = [
       "Chilled Tofu",
       "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Crab Gunkan",
       "Kobe Beef Fillet Steak 100g",
-      "Kobe Beef Sukiyaki",
       "Sea Urchin Hand Roll · Kobe Beef Nikuzushi",
       "Aka-dashi Miso Soup · Matcha & Sweets"
     ]
@@ -165,7 +163,6 @@ const LIST = [
       "Chilled Tofu",
       "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop",
       "Wagyu Fillet Steak 50g",
-      "Wagyu Sukiyaki",
       "Salmon & Ikura Hand Roll · Wagyu Nikuzushi",
       "Aka-dashi Miso Soup · Matcha & Sweets"
     ]
@@ -240,7 +237,6 @@ const LIST = [
     rows: [
       "Wagyu Hassun — Seasonal Appetizers",
       "Chilled Tofu",
-      "Wagyu Sukiyaki (thin-sliced)",
       "Wagyu Fillet Steak 100g",
       "Wagyu Spring Roll",
       "Wagyu Nikuzushi & Steak Hand Roll (20g)",
@@ -267,7 +263,6 @@ const LIST = [
     rows: [
       "Kobe Beef Hassun — Seasonal Appetizers",
       "Chilled Tofu",
-      "Kobe Beef Sukiyaki (thin-sliced)",
       "Kobe Beef Fillet Steak 100g",
       "Kobe Beef Spring Roll",
       "Kobe Beef Nikuzushi & Steak Hand Roll (20g)",
