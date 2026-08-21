@@ -35,6 +35,7 @@ eleventyComputed:
   courses: ["/images/course-sushi-standard.jpg","/images/course-sushi-premium.jpg","/images/sushi1.jpg","/images/sushi2.jpg"]
 } %}
 {% endif %}
+{% set SHOW_PERFORMANCE = false %}   {# パフォーマンスセクションの表示切替。true で復活 #}
 {% set TCATS = courses.themes[store.theme] or courses.themes.all %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
 {% macro yen(n) %}{% set s = (n | string) %}{% set L = s | length %}{% for i in range(0, L) %}{% if i > 0 and (L - i) % 3 == 0 %},{% endif %}{{ s[i] }}{% endfor %}{% endmacro %}
@@ -95,8 +96,8 @@ html.no-js .reveal{opacity:1;transform:none;}
 .hd.solid{padding:10px 0;box-shadow:0 10px 30px -18px rgba(0,0,0,.9);}
 .hd-in{display:flex;align-items:center;justify-content:space-between;gap:clamp(10px,2vw,26px);}
 /* 左上：ロゴ＋フル店名。折り返して全文を出す（省略しない） */
-.mark{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 auto;max-width:min(58%,620px);}
-.mark img{width:clamp(38px,4.4vw,56px);height:auto;flex-shrink:0;}
+.mark{display:flex;align-items:center;flex-shrink:0;}
+.mark img{width:clamp(58px,7vw,96px);height:auto;}
 .mark b{display:block;font-family:var(--disp);font-weight:500;line-height:1.3;
   font-size:clamp(10.5px,1.15vw,15px);letter-spacing:.005em;
   white-space:normal;overflow-wrap:anywhere;word-break:normal;}
@@ -182,13 +183,11 @@ html.no-js .reveal{opacity:1;transform:none;}
 .lead-sec{position:relative;padding-top:clamp(30px,5vw,70px);}
 .lead-grid{display:grid;gap:clamp(26px,4vw,50px);align-items:start;}
 @media(min-width:1000px){.lead-grid{grid-template-columns:1fr 1fr;gap:clamp(40px,5vw,80px);}}
-.lead-h{font-family:var(--disp);font-weight:400;line-height:1.24;font-size:clamp(30px,5.4vw,60px);letter-spacing:-.012em;}
+.lead-h{font-family:var(--disp);font-weight:400;line-height:1.3;font-size:clamp(23px,3.4vw,40px);letter-spacing:-.01em;overflow-wrap:anywhere;}
 .lead-h em{font-style:normal;display:block;}
 .lead-shot{position:relative;}
 .lead-shot img{width:100%;aspect-ratio:16/11;object-fit:cover;}
 @media(min-width:1000px){.lead-shot{margin-right:calc(var(--gut) * -1);}}
-.hero-name{margin-top:clamp(26px,4vw,44px);padding-top:20px;border-top:1px solid var(--line);
-  font-family:var(--disp);font-weight:500;font-size:clamp(16px,2.2vw,23px);line-height:1.5;color:var(--gold);}
 .hero-meta{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--body);font-weight:500;font-size:11.5px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--w-d);}
 .hero-meta b{color:var(--gold);font-weight:600;}
@@ -386,7 +385,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 
 <header class="hd" id="hd">
   <div class="wrap hd-in">
-    <a class="mark" href="#top"><img src="/images/logo-gtj-light.png" alt="Gastronomic Tour of JAPAN"/><b>{{ store.name_full_en }}</b></a>
+    <a class="mark" href="#top" aria-label="{{ store.name_full_en }}"><img src="/images/logo-gtj-light.png" alt="Gastronomic Tour of JAPAN"/></a>
     <div class="hd-r">
       <button class="langbtn" id="langOpen" aria-haspopup="dialog">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2M12 3.4c2.5 2.6 2.5 15 0 17.2M12 3.4c-2.5 2.6-2.5 15 0 17.2"/></svg>
@@ -416,7 +415,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
     <nav>
       <a href="#concept" data-nav data-i18n="nav.experience">The Experience</a>
       <a href="#interior" data-nav data-i18n="nav.interior">Interior</a>
-      <a href="#performance" data-nav data-i18n="nav.performance">Performance</a>
+      {% if SHOW_PERFORMANCE %}<a href="#performance" data-nav data-i18n="nav.performance">Performance</a>{% endif %}
       <a href="#menu" data-nav data-i18n="nav.menu">Menu</a>
       <a href="#halal" data-nav data-i18n="nav.halal">Muslim-Friendly</a>
       <a href="#access" data-nav data-i18n="nav.access">Access</a>
@@ -438,11 +437,8 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
     <div class="lead-grid">
       <div>
         <p class="eyebrow" data-i18n="hero.tour">Gastronomic Tour of Japan</p>
-        <h1 class="lead-h" style="margin-top:10px;">
-          <span data-i18n="theme.{{ store.theme }}">{{ store.theme | capitalize }}</span><em data-i18n="hero.halal">Halal Omakase Experience</em>
-        </h1>
+        <h1 class="lead-h" style="margin-top:10px;">{{ store.name_full_en }}</h1>
         <p class="p" style="margin-top:clamp(18px,3vw,30px);max-width:520px;" data-i18n="menu.{{ store.theme }}P">Authentic omakase, served Muslim-friendly.</p>
-        <p class="hero-name">{{ store.name_full_en }}</p>
         <div class="hero-meta">
           <span><b>&#9733; {{ store.rating }}</b> Google &middot; {{ store.rating_count }}</span>
           <span>{{ store.hours }}</span>
@@ -451,7 +447,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
         <nav class="hero-nav">
           <a href="#menu" data-i18n="nav.menu">Menu</a>
           <a href="#interior" data-i18n="nav.interior">Interior</a>
-          <a href="#performance" data-i18n="nav.performance">Performance</a>
+          {% if SHOW_PERFORMANCE %}<a href="#performance" data-i18n="nav.performance">Performance</a>{% endif %}
           <a href="#voices" data-i18n="voices.label">Guest Voices</a>
           <a href="#halal" data-i18n="nav.halal">Muslim-Friendly</a>
           <a href="#access" data-i18n="nav.access">Access</a>
@@ -491,6 +487,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
   </div>
 </section>
 
+{% if SHOW_PERFORMANCE %}
 <!-- ================= PERFORMANCE ================= -->
 <section class="pad" id="performance" style="background:var(--navy-2);">
   <div class="wrap">
@@ -511,6 +508,8 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
     </div>
   </div>
 </section>
+
+{% endif %}
 
 <!-- ================= MENU ================= -->
 <section class="pad" id="menu" style="background:var(--navy-2);">
@@ -679,7 +678,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
       <nav class="ft-nav">
         <a href="#concept" data-i18n="nav.experience">The Experience</a>
         <a href="#interior" data-i18n="nav.interior">Interior</a>
-        <a href="#performance" data-i18n="nav.performance">Performance</a>
+        {% if SHOW_PERFORMANCE %}<a href="#performance" data-i18n="nav.performance">Performance</a>{% endif %}
         <a href="#menu" data-i18n="nav.menu">Menu</a>
         <a href="#halal" data-i18n="nav.halal">Muslim-Friendly</a>
         <a href="#access" data-i18n="nav.access">Access</a>
