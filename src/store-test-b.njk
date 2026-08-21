@@ -290,7 +290,8 @@ html.no-js .reveal{opacity:1;transform:none;}
   text-shadow:0 2px 22px rgba(0,0,0,.75);}
 .hero-nav a:hover{color:#e0a24a;transform:translateX(8px);}
 @media(min-width:900px){
-  .hero-nav{position:absolute;inset:0;z-index:4;display:flex;align-items:center;pointer-events:none;}
+  .hero-nav{position:absolute;inset:0;z-index:4;display:flex;align-items:flex-end;pointer-events:none;
+    padding-bottom:clamp(26px,4.5vw,64px);}
   .hero-nav .wrap{pointer-events:auto;}
   .hero-nav a{font-size:clamp(21px,2.5vw,36px);line-height:1;padding:clamp(9px,1.1vw,15px) 0;width:max-content;}
 }
@@ -456,8 +457,8 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
   </div>
   <nav class="hero-nav">
     <div class="wrap">
+      <a href="#concept" data-i18n="nav.experience">The Experience</a>
       <a href="#courses" data-i18n="nav.menu">Menu</a>
-      <a href="#interior" data-i18n="nav.interior">Interior</a>
       {% if SHOW_PERFORMANCE %}<a href="#performance" data-i18n="nav.performance">Performance</a>{% endif %}
       <a href="#voices" data-i18n="voices.label">Guest Voices</a>
       <a href="#halal" data-i18n="nav.halal">Muslim-Friendly</a>
@@ -488,7 +489,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
 </section>
 
 <!-- ================= EXPERIENCE ================= -->
-<section class="pad">
+<section class="pad" id="concept">
   <div class="wrap">
     <div class="center reveal" style="max-width:660px;margin-inline:auto;">
       <span class="eyebrow" data-i18n="exp.label">The Experience</span>
@@ -588,14 +589,6 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
       <p class="lead" data-i18n="menu.{{ store.theme }}P">Authentic omakase, served Muslim-friendly.</p>
     </div>
 
-    <div class="slider reveal" data-slider style="margin-bottom:clamp(34px,5vw,60px);">
-      <div class="slides">
-        {% for im in IMG.courses %}<img src="{{ im }}" alt=""{% if loop.first %} class="on"{% else %} loading="lazy"{% endif %}/>{% endfor %}
-      </div>
-      <button class="s-nav prev" data-slide-prev aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="s-nav next" data-slide-next aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="s-dots" data-slide-dots></div>
-    </div>
 
     {% if store.theme == "wagyu" %}
     {% set FEATURED = ["wagyu-standard","kobe-premium"] %}
