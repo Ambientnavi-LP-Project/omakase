@@ -1,0 +1,308 @@
+---
+pagination:
+  data: stores.pagesTestCourses
+  size: 1
+  alias: store
+permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}courses/index.html"
+eleventyComputed:
+  title: "{{ store.name_full_en }}"
+  tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}-courses&utm_medium=referral{% else %}#{% endif %}"
+---
+{% set TH = courses.themes[store.theme] or courses.themes.all %}
+{% set showPrice = (not store.hide_prices) or store.force_prices %}
+{% set isDark = "test-a" in store.channel_id %}
+{% set home = "/" + store.region + "/" + store.slug + "/" + store.channel_suffix %}
+{% macro yen(n) %}{% set s = (n | string) %}{% set L = s | length %}{% for i in range(0, L) %}{% if i > 0 and (L - i) % 3 == 0 %},{% endif %}{{ s[i] }}{% endfor %}{% endmacro %}
+<!DOCTYPE html>
+<html lang="en" data-lang="en" class="no-js">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>{{ store.name_full_en }}</title>
+<meta name="robots" content="noindex,follow"/>
+<link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/"/>
+
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TJKTLQJ6');</script>
+<script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({store_name:'{{ store.slug }}',store_area:'{{ store.region }}',brand:'{{ stores.brand.brand_slug }}',channel:'{{ store.channel_id }}',design:'{{ "test-a" if isDark else "test-b" }}',theme:'{{ store.theme }}',page_type:'courses'});</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+:root{
+{% if isDark %}
+  --bg:#0c0a09; --bg-2:#15100f; --paper:#efe9dc;
+  --t:#f4f1ea; --t-d:rgba(244,241,234,.86); --t-f:rgba(244,241,234,.60);
+  --accent:#c9a96e; --accent-l:#e0c793; --enji:#7d2231; --enji-l:#9c2c3d;
+  --line:rgba(244,241,234,.18);
+{% else %}
+  --bg:#f4efe5; --bg-2:#fffdf9; --paper:#eae2d4;
+  --t:#131010; --t-d:rgba(19,16,16,.84); --t-f:rgba(19,16,16,.56);
+  --accent:#a5843f; --accent-l:#8a6a2f; --enji:#8c2230; --enji-l:#a62c3d;
+  --line:rgba(19,16,16,.18);
+{% endif %}
+  --disp:'Lora',serif; --body:'Jost',sans-serif;
+  --gut:clamp(22px,5.5vw,80px);
+  --rv-bg:var(--bg-2); --rv-panel:var(--bg); --rv-line:var(--line);
+  --rv-text:var(--t); --rv-muted:var(--t-f); --rv-accent:var(--enji-l);
+  --rv-on-accent:#fff; --rv-display:var(--disp); --rv-body:var(--body); --rv-radius:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:var(--body);font-weight:400;line-height:1.8;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:clamp(84px,10vw,108px);}
+img{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+.wrap{width:100%;max-width:1120px;margin-inline:auto;padding-inline:var(--gut);}
+
+.hd{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 0;}
+.hd-in{display:flex;align-items:center;justify-content:space-between;gap:14px;}
+.hd-in img{width:clamp(52px,6vw,84px);height:auto;}
+.hd-r{display:flex;align-items:center;gap:12px;}
+.back{display:inline-flex;align-items:center;gap:9px;font-family:var(--body);font-weight:500;font-size:13px;color:var(--t-d);}
+.back svg{width:15px;height:15px;}
+.back:hover{color:var(--accent);}
+.langbtn{display:flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--line);
+  cursor:pointer;color:var(--t);font-family:var(--body);font-weight:500;font-size:13px;padding:9px 12px;}
+.langbtn svg{width:15px;height:15px;color:var(--accent);}
+@media(max-width:560px){.langbtn span{display:none;}}
+.sheet{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:20px;background:rgba(6,5,4,.7);}
+.sheet.open{display:grid;}
+.sheet-in{background:var(--bg-2);border:1px solid var(--line);width:100%;max-width:400px;padding:26px;border-radius:6px;}
+.sheet-in h4{font-family:var(--disp);font-weight:600;font-size:20px;}
+.sheet-in p{font-size:13.5px;line-height:1.75;color:var(--t-d);margin:5px 0 18px;}
+.sheet-list{display:grid;gap:2px;}
+.sheet-list button{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;background:none;
+  border:none;cursor:pointer;font-family:var(--body);font-size:15px;color:var(--t);text-align:left;padding:12px 13px;border-radius:4px;}
+.sheet-list button:hover{background:var(--paper);{% if isDark %}background:rgba(244,241,234,.07);{% endif %}}
+.sheet-list button[aria-current="true"]{color:var(--enji-l);font-weight:600;}
+.sheet-list .code{font-size:12px;font-weight:500;color:var(--t-f);}
+
+.head{padding:clamp(40px,6vw,80px) 0 clamp(28px,4vw,44px);}
+.eyebrow{display:inline-block;font-family:var(--body);font-weight:600;font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);}
+.head h1{font-family:var(--disp);font-weight:500;font-size:clamp(26px,4vw,44px);line-height:1.26;margin-top:12px;letter-spacing:-.01em;}
+.head p{margin-top:16px;font-size:16px;line-height:1.9;color:var(--t-d);max-width:640px;}
+
+/* コース1件 */
+.course{border-top:1px solid var(--line);padding:clamp(34px,5vw,60px) 0;scroll-margin-top:90px;}
+.course-grid{display:grid;gap:clamp(22px,3.4vw,48px);align-items:start;}
+@media(min-width:900px){.course-grid{grid-template-columns:1.05fr .95fr;}}
+.shot{position:relative;overflow:hidden;background:var(--paper);}
+.shot img{width:100%;aspect-ratio:4/3;object-fit:cover;}
+.shot .flag{position:absolute;left:0;top:0;background:var(--enji);color:#fff;font-family:var(--body);
+  font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;}
+.c-cat{font-family:var(--body);font-weight:600;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);}
+.c-name{font-family:var(--disp);font-weight:500;font-size:clamp(22px,2.9vw,32px);line-height:1.28;margin-top:10px;letter-spacing:-.01em;}
+.c-price{margin-top:14px;font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.2vw,36px);color:var(--enji-l);line-height:1;}
+.c-price small{font-family:var(--body);font-size:13px;font-weight:400;color:var(--t-f);margin-left:9px;}
+.c-lead{margin-top:14px;font-size:15.5px;line-height:1.92;color:var(--t-d);}
+.flow{counter-reset:f;margin-top:22px;border-top:1px solid var(--line);}
+.flow-row{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line);}
+.fl-n{counter-increment:f;font-family:var(--disp);font-weight:600;font-size:11px;color:var(--accent);}
+.fl-n::before{content:counter(f,decimal-leading-zero);}
+.fl-t{font-size:14.5px;line-height:1.8;color:var(--t-d);}
+.c-note{margin-top:14px;font-size:13px;color:var(--t-f);}
+
+.foot{border-top:1px solid var(--line);padding:clamp(44px,6vw,80px) 0;text-align:center;}
+.foot h2{font-family:var(--disp);font-weight:500;font-size:clamp(22px,3vw,32px);}
+.foot p{margin-top:14px;font-size:15px;color:var(--t-d);}
+.btn{display:inline-block;margin-top:24px;background:var(--enji);color:#fff;border:none;cursor:pointer;
+  font-family:var(--body);font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+  padding:18px 44px;border-radius:100px;}
+.btn:hover{background:var(--enji-l);}
+
+.fab{position:fixed;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px);z-index:50;
+  display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:#c9a96e;color:#0b0908;
+  border:none;cursor:pointer;text-decoration:none;font-family:var(--body);border-radius:14px;padding:11px 18px;
+  overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 0 1px rgba(201,169,110,.45);
+  transition:transform .2s ease,box-shadow .2s ease;}
+.fab:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 14px 36px rgba(0,0,0,.55),0 0 0 1px rgba(201,169,110,.8);}
+.fab-viewers{display:flex;align-items:center;gap:6px;position:relative;z-index:2;font-size:10px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:rgba(11,9,8,.72);}
+.fab-dot{width:7px;height:7px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 0 rgba(22,163,74,.6);animation:pulseGreen 1.8s ease-in-out infinite;}
+@keyframes pulseGreen{0%{box-shadow:0 0 0 0 rgba(22,163,74,.6);}70%{box-shadow:0 0 0 6px rgba(22,163,74,0);}100%{box-shadow:0 0 0 0 rgba(22,163,74,0);}}
+.fab-main{position:relative;z-index:2;font-size:13.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+.fab::before{content:'';position:absolute;top:-60%;bottom:-60%;width:38%;left:-50%;z-index:1;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.7) 50%,rgba(255,255,255,0) 100%);
+  transform:skewX(-18deg);animation:shine 3.4s ease-in-out infinite;}
+@keyframes shine{0%{left:-50%;}45%{left:120%;}100%{left:120%;}}
+@media(prefers-reduced-motion:reduce){.fab::before{animation:none;opacity:0;}.fab-dot{animation:none;}}
+@media(max-width:380px){.fab{right:10px;bottom:10px;padding:9px 14px;}.fab-main{font-size:12px;}}
+</style>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TJKTLQJ6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<header class="hd">
+  <div class="wrap hd-in">
+    <a href="{{ home }}" aria-label="{{ store.name_full_en }}"><img src="/images/logo-gtj{{ '-light' if isDark else '' }}.png" alt="Gastronomic Tour of JAPAN"/></a>
+    <div class="hd-r">
+      <a class="back" href="{{ home }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-i18n="course.back">Back to the site</span>
+      </a>
+      <button class="langbtn" id="langOpen" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2M12 3.4c2.5 2.6 2.5 15 0 17.2M12 3.4c-2.5 2.6-2.5 15 0 17.2"/></svg>
+        <span id="langNow">English</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="sheet" id="langSheet" role="dialog" aria-modal="true" aria-label="Language">
+  <div class="sheet-in">
+    <h4 data-i18n="lang.h">Language</h4>
+    <p data-i18n="lang.p">The menu and information are the same in every language.</p>
+    <div class="sheet-list" id="langList"></div>
+  </div>
+</div>
+
+<div class="wrap head">
+  <span class="eyebrow" data-i18n="menu.chefs">Chef&rsquo;s Omakase</span>
+  <h1 data-i18n="courses.h">Course Details</h1>
+  <p data-i18n="menu.{{ store.theme }}P">Authentic omakase, served Muslim-friendly.</p>
+  <p style="font-size:13px;color:var(--t-f);margin-top:10px;" data-i18n="menu.season">* Ingredients may vary depending on the season.</p>
+</div>
+
+<div class="wrap">
+{% for ck in TH.cats %}{% for cat in courses.cats %}{% if cat.key == ck %}
+{% for c in courses.list %}{% if c.cat == cat.key and c.id in TH.ids %}
+{% set p = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}
+  <article class="course" id="{{ c.id }}">
+    <div class="course-grid">
+      <div class="shot">
+        <img src="{{ c.img }}" alt="" loading="lazy"/>
+        {% if c.premium %}<span class="flag" data-i18n="tag.recommended">Recommended</span>{% endif %}
+        {% if c.lunch_only %}<span class="flag" data-i18n="tag.lunch">Lunch only</span>{% endif %}
+      </div>
+      <div>
+        <span class="c-cat" data-i18n="cat.{{ cat.key }}.label">{{ cat.label.en }}</span>
+        <h2 class="c-name" data-i18n="course.{{ c.id }}.name">{{ c.name.en }}</h2>
+        {% if showPrice %}<p class="c-price">&yen;{{ yen(p) }}<small>&yen;{{ yen((p * 1.1) | round(0,"floor") | int) }} <span data-i18n="course.incl">incl. tax</span></small></p>{% endif %}
+        <p class="c-lead" data-i18n="course.{{ c.id }}.lead">{{ c.lead.en }}</p>
+        <div class="flow">
+          {% for r in c.rows %}<div class="flow-row"><span class="fl-n"></span><span class="fl-t">{{ r }}</span></div>{% endfor %}
+        </div>
+        <p class="c-note" data-i18n="menu.note">All Muslim-friendly &middot; Seasonal menu</p>
+      </div>
+    </div>
+  </article>
+{% endif %}{% endfor %}
+{% endif %}{% endfor %}{% endfor %}
+</div>
+
+<section class="foot">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="reserve.label">Reserve</span>
+    <h2 style="margin-top:12px;" data-i18n="reserve.h">Begin Your Experience</h2>
+    <p data-i18n="reserve.p">Reservations recommended 2 weeks in advance. Walk-ins welcome subject to availability.</p>
+    <button class="btn" onclick="openReserve('courses_page')" data-ga-event="reserve_click" data-ga-location="courses_page">
+      <span data-i18n="{% if store.reserve_system == 'form' %}reserve.btn{{ store.theme | capitalize }}{% else %}reserve.btnTc{% endif %}">{% if store.reserve_system == 'form' %}Reserve Your Omakase{% else %}Reserve on TableCheck{% endif %}</span>
+    </button>
+    <p style="margin-top:20px;font-size:13px;"><a class="back" href="{{ home }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="course.back">Back to the site</span></a></p>
+  </div>
+</section>
+
+<button class="fab" onclick="openReserve('float_cta_courses')" data-ga-event="reserve_click" data-ga-location="float_cta_courses">
+  <span class="fab-viewers"><span class="fab-dot"></span><span id="viewer-count">5</span>&nbsp;<span data-i18n="cta.viewers">people viewing now</span></span>
+  <span class="fab-main"><span data-i18n="cta.check">Check availability</span> <span aria-hidden="true">&rarr;</span></span>
+</button>
+
+<script>
+document.documentElement.classList.remove('no-js');
+window.I18N = {{ ui.dict | dump | safe }};
+window.LANGS = {{ ui.langs | dump | safe }};
+{% for L in courses.langs %}
+{% for cat in courses.cats %}window.I18N["{{ L }}"]["cat.{{ cat.key }}.label"] = {{ cat.label[L] | dump | safe }};{% endfor %}
+{% for c in courses.list %}window.I18N["{{ L }}"]["course.{{ c.id }}.name"] = {{ c.name[L] | dump | safe }};
+window.I18N["{{ L }}"]["course.{{ c.id }}.opt"]  = {{ c.name[L] | dump | safe }};
+window.I18N["{{ L }}"]["course.{{ c.id }}.lead"] = {{ c.lead[L] | dump | safe }};
+{% endfor %}{% endfor %}
+
+var VARS = { brand: {{ stores.brand.brand_name | dump | safe }}, city: {{ (store.city.split(',')[0]) | dump | safe }}, tel: {{ store.tel_display | dump | safe }} };
+function fill(s){ return String(s).replace(/\{brand\}/g,VARS.brand).replace(/\{city\}/g,VARS.city).replace(/\{tel\}/g,VARS.tel); }
+window.CURRENT_LANG = 'en';
+function applyLang(code){
+  var meta = window.LANGS.filter(function(l){ return l.code === code; })[0];
+  if(!meta || !window.I18N[code]){ code = 'en'; meta = window.LANGS[0]; }
+  window.CURRENT_LANG = code;
+  var d = window.I18N[code];
+  document.documentElement.setAttribute('lang', meta.html);
+  document.documentElement.setAttribute('data-lang', code);
+  if(meta.font) loadFont(meta.font, code);
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ var v = d[el.getAttribute('data-i18n')]; if(v != null) el.innerHTML = fill(v); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){ var v = d[el.getAttribute('data-i18n-ph')]; if(v != null) el.setAttribute('placeholder', fill(v)); });
+  document.querySelectorAll('[data-i18n-og]').forEach(function(el){ var v = d[el.getAttribute('data-i18n-og')]; if(v != null) el.setAttribute('label', fill(v)); });
+  document.querySelectorAll('[data-lang-btn]').forEach(function(b){ b.setAttribute('aria-current', String(b.getAttribute('data-lang-btn') === code)); });
+  document.getElementById('langNow').textContent = meta.short;
+  try{ localStorage.setItem('omakase_lang', code); }catch(e){}
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({event:'lang_switch', lang:code});
+}
+var FONTS = {};
+function loadFont(family, code){
+  if(FONTS[family]) return; FONTS[family] = 1;
+  var l = document.createElement('link'); l.rel='stylesheet';
+  l.href = 'https://fonts.googleapis.com/css2?family=' + family + '&display=swap';
+  document.head.appendChild(l);
+  var st = document.createElement('style');
+  st.textContent = 'html[data-lang="' + code + '"] body{font-family:"' + family.split(':')[0].replace(/\+/g,' ') + '",serif;}';
+  document.head.appendChild(st);
+}
+function initLang(){
+  var q = new URLSearchParams(location.search).get('lang');
+  var saved = null; try{ saved = localStorage.getItem('omakase_lang'); }catch(e){}
+  var n = (navigator.language || 'en').toLowerCase(), auto = 'en';
+  if(n.indexOf('ja') === 0) auto = 'ja';
+  else if(n.indexOf('ko') === 0) auto = 'ko';
+  else if(n.indexOf('id') === 0 || n.indexOf('in') === 0) auto = 'id';
+  else if(n.indexOf('zh') === 0) auto = (n.indexOf('tw') > -1 || n.indexOf('hk') > -1 || n.indexOf('hant') > -1) ? 'zht' : 'zhs';
+  applyLang(q || saved || auto);
+}
+(function(){
+  var list = document.getElementById('langList');
+  window.LANGS.forEach(function(l){
+    var b = document.createElement('button');
+    b.setAttribute('data-lang-btn', l.code);
+    b.innerHTML = '<span>' + l.label + '</span><span class="code">' + l.short + '</span>';
+    b.addEventListener('click', function(){ applyLang(l.code); closeSheet(); });
+    list.appendChild(b);
+  });
+})();
+var sheet = document.getElementById('langSheet');
+function closeSheet(){ sheet.classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('langOpen').addEventListener('click', function(){ sheet.classList.add('open'); document.body.style.overflow='hidden'; });
+sheet.addEventListener('click', function(e){ if(e.target === sheet) closeSheet(); });
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeSheet(); });
+document.addEventListener('click', function(e){
+  var t = e.target.closest('[data-ga-event]'); if(!t) return;
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({event:t.getAttribute('data-ga-event'), event_label:t.getAttribute('data-ga-location')||''});
+});
+(function(){
+  function seeded(min,max,bucket){ var h=(bucket*2654435761)%2147483647; var r=(h>>>0)/2147483647; return min+Math.floor(r*(max-min+1)); }
+  var v = document.getElementById('viewer-count'); if(!v) return;
+  v.textContent = seeded(4,8,Math.floor(Date.now()/(7*60*1000)));
+  setInterval(function(){
+    var cur = parseInt(v.textContent,10) || 5;
+    v.textContent = Math.max(4, Math.min(8, cur + (Math.random() < .5 ? -1 : 1)));
+  }, 26000);
+})();
+document.addEventListener('DOMContentLoaded', initLang);
+</script>
+
+{% if store.reserve_system == 'form' %}
+  {% include "partials/reserve-v2.njk" %}
+{% else %}
+  <script>
+  window.openReserve = window.openReserveModal = function(label, courseId){
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({event:'reserve_click', event_label: label || '', course_id: courseId || ''});
+    window.location.href = '{{ tablecheck_with_utm | safe }}';
+  };
+  </script>
+{% endif %}
+</body>
+</html>

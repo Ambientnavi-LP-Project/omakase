@@ -36,7 +36,7 @@ eleventyComputed:
 } %}
 {% endif %}
 {% set SHOW_PERFORMANCE = false %}   {# パフォーマンスセクションの表示切替。true で復活 #}
-{% set TCATS = courses.themes[store.theme] or courses.themes.all %}
+{% set TH = courses.themes[store.theme] or courses.themes.all %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
 {% macro circ() %}<span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{% endmacro %}
 {% macro yen(n) %}{% set s = (n | string) %}{% set L = s | length %}{% for i in range(0, L) %}{% if i > 0 and (L - i) % 3 == 0 %},{% endif %}{{ s[i] }}{% endfor %}{% endmacro %}
@@ -60,8 +60,8 @@ eleventyComputed:
 <style>
 :root{
   --paper:#f4efe5; --paper-2:#fffdf9; --paper-3:#eae2d4;
-  --sumi:#141110; --sumi-2:#4a4139; --sumi-3:#6e645b;
-  --shu:#a8342a; --shu-d:#8b2820; --shu-l:#c9463a; --brass:#96793f;
+  --sumi:#131010; --sumi-2:#4a4139; --sumi-3:#6e645b;
+  --shu:#8c2230; --shu-d:#6d1926; --shu-l:#a62c3d; --brass:#a5843f;
   --line:rgba(20,17,16,.18);
   --disp:'Lora',serif; --body:'Jost',sans-serif;
   --gut:clamp(24px,6vw,72px);
@@ -259,25 +259,25 @@ html.no-js .reveal{opacity:1;transform:none;}
   color:var(--shu);border-bottom:1px solid rgba(168,52,42,.35);padding-bottom:2px;}
 
 
-/* ---------- 常時表示の予約ボタン（右下・シャイン） ---------- */
-.fab{position:fixed;right:clamp(14px,2.4vw,30px);bottom:clamp(14px,2.4vw,30px);z-index:78;
-  display:inline-flex;flex-direction:column;align-items:center;gap:2px;
-  background:var(--shu);color:#fff;border:none;cursor:pointer;font-family:var(--body);
-  padding:15px clamp(20px,2.6vw,30px);border-radius:100px;
-  box-shadow:0 12px 34px -10px rgba(168,52,42,.6),0 3px 0 var(--shu-d);
-  overflow:hidden;opacity:0;transform:translateY(16px);pointer-events:none;
-  transition:opacity .45s ease,transform .45s cubic-bezier(.16,1,.3,1),background .25s;}
-.fab.show{opacity:1;transform:none;pointer-events:auto;}
-.fab:hover{background:var(--shu-l);}
-.fab:active{transform:translateY(2px);}
-.fab strong{font-size:14.5px;font-weight:600;letter-spacing:.05em;position:relative;z-index:2;}
-.fab small{font-size:10.5px;opacity:.88;position:relative;z-index:2;}
+/* ---------- 常時表示のフローティングCTA（既存デザイン踏襲） ---------- */
+.fab{position:fixed;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px);z-index:78;
+  display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+  background:#c9a96e;color:#0b0908;border:none;cursor:pointer;text-decoration:none;
+  font-family:var(--body);border-radius:14px;padding:11px 18px;overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 0 1px rgba(201,169,110,.45);
+  transition:transform .2s ease,box-shadow .2s ease,background .2s;}
+.fab:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 14px 36px rgba(0,0,0,.55),0 0 0 1px rgba(201,169,110,.8);}
+.fab-viewers{display:flex;align-items:center;gap:6px;position:relative;z-index:2;
+  font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(11,9,8,.72);}
+.fab-dot{width:7px;height:7px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 0 rgba(22,163,74,.6);animation:pulseGreen 1.8s ease-in-out infinite;}
+@keyframes pulseGreen{0%{box-shadow:0 0 0 0 rgba(22,163,74,.6);}70%{box-shadow:0 0 0 6px rgba(22,163,74,0);}100%{box-shadow:0 0 0 0 rgba(22,163,74,0);}}
+.fab-main{position:relative;z-index:2;font-size:13.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
 .fab::before{content:'';position:absolute;top:-60%;bottom:-60%;width:38%;left:-50%;z-index:1;
-  background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.6) 50%,rgba(255,255,255,0) 100%);
-  transform:skewX(-18deg);animation:shine 3.2s ease-in-out infinite;}
+  background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.7) 50%,rgba(255,255,255,0) 100%);
+  transform:skewX(-18deg);animation:shine 3.4s ease-in-out infinite;}
 @keyframes shine{0%{left:-50%;}45%{left:120%;}100%{left:120%;}}
-@media(prefers-reduced-motion:reduce){.fab::before{animation:none;opacity:0;}}
-@media(max-width:520px){.fab{padding:13px 20px;} .fab strong{font-size:13.5px;} .fab small{font-size:10px;}}
+@media(prefers-reduced-motion:reduce){.fab::before{animation:none;opacity:0;}.fab-dot{animation:none;}}
+@media(max-width:380px){.fab{right:10px;bottom:10px;padding:9px 14px;}.fab-main{font-size:12px;}}
 
 /* ---------- ムスリムフレンドリー ---------- */
 .halal-icon{width:42px;height:42px;color:var(--shu);margin:0 auto 18px;display:block;}
@@ -288,20 +288,15 @@ html.no-js .reveal{opacity:1;transform:none;}
 .hero-nav a{display:block;font-family:var(--disp);font-weight:600;text-transform:uppercase;
   letter-spacing:.045em;color:#fff;transition:color .3s,transform .4s cubic-bezier(.16,1,.3,1);
   text-shadow:0 2px 22px rgba(0,0,0,.75);}
-.hero-nav a:hover{color:#e0a24a;transform:translateX(8px);}
+.hero-nav a:hover{color:#dcc08a;transform:translateX(8px);}
 @media(min-width:900px){
   .hero-nav{position:absolute;inset:0;z-index:4;display:flex;align-items:flex-end;pointer-events:none;
     padding-bottom:clamp(26px,4.5vw,64px);}
   .hero-nav .wrap{pointer-events:auto;}
   .hero-nav a{font-size:clamp(21px,2.5vw,36px);line-height:1;padding:clamp(9px,1.1vw,15px) 0;width:max-content;}
 }
-@media(max-width:899px){
-  .hero-nav{padding-block:clamp(20px,5vw,30px) 0;}
-  .hero-nav .wrap{display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;}
-  .hero-nav a{font-size:17px;line-height:1.35;padding:8px 0;color:var(--sumi);text-shadow:none;
-    border-bottom:1px solid var(--line);}
-  .hero-nav a:hover{transform:none;}
-}
+/* 狭い画面ではヘッダーのハンバーガーに集約する */
+@media(max-width:899px){ .hero-nav{display:none;} }
 /* 左端を少し落として文字を読ませる */
 .hero-media::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
   background:linear-gradient(90deg,rgba(20,17,16,.62) 0%,rgba(20,17,16,.30) 34%,rgba(20,17,16,0) 58%);}
@@ -315,13 +310,23 @@ html.no-js .reveal{opacity:1;transform:none;}
 .card p{font-size:14.5px;line-height:1.9;color:var(--sumi-2);}
 
 /* ---------- courses ---------- */
+/* ---------- コース選択の導入コピー ---------- */
+.msel{max-width:720px;margin:clamp(30px,4vw,48px) auto clamp(26px,3.6vw,40px);text-align:center;}
+.msel-tap{margin-top:14px;font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--sumi-3);}
+.scar{margin-top:20px;padding-top:18px;border-top:1px solid var(--line);}
+.scar-1{font-family:var(--body);font-weight:600;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--shu);}
+.scar-2{margin-top:8px;display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:500;
+  font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sumi-3);}
+.scar-dot{width:7px;height:7px;border-radius:50%;background:#3fae6a;box-shadow:0 0 0 3px rgba(63,174,106,.18);}
 .pick{display:grid;gap:16px;}
-@media(min-width:700px){.pick{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start;max-width:840px;margin-inline:auto;}}
+@media(min-width:640px){.pick{grid-template-columns:repeat(2,1fr);align-items:start;}}
+@media(min-width:1000px){.pick{grid-template-columns:repeat(4,1fr);}}
 .pc{position:relative;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;}
 .pc.best{border:2px solid var(--shu);box-shadow:0 8px 30px rgba(168,52,42,.13);}
 .pc-flag{position:absolute;right:0;top:0;z-index:2;background:var(--shu);color:#fff;font-size:10px;font-weight:600;
   letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border-radius:0 0 0 6px;}
-.pc-img{aspect-ratio:16/10;overflow:hidden;background:var(--paper-3);}
+.pc-img{aspect-ratio:4/3;overflow:hidden;background:var(--paper-3);}
 .pc-img img{width:100%;height:100%;object-fit:cover;}
 .pc-in{padding:20px 20px 22px;display:flex;flex-direction:column;flex:1;}
 .pc-cat{font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);}
@@ -349,7 +354,7 @@ table.cmp .hi{color:var(--shu);font-weight:600;}
 .rev-wrap{display:grid;gap:14px;margin-top:26px;}
 @media(min-width:820px){.rev-wrap{grid-template-columns:repeat(2,1fr);}}
 .rev{background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:22px 21px;}
-.stars{color:#d99b20;font-size:14px;letter-spacing:2px;}
+.stars{color:#c9962a;font-size:14px;letter-spacing:2px;}
 .rev-src{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--sumi-3);margin-left:8px;}
 .rev p{font-family:var(--disp);font-size:16px;line-height:1.9;margin:12px 0 14px;}
 .rev cite{font-style:normal;font-size:12.5px;color:var(--sumi-2);}
@@ -589,16 +594,24 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
       <p class="lead" data-i18n="menu.{{ store.theme }}P">Authentic omakase, served Muslim-friendly.</p>
     </div>
 
+    <div class="reveal msel">
+      <span class="eyebrow" data-i18n="menu.label">Course Selection</span>
+      <p class="lead" data-i18n="menu.omakase">Ever heard of &ldquo;omakase&rdquo;? It's the chef's-choice course.</p>
+      <p class="msel-tap" data-i18n="menu.tap">Tap a course to see full details &middot; All dishes Muslim-friendly &middot; Seasonal menu</p>
+      <div class="scar">
+        <p class="scar-1" data-i18n="scarcity.seats">Seats are limited — reservation recommended</p>
+        <p class="scar-2"><span class="scar-dot"></span><span data-i18n="scarcity.few">Only a few seats left today</span></p>
+      </div>
+    </div>
 
-    {% if store.theme == "wagyu" %}
-    {% set FEATURED = ["wagyu-standard","kobe-premium"] %}
-    {% else %}
-    {% set FEATURED = ["sushi-standard","sushi-premium"] %}
-    {% endif %}
+
+    {% set FEATURED = TH.ids %}
+    {% if store.theme == "wagyu" %}{% set CMP = ["wagyu-standard","kobe-premium"] %}
+    {% else %}{% set CMP = ["sushi-standard","sushi-premium"] %}{% endif %}
     <div class="pick reveal" style="margin-top:30px;">
       {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}
       {% set p = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}
-      <div class="pc{% if loop.index0 == 1 %} best{% endif %}">
+      <div class="pc{% if c.premium %} best{% endif %}">
         {% if c.web_only %}<span class="pc-flag" data-i18n="tag.web">Web exclusive</span>{% endif %}
         {% if c.premium %}<span class="pc-flag" data-i18n="tag.recommended">Recommended</span>{% endif %}
         <div class="pc-img"><img src="{{ c.img }}" alt="" loading="lazy"/></div>
@@ -610,7 +623,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
           <ul class="pc-list">
             {% for r in c.rows %}{% if loop.index0 == 2 or loop.index0 == 3 or loop.index0 == 4 %}<li>{{ r }}</li>{% endif %}{% endfor %}
           </ul>
-          <button class="pc-btn" onclick="openReserve('course_{{ c.id }}','{{ c.id }}')" data-i18n="course.reserve">Reserve this course</button>
+          <a class="pc-btn" style="display:block;text-align:center;text-decoration:none;" href="/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}courses/#{{ c.id }}" data-ga-event="course_view" data-ga-location="{{ c.id }}" data-i18n="course.view">View course</a>
         </div>
       </div>
       {% endif %}{% endfor %}{% endfor %}
@@ -619,7 +632,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
     <div class="tbl-scroll reveal" id="cmp">
       <table class="cmp">
         <thead><tr><th></th>
-          {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}<th data-i18n="course.{{ c.id }}.name">{{ c.name.en }}</th>{% endif %}{% endfor %}{% endfor %}
+          {% for fid in CMP %}{% for c in courses.list %}{% if c.id == fid %}<th data-i18n="course.{{ c.id }}.name">{{ c.name.en }}</th>{% endif %}{% endfor %}{% endfor %}
         </tr></thead>
         <tbody>
           {% if store.theme == "wagyu" %}
@@ -635,7 +648,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
           {% endif %}
           {% if showPrice %}
           <tr><th data-i18n="cmp.price">Price</th>
-            {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}{% set p = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}<td>&yen;{{ yen(p) }}</td>{% endif %}{% endfor %}{% endfor %}
+            {% for fid in CMP %}{% for c in courses.list %}{% if c.id == fid %}{% set p = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}<td>&yen;{{ yen(p) }}</td>{% endif %}{% endfor %}{% endfor %}
           </tr>{% endif %}
         </tbody>
       </table>
@@ -643,7 +656,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
 
     <div class="center reveal">
       <p class="lead" style="font-size:12.5px;" data-i18n="menu.season">* Ingredients may vary depending on the season.</p>
-      <a class="cbtn" href="#faq" style="margin-top:8px;">{{ circ() }}<span class="lbl" data-i18n="ui.viewMore">View more</span></a>
+      <a class="cbtn" href="/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}courses/" style="margin-top:8px;" data-ga-event="course_view" data-ga-location="view_all">{{ circ() }}<span class="lbl" data-i18n="course.viewAll">View all courses</span></a>
     </div>
   </div>
 </section>
@@ -790,9 +803,9 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
   </div>
 </footer>
 
-<button class="fab" id="fab" onclick="openReserve('fab')" data-ga-event="reserve_click" data-ga-location="fab">
-  <strong data-i18n="{% if store.reserve_system == 'form' %}reserve.btn{{ store.theme | capitalize }}{% else %}reserve.btnTc{% endif %}">{% if store.reserve_system == 'form' %}Reserve Your Omakase{% else %}Reserve on TableCheck{% endif %}</strong>
-  <small data-i18n="menu.note">All Muslim-friendly &middot; Seasonal menu</small>
+<button class="fab" id="fab" onclick="openReserve('float_cta')" data-ga-event="reserve_click" data-ga-location="float_cta">
+  <span class="fab-viewers"><span class="fab-dot"></span><span id="viewer-count">5</span>&nbsp;<span data-i18n="cta.viewers">people viewing now</span></span>
+  <span class="fab-main"><span data-i18n="cta.check">Check availability</span> <span aria-hidden="true">&rarr;</span></span>
 </button>
 
 <script>
@@ -955,13 +968,33 @@ document.querySelectorAll('[data-slider]').forEach(function(root){
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 })();
 
-/* 右下の常時予約ボタン */
+/* フローティングCTAの閲覧人数。約7分ごとに決まる値をベースに、滞在中ゆるく揺らす */
 (function(){
-  var fab = document.getElementById('fab');
-  var anchor = document.querySelector('.hero-nav');
-  if(!fab || !anchor) return;
-  new IntersectionObserver(function(es){ fab.classList.toggle('show', !es[0].isIntersecting); }, {threshold:0}).observe(anchor);
+  function seeded(min,max,bucket){ var h=(bucket*2654435761)%2147483647; var r=(h>>>0)/2147483647; return min+Math.floor(r*(max-min+1)); }
+  var v = document.getElementById('viewer-count'); if(!v) return;
+  v.textContent = seeded(4,8,Math.floor(Date.now()/(7*60*1000)));
+  setInterval(function(){
+    var cur = parseInt(v.textContent,10) || 5;
+    cur = Math.max(4, Math.min(8, cur + (Math.random() < .5 ? -1 : 1)));
+    v.textContent = cur;
+  }, 26000);
 })();
+
+/* reveal */
+(function(){
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+})();
+
+/* 右下の常時予約ボタン */
+document.addEventListener('DOMContentLoaded', function(){
+  var fab = document.getElementById('fab'); if(!fab) return;
+  var anchor = document.querySelector('.hero-stage') || document.querySelector('.hero-media');
+  if(!anchor){ fab.classList.add('show'); return; }
+  new IntersectionObserver(function(es){
+    fab.classList.toggle('show', es[0].intersectionRatio < .15);
+  }, {threshold:[0,.15,.5,1]}).observe(anchor);
+});
 
 document.addEventListener('click', function(e){
   var t = e.target.closest('[data-ga-event]'); if(!t) return;

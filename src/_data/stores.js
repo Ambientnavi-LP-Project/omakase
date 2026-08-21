@@ -482,6 +482,7 @@ module.exports = {
   pagesWagyu: pagesWagyu, // 和牛特化LP用(全店舗)。store-wagyu.njk が使う。
   pagesSimple: pagesSimple, // シンプル版LP(全店舗)。store-simple.njk が使う。
   pagesTestA: pagesTestA, // 【新デザイン検証】HP型。store-test-a.njk が使う。/{region}/{slug}/test-a/
-  pagesTestB: pagesTestB, // 【新デザイン検証】広告LP型。store-test-b.njk が使う。/{region}/{slug}/test-b/
+  pagesTestB: pagesTestB,
+  pagesTestCourses: pagesTestA.concat(pagesTestB), // コース詳細ページ。store-test-courses.njk が使う。/{...}/{channel}/courses/ // 【新デザイン検証】広告LP型。store-test-b.njk が使う。/{region}/{slug}/test-b/
   pagesRelocated: pagesRelocated // 移転案内(古民家・築地)。store-relocated.njk が使う。
 };

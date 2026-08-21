@@ -75,11 +75,21 @@ const CATS = [
   }
 ];
 
-/** 訴求テーマごとに出すカテゴリ。既存 store-sushi.njk / store-wagyu.njk と同じ組み合わせ。 */
+/** 訴求テーマごとの掲載構成。cats = 表示順、ids = 掲載するコース（各4種）。 */
 const THEMES = {
-  sushi: ["sushi"],   // 寿司LPに和牛のコースを出さないため mix は含めない
-  wagyu: ["wagyu"],   // 同様に和牛LPには寿司コースを出さない
-  all:   ["mix", "sushi", "wagyu"]
+  sushi: {
+    cats: ["sushi", "mix"],
+    ids: ["sushi-standard", "sushi-premium", "sushi-wagyu-standard", "sushi-kobe-premium"]
+  },
+  wagyu: {
+    cats: ["wagyu", "mix"],
+    ids: ["wagyu-standard", "kobe-premium", "sushi-wagyu-standard", "sushi-kobe-premium"]
+  },
+  all: {
+    cats: ["mix", "sushi", "wagyu"],
+    ids: ["sushi-wagyu-standard", "sushi-kobe-premium", "sushi-wagyu-lunch",
+          "sushi-standard", "sushi-premium", "wagyu-standard", "kobe-premium"]
+  }
 };
 
 const LIST = [
