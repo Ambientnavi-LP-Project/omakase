@@ -18,7 +18,8 @@ eleventyComputed:
   col_a:   "/images/course-wagyu-standard.jpg",
   col_b:   "/images/chef2.jpg",
   story:   "/images/chef1.jpg",
-  halal:   "/images/chef3.jpg"
+  halal:   "/images/chef3.jpg",
+  courses: ["/images/course-wagyu-standard.jpg","/images/course-kobe-premium.jpg","/images/wagyu-lead.jpg","/images/cat-wagyu.jpg"]
 } %}
 {% else %}
 {% set IMG = {
@@ -30,7 +31,8 @@ eleventyComputed:
   col_a:   "/images/course-sushi-premium.jpg",
   col_b:   "/images/chef2.jpg",
   story:   "/images/chef1.jpg",
-  halal:   "/images/sushi4.jpg"
+  halal:   "/images/sushi4.jpg",
+  courses: ["/images/course-sushi-standard.jpg","/images/course-sushi-premium.jpg","/images/sushi1.jpg","/images/sushi2.jpg"]
 } %}
 {% endif %}
 {% set TCATS = courses.themes[store.theme] or courses.themes.all %}
@@ -262,6 +264,42 @@ html.no-js .reveal{opacity:1;transform:none;}
 .g-link{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font-family:var(--body);font-weight:500;font-size:13px;
   letter-spacing:.08em;color:var(--gold);border-bottom:1px solid rgba(200,168,106,.4);padding-bottom:2px;}
 
+
+/* ---------- ヒーロー左下の目次 ---------- */
+.hero-nav{display:flex;flex-wrap:wrap;gap:8px 0;margin-top:clamp(24px,3.6vw,40px);
+  border-top:1px solid var(--line);padding-top:18px;}
+.hero-nav a{position:relative;font-family:var(--body);font-weight:500;font-size:13px;letter-spacing:.06em;
+  color:var(--w-d);padding:6px 18px 6px 0;margin-right:18px;transition:color .3s;white-space:nowrap;}
+.hero-nav a::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:1px;height:11px;background:var(--line);}
+.hero-nav a:last-child::after{display:none;}
+.hero-nav a:hover{color:var(--gold);}
+@media(max-width:640px){.hero-nav a{font-size:12.5px;padding-right:14px;margin-right:14px;}}
+
+/* ---------- 常時表示の予約ボタン（右下・シャイン） ---------- */
+.fab{position:fixed;right:clamp(14px,2.4vw,30px);bottom:clamp(14px,2.4vw,30px);z-index:78;
+  display:inline-flex;flex-direction:column;align-items:center;gap:2px;
+  background:var(--shu);color:#fff;border:none;cursor:pointer;font-family:var(--body);
+  padding:15px clamp(20px,2.6vw,30px);border-radius:100px;
+  box-shadow:0 12px 34px -10px rgba(168,52,42,.75),0 2px 0 rgba(0,0,0,.25);
+  overflow:hidden;opacity:0;transform:translateY(16px);pointer-events:none;
+  transition:opacity .45s ease,transform .45s cubic-bezier(.16,1,.3,1),background .25s;}
+.fab.show{opacity:1;transform:none;pointer-events:auto;}
+.fab:hover{background:var(--shu-l);}
+.fab strong{font-size:14.5px;font-weight:600;letter-spacing:.06em;position:relative;z-index:2;}
+.fab small{font-size:10.5px;opacity:.85;letter-spacing:.04em;position:relative;z-index:2;}
+.fab::before{content:'';position:absolute;top:-60%;bottom:-60%;width:38%;left:-50%;z-index:1;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.55) 50%,rgba(255,255,255,0) 100%);
+  transform:skewX(-18deg);animation:shine 3.4s ease-in-out infinite;}
+@keyframes shine{0%{left:-50%;}45%{left:120%;}100%{left:120%;}}
+@media(prefers-reduced-motion:reduce){.fab::before{animation:none;opacity:0;}}
+@media(max-width:520px){.fab{padding:13px 20px;} .fab strong{font-size:13.5px;} .fab small{font-size:10px;}}
+
+/* ---------- ムスリムフレンドリー（既存デザイン踏襲・中央組み） ---------- */
+.halal-icon{width:42px;height:42px;color:var(--gold);margin:0 auto 18px;display:block;}
+.halal-center{max-width:720px;margin-inline:auto;text-align:center;}
+.halal-center .badges{justify-content:center;margin-top:26px;}
+
 /* ---------- menu ---------- */
 .cg{border-top:1px solid var(--line);padding-top:clamp(30px,4.5vw,54px);margin-top:clamp(30px,4.5vw,54px);}
 .cg:first-of-type{border-top:none;margin-top:0;padding-top:0;}
@@ -380,7 +418,6 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
       <a href="#interior" data-nav data-i18n="nav.interior">Interior</a>
       <a href="#performance" data-nav data-i18n="nav.performance">Performance</a>
       <a href="#menu" data-nav data-i18n="nav.menu">Menu</a>
-      <a href="#story" data-nav data-i18n="nav.story">Our Story</a>
       <a href="#halal" data-nav data-i18n="nav.halal">Muslim-Friendly</a>
       <a href="#access" data-nav data-i18n="nav.access">Access</a>
     </nav>
@@ -411,9 +448,15 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
           <span>{{ store.hours }}</span>
           <span>{{ store.station_en }}</span>
         </div>
-        <div style="margin-top:clamp(26px,4vw,46px);">
-          <a class="cbtn" href="#concept">{{ circ() }}<span class="lbl" data-i18n="nav.experience">The Experience</span></a>
-        </div>
+        <nav class="hero-nav">
+          <a href="#menu" data-i18n="nav.menu">Menu</a>
+          <a href="#interior" data-i18n="nav.interior">Interior</a>
+          <a href="#performance" data-i18n="nav.performance">Performance</a>
+          <a href="#voices" data-i18n="voices.label">Guest Voices</a>
+          <a href="#halal" data-i18n="nav.halal">Muslim-Friendly</a>
+          <a href="#access" data-i18n="nav.access">Access</a>
+          <a href="#reserve" data-i18n="nav.reserve">Reserve</a>
+        </nav>
       </div>
       <div class="lead-shot"><img src="{{ IMG.lead }}" alt="" loading="lazy"/></div>
     </div>
@@ -479,6 +522,15 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
       <p class="p" style="margin-top:10px;font-size:12.5px;font-style:italic;" data-i18n="menu.follows">Our omakase follows the season — ingredients may vary.</p>
     </div>
 
+    <div class="slider reveal" data-slider style="margin-bottom:clamp(34px,5vw,60px);">
+      <div class="slides">
+        {% for im in IMG.courses %}<img src="{{ im }}" alt=""{% if loop.first %} class="on"{% else %} loading="lazy"{% endif %}/>{% endfor %}
+      </div>
+      <button class="s-nav prev" data-slide-prev aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="s-nav next" data-slide-next aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="s-dots" data-slide-dots></div>
+    </div>
+
     {% for ck in TCATS %}{% for cat in courses.cats %}{% if cat.key == ck %}
     <div class="cg reveal">
       <div class="cg-head">
@@ -519,34 +571,11 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
   </div>
 </section>
 
-<!-- ================= OUR STORY ================= -->
-<section class="pad" id="story">
-  <div class="wrap split rev-o">
-    <div class="reveal">
-      <span class="eyebrow" data-i18n="story.label">Our Story</span>
-      <h2 class="h-en" style="margin-top:14px;" data-i18n="story.h">The Story Begins in 1962</h2>
-      <p class="p" style="margin-top:22px;" data-i18n="story.p1">The first generation started this journey as a Wagyu merchant.</p>
-      <blockquote class="quote" data-i18n="story.quote">Wagyu was never a &lsquo;special occasion treat&rsquo; for me.</blockquote>
-      <p class="by" data-i18n="story.by">— 5th Generation Owner</p>
-    </div>
-    <div class="frame reveal"><img src="{{ IMG.story }}" alt="" loading="lazy"/></div>
-  </div>
-  <div class="wrap blocks reveal">
-    <div><h4 data-i18n="story.t.label">The Turning Point</h4>
-      <p class="p" style="font-size:13.5px;" data-i18n="story.t.p1">However, in my 30s, when I visited America, that feeling was greatly shaken.</p>
-      <p class="p" style="font-size:13.5px;margin-top:14px;" data-i18n="story.t.p2">Seeing that scene brought me both surprise and frustration.</p></div>
-    <div><h4 data-i18n="story.q.label">Our Commitment to Quality</h4>
-      <p class="p" style="font-size:13.5px;" data-i18n="story.q.p">I visit livestock farms all over Japan.</p></div>
-    <div><h4 data-i18n="story.w.label">For Everyone in the World</h4>
-      <p class="p" style="font-size:13.5px;" data-i18n="story.w.p">I personally select Wagyu processed at trusted suppliers in Japan.</p></div>
-  </div>
-</section>
-
 <!-- ================= MUSLIM-FRIENDLY ================= -->
 <section class="pad" id="halal" style="background:var(--navy-2);">
-  <div class="wrap split">
-    <div class="frame reveal"><img src="{{ IMG.halal }}" alt="" loading="lazy" style="aspect-ratio:16/11;"/></div>
-    <div class="reveal">
+  <div class="wrap">
+    <div class="halal-center reveal">
+      <svg class="halal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="eyebrow" data-i18n="halal.label">Muslim-Friendly Dining</span>
       <h2 class="h-en" style="margin-top:14px;" data-i18n="halal.h">A Muslim-Friendly Dining Experience in {{ store.city.split(',')[0] }}</h2>
       <p class="p" style="margin-top:22px;" data-i18n="halal.p1">Welcome to our restaurant — a warm, inclusive space where guests from all cultures can dine with peace of mind.</p>
@@ -652,7 +681,6 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
         <a href="#interior" data-i18n="nav.interior">Interior</a>
         <a href="#performance" data-i18n="nav.performance">Performance</a>
         <a href="#menu" data-i18n="nav.menu">Menu</a>
-        <a href="#story" data-i18n="nav.story">Our Story</a>
         <a href="#halal" data-i18n="nav.halal">Muslim-Friendly</a>
         <a href="#access" data-i18n="nav.access">Access</a>
         <a href="#reserve" data-i18n="nav.reserve">Reserve</a>
@@ -796,6 +824,14 @@ document.querySelectorAll('[data-slider]').forEach(function(root){
   restart();
 });
 
+/* 右下の常時予約ボタン */
+(function(){
+  var fab = document.getElementById('fab');
+  var anchor = document.querySelector('.hero-nav');
+  if(!fab || !anchor) return;
+  new IntersectionObserver(function(es){ fab.classList.toggle('show', !es[0].isIntersecting); }, {threshold:0}).observe(anchor);
+})();
+
 /* reveal */
 (function(){
   var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, {threshold:.12, rootMargin:'0px 0px -7% 0px'});
@@ -809,6 +845,11 @@ document.addEventListener('click', function(e){
 });
 document.addEventListener('DOMContentLoaded', initLang);
 </script>
+
+<button class="fab" id="fab" onclick="openReserve('fab')" data-ga-event="reserve_click" data-ga-location="fab">
+  <strong data-i18n="{% if store.reserve_system == 'form' %}reserve.btn{{ store.theme | capitalize }}{% else %}reserve.btnTc{% endif %}">{% if store.reserve_system == 'form' %}Reserve Your Omakase{% else %}Reserve on TableCheck{% endif %}</strong>
+  <small data-i18n="menu.note">All Muslim-friendly &middot; Seasonal menu</small>
+</button>
 
 {% if store.reserve_system == 'form' %}
   {% include "partials/reserve-v2.njk" %}
