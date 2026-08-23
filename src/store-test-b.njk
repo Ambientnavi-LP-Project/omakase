@@ -61,9 +61,9 @@ eleventyComputed:
 
 <style>
 :root{
-  --paper:#f4efe5; --paper-2:#fffdf9; --paper-3:#eae2d4;
-  --sumi:#131010; --sumi-2:#4a4139; --sumi-3:#6e645b;
-  --shu:#8c2230; --shu-d:#6d1926; --shu-l:#a62c3d; --brass:#a5843f;
+  --paper:#f0eade; --paper-2:#fffdf8; --paper-3:#e6dece;
+  --sumi:#16120f; --sumi-2:#4a4139; --sumi-3:#6e645b;
+  --shu:#8c2230; --shu-d:#6d1926; --shu-l:#a62c3d; --brass:#a5843f; --gold:#c9a96e;
   --line:rgba(20,17,16,.18);
   --disp:'Lora',serif; --body:'Jost',sans-serif;
   --gut:clamp(24px,6vw,104px);
@@ -355,12 +355,58 @@ footer{border-top:2px solid var(--shu);}
 /* ---------- ヒーロー左の目次（動画に重ねる） ---------- */
 .hero-stage{position:relative;overflow:hidden;}
 
+
+/* ---------- 黒地の反転セクション ---------- */
+.sec-dark{background:var(--sumi);color:var(--paper);
+  --sumi:#f4efe5; --sumi-2:rgba(244,239,229,.82); --sumi-3:rgba(244,239,229,.6);
+  --paper-2:rgba(244,239,229,.05); --paper-3:rgba(244,239,229,.09);
+  --line:rgba(244,239,229,.18); --shu:#c25566; --brass:#d9b878;}
+.sec-dark .eyebrow{color:#d9b878;}
+.sec-dark .eyebrow::before{background:#c25566;}
+.sec-dark h2.sh,.sec-dark .cg-name,.sec-dark .ccard-name{color:var(--paper);}
+.sec-dark .card{background:rgba(244,239,229,.05);border-top-color:#c25566;}
+.sec-dark .rev{background:rgba(244,239,229,.05);}
+.sec-dark .gcard{background:rgba(244,239,229,.05);box-shadow:none;}
+.sec-dark .g-num{color:#d9b878;}
+.sec-dark .faq summary::after{color:#d9b878;}
+
 /* ---------- cards ---------- */
 .grid3{display:grid;gap:14px;}
 @media(min-width:820px){.grid3{grid-template-columns:repeat(3,1fr);}}
 .card{background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:24px 22px;}
 .card h3{font-family:var(--disp);font-weight:600;font-size:16.5px;line-height:1.5;margin:0 0 9px;}
 .card p{font-size:14.5px;line-height:1.9;color:var(--sumi-2);}
+
+
+/* ---------- コースカード（A案と同じ並べ方） ---------- */
+.cg{border-top:1px solid var(--line);padding-top:clamp(30px,4.5vw,54px);margin-top:clamp(30px,4.5vw,54px);}
+.cg:first-of-type{border-top:none;margin-top:0;padding-top:0;}
+.cg-head{max-width:760px;}
+.cg-name{font-family:var(--disp);font-weight:600;font-size:clamp(22px,3vw,32px);line-height:1.26;margin-top:10px;letter-spacing:-.006em;}
+.cg-lead{margin-top:10px;font-size:15px;line-height:1.9;color:var(--sumi-2);}
+.clist{display:grid;gap:clamp(18px,2.6vw,30px);margin-top:clamp(20px,3vw,36px);}
+@media(min-width:760px){.clist{grid-template-columns:repeat(2,1fr);}}
+.ccard{display:flex;flex-direction:column;background:var(--paper-2);border:1px solid var(--line);
+  border-left:2px solid transparent;border-radius:8px;overflow:hidden;transition:border-color .35s,box-shadow .35s;}
+.ccard:hover{border-left-color:var(--shu);box-shadow:0 14px 40px -26px rgba(20,17,16,.5);}
+.ccard-photo{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--paper-3);}
+.ccard-photo img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.16,1,.3,1);}
+.ccard:hover .ccard-photo img{transform:scale(1.04);}
+.ccard-tag{position:absolute;left:0;top:0;z-index:2;background:var(--shu);color:#fff;font-family:var(--body);
+  font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:7px 13px;}
+.ccard-in{padding:clamp(20px,2.4vw,28px);display:flex;flex-direction:column;flex:1;}
+.ccard-cat{font-family:var(--body);font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);}
+.ccard-name{font-family:var(--disp);font-weight:600;font-size:clamp(19px,2.2vw,25px);line-height:1.3;margin-top:9px;}
+.ccard-price{margin-top:12px;font-family:var(--disp);font-weight:600;font-size:clamp(22px,2.4vw,28px);color:var(--shu);line-height:1;}
+.ccard-price small{font-family:var(--body);font-size:12px;font-weight:400;color:var(--sumi-3);margin-left:8px;}
+.ccard-lead{margin-top:12px;font-size:14.5px;line-height:1.9;color:var(--sumi-2);flex:1;}
+.ccard-go{margin-top:18px;display:inline-flex;align-items:center;gap:12px;align-self:flex-start;
+  background:none;border:none;cursor:pointer;color:var(--shu);font-family:var(--body);font-weight:600;
+  font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;padding:0;text-decoration:none;}
+.ccard-go .arw{position:relative;display:block;width:40px;height:1.5px;background:rgba(140,34,48,.35);overflow:hidden;}
+.ccard-go .arw::after{content:'';position:absolute;inset:0;background:var(--shu);transform:translateX(-101%);
+  transition:transform .55s cubic-bezier(.16,1,.3,1);}
+.ccard-go:hover .arw::after{transform:none;}
 
 /* ---------- courses ---------- */
 /* ---------- コース選択の導入（内観写真を背景に） ---------- */
@@ -551,7 +597,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
 </section>
 
 <!-- ================= EXPERIENCE ================= -->
-<section class="pad" id="concept">
+<section class="pad sec-dark" id="concept">
   <div class="wrap">
     <div class="center reveal" style="max-width:660px;margin-inline:auto;">
       <span class="eyebrow" data-i18n="exp.label">The Experience</span>
@@ -635,29 +681,39 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
       </div>
     </div>
 
-    {% set FEATURED = TH.ids %}
     {% if store.theme == "wagyu" %}{% set CMP = ["wagyu-standard","kobe-premium"] %}
     {% else %}{% set CMP = ["sushi-standard","sushi-premium"] %}{% endif %}
-    <div class="pick reveal" style="margin-top:30px;">
-      {% for fid in FEATURED %}{% for c in courses.list %}{% if c.id == fid %}
-      {% set p = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}
-      <div class="pc{% if c.premium %} best{% endif %}">
-        {% if c.web_only %}<span class="pc-flag" data-i18n="tag.web">Web exclusive</span>{% endif %}
-        {% if c.premium %}<span class="pc-flag" data-i18n="tag.recommended">Recommended</span>{% endif %}
-        <div class="pc-img"><img src="{{ c.img }}" alt="" loading="lazy"/></div>
-        <div class="pc-in">
-          <span class="pc-cat" data-i18n="cat.{{ c.cat }}.label">{% for cc in courses.cats %}{% if cc.key == c.cat %}{{ cc.label.en }}{% endif %}{% endfor %}</span>
-          <h3 class="pc-name" data-i18n="course.{{ c.id }}.name">{{ c.name.en }}</h3>
-          {% if showPrice %}<p class="pc-price">&yen;{{ yen(p) }}<small>&yen;{{ yen((p * 1.1) | round(0,"floor") | int) }} <span data-i18n="course.incl">incl. tax</span></small></p>{% endif %}
-          <p class="pc-lead" data-i18n="course.{{ c.id }}.lead">{{ c.lead.en }}</p>
-          <ul class="pc-list">
-            {% for r in c.rows %}{% if loop.index0 == 2 or loop.index0 == 3 or loop.index0 == 4 %}<li>{{ r }}</li>{% endif %}{% endfor %}
-          </ul>
-          <a class="pc-btn" style="display:block;text-align:center;text-decoration:none;" href="/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}courses/#{{ c.id }}" data-ga-event="course_view" data-ga-location="{{ c.id }}" data-i18n="course.view">View course</a>
-        </div>
+
+    {% for ck in TH.cats %}{% for cat in courses.cats %}{% if cat.key == ck %}
+    <div class="cg reveal">
+      <div class="cg-head">
+        {% if cat.tag %}<span class="ccard-tag" style="position:static;display:inline-block;" data-i18n="tag.popular">Most Popular</span>{% endif %}
+        <h3 class="cg-name" data-i18n="cat.{{ cat.key }}.label">{{ cat.label.en }}</h3>
+        <p class="cg-lead" data-i18n="cat.{{ cat.key }}.lead">{{ cat.lead.en }}</p>
       </div>
-      {% endif %}{% endfor %}{% endfor %}
+      <div class="clist">
+      {% for c in courses.list %}{% if c.cat == cat.key and c.id in TH.ids %}
+      {% set p = c.base + (0 if c.noadj else (store.price_adjust or 0)) %}
+        <article class="ccard">
+          <div class="ccard-photo">
+            <img src="{{ c.img }}" alt="" loading="lazy"/>
+            {% if c.premium %}<span class="ccard-tag" data-i18n="tag.recommended">Recommended</span>{% endif %}
+            {% if c.lunch_only %}<span class="ccard-tag" data-i18n="tag.lunch">Lunch only</span>{% endif %}
+          </div>
+          <div class="ccard-in">
+            <span class="ccard-cat" data-i18n="cat.{{ cat.key }}.label">{{ cat.label.en }}</span>
+            <h4 class="ccard-name" data-i18n="course.{{ c.id }}.name">{{ c.name.en }}</h4>
+            {% if showPrice %}<p class="ccard-price">&yen;{{ yen(p) }}<small>&yen;{{ yen((p * 1.1) | round(0,"floor") | int) }} <span data-i18n="course.incl">incl. tax</span></small></p>{% endif %}
+            <p class="ccard-lead" data-i18n="course.{{ c.id }}.lead">{{ c.lead.en }}</p>
+            <a class="ccard-go" href="/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}courses/#{{ c.id }}" data-ga-event="course_view" data-ga-location="{{ c.id }}">
+              <span data-i18n="course.view">View course</span><span class="arw"></span>
+            </a>
+          </div>
+        </article>
+      {% endif %}{% endfor %}
+      </div>
     </div>
+    {% endif %}{% endfor %}{% endfor %}
 
     <div class="tbl-scroll reveal" id="cmp">
       <table class="cmp">
@@ -692,7 +748,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
 </section>
 
 <!-- ================= VOICES ================= -->
-<section class="pad" id="voices">
+<section class="pad sec-dark" id="voices">
   <div class="wrap">
     <div class="center reveal" style="max-width:620px;margin-inline:auto;">
       <span class="eyebrow" data-i18n="voices.label">Guest Voices</span>
@@ -739,7 +795,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
 </section>
 
 <!-- ================= FAQ ================= -->
-<section class="pad" id="faq">
+<section class="pad sec-dark" id="faq">
   <div class="narrow">
     <div class="center reveal">
       <span class="eyebrow">FAQ</span>
@@ -840,6 +896,7 @@ window.LANGS = {{ ui.langs | dump | safe }};
 {% for L in courses.langs %}
 {% for cat in courses.cats %}
 window.I18N["{{ L }}"]["cat.{{ cat.key }}.label"] = {{ cat.label[L] | dump | safe }};
+window.I18N["{{ L }}"]["cat.{{ cat.key }}.lead"]  = {{ cat.lead[L] | dump | safe }};
 {% endfor %}
 {% for c in courses.list %}
 window.I18N["{{ L }}"]["course.{{ c.id }}.name"] = {{ c.name[L] | dump | safe }};
@@ -985,6 +1042,32 @@ document.querySelectorAll('[data-slider]').forEach(function(root){
   });
   restart();
 });
+
+/* ヒーロー目次を動画の高さに必ず収める（はみ出し・クリップ防止） */
+(function(){
+  var nav = document.querySelector('.hero-nav');
+  var media = document.querySelector('.hero-media');
+  if(!nav || !media) return;
+  var box = nav.querySelector('.wrap');
+  var links = box.querySelectorAll('a');
+  function fit(){
+    if(getComputedStyle(nav).display === 'none') return;
+    nav.style.visibility = 'hidden';
+    var size = Math.min(32, Math.max(13, media.clientHeight * 0.052));
+    var pad, guard = 0;
+    do {
+      pad = Math.max(3, size * 0.34);
+      links.forEach(function(a){ a.style.fontSize = size + 'px'; a.style.padding = pad + 'px 0'; });
+      if(box.scrollHeight <= media.clientHeight - 28) break;
+      size -= 1;
+    } while(size > 11 && guard++ < 40);
+    nav.style.visibility = '';
+  }
+  fit();
+  addEventListener('resize', fit, {passive:true});
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  addEventListener('load', fit);
+})();
 
 /* reveal */
 (function(){
