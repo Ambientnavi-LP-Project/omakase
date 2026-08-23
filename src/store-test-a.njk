@@ -328,9 +328,9 @@ footer{border-top:2px solid var(--shu);}
 .hero-nav a:hover{color:var(--gold-l);transform:translateX(8px);}
 @media(min-width:900px){
   .hero-nav{position:absolute;inset:0;z-index:4;display:flex;align-items:flex-end;pointer-events:none;
-    padding-bottom:clamp(12px,2vw,30px);}
+    padding-bottom:clamp(18px,3vw,44px);}
   .hero-nav .wrap{pointer-events:auto;}
-  .hero-nav a{font-size:clamp(14px,1.55vw,22px);line-height:1;padding:clamp(5px,.65vw,9px) 0;width:max-content;}
+  .hero-nav a{font-size:clamp(21px,2.5vw,36px);line-height:1;padding:clamp(9px,1.1vw,15px) 0;width:max-content;}
 }
 /* 狭い画面ではヘッダーのハンバーガーに集約する */
 @media(max-width:899px){ .hero-nav{display:none;} }
@@ -343,11 +343,8 @@ footer{border-top:2px solid var(--shu);}
 .cg{border-top:1px solid var(--line);padding-top:clamp(30px,4.5vw,54px);margin-top:clamp(30px,4.5vw,54px);}
 .cg:first-of-type{border-top:none;margin-top:0;padding-top:0;}
 .cg-head{display:grid;gap:22px;align-items:end;}
-@media(min-width:900px){.cg-head{grid-template-columns:1fr 1fr;gap:48px;}}
-.cg-photo{aspect-ratio:16/10;overflow:hidden;background:var(--navy-2);}
-.cg-photo img{width:100%;height:100%;object-fit:cover;transition:transform 1.3s cubic-bezier(.16,1,.3,1);}
-.cg:hover .cg-photo img{transform:scale(1.035);}
-.cg-name{font-family:var(--disp);font-weight:500;font-size:clamp(21px,2.9vw,32px);line-height:1.26;letter-spacing:-.006em;margin-top:10px;}
+.cg-head{max-width:760px;}
+.cg:hover .cg-name{font-family:var(--disp);font-weight:500;font-size:clamp(21px,2.9vw,32px);line-height:1.26;letter-spacing:-.006em;margin-top:10px;}
 .cg-lead{margin-top:10px;font-size:15px;line-height:1.9;color:var(--w-d);}
 /* ---------- コース選択の導入コピー ---------- */
 .msel{max-width:720px;margin:clamp(30px,4vw,48px) auto clamp(26px,3.6vw,40px);text-align:center;}
@@ -553,16 +550,11 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 
   <div class="wrap pad">
     <div class="collage reveal">
-      <div>
-        <span class="eyebrow" data-i18n="exp.label">The Experience</span>
-        <h3 class="h-en" style="margin-top:12px;font-size:clamp(21px,2.8vw,32px);" data-i18n="exp.h">A Journey Through Japan</h3>
-        <p class="p" style="margin-top:18px;" data-i18n="exp.p">A journey through Japan's food culture — wagyu, sushi, and projection-mapped dining.</p>
-        <div style="margin-top:24px;"><a class="cbtn sm" href="#access">{{ circ() }}<span class="lbl" data-i18n="nav.access">Access</span></a></div>
-      </div>
       <div class="collage-imgs">
         <img class="a" src="{{ IMG.col_a }}" alt="" loading="lazy"/>
         <img class="b" src="{{ IMG.col_b }}" alt="" loading="lazy"/>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -614,7 +606,6 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
     {% for ck in TH.cats %}{% for cat in courses.cats %}{% if cat.key == ck %}
     <div class="cg reveal">
       <div class="cg-head">
-        <div class="cg-photo"><img src="{{ cat.img }}" alt="{{ cat.label.en }}" loading="lazy"/></div>
         <div>
           {% if cat.tag %}<span class="item-tag" style="margin-left:10px;" data-i18n="tag.popular">Most Popular</span>{% endif %}
           <h3 class="cg-name" data-i18n="cat.{{ cat.key }}.label">{{ cat.label.en }}</h3>

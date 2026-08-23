@@ -309,9 +309,9 @@ footer{border-top:2px solid var(--shu);}
 .hero-nav a:hover{color:#dcc08a;transform:translateX(8px);}
 @media(min-width:900px){
   .hero-nav{position:absolute;inset:0;z-index:4;display:flex;align-items:flex-end;pointer-events:none;
-    padding-bottom:clamp(12px,2vw,30px);}
+    padding-bottom:clamp(18px,3vw,44px);}
   .hero-nav .wrap{pointer-events:auto;}
-  .hero-nav a{font-size:clamp(14px,1.55vw,22px);line-height:1;padding:clamp(5px,.65vw,9px) 0;width:max-content;}
+  .hero-nav a{font-size:clamp(21px,2.5vw,36px);line-height:1;padding:clamp(9px,1.1vw,15px) 0;width:max-content;}
 }
 /* 狭い画面ではヘッダーのハンバーガーに集約する */
 @media(max-width:899px){ .hero-nav{display:none;} }
@@ -565,16 +565,11 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
   </div>
   <div class="wrap pad">
     <div class="collage reveal">
-      <div>
-        <span class="eyebrow" data-i18n="exp.label">The Experience</span>
-        <h3 class="sh" style="font-size:clamp(20px,2.8vw,30px);" data-i18n="exp.h">A Journey Through Japan</h3>
-        <p class="lead" data-i18n="exp.p">A journey through Japan's food culture — wagyu, sushi, and projection-mapped dining. Muslim-friendly omakase, crafted for travelers from around the world.</p>
-        <div style="margin-top:22px;"><a class="cbtn" href="#courses">{{ circ() }}<span class="lbl" data-i18n="nav.menu">Menu</span></a></div>
-      </div>
       <div class="collage-imgs">
         <img class="a" src="{{ IMG.col_a }}" alt="" loading="lazy"/>
         <img class="b" src="{{ IMG.col_b }}" alt="" loading="lazy"/>
       </div>
+    </div>
     </div>
   </div>
 </section>
