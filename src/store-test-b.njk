@@ -91,6 +91,24 @@ html.no-js .reveal{opacity:1;transform:none;}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
 
 
+
+/* ---------- えんじのアクセント ---------- */
+.eyebrow{position:relative;padding-left:22px;}
+.eyebrow::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:14px;height:2px;background:var(--shu);}
+.center .eyebrow{padding-left:0;}
+.center .eyebrow::before{position:static;transform:none;display:block;margin:0 auto 10px;width:36px;}
+.hd{box-shadow:inset 0 -3px 0 -2px var(--shu);}
+.s-dots button.on{background:var(--shu);}
+.card{border-top:2px solid var(--shu);}
+.rev{border-left:2px solid rgba(140,34,48,.45);}
+.step b{color:var(--shu);}
+.faq summary::after{color:var(--shu);}
+.pc.best{box-shadow:0 8px 30px rgba(140,34,48,.16);}
+.strip{border-bottom:2px solid var(--shu);}
+footer{border-top:2px solid var(--shu);}
+.g-num{color:var(--shu);}
+
 /* ---------- strip / header ---------- */
 .strip{background:var(--sumi);color:var(--paper);font-size:12.5px;letter-spacing:.03em;text-align:center;padding:10px 16px;line-height:1.6;}
 .strip b{color:#e7c98c;font-weight:500;}
@@ -291,9 +309,9 @@ html.no-js .reveal{opacity:1;transform:none;}
 .hero-nav a:hover{color:#dcc08a;transform:translateX(8px);}
 @media(min-width:900px){
   .hero-nav{position:absolute;inset:0;z-index:4;display:flex;align-items:flex-end;pointer-events:none;
-    padding-bottom:clamp(26px,4.5vw,64px);}
+    padding-bottom:clamp(12px,2vw,30px);}
   .hero-nav .wrap{pointer-events:auto;}
-  .hero-nav a{font-size:clamp(21px,2.5vw,36px);line-height:1;padding:clamp(9px,1.1vw,15px) 0;width:max-content;}
+  .hero-nav a{font-size:clamp(14px,1.55vw,22px);line-height:1;padding:clamp(5px,.65vw,9px) 0;width:max-content;}
 }
 /* 狭い画面ではヘッダーのハンバーガーに集約する */
 @media(max-width:899px){ .hero-nav{display:none;} }
