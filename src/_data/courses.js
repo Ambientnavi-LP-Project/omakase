@@ -28,12 +28,6 @@ const CATS = [
       ko: "두 가지의 정수 — 제철 최상급 니기리와 핸드롤을 프리미엄 와규와 함께 한 코스씩, 아낌없는 여정으로.",
       id: "Yang terbaik dari keduanya — nigiri dan hand roll terbaik musim ini disajikan bersama wagyu premium, hidangan demi hidangan, dalam satu perjalanan yang memanjakan."
     },
-    note: {
-      ja: "神戸牛のプレミアムコースもご用意しています。",
-      en: "A Kobe beef premium course is also available.",
-      zhs: "另有神户牛尊享套餐。", zht: "另有神戶牛尊享套餐。",
-      ko: "고베규 프리미엄 코스도 준비되어 있습니다.", id: "Tersedia juga kursus premium daging Kobe."
-    }
   },
   {
     key: "sushi",
@@ -47,12 +41,6 @@ const CATS = [
       ko: "에도마에 스타일 오마카세 — 그날 가장 좋은 생선으로 만든 니기리와 핸드롤을, 가장 맛있는 순간에.",
       id: "Omakase gaya Edomae — nigiri dan hand roll dari ikan terbaik hari itu, disajikan pada puncak rasanya."
     },
-    note: {
-      ja: "雲丹と中トロを加えたプレミアムコースもご用意しています。",
-      en: "A Premium course with sea urchin and chutoro tuna is also available.",
-      zhs: "另有加入海胆与中脂金枪鱼的尊享套餐。", zht: "另有加入海膽與中脂鮪魚的尊享套餐。",
-      ko: "성게와 주토로를 더한 프리미엄 코스도 준비되어 있습니다.", id: "Tersedia juga kursus Premium dengan bulu babi dan tuna chutoro."
-    }
   },
   {
     key: "wagyu",
@@ -66,12 +54,6 @@ const CATS = [
       ko: "최상급 일본 와규의 정수 — 안심 스테이크와 와규 스시. 마블링과 입안에서 녹는 풍미로 고른 부위만.",
       id: "Wagyu Jepang premium terbaik — steak fillet dan sushi wagyu; setiap potongan dipilih karena marbling dan kelembutannya."
     },
-    note: {
-      ja: "神戸牛のコースもご用意しています。",
-      en: "A Kobe beef course is also available.",
-      zhs: "另有神户牛套餐。", zht: "另有神戶牛套餐。",
-      ko: "고베규 코스도 준비되어 있습니다.", id: "Tersedia juga kursus daging Kobe."
-    }
   }
 ];
 

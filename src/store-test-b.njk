@@ -64,7 +64,7 @@ eleventyComputed:
   --shu:#8c2230; --shu-d:#6d1926; --shu-l:#a62c3d; --brass:#a5843f;
   --line:rgba(20,17,16,.18);
   --disp:'Lora',serif; --body:'Jost',sans-serif;
-  --gut:clamp(24px,6vw,72px);
+  --gut:clamp(20px,4.5vw,72px);
   --rv-bg:var(--paper-2); --rv-panel:var(--paper); --rv-line:var(--line);
   --rv-text:var(--sumi); --rv-muted:var(--sumi-3); --rv-accent:var(--shu);
   --rv-on-accent:#fff; --rv-display:var(--disp); --rv-body:var(--body); --rv-radius:6px;
@@ -77,8 +77,8 @@ img,video{display:block;max-width:100%;}
 a{color:inherit;text-decoration:none;}
 :focus-visible{outline:2px solid var(--shu);outline-offset:2px;}
 
-.wrap{width:100%;max-width:1120px;margin-inline:auto;padding-inline:var(--gut);}
-.narrow{width:100%;max-width:740px;margin-inline:auto;padding-inline:var(--gut);}
+.wrap{width:100%;max-width:1200px;margin-inline:auto;padding-inline:var(--gut);}
+.narrow{width:100%;max-width:800px;margin-inline:auto;padding-inline:var(--gut);}
 .pad{padding:clamp(52px,8vw,96px) 0;}
 .center{text-align:center;}
 
@@ -485,9 +485,6 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
     <p class="hero-p" data-i18n="menu.{{ store.theme }}P">Authentic omakase, served Muslim-friendly.</p>
     <div class="trust">
       <span class="chip"><b>&#9733; {{ store.rating }}</b> Google &middot; {{ store.rating_count }} <span data-i18n="ui.reviews">reviews</span></span>
-      <span class="chip" data-i18n="badge.mf">Muslim-friendly</span>
-      <span class="chip" data-i18n="badge.nopork">No pork</span>
-      <span class="chip" data-i18n="badge.noalc">No alcohol in food</span>
     </div>
     <div style="margin-top:22px;">
       <button class="cta-lg" onclick="openReserve('hero')" data-ga-event="reserve_click" data-ga-location="hero">
@@ -686,11 +683,6 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
     <h2 class="sh" data-i18n="halal.h">A Muslim-Friendly Dining Experience in {{ store.city.split(',')[0] }}</h2>
     <p class="lead" data-i18n="halal.p1">Welcome to our restaurant — a warm, inclusive space where guests from all cultures can dine with peace of mind.</p>
     <p class="lead" data-i18n="halal.p2">Please feel free to share any dietary preferences or restrictions when making your reservation — we will do our best to accommodate.</p>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px;">
-      <span class="chip" data-i18n="badge.nopork">No pork</span>
-      <span class="chip" data-i18n="badge.noalc">No alcohol in food</span>
-      <span class="chip" data-i18n="badge.mf">Muslim-friendly</span>
-    </div>
   </div>
 </section>
 
