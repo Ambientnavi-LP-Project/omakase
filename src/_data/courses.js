@@ -40,12 +40,12 @@ const CATS = [
     img: "/images/cat-sushi.jpg",
     label: { en: "Sushi", ja: "寿司", zhs: "寿司", zht: "壽司", ko: "스시", id: "Sushi" },
     lead: {
-      ja: "江戸前のおまかせ。その日いちばんの魚を一貫ずつ握り、手巻きとともに、いちばん美味しい瞬間にお出しします。",
-      en: "Edomae-style omakase — nigiri and hand rolls crafted piece by piece from the day\u2019s finest fish, each served at the peak of its flavor.",
-      zhs: "江户前风格的 omakase——以当日最上乘的鱼货逐贯捏制握寿司与手卷，在风味最佳的时刻呈上。",
-      zht: "江戶前風格的 omakase——以當日最上乘的魚貨逐貫捏製握壽司與手卷，在風味最佳的時刻呈上。",
-      ko: "에도마에 스타일 오마카세 — 그날 가장 좋은 생선으로 한 점씩 쥐어낸 니기리와 핸드롤을, 가장 맛있는 순간에.",
-      id: "Omakase gaya Edomae — nigiri dan hand roll dibuat satu per satu dari ikan terbaik hari itu, disajikan pada puncak rasanya."
+      ja: "江戸前のおまかせ。その日いちばんの魚を、手巻きとともに、いちばん美味しい瞬間にお出しします。",
+      en: "Edomae-style omakase — nigiri and hand rolls made from the day\u2019s finest fish, each served at the peak of its flavor.",
+      zhs: "江户前风格的 omakase——以当日最上乘的鱼货制作握寿司与手卷，在风味最佳的时刻呈上。",
+      zht: "江戶前風格的 omakase——以當日最上乘的魚貨製作握壽司與手卷，在風味最佳的時刻呈上。",
+      ko: "에도마에 스타일 오마카세 — 그날 가장 좋은 생선으로 만든 니기리와 핸드롤을, 가장 맛있는 순간에.",
+      id: "Omakase gaya Edomae — nigiri dan hand roll dari ikan terbaik hari itu, disajikan pada puncak rasanya."
     },
     note: {
       ja: "雲丹と中トロを加えたプレミアムコースもご用意しています。",

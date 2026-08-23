@@ -186,27 +186,8 @@ footer{border-top:2px solid var(--shu);}
 .ovl-foot p{font-size:12.5px;line-height:1.9;color:rgba(244,239,229,.5);}
 .ovl-foot a{color:#e7c98c;}
 
-/* ---------- interior band ---------- */
-.band-photo{position:relative;width:100%;}
-.band-photo img{width:100%;aspect-ratio:21/9;object-fit:cover;}
-@media(max-width:760px){.band-photo img{aspect-ratio:4/3;}}
-.band-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(25,21,18,.1) 0%,rgba(25,21,18,.55) 60%,rgba(25,21,18,.82) 100%);}
-@media(max-width:760px){.band-photo::after{background:linear-gradient(180deg,rgba(25,21,18,.15) 0%,rgba(25,21,18,.8) 100%);}}
-.band-txt{position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:2;width:100%;color:var(--paper);}
-.band-txt .in{max-width:500px;margin-left:auto;}
-.band-txt .lead{color:rgba(244,239,229,.78);}
-.band-txt h2{color:var(--paper);}
-.collage{display:grid;gap:clamp(20px,3vw,40px);align-items:center;}
-@media(min-width:1000px){.collage{grid-template-columns:.9fr 1.1fr;}}
-.collage-imgs{position:relative;padding-bottom:clamp(28px,4vw,48px);}
-.collage-imgs .a{width:76%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;}
-.collage-imgs .b{position:absolute;right:0;bottom:0;width:42%;aspect-ratio:4/3;object-fit:cover;
-  border:5px solid var(--paper);border-radius:8px;box-shadow:0 18px 40px -24px rgba(25,21,18,.55);}
 @media(max-width:760px){
-  .collage-imgs{padding-bottom:0;}
-  .collage-imgs .a{width:100%;aspect-ratio:16/10;}
-  .collage-imgs .b{position:static;width:62%;margin:10px 0 0 auto;border:none;box-shadow:none;}
-}
+      }
 
 /* ---------- hero ---------- */
 .hero-media{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;}
@@ -328,15 +309,23 @@ footer{border-top:2px solid var(--shu);}
 .card p{font-size:14.5px;line-height:1.9;color:var(--sumi-2);}
 
 /* ---------- courses ---------- */
-/* ---------- コース選択の導入コピー ---------- */
-.msel{max-width:720px;margin:clamp(30px,4vw,48px) auto clamp(26px,3.6vw,40px);text-align:center;}
-.msel-tap{margin-top:14px;font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--sumi-3);}
-.scar{margin-top:20px;padding-top:18px;border-top:1px solid var(--line);}
-.scar-1{font-family:var(--body);font-weight:600;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--shu);}
+/* ---------- コース選択の導入（内観写真を背景に） ---------- */
+.msel{position:relative;isolation:isolate;overflow:hidden;text-align:center;
+  margin:clamp(30px,4vw,52px) 0 clamp(28px,3.8vw,44px);
+  padding:clamp(40px,6vw,80px) clamp(22px,4vw,60px);
+  background-image:url("{{ IMG.band }}");background-size:cover;background-position:center;}
+.msel::before{content:'';position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(6,5,4,.62) 0%,rgba(6,5,4,.78) 100%);}
+.msel .eyebrow{color:#e0c793;}
+.msel .eyebrow::before{background:#9c2c3d;}
+.msel-p{max-width:640px;margin:16px auto 0;font-size:16px;line-height:1.95;color:rgba(255,255,255,.9);}
+.msel-tap{margin-top:16px;font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(255,255,255,.66);}
+.scar{margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.22);}
+.scar-1{font-family:var(--body);font-weight:600;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#e0c793;}
 .scar-2{margin-top:8px;display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:500;
-  font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sumi-3);}
-.scar-dot{width:7px;height:7px;border-radius:50%;background:#3fae6a;box-shadow:0 0 0 3px rgba(63,174,106,.18);}
+  font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72);}
+.scar-dot{width:7px;height:7px;border-radius:50%;background:#3fae6a;box-shadow:0 0 0 3px rgba(63,174,106,.22);}
 .pick{display:grid;gap:16px;}
 @media(min-width:640px){.pick{grid-template-columns:repeat(2,1fr);align-items:start;}}
 @media(min-width:1000px){.pick{grid-template-columns:repeat(4,1fr);}}
@@ -458,7 +447,6 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
   <div class="ovl-in wrap">
     <nav>
       <a href="#courses" data-nav data-i18n="nav.menu">Menu</a>
-      <a href="#interior" data-nav data-i18n="nav.interior">Interior</a>
       {% if SHOW_PERFORMANCE %}<a href="#performance" data-nav data-i18n="nav.performance">Performance</a>{% endif %}
       <a href="#voices" data-nav data-i18n="voices.label">Guest Voices</a>
       <a href="#halal" data-nav data-i18n="nav.halal">Muslim-Friendly</a>
@@ -553,27 +541,6 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
   </div>
 </section>
 
-<!-- ================= INTERIOR ================= -->
-<section id="interior">
-  <div class="band-photo reveal">
-    <img src="{{ IMG.band }}" alt="" loading="lazy"/>
-    <div class="band-txt"><div class="wrap"><div class="in">
-      <span class="eyebrow" data-i18n="nav.interior">Interior</span>
-      <h2 class="sh" data-i18n="menu.premiumH">&ldquo;Sushi &amp; Wagyu Indulgence&rdquo;</h2>
-      <p class="lead" data-i18n="menu.premiumP">Within our signature courses, you'll also find premium dishes — crafted with the finest seasonal ingredients for an extraordinary experience.</p>
-    </div></div></div>
-  </div>
-  <div class="wrap pad">
-    <div class="collage reveal">
-      <div class="collage-imgs">
-        <img class="a" src="{{ IMG.col_a }}" alt="" loading="lazy"/>
-        <img class="b" src="{{ IMG.col_b }}" alt="" loading="lazy"/>
-      </div>
-    </div>
-    </div>
-  </div>
-</section>
-
 {% if SHOW_PERFORMANCE %}
 <!-- ================= PERFORMANCE ================= -->
 <section class="pad" style="background:var(--paper-3);" id="performance">
@@ -609,12 +576,13 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
 
     <div class="reveal msel">
       <span class="eyebrow" data-i18n="menu.label">Course Selection</span>
-      <p class="lead" data-i18n="menu.omakase">Ever heard of &ldquo;omakase&rdquo;? It's the chef's-choice course.</p>
+      <p class="msel-p" data-i18n="menu.omakase">Ever heard of &ldquo;omakase&rdquo;? It's the chef's-choice course — we hand-pick the season's finest ingredients and serve only what tastes best right now.</p>
       <p class="msel-tap" data-i18n="menu.tap">Tap a course to see full details &middot; All dishes Muslim-friendly &middot; Seasonal menu</p>
       <div class="scar">
         <p class="scar-1" data-i18n="scarcity.seats">Seats are limited — reservation recommended</p>
         <p class="scar-2"><span class="scar-dot"></span><span data-i18n="scarcity.few">Only a few seats left today</span></p>
       </div>
+    </div>
     </div>
 
 
@@ -800,7 +768,6 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
       </div>
       <nav class="ft-nav">
         <a href="#courses" data-i18n="nav.menu">Menu</a>
-        <a href="#interior" data-i18n="nav.interior">Interior</a>
         {% if SHOW_PERFORMANCE %}<a href="#performance" data-i18n="nav.performance">Performance</a>{% endif %}
         <a href="#voices" data-i18n="voices.label">Guest Voices</a>
         <a href="#halal" data-i18n="nav.halal">Muslim-Friendly</a>
