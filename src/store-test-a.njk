@@ -62,8 +62,8 @@ eleventyComputed:
 <style>
 :root{
   /* 黒基調 × えんじ × 金 */
-  --navy:#0c0a09; --navy-2:#15100f; --navy-3:#070605;
-  --paper:#efe9dc;
+  --navy:#16120f; --navy-2:#1f1a16; --navy-3:#0e0b09;
+  --paper:#f0eade; --paper-2:#fffdf8;
   --w:#f4f1ea; --w-d:rgba(244,241,234,.86); --w-f:rgba(244,241,234,.60);
   --shu:#7d2231; --shu-l:#9c2c3d; --gold:#c9a96e; --gold-l:#e0c793;
   --line:rgba(244,241,234,.18);
@@ -101,7 +101,6 @@ html.no-js .reveal{opacity:1;transform:none;}
   width:14px;height:2px;background:var(--shu-l);}
 .h-en{position:relative;}
 .sec-mark{display:block;width:44px;height:2px;background:var(--shu-l);margin-top:18px;}
-.hd{border-bottom:1px solid var(--line);box-shadow:inset 0 -3px 0 -2px var(--shu);}
 .s-dots button.on{background:var(--shu-l);width:44px;}
 .ccard-price{color:var(--shu-l);}
 .ccard{border-left:2px solid transparent;transition:border-color .35s;}
@@ -113,7 +112,7 @@ html.no-js .reveal{opacity:1;transform:none;}
 .sec-light .ccard-price{color:var(--shu);}
 .sec-light .eyebrow::before{background:var(--shu);}
 .sec-light .scar-1{color:var(--shu);}
-footer{border-top:2px solid var(--shu);}
+footer{border-top:3px solid var(--shu);background:var(--navy-3);}
 .g-num{color:var(--gold);}
 .rev{border-left:2px solid rgba(156,44,61,.45);}
 .flow-row .fl-n{color:var(--shu-l);}
@@ -123,13 +122,29 @@ footer{border-top:2px solid var(--shu);}
 .ccard-tag{background:var(--shu);}
 
 /* ---------- header ---------- */
-.hd{position:sticky;top:0;z-index:95;padding:14px 0;background:var(--navy);
-  border-bottom:1px solid var(--line);transition:padding .4s,box-shadow .4s;}
-.hd.solid{padding:10px 0;box-shadow:0 10px 30px -18px rgba(0,0,0,.9);}
+.hd{position:sticky;top:0;z-index:95;padding:13px 0;background:var(--paper);
+  border-bottom:1px solid rgba(22,18,15,.14);box-shadow:inset 0 -3px 0 -2px var(--shu);
+  transition:padding .4s;}
+.hd.solid{padding:10px 0;}
+/* ヘッダー内は明るい面なので配色を反転 */
+.hd .langbtn{color:#16120f;border-color:rgba(22,18,15,.2);}
+.hd .langbtn:hover{border-color:rgba(22,18,15,.4);}
+.hd .langbtn svg{color:var(--shu);}
+.hd .pill{border-color:rgba(22,18,15,.28);color:#16120f;}
+.hd .pill:hover{background:var(--shu);color:#fff;border-color:var(--shu);}
+.hd .burger .bl{background:#16120f;}
+.hd .burger .btx{color:#16120f;}
+.nav-open .hd{background:var(--navy-3);border-bottom-color:var(--line);}
+.nav-open .hd .langbtn,.nav-open .hd .pill{color:var(--w);border-color:var(--line);}
+.nav-open .hd .burger .bl{background:var(--w);}
+.nav-open .hd .burger .btx{color:var(--w);}
 .hd-in{display:flex;align-items:center;justify-content:space-between;gap:clamp(10px,2vw,26px);}
 /* 左上：ロゴ＋フル店名。折り返して全文を出す（省略しない） */
 .mark{display:flex;align-items:center;flex-shrink:0;}
 .mark img{width:clamp(58px,7vw,96px);height:auto;}
+.mark .logo-light{display:none;}
+.nav-open .mark .logo-dark{display:none;}
+.nav-open .mark .logo-light{display:block;}
 .mark b{display:block;font-family:var(--disp);font-weight:500;line-height:1.3;
   font-size:clamp(10.5px,1.15vw,15px);letter-spacing:.005em;
   white-space:normal;overflow-wrap:anywhere;word-break:normal;}
@@ -209,7 +224,7 @@ footer{border-top:2px solid var(--shu);}
 @media(min-width:900px){.hero-media{max-height:calc(92vh - 72px);}}
 .hero-media video{width:100%;height:100%;object-fit:cover;}
 .hero-media::after{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 60%,rgba(12,10,9,.55) 90%,var(--navy) 100%);}
+  background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 60%,rgba(22,18,15,.55) 90%,var(--navy) 100%);}
 
 /* 参考サイトのコンセプト面：見出し左・写真右 */
 .lead-sec{position:relative;padding-top:clamp(34px,5vw,72px);}
@@ -383,6 +398,22 @@ footer{border-top:2px solid var(--shu);}
 /* ---------- ヒーロー左の目次（動画に重ねる） ---------- */
 .hero-stage{position:relative;overflow:hidden;}
 
+
+/* ---------- ヒーローの信頼バッジと主CTA（B案と同構成） ---------- */
+.trust{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);
+  background:rgba(244,241,234,.05);border-radius:100px;padding:9px 16px;
+  font-family:var(--body);font-size:13.5px;font-weight:500;color:var(--w);}
+.chip b{color:var(--gold);font-weight:600;}
+.cta-lg{display:inline-flex;flex-direction:column;align-items:center;gap:3px;width:100%;max-width:420px;
+  background:var(--shu);color:#fff;border:none;cursor:pointer;padding:18px 24px;border-radius:6px;
+  font-family:var(--body);box-shadow:0 4px 0 #5f1926;transition:transform .12s,box-shadow .12s,background .2s;}
+.cta-lg:hover{background:var(--shu-l);}
+.cta-lg:active{transform:translateY(3px);box-shadow:0 1px 0 #5f1926;}
+.cta-lg strong{font-family:var(--disp);font-weight:500;font-size:16.5px;letter-spacing:.04em;}
+.cta-lg span{font-size:11.5px;opacity:.88;letter-spacing:.03em;}
+.cta-sub{margin-top:11px;font-size:12.5px;color:var(--w-f);}
+
 /* ---------- menu ---------- */
 .cg{border-top:1px solid var(--line);padding-top:clamp(30px,4.5vw,54px);margin-top:clamp(30px,4.5vw,54px);}
 .cg:first-of-type{border-top:none;margin-top:0;padding-top:0;}
@@ -481,7 +512,10 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 
 <header class="hd" id="hd">
   <div class="wrap hd-in">
-    <a class="mark" href="#top" aria-label="{{ store.name_full_en }}"><img src="/images/logo-gtj-light.png" alt="Gastronomic Tour of JAPAN"/></a>
+    <a class="mark" href="#top" aria-label="{{ store.name_full_en }}">
+      <img class="logo-dark" src="/images/logo-gtj.png" alt="Gastronomic Tour of JAPAN"/>
+      <img class="logo-light" src="/images/logo-gtj-light.png" alt=""/>
+    </a>
     <div class="hd-r">
       <button class="langbtn" id="langOpen" aria-haspopup="dialog">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2M12 3.4c2.5 2.6 2.5 15 0 17.2M12 3.4c-2.5 2.6-2.5 15 0 17.2"/></svg>
@@ -727,7 +761,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 </section>
 
 <!-- ================= ACCESS ================= -->
-<section class="pad" id="access" style="background:var(--navy-2);">
+<section class="pad sec-light" id="access">
   <div class="wrap">
     <div class="reveal" style="margin-bottom:clamp(30px,4.5vw,52px);">
       <span class="eyebrow" data-i18n="access.label">Access</span>
@@ -752,7 +786,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 </section>
 
 <!-- ================= RESERVE ================= -->
-<section class="pad" id="reserve">
+<section class="pad" id="reserve" style="background:var(--navy-2);">
   <div class="narrow reveal" style="text-align:center;">
     <span class="eyebrow" data-i18n="reserve.label">Reserve</span>
     <h2 class="h-en" data-mark style="margin-top:14px;" data-i18n="reserve.h">Begin Your Experience</h2>
@@ -943,6 +977,32 @@ document.querySelectorAll('[data-slider]').forEach(function(root){
 document.querySelectorAll('[data-mark]').forEach(function(h){
   var s = document.createElement('span'); s.className = 'sec-mark'; h.insertAdjacentElement('afterend', s);
 });
+
+/* ヒーロー目次を動画の高さに必ず収める（はみ出し・クリップ防止） */
+(function(){
+  var nav = document.querySelector('.hero-nav');
+  var media = document.querySelector('.hero-media');
+  if(!nav || !media) return;
+  var box = nav.querySelector('.wrap');
+  var links = box.querySelectorAll('a');
+  function fit(){
+    if(getComputedStyle(nav).display === 'none') return;
+    nav.style.visibility = 'hidden';
+    var size = Math.min(32, Math.max(13, media.clientHeight * 0.052));
+    var pad, guard = 0;
+    do {
+      pad = Math.max(3, size * 0.34);
+      links.forEach(function(a){ a.style.fontSize = size + 'px'; a.style.padding = pad + 'px 0'; });
+      if(box.scrollHeight <= media.clientHeight - 28) break;
+      size -= 1;
+    } while(size > 11 && guard++ < 40);
+    nav.style.visibility = '';
+  }
+  fit();
+  addEventListener('resize', fit, {passive:true});
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  addEventListener('load', fit);
+})();
 
 /* reveal */
 (function(){
