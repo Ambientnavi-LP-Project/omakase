@@ -10,6 +10,7 @@ eleventyComputed:
 ---
 {% if store.theme == "wagyu" %}
 {% set IMG = {
+  heroMain: "/images/course-kobe-premium.jpg",
   hero:    "/images/ロコ_あり和牛.mp4",
   poster:  "/images/ロコ_あり和牛-poster.jpg",
   lead:    "/images/wagyu-lead.jpg",
@@ -23,6 +24,7 @@ eleventyComputed:
 } %}
 {% else %}
 {% set IMG = {
+  heroMain: "/images/course-sushi-premium.jpg",
   hero:    "/images/ロコ_あり寿司.mp4",
   poster:  "/images/ロコ_あり寿司-poster.jpg",
   lead:    "/images/sushi1.jpg",
@@ -66,7 +68,7 @@ eleventyComputed:
   --shu:#7d2231; --shu-l:#9c2c3d; --gold:#c9a96e; --gold-l:#e0c793;
   --line:rgba(244,241,234,.18);
   --disp:'Lora',serif; --body:'Jost',sans-serif;
-  --gut:clamp(20px,4.5vw,72px);
+  --gut:clamp(24px,6vw,104px);
   --rv-bg:var(--navy-2); --rv-panel:var(--navy-3); --rv-line:var(--line);
   --rv-text:var(--w); --rv-muted:var(--w-f); --rv-accent:var(--shu-l);
   --rv-on-accent:#fff; --rv-display:var(--disp); --rv-body:var(--body); --rv-radius:4px;
@@ -79,7 +81,7 @@ body{background:var(--navy);color:var(--w);font-family:var(--body);font-weight:4
 img,video{display:block;max-width:100%;}
 a{color:inherit;text-decoration:none;}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
-.wrap{width:100%;max-width:1200px;margin-inline:auto;padding-inline:var(--gut);}
+.wrap{width:100%;max-width:1160px;margin-inline:auto;padding-inline:var(--gut);}
 .narrow{width:100%;max-width:800px;margin-inline:auto;padding-inline:var(--gut);}
 .pad{padding:clamp(66px,10vw,142px) 0;}
 
@@ -116,7 +118,9 @@ footer{border-top:2px solid var(--shu);}
 .rev{border-left:2px solid rgba(156,44,61,.45);}
 .flow-row .fl-n{color:var(--shu-l);}
 .sec-light .flow-row .fl-n{color:var(--shu);}
-.item-tag,.ccard-tag{background:var(--shu);}
+.item-tag{display:inline-block;background:var(--shu);color:#fff;font-family:var(--body);font-weight:600;
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:5px 11px;vertical-align:middle;}
+.ccard-tag{background:var(--shu);}
 
 /* ---------- header ---------- */
 .hd{position:sticky;top:0;z-index:95;padding:14px 0;background:var(--navy);
@@ -213,8 +217,15 @@ footer{border-top:2px solid var(--shu);}
 @media(min-width:1000px){.lead-grid{grid-template-columns:1fr 1fr;gap:clamp(40px,5vw,80px);}}
 .lead-h{font-family:var(--disp);font-weight:400;line-height:1.3;font-size:clamp(23px,3.4vw,40px);letter-spacing:-.01em;overflow-wrap:anywhere;}
 .lead-h em{font-style:normal;display:block;}
-.lead-shot{position:relative;}
-.lead-shot img{width:100%;aspect-ratio:16/11;object-fit:cover;}
+.lead-shot{position:relative;padding-bottom:clamp(26px,3.4vw,46px);}
+.lead-shot .main{width:78%;aspect-ratio:4/3;object-fit:cover;}
+.lead-shot .sub{position:absolute;right:0;bottom:0;width:44%;aspect-ratio:4/3;object-fit:cover;
+  border:5px solid var(--navy);box-shadow:0 18px 44px -22px rgba(0,0,0,.9);}
+@media(max-width:760px){
+  .lead-shot{padding-bottom:0;}
+  .lead-shot .main{width:100%;aspect-ratio:16/10;}
+  .lead-shot .sub{position:static;width:62%;margin:10px 0 0 auto;border:none;box-shadow:none;}
+}
 .hero-meta{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--body);font-weight:500;font-size:11.5px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--w-d);}
 .hero-meta b{color:var(--gold);font-weight:600;}
@@ -299,16 +310,17 @@ footer{border-top:2px solid var(--shu);}
 .halal-center 
 
 /* ---------- ヒーロー左の目次（動画に重ねる） ---------- */
-.hero-stage{position:relative;}
+.hero-stage{position:relative;overflow:hidden;}
 .hero-nav a{display:block;font-family:var(--disp);font-weight:400;text-transform:uppercase;
   letter-spacing:.045em;color:#fff;transition:color .3s,transform .4s cubic-bezier(.16,1,.3,1);
   text-shadow:0 2px 22px rgba(0,0,0,.75);}
 .hero-nav a:hover{color:var(--gold-l);transform:translateX(8px);}
 @media(min-width:900px){
   .hero-nav{position:absolute;inset:0;z-index:4;display:flex;align-items:flex-end;pointer-events:none;
-    padding-bottom:clamp(18px,3vw,44px);}
+    padding-bottom:clamp(14px,min(2.4vh,2.6vw),38px);}
   .hero-nav .wrap{pointer-events:auto;}
-  .hero-nav a{font-size:clamp(21px,2.5vw,36px);line-height:1;padding:clamp(9px,1.1vw,15px) 0;width:max-content;}
+  .hero-nav a{font-size:clamp(16px,min(2.3vw,3.1vh),32px);line-height:1;
+    padding:clamp(5px,min(1vh,1.05vw),13px) 0;width:max-content;}
 }
 /* 狭い画面ではヘッダーのハンバーガーに集約する */
 @media(max-width:899px){ .hero-nav{display:none;} }
@@ -487,7 +499,10 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
           <span>{{ store.station_en }}</span>
         </div>
           </div>
-      <div class="lead-shot"><img src="{{ IMG.lead }}" alt="" loading="lazy"/></div>
+      <div class="lead-shot">
+        <img class="main" src="{{ IMG.heroMain }}" alt="" loading="lazy"/>
+        <img class="sub" src="{{ IMG.lead }}" alt="" loading="lazy"/>
+      </div>
     </div>
   </div>
 </section>
