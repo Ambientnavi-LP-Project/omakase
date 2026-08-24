@@ -21,12 +21,12 @@ const CATS = [
     label: { en: "Sushi & Wagyu", ja: "寿司と和牛", zhs: "寿司与和牛", zht: "壽司與和牛", ko: "스시 & 와규", id: "Sushi & Wagyu" },
     // 既存 store-sushi.njk / store-wagyu.njk の CATS[].story より
     lead: {
-      ja: "両方のいいところを。旬の握りと手巻きに、上質な和牛を一品ずつ添えた、贅を尽くした一続きの流れです。",
-      en: "The best of both worlds — the season\u2019s finest nigiri and hand rolls served alongside premium wagyu, course by course, in one indulgent journey.",
-      zhs: "两全其美——当季最上乘的握寿司与手卷，伴随顶级和牛逐道呈上，成就一场尽兴的旅程。",
-      zht: "兩全其美——當季最上乘的握壽司與手卷，伴隨頂級和牛逐道呈上，成就一場盡興的旅程。",
-      ko: "두 가지의 정수 — 제철 최상급 니기리와 핸드롤을 프리미엄 와규와 함께 한 코스씩, 아낌없는 여정으로.",
-      id: "Yang terbaik dari keduanya — nigiri dan hand roll terbaik musim ini disajikan bersama wagyu premium, hidangan demi hidangan, dalam satu perjalanan yang memanjakan."
+      ja: "握りと手巻きに和牛を添えて、一品ずつお出しします。",
+      en: "Nigiri and hand rolls served alongside wagyu, course by course.",
+      zhs: "握寿司与手卷佐以和牛，逐道呈上。",
+      zht: "握壽司與手卷佐以和牛，逐道呈上。",
+      ko: "니기리와 핸드롤에 와규를 곁들여 한 코스씩.",
+      id: "Nigiri dan hand roll disajikan bersama wagyu, hidangan demi hidangan."
     },
   },
   {
@@ -34,12 +34,12 @@ const CATS = [
     img: "/images/cat-sushi.jpg",
     label: { en: "Sushi", ja: "寿司", zhs: "寿司", zht: "壽司", ko: "스시", id: "Sushi" },
     lead: {
-      ja: "江戸前のおまかせ。その日いちばんの魚を、手巻きとともに、いちばん美味しい瞬間にお出しします。",
-      en: "Edomae-style omakase — nigiri and hand rolls made from the day\u2019s finest fish, each served at the peak of its flavor.",
-      zhs: "江户前风格的 omakase——以当日最上乘的鱼货制作握寿司与手卷，在风味最佳的时刻呈上。",
-      zht: "江戶前風格的 omakase——以當日最上乘的魚貨製作握壽司與手卷，在風味最佳的時刻呈上。",
-      ko: "에도마에 스타일 오마카세 — 그날 가장 좋은 생선으로 만든 니기리와 핸드롤을, 가장 맛있는 순간에.",
-      id: "Omakase gaya Edomae — nigiri dan hand roll dari ikan terbaik hari itu, disajikan pada puncak rasanya."
+      ja: "握りと手巻きを、おまかせのコースで。",
+      en: "Nigiri and hand rolls, served as an omakase course.",
+      zhs: "握寿司与手卷，以 omakase 套餐形式呈上。",
+      zht: "握壽司與手卷，以 omakase 套餐形式呈上。",
+      ko: "니기리와 핸드롤을 오마카세 코스로.",
+      id: "Nigiri dan hand roll, disajikan sebagai kursus omakase."
     },
   },
   {
@@ -47,12 +47,12 @@ const CATS = [
     img: "/images/cat-wagyu.jpg",
     label: { en: "Wagyu Beef", ja: "和牛", zhs: "和牛", zht: "和牛", ko: "와규", id: "Wagyu" },
     lead: {
-      ja: "上質な和牛の真髄を。フィレステーキと和牛寿司。いずれも霜降りと口どけで選び抜いた部位です。",
-      en: "Premium Japanese wagyu at its finest — fillet steak and wagyu sushi, each cut chosen for its marbling and melt-in-the-mouth richness.",
-      zhs: "顶级日本和牛的极致——菲力牛排与和牛寿司，每一块皆因霜降与入口即化的丰腴而选。",
-      zht: "頂級日本和牛的極致——菲力牛排與和牛壽司，每一塊皆因霜降與入口即化的豐腴而選。",
-      ko: "최상급 일본 와규의 정수 — 안심 스테이크와 와규 스시. 마블링과 입안에서 녹는 풍미로 고른 부위만.",
-      id: "Wagyu Jepang premium terbaik — steak fillet dan sushi wagyu; setiap potongan dipilih karena marbling dan kelembutannya."
+      ja: "フィレステーキと和牛寿司を、おまかせのコースで。",
+      en: "Fillet steak and wagyu sushi, served as an omakase course.",
+      zhs: "菲力牛排与和牛寿司，以 omakase 套餐形式呈上。",
+      zht: "菲力牛排與和牛壽司，以 omakase 套餐形式呈上。",
+      ko: "안심 스테이크와 와규 스시를 오마카세 코스로.",
+      id: "Steak fillet dan sushi wagyu, disajikan sebagai kursus omakase."
     },
   }
 ];
