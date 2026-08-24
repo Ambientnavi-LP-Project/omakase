@@ -227,7 +227,7 @@ const STORES = [
     address_en_line1: "1-18-6 Higashi-Shinsaibashi, Chuo-ku, Osaka, Gallery Bldg. 4F",
     address_postal: "542-0083",
 
-    tel_display: "090-4467-3409",
+    tel_display: "080-2965-7336",
     tel_raw: "+819044673409",
 
     hours: "11:00 – 23:00",
