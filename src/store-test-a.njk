@@ -568,7 +568,7 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
         <div style="margin-top:22px;">
           <button class="cta-lg" onclick="openReserve('hero')" data-ga-event="reserve_click" data-ga-location="hero">
             <strong data-i18n="{% if store.reserve_system == 'form' %}reserve.btn{{ store.theme | capitalize }}{% else %}reserve.btnTc{% endif %}">{% if store.reserve_system == 'form' %}Reserve Your Omakase{% else %}Reserve on TableCheck{% endif %}</strong>
-            <span data-i18n="menu.note">All Muslim-friendly &middot; Seasonal menu</span>
+            <span data-i18n="menu.note">All Muslim-friendly</span>
           </button>
           <p class="cta-sub" data-i18n="{% if store.reserve_system == 'form' %}reserve.noteForm{% else %}reserve.noteTc{% endif %}">{% if store.reserve_system == 'form' %}* Reservation is confirmed after email from {{ stores.brand.brand_name }}.{% else %}* Reservation handled by TableCheck — secure &amp; instant.{% endif %}</p>
         </div>
@@ -648,8 +648,8 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
 
     <div class="reveal msel">
       <span class="eyebrow" data-i18n="menu.label">Course Selection</span>
-      <p class="msel-p" data-i18n="menu.omakase">Ever heard of &ldquo;omakase&rdquo;? It's the chef's-choice course — the chef decides the menu, and the dishes are served in order.</p>
-      <p class="msel-tap" data-i18n="menu.tap">Tap a course to see full details &middot; All dishes Muslim-friendly &middot; Seasonal menu</p>
+      <p class="msel-p" data-i18n="menu.omakase">Ever heard of &ldquo;omakase&rdquo;? It's the chef's-choice course — we serve the dishes our chef selects and recommends.</p>
+      <p class="msel-tap" data-i18n="menu.tap">Tap a course to see full details &middot; All dishes Muslim-friendly</p>
       <div class="scar">
         <p class="scar-1" data-i18n="scarcity.seats">Seats are limited — reservation recommended</p>
         <p class="scar-2"><span class="scar-dot"></span><span data-i18n="scarcity.few">Only a few seats left today</span></p>
@@ -691,7 +691,6 @@ footer{background:var(--navy-3);padding:clamp(56px,8vw,110px) 0 clamp(30px,4vw,5
     <div class="reveal" style="margin-top:clamp(30px,4vw,46px);">
       <a class="cbtn" href="/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}courses/" data-ga-event="course_view" data-ga-location="view_all">{{ circ() }}<span class="lbl" data-i18n="course.viewAll">View all courses</span></a>
     </div>
-    <p class="p reveal" style="margin-top:26px;font-size:12px;" data-i18n="menu.season">* Ingredients may vary depending on the season.</p>
   </div>
 </section>
 

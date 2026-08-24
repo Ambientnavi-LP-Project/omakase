@@ -589,7 +589,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
     <div style="margin-top:22px;">
       <button class="cta-lg" onclick="openReserve('hero')" data-ga-event="reserve_click" data-ga-location="hero">
         <strong data-i18n="{% if store.reserve_system == 'form' %}reserve.btn{{ store.theme | capitalize }}{% else %}reserve.btnTc{% endif %}">{% if store.reserve_system == 'form' %}Reserve Your Omakase{% else %}Reserve on TableCheck{% endif %}</strong>
-        <span data-i18n="menu.note">All Muslim-friendly &middot; Seasonal menu</span>
+        <span data-i18n="menu.note">All Muslim-friendly</span>
       </button>
       <p class="cta-sub" data-i18n="{% if store.reserve_system == 'form' %}reserve.noteForm{% else %}reserve.noteTc{% endif %}">{% if store.reserve_system == 'form' %}* Reservation is confirmed after email from {{ stores.brand.brand_name }}.{% else %}* Reservation handled by TableCheck — secure &amp; instant.{% endif %}</p>
     </div>
@@ -673,8 +673,8 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
 
     <div class="reveal msel">
       <span class="eyebrow" data-i18n="menu.label">Course Selection</span>
-      <p class="msel-p" data-i18n="menu.omakase">Ever heard of &ldquo;omakase&rdquo;? It's the chef's-choice course — the chef decides the menu, and the dishes are served in order.</p>
-      <p class="msel-tap" data-i18n="menu.tap">Tap a course to see full details &middot; All dishes Muslim-friendly &middot; Seasonal menu</p>
+      <p class="msel-p" data-i18n="menu.omakase">Ever heard of &ldquo;omakase&rdquo;? It's the chef's-choice course — we serve the dishes our chef selects and recommends.</p>
+      <p class="msel-tap" data-i18n="menu.tap">Tap a course to see full details &middot; All dishes Muslim-friendly</p>
       <div class="scar">
         <p class="scar-1" data-i18n="scarcity.seats">Seats are limited — reservation recommended</p>
         <p class="scar-2"><span class="scar-dot"></span><span data-i18n="scarcity.few">Only a few seats left today</span></p>
@@ -741,7 +741,6 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
     </div>
 
     <div class="center reveal">
-      <p class="lead" style="font-size:12.5px;" data-i18n="menu.season">* Ingredients may vary depending on the season.</p>
       <a class="cbtn" href="/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}courses/" style="margin-top:8px;" data-ga-event="course_view" data-ga-location="view_all">{{ circ() }}<span class="lbl" data-i18n="course.viewAll">View all courses</span></a>
     </div>
   </div>
@@ -806,8 +805,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
       <details><summary data-i18n="faq.q2">Can you accommodate dietary restrictions?</summary><p data-i18n="halal.p2">Please feel free to share any dietary preferences or restrictions when making your reservation.</p></details>
       <details><summary data-i18n="faq.q3">How far in advance should I book?</summary><p data-i18n="reserve.p">Reservations recommended 2 weeks in advance. Walk-ins welcome subject to availability.</p></details>
       <details><summary data-i18n="faq.q4">What is the cancellation policy?</summary><p><span data-i18n="rv.cx48">Within 48 hours: &yen;5,000 / person</span><br/><span data-i18n="rv.cx24">Within 24 hours: &yen;10,000 / person</span></p></details>
-      <details><summary data-i18n="faq.q5">Do the courses change?</summary><p data-i18n="menu.season">* Ingredients may vary depending on the season.</p></details>
-    </div>
+          </div>
   </div>
 </section>
 
@@ -909,34 +907,34 @@ window.I18N["{{ L }}"]["course.{{ c.id }}.lead"] = {{ c.lead[L] | dump | safe }}
 var EXTRA = {
   en:{"strip.line":"<b>Reservations recommended 2 weeks in advance.</b> Walk-ins welcome subject to availability.",
       "faq.h":"Before you reserve","faq.q1":"Is the food Muslim-friendly?","faq.q2":"Can you accommodate dietary restrictions?",
-      "faq.q3":"How far in advance should I book?","faq.q4":"What is the cancellation policy?","faq.q5":"Do the courses change?",
+      "faq.q3":"How far in advance should I book?","faq.q4":"What is the cancellation policy?",
       "cmp.extra":"Sea urchin & crab","cmp.beef":"Beef","cmp.spring":"Spring roll","cmp.nikuzushi":"Nikuzushi","cmp.chawan":"Chawanmushi","cmp.nigiri":"Nigiri","cmp.steak":"Fillet steak","cmp.roll":"Hand roll","cmp.book":"Booking","cmp.price":"Price",
       },
   ja:{"strip.line":"<b>2週間前までのご予約をおすすめします。</b>当日のご来店も、空席がございましたら承ります。",
       "cmp.spring":"春巻き","cmp.nikuzushi":"肉寿司","cmp.chawan":"茶碗蒸し",
       "cmp.extra":"雲丹と蟹","cmp.beef":"牛",
       "faq.h":"ご予約の前に","faq.q1":"料理はムスリムフレンドリーですか？","faq.q2":"食事制限に対応できますか？",
-      "faq.q3":"どのくらい前に予約すればよいですか？","faq.q4":"キャンセルポリシーは？","faq.q5":"コースの内容は変わりますか？",
+      "faq.q3":"どのくらい前に予約すればよいですか？","faq.q4":"キャンセルポリシーは？",
       "cmp.nigiri":"握り","cmp.steak":"フィレステーキ","cmp.roll":"手巻き","cmp.book":"ご予約","cmp.price":"価格",
       "seal.1":"和牛<br/>五代","seal.2":"無<br/>酒精","seal.3":"世界<br/>へ"},
   zhs:{"strip.line":"<b>建议提前两周预约。</b>现场候位视空位情况欢迎光临。",
       "faq.h":"预约前须知","faq.q1":"料理是穆斯林友善的吗？","faq.q2":"可以配合饮食限制吗？",
-      "faq.q3":"需要提前多久预约？","faq.q4":"取消规定为何？","faq.q5":"套餐内容会变动吗？",
+      "faq.q3":"需要提前多久预约？","faq.q4":"取消规定为何？",
       "cmp.extra":"海胆与蟹","cmp.beef":"牛肉","cmp.spring":"春卷","cmp.nikuzushi":"肉寿司","cmp.chawan":"茶碗蒸","cmp.nigiri":"握寿司","cmp.steak":"菲力牛排","cmp.roll":"手卷","cmp.book":"预约方式","cmp.price":"价格",
       },
   zht:{"strip.line":"<b>建議提前兩週預約。</b>現場候位視空位情況歡迎光臨。",
       "faq.h":"預約前須知","faq.q1":"料理是穆斯林友善的嗎？","faq.q2":"可以配合飲食限制嗎？",
-      "faq.q3":"需要提前多久預約？","faq.q4":"取消規定為何？","faq.q5":"套餐內容會變動嗎？",
+      "faq.q3":"需要提前多久預約？","faq.q4":"取消規定為何？",
       "cmp.extra":"海膽與蟹","cmp.beef":"牛肉","cmp.spring":"春捲","cmp.nikuzushi":"肉壽司","cmp.chawan":"茶碗蒸","cmp.nigiri":"握壽司","cmp.steak":"菲力牛排","cmp.roll":"手卷","cmp.book":"預約方式","cmp.price":"價格",
       },
   ko:{"strip.line":"<b>2주 전 예약을 권장합니다.</b> 워크인은 좌석 상황에 따라 안내해 드립니다.",
       "faq.h":"예약 전 확인","faq.q1":"음식은 무슬림 프렌들리인가요?","faq.q2":"식이 제한도 배려해 주시나요?",
-      "faq.q3":"얼마나 미리 예약해야 하나요?","faq.q4":"취소 규정은 어떻게 되나요?","faq.q5":"코스 내용이 바뀌나요?",
+      "faq.q3":"얼마나 미리 예약해야 하나요?","faq.q4":"취소 규정은 어떻게 되나요?",
       "cmp.extra":"성게 & 게","cmp.beef":"소고기","cmp.spring":"춘권","cmp.nikuzushi":"니쿠즈시","cmp.chawan":"차완무시","cmp.nigiri":"니기리","cmp.steak":"안심 스테이크","cmp.roll":"핸드롤","cmp.book":"예약","cmp.price":"가격",
       },
   id:{"strip.line":"<b>Reservasi disarankan 2 minggu sebelumnya.</b> Tamu tanpa reservasi kami terima sesuai ketersediaan.",
       "faq.h":"Sebelum Anda memesan","faq.q1":"Apakah makanannya ramah Muslim?","faq.q2":"Bisakah menyesuaikan pantangan makanan?",
-      "faq.q3":"Seberapa jauh hari sebaiknya memesan?","faq.q4":"Bagaimana kebijakan pembatalannya?","faq.q5":"Apakah isi kursus berubah?",
+      "faq.q3":"Seberapa jauh hari sebaiknya memesan?","faq.q4":"Bagaimana kebijakan pembatalannya?",
       "cmp.extra":"Bulu babi & kepiting","cmp.beef":"Daging sapi","cmp.spring":"Lumpia","cmp.nikuzushi":"Nikuzushi","cmp.chawan":"Chawanmushi","cmp.nigiri":"Nigiri","cmp.steak":"Steak fillet","cmp.roll":"Hand roll","cmp.book":"Pemesanan","cmp.price":"Harga",
       }
 };

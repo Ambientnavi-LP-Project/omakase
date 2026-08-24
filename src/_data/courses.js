@@ -95,7 +95,7 @@ const LIST = [
       id: "Kombinasi standar sushi + wagyu."
     },
     rows: [
-      "Sushi Hassun — Seasonal Appetizers",
+      "Sushi Hassun — Assorted Appetizers",
       "Chilled Tofu",
       "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop",
       "Wagyu Fillet Steak 100g",
@@ -123,7 +123,7 @@ const LIST = [
       id: "Menambah sushi bulu babi & kepiting; daging naik ke Kobe Beef."
     },
     rows: [
-      "Sushi Hassun — Seasonal Appetizers",
+      "Sushi Hassun — Assorted Appetizers",
       "Chilled Tofu",
       "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Crab Gunkan",
       "Kobe Beef Fillet Steak 100g",
@@ -151,7 +151,7 @@ const LIST = [
       id: "Hanya saat makan siang · alur lengkap sushi & wagyu."
     },
     rows: [
-      "Wagyu Hassun — Seasonal Appetizers",
+      "Wagyu Hassun — Assorted Appetizers",
       "Chilled Tofu",
       "Nigiri 5 — Chutoro / Salmon / Sea Bream / Tamago / Scallop",
       "Wagyu Fillet Steak 50g",
@@ -175,7 +175,7 @@ const LIST = [
       ko: "표준 스시 오마카세.", id: "Omakase sushi standar."
     },
     rows: [
-      "Sushi Hassun — Seasonal Appetizers",
+      "Sushi Hassun — Assorted Appetizers",
       "Chilled Tofu",
       "Salmon & Ikura Hand Roll",
       "Nigiri 10 — Chutoro / Salmon / Sea Bream / Shrimp / Scallop · Lean Tuna / Seared Salmon / Tamago / Seared Sea Bream / Ikura Gunkan",
@@ -202,7 +202,7 @@ const LIST = [
       id: "Menambah nigiri bulu babi & kepiting, hand roll bulu babi, dan chawanmushi kepiting salju."
     },
     rows: [
-      "Sushi Hassun — Seasonal Appetizers",
+      "Sushi Hassun — Assorted Appetizers",
       "Chilled Tofu",
       "Sea Urchin Hand Roll · Salmon & Ikura Hand Roll",
       "Nigiri 10 — Chutoro / Salmon / Sea Bream / Urchin Gunkan / Scallop · Lean Tuna / Seared Salmon / Tamago / Crab Gunkan / Ikura Gunkan",
@@ -227,7 +227,7 @@ const LIST = [
       ko: "표준 와규 오마카세.", id: "Omakase wagyu standar."
     },
     rows: [
-      "Wagyu Hassun — Seasonal Appetizers",
+      "Wagyu Hassun — Assorted Appetizers",
       "Chilled Tofu",
       "Wagyu Fillet Steak 100g",
       "Wagyu Spring Roll",
@@ -253,7 +253,7 @@ const LIST = [
       id: "Sama seperti Standard, ditingkatkan ke Kobe Beef premium."
     },
     rows: [
-      "Kobe Beef Hassun — Seasonal Appetizers",
+      "Kobe Beef Hassun — Assorted Appetizers",
       "Chilled Tofu",
       "Kobe Beef Fillet Steak 100g",
       "Kobe Beef Spring Roll",
