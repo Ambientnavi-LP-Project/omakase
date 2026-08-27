@@ -15,10 +15,14 @@ const USE = {
   sushi: "寿司訴求 広告",
   wagyu: "和牛/ステーキ訴求 広告",
   simple: "簡易版",
+  "meta-wagyu": "Meta広告 和牛訴求",
+  "meta-sushi": "Meta広告 寿司訴求",
   test: "テスト用",
 };
 
 const AD_CHANNELS = new Set(["japan", "global", "sushi", "wagyu"]);
+const META_AD_CHANNELS = new Set(["meta-wagyu", "meta-sushi"]);
+const META_SUFFIX = "?utm_source=meta&utm_medium=paid_social";
 const AD_SUFFIX =
   "?utm_source=google-ads-website&utm_medium=cpc&utm_campaign=store";
 const GBP_SUFFIX =
@@ -53,7 +57,9 @@ module.exports = class {
       (stores[key] || []).forEach((p) => {
         const lp = `https://${domain}/${p.region}/${p.slug}/${p.channel_suffix}`;
         const ch = p.channel_id;
-        const adUrl = AD_CHANNELS.has(ch) ? lp + AD_SUFFIX : "";
+        const adUrl = AD_CHANNELS.has(ch) ? lp + AD_SUFFIX
+                    : META_AD_CHANNELS.has(ch) ? lp + META_SUFFIX + "&utm_campaign=" + ch.replace("meta-", "")
+                    : "";
         const gbpUrl = ch === "map" ? lp + GBP_SUFFIX : "";
         let tcUrl = "";
         if (p.tablecheck_url && p.tablecheck_url !== "TBD") {

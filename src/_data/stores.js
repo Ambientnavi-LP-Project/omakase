@@ -484,7 +484,35 @@ const pagesRelocated = STORES
     };
   });
 
-const pagesV2All = pagesV2.concat(pagesSushiV2).concat(pagesWagyuV2);
+// ============================================================
+// Meta広告専用チャンネル（新デザインの店舗のみ）
+// ------------------------------------------------------------
+// GoogleビジネスプロフィールとGoogle広告が /sushi/ /wagyu/ を使っているため、
+// Meta広告は専用URLに分けて計測が混ざらないようにする。
+//   /{region}/{slug}/meta-wagyu/   … Meta広告 和牛訴求
+//   /{region}/{slug}/meta-sushi/   … Meta広告 寿司訴求
+// 配下の courses/ も同じ経路で生成されるので、コース詳細からの予約も分離できる。
+// ============================================================
+const META_CHANNELS = [
+  { id: "meta-wagyu", suffix: "meta-wagyu/", utm_source: "lp-meta-wagyu", theme: "wagyu" },
+  { id: "meta-sushi", suffix: "meta-sushi/", utm_source: "lp-meta-sushi", theme: "sushi" }
+];
+const pagesMeta = [];
+STORES.forEach(s => {
+  if (s.relocated || !V2_STORES.includes(s.slug)) return;
+  META_CHANNELS.forEach(c => {
+    pagesMeta.push({
+      ...s,
+      name_full_en: (c.theme === "sushi" && s.name_full_en_sushi) ? s.name_full_en_sushi : s.name_full_en,
+      channel_id: c.id,
+      channel_suffix: c.suffix,
+      channel_utm_source: c.utm_source,
+      theme: c.theme
+    });
+  });
+});
+
+const pagesV2All = pagesV2.concat(pagesSushiV2).concat(pagesWagyuV2).concat(pagesMeta);
 
 module.exports = {
   brand: {
@@ -494,9 +522,20 @@ module.exports = {
     brand_name: "Omakase wagyu&sushi 〜Gastronomic Tour〜",
     brand_slug: "japan-omakase",
 
-    // Meta（Facebook/Instagram）広告のピクセルID。
-    // 空文字 "" にするとピクセルタグを出力しない（停止できる）。
-    meta_pixel_id: "1794289291924794"
+    // ============================================================
+    // Meta（Facebook/Instagram）広告のピクセルID
+    // ------------------------------------------------------------
+    // meta_pixel_id        … 既定のID。テーマ指定が無いページで使う。
+    // meta_pixel_by_theme  … LPごとに分けたい場合。theme をキーにする。
+    //                        値が空 "" またはキーが無ければ既定IDを使う。
+    // すべて空にすればピクセルタグ自体が出力されない（停止できる）。
+    // ============================================================
+    meta_pixel_id: "1794289291924794",
+    meta_pixel_by_theme: {
+      wagyu: "1794289291924794",   // 和牛LP（/wagyu/, /test-*-wagyu/）
+      sushi: "",                   // ← ここに寿司用の新しいピクセルIDを入れると分離される
+      all:   ""                    // 本番トップ・japan/global/map。空なら既定ID
+    }
   },
   stores: STORES,
   channels: CHANNELS,
