@@ -8,9 +8,10 @@ eleventyComputed:
   title: "{{ store.name_full_en }}"
   tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}-courses&utm_medium=referral{% else %}#{% endif %}"
 ---
-{% set TH = courses.themes[store.theme] or courses.themes.all %}
+{% set THEME = store.theme or "all" %}
+{% set TH = courses.themes[THEME] %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
-{% set isDark = "test-a" in store.channel_id %}
+{% set isDark = ("test-a" in store.channel_id) or (store.theme is not defined) %}
 {% set home = "/" + store.region + "/" + store.slug + "/" + store.channel_suffix %}
 {% macro yen(n) %}{% set s = (n | string) %}{% set L = s | length %}{% for i in range(0, L) %}{% if i > 0 and (L - i) % 3 == 0 %},{% endif %}{{ s[i] }}{% endfor %}{% endmacro %}
 <!DOCTYPE html>
@@ -19,11 +20,13 @@ eleventyComputed:
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>{{ store.name_full_en }}</title>
-<meta name="robots" content="noindex,follow"/>
-<link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/"/>
+{% if store.channel_id != "default" %}<meta name="robots" content="noindex,follow"/>{% endif %}
+<link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/courses/"/>
 
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TJKTLQJ6');</script>
-<script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({store_name:'{{ store.slug }}',store_area:'{{ store.region }}',brand:'{{ stores.brand.brand_slug }}',channel:'{{ store.channel_id }}',design:'{{ "test-a" if isDark else "test-b" }}',theme:'{{ store.theme }}',page_type:'courses'});</script>
+<script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({store_name:'{{ store.slug }}',store_area:'{{ store.region }}',brand:'{{ stores.brand.brand_slug }}',channel:'{{ store.channel_id }}',design:'{{ "test-a" if isDark else "test-b" }}',theme:'{{ THEME }}',page_type:'courses'});</script>
+
+{% include "partials/meta-pixel.njk" %}
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -167,7 +170,7 @@ a{color:inherit;text-decoration:none;}
 <div class="wrap head">
   <span class="eyebrow" data-i18n="menu.chefs">Chef&rsquo;s Omakase</span>
   <h1 data-i18n="courses.h">Course Details</h1>
-  <p data-i18n="menu.{{ store.theme }}P">Omakase course, served Muslim-friendly.</p>
+  <p data-i18n="menu.{{ THEME }}P">Omakase course, served Muslim-friendly.</p>
 </div>
 
 <div class="wrap">
@@ -203,7 +206,7 @@ a{color:inherit;text-decoration:none;}
     <h2 style="margin-top:12px;" data-i18n="reserve.h">Begin Your Experience</h2>
     <p data-i18n="reserve.p">Reservations recommended 2 weeks in advance. Walk-ins welcome subject to availability.</p>
     <button class="btn" onclick="openReserve('courses_page')" data-ga-event="reserve_click" data-ga-location="courses_page">
-      <span data-i18n="{% if store.reserve_system == 'form' %}reserve.btn{{ store.theme | capitalize }}{% else %}reserve.btnTc{% endif %}">{% if store.reserve_system == 'form' %}Reserve Your Omakase{% else %}Reserve on TableCheck{% endif %}</span>
+      <span data-i18n="{% if store.reserve_system == 'form' %}reserve.btn{{ THEME | capitalize }}{% else %}reserve.btnTc{% endif %}">{% if store.reserve_system == 'form' %}Reserve Your Omakase{% else %}Reserve on TableCheck{% endif %}</span>
     </button>
     <p style="margin-top:20px;font-size:13px;"><a class="back" href="{{ home }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="course.back">Back to the site</span></a></p>
   </div>
@@ -282,8 +285,10 @@ sheet.addEventListener('click', function(e){ if(e.target === sheet) closeSheet()
 document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeSheet(); });
 document.addEventListener('click', function(e){
   var t = e.target.closest('[data-ga-event]'); if(!t) return;
+  var ev = t.getAttribute('data-ga-event'), loc = t.getAttribute('data-ga-location') || '';
   window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({event:t.getAttribute('data-ga-event'), event_label:t.getAttribute('data-ga-location')||''});
+  window.dataLayer.push({event:ev, event_label:loc});
+  if(ev === 'reserve_click' && window.fbqReserve) window.fbqReserve(loc);
 });
 (function(){
   function seeded(min,max,bucket){ var h=(bucket*2654435761)%2147483647; var r=(h>>>0)/2147483647; return min+Math.floor(r*(max-min+1)); }

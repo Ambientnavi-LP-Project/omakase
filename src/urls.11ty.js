@@ -36,6 +36,7 @@ module.exports = class {
     const domain = stores.brand.domain;
     const groups = [
       ["pages", "live"],
+      ["pagesV2", "live"],       // 新デザイン(v2)の本番LP。store-v2.njk が使う。
       ["pagesSushi", "live"],
       ["pagesWagyu", "live"],
       ["pagesSimple", "live"],
@@ -57,7 +58,7 @@ module.exports = class {
         let tcUrl = "";
         if (p.tablecheck_url && p.tablecheck_url !== "TBD") {
           const src = p.channel_utm_source || "lp";
-          tcUrl = p.tablecheck_url;
+          tcUrl = `${p.tablecheck_url}?utm_source=${src}&utm_medium=referral`;
         }
         rows.push([
           p.name_jp || p.slug, p.region, p.slug, state, ch, USE[ch] || "",

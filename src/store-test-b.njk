@@ -55,6 +55,8 @@ eleventyComputed:
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TJKTLQJ6');</script>
 <script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({store_name:'{{ store.slug }}',store_area:'{{ store.region }}',brand:'{{ stores.brand.brand_slug }}',channel:'{{ store.channel_id }}',design:'test-b',theme:'{{ store.theme }}'});</script>
 
+{% include "partials/meta-pixel.njk" %}
+
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -1103,8 +1105,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
 document.addEventListener('click', function(e){
   var t = e.target.closest('[data-ga-event]'); if(!t) return;
+  var ev = t.getAttribute('data-ga-event'), loc = t.getAttribute('data-ga-location') || '';
   window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({event:t.getAttribute('data-ga-event'), event_label:t.getAttribute('data-ga-location')||''});
+  window.dataLayer.push({event:ev, event_label:loc});
+  if(ev === 'reserve_click' && window.fbqReserve) window.fbqReserve(loc);
 });
 document.addEventListener('DOMContentLoaded', initLang);
 </script>

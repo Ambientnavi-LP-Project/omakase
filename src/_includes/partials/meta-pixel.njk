@@ -1,0 +1,43 @@
+{#
+  ============================================================
+  meta-pixel.njk — Meta（Facebook/Instagram）広告のピクセル
+  ------------------------------------------------------------
+  ・ID は src/_data/stores.js の brand.meta_pixel_id で管理する。
+    空文字にすると、このタグは一切出力されない（＝停止できる）。
+  ・<head> の中で include すること。
+  ・PageView に加えて、予約ボタンのクリックで Lead を送る。
+    （fbqReserve() は各テンプレの予約処理から呼ばれる）
+  ============================================================
+#}
+{% if stores.brand.meta_pixel_id %}
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '{{ stores.brand.meta_pixel_id }}');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id={{ stores.brand.meta_pixel_id }}&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<script>
+/* 予約ボタンのクリックを Lead として送る。GA4 の reserve_click と対になる。 */
+window.fbqReserve = function(label){
+  if (typeof fbq !== 'function') return;
+  fbq('track', 'Lead', {
+    content_name: '{{ store.name_full_en }}',
+    content_category: '{{ store.channel_id }}',
+    source: label || ''
+  });
+};
+</script>
+{% else %}
+<script>window.fbqReserve = function(){};</script>
+{% endif %}

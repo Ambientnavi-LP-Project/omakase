@@ -227,7 +227,7 @@ const STORES = [
     address_en_line1: "1-18-6 Higashi-Shinsaibashi, Chuo-ku, Osaka, Gallery Bldg. 4F",
     address_postal: "542-0083",
 
-    tel_display: "080-2965-7336",
+    tel_display: "090-4467-3409",
     tel_raw: "+819044673409",
 
     hours: "11:00 – 23:00",
@@ -317,16 +317,27 @@ const CHANNELS = [
 ];
 
 // 店舗 × チャネルの全組み合わせを生成
-const pages = [];
+// ============================================================
+// 【新デザイン(v2)への切替】
+// ここに slug を入れた店舗だけ、本番LPが新デザイン(store-v2.njk)で生成される。
+// 入っていない店舗は従来どおり store.njk で生成される。URLは変わらない。
+//   例) V2_STORES = []                     … 全店を旧デザインに戻す（ロールバック）
+//       V2_STORES = ["shinjuku-sanchome"]  … 新宿三丁目だけ新デザイン
+// ------------------------------------------------------------
+const V2_STORES = ["shinjuku-sanchome"];
+
+const pages = [];    // 旧デザイン。store.njk が使う。
+const pagesV2 = [];  // 新デザイン。store-v2.njk が使う。
 STORES.forEach(store => {
   if (store.relocated) return;
   CHANNELS.forEach(channel => {
-    pages.push({
+    const page = {
       ...store,
       channel_id: channel.id,
       channel_suffix: channel.suffix,
       channel_utm_source: channel.utm_source
-    });
+    };
+    (V2_STORES.includes(store.slug) ? pagesV2 : pages).push(page);
   });
 });
 
@@ -472,17 +483,22 @@ module.exports = {
     ga4_id: "G-71QJSRH923",
     gas_endpoint: "https://script.google.com/macros/s/AKfycbxg9_jS2cMMgvOxJQPoFePq-L9ja7coWWL-bqXCrmMc7OwzGzyqXVF6QPrek5-W3arR/exec",
     brand_name: "Omakase wagyu&sushi 〜Gastronomic Tour〜",
-    brand_slug: "japan-omakase"
+    brand_slug: "japan-omakase",
+
+    // Meta（Facebook/Instagram）広告のピクセルID。
+    // 空文字 "" にするとピクセルタグを出力しない（停止できる）。
+    meta_pixel_id: "1794289291924794"
   },
   stores: STORES,
   channels: CHANNELS,
-  pages: pages,         // 本番用(default/japan/global/map)。testは含まない。
+  pages: pages,
+  pagesV2: pagesV2, // 新デザインの本番LP。store-v2.njk が使う。         // 本番用(default/japan/global/map)。testは含まない。
   pagesTest: pagesTest, // テスト用(新宿三丁目のtestチャンネルのみ)。store-test.njk が使う。
   pagesSushi: pagesSushi, // 寿司特化LP用(全店舗)。store-sushi.njk が使う。
   pagesWagyu: pagesWagyu, // 和牛特化LP用(全店舗)。store-wagyu.njk が使う。
   pagesSimple: pagesSimple, // シンプル版LP(全店舗)。store-simple.njk が使う。
   pagesTestA: pagesTestA, // 【新デザイン検証】HP型。store-test-a.njk が使う。/{region}/{slug}/test-a/
   pagesTestB: pagesTestB,
-  pagesTestCourses: pagesTestA.concat(pagesTestB), // コース詳細ページ。store-test-courses.njk が使う。/{...}/{channel}/courses/ // 【新デザイン検証】広告LP型。store-test-b.njk が使う。/{region}/{slug}/test-b/
+  pagesTestCourses: pagesTestA.concat(pagesTestB).concat(pagesV2), // コース詳細ページ。store-test-courses.njk が使う。/{...}/{channel}/courses/ // 【新デザイン検証】広告LP型。store-test-b.njk が使う。/{region}/{slug}/test-b/
   pagesRelocated: pagesRelocated // 移転案内(古民家・築地)。store-relocated.njk が使う。
 };

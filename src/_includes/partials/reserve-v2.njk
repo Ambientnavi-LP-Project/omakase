@@ -492,6 +492,7 @@
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({event:'reservation_form_submit', form_guests:params.guests,
       form_date:params.date, form_course:params.course, booking_id:params.booking_id||''});
+    if(window.fbqReserve) window.fbqReserve('form_submit');
     showSuccess();
   };
 })();
