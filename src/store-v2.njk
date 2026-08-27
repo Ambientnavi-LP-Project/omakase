@@ -8,6 +8,7 @@ eleventyComputed:
   title: "{{ store.name_full_en }}"
   tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral{% else %}#{% endif %}"
 ---
+{% set THEME = store.theme or "all" %}
 {% if THEME == "wagyu" %}
 {% set IMG = {
   heroMain: "/images/course-kobe-premium.jpg",
@@ -37,8 +38,7 @@ eleventyComputed:
   courses: ["/images/course-sushi-standard.jpg","/images/course-sushi-premium.jpg","/images/sushi1.jpg","/images/sushi2.jpg"]
 } %}
 {% endif %}
-{% set SHOW_PERFORMANCE = false %}
-{% set THEME = store.theme or "all" %}   {# パフォーマンスセクションの表示切替。true で復活 #}
+{% set SHOW_PERFORMANCE = false %}   {# パフォーマンスセクションの表示切替。true で復活 #}
 {% set TH = courses.themes[THEME] %}
 {% set showPrice = (not store.hide_prices) or store.force_prices %}
 {% macro yen(n) %}{% set s = (n | string) %}{% set L = s | length %}{% for i in range(0, L) %}{% if i > 0 and (L - i) % 3 == 0 %},{% endif %}{{ s[i] }}{% endfor %}{% endmacro %}

@@ -374,7 +374,7 @@ STORES.forEach(s => {
 // 対象店を増やす/減らすときは SUSHI_SLUGS を編集するだけ。
 // ============================================================
 const SUSHI_SLUGS = STORES.filter(s => !s.relocated).map(s => s.slug); // 全店舗に寿司デザインLP(/sushi/)を展開
-const pagesSushi = STORES
+const _sushiAll = STORES
   .filter(s => SUSHI_SLUGS.includes(s.slug))
   .map(s => ({
     ...s,
@@ -382,20 +382,27 @@ const pagesSushi = STORES
     name_full_en: s.name_full_en_sushi || s.name_full_en,
     channel_id: "sushi",
     channel_suffix: "sushi/",
-    channel_utm_source: "lp-sushi"
+    channel_utm_source: "lp-sushi",
+    theme: "sushi"
   }));
+// V2_STORES の店だけ新デザイン(store-v2.njk)へ。URLは変わらない。
+const pagesSushi   = _sushiAll.filter(p => !V2_STORES.includes(p.slug));
+const pagesSushiV2 = _sushiAll.filter(p =>  V2_STORES.includes(p.slug));
 
 // 和牛特化LP用ページ(全店舗)。store-wagyu.njk が使う。/{region}/{slug}/wagyu/
 // Web限定・和牛コース・寿司和牛コースを訴求。
 const WAGYU_SLUGS = STORES.filter(s => !s.relocated).map(s => s.slug);
-const pagesWagyu = STORES
+const _wagyuAll = STORES
   .filter(s => WAGYU_SLUGS.includes(s.slug))
   .map(s => ({
     ...s,
     channel_id: "wagyu",
     channel_suffix: "wagyu/",
-    channel_utm_source: "lp-wagyu"
+    channel_utm_source: "lp-wagyu",
+    theme: "wagyu"
   }));
+const pagesWagyu   = _wagyuAll.filter(p => !V2_STORES.includes(p.slug));
+const pagesWagyuV2 = _wagyuAll.filter(p =>  V2_STORES.includes(p.slug));
 
 // シンプル版LP(全店舗)。store-simple.njk が使う。/{region}/{slug}/simple/
 // 価格なし・コースカードなし・簡単なコース紹介＋写真数枚のみ。
@@ -477,6 +484,8 @@ const pagesRelocated = STORES
     };
   });
 
+const pagesV2All = pagesV2.concat(pagesSushiV2).concat(pagesWagyuV2);
+
 module.exports = {
   brand: {
     domain: "japan-omakase.wagyu-sushi.com",
@@ -492,13 +501,13 @@ module.exports = {
   stores: STORES,
   channels: CHANNELS,
   pages: pages,
-  pagesV2: pagesV2, // 新デザインの本番LP。store-v2.njk が使う。         // 本番用(default/japan/global/map)。testは含まない。
+  pagesV2: pagesV2All, // 新デザインの本番LP。store-v2.njk が使う。         // 本番用(default/japan/global/map)。testは含まない。
   pagesTest: pagesTest, // テスト用(新宿三丁目のtestチャンネルのみ)。store-test.njk が使う。
   pagesSushi: pagesSushi, // 寿司特化LP用(全店舗)。store-sushi.njk が使う。
   pagesWagyu: pagesWagyu, // 和牛特化LP用(全店舗)。store-wagyu.njk が使う。
   pagesSimple: pagesSimple, // シンプル版LP(全店舗)。store-simple.njk が使う。
   pagesTestA: pagesTestA, // 【新デザイン検証】HP型。store-test-a.njk が使う。/{region}/{slug}/test-a/
   pagesTestB: pagesTestB,
-  pagesTestCourses: pagesTestA.concat(pagesTestB).concat(pagesV2), // コース詳細ページ。store-test-courses.njk が使う。/{...}/{channel}/courses/ // 【新デザイン検証】広告LP型。store-test-b.njk が使う。/{region}/{slug}/test-b/
+  pagesTestCourses: pagesTestA.concat(pagesTestB).concat(pagesV2All), // コース詳細ページ。store-test-courses.njk が使う。/{...}/{channel}/courses/ // 【新デザイン検証】広告LP型。store-test-b.njk が使う。/{region}/{slug}/test-b/
   pagesRelocated: pagesRelocated // 移転案内(古民家・築地)。store-relocated.njk が使う。
 };
