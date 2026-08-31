@@ -6,7 +6,7 @@ pagination:
 permalink: "/{{ store.region }}/{{ store.slug }}/{{ store.channel_suffix }}index.html"
 eleventyComputed:
   title: "{{ store.name_full_en }}"
-  tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}?utm_source={{ store.channel_utm_source }}&utm_medium=referral{% else %}#{% endif %}"
+  tablecheck_with_utm: "{% if store.tablecheck_url and store.tablecheck_url != 'TBD' %}{{ store.tablecheck_url }}{% else %}#{% endif %}"
 ---
 {% if store.theme == "wagyu" %}
 {% set IMG = {
@@ -1118,9 +1118,29 @@ document.addEventListener('DOMContentLoaded', initLang);
 {% else %}
   <script>
   window.openReserve = window.openReserveModal = function(label, courseId){
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({event:'reserve_click', event_label: label || '', course_id: courseId || ''});
-    window.location.href = '{{ tablecheck_with_utm | safe }}';
+    // reserve_click の計測は [data-ga-event] の汎用ハンドラが行うため、
+    // ここでは dataLayer に push しない（push すると1クリックで2回計上される）。
+
+    // GA4のリンカーと Conversion Linker は <a> のクリックにしか働かない。
+    // window.location.href で直接遷移すると _gl / _gcl_aw が付与されず、
+    // TableCheck とのクロスドメイン計測と gclid の受け渡しが切れる。
+    // そのため一時的な <a> を生成してクリックさせ、リンカーに処理させる。
+    var url = '{{ tablecheck_with_utm | safe }}';
+    if (!url || url === '#') return;
+
+    var a = document.createElement('a');
+    a.href = url;
+    a.target = '_self';
+    a.rel = 'noopener';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+
+    // リンカーが動作しない環境向けのフォールバック。
+    // a.href はリンカーによって _gl 付きに書き換わっているため、それを使う。
+    setTimeout(function(){
+      if (document.visibilityState !== 'hidden') window.location.href = a.href;
+    }, 400);
   };
   </script>
 {% endif %}
