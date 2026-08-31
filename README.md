@@ -190,3 +190,8 @@ dataLayer に `design: 'test-a' | 'test-b'` と `channel` を積んでいます�
 ```bash
 npx @11ty/eleventy --serve
 ```
+
+## 計測要件
+
+LPの作成・デザイン変更・テンプレート追加を行う際は、必ず [docs/LP作成プロンプト.md](docs/LP作成プロンプト.md) を参照すること。
+CTAの書き方やTableCheckのURL指定を誤ると、広告のコンバージョン計測が停止する。
