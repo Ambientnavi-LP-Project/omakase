@@ -1,0 +1,93 @@
+{# ============================================================
+   ACQ-FORWARD (共通パーシャル)
+   獲得元(utm / click id)を TableCheck 予約リンクへ転記する。
+   TableCheck 側のクロスドメイン受入が完了するまでの代替手段。
+
+   使い方: 各テンプレートの </body> 直前で
+     {% include "partials/acq-forward.njk" %}
+
+   旧インライン実装からの変更点:
+   1. パラメータを「追記」ではなく「上書き」(searchParams.set)。
+      旧実装は h + '&' + params だったため、リンク側に
+      ?utm_source=lp-wagyu が入っていると
+      ?utm_source=lp-wagyu&utm_source=chatgpt となり、
+      GA4 は先頭を採用するので獲得元が握り潰されていた。
+   2. 対象ドメインを配列で管理。
+   3. utm_content / msclkid を追加。
+   4. 後から差し込まれるリンクにも対応 (MutationObserver)。
+   ============================================================ #}
+<script>
+(function () {
+  var KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content',
+              'gclid','gbraid','wbraid','msclkid'];
+  var RESERVE_HOSTS = ['tablecheck.com'];
+  var SELECTOR = RESERVE_HOSTS.map(function (h) {
+    return 'a[href*="' + h + '"]';
+  }).join(',');
+
+  try {
+    var qs = new URLSearchParams(location.search);
+    KEYS.forEach(function (k) {
+      var v = qs.get(k);
+      if (v && !sessionStorage.getItem('acq_' + k)) {
+        sessionStorage.setItem('acq_' + k, v);
+      }
+    });
+  } catch (e) {}
+
+  function stored() {
+    var out = {};
+    KEYS.forEach(function (k) {
+      var v = null;
+      try { v = sessionStorage.getItem('acq_' + k); } catch (e) {}
+      if (v) out[k] = v;
+    });
+    return out;
+  }
+
+  function decorate(a) {
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (!href) return;
+    var acq = stored();
+    var found = Object.keys(acq);
+    if (!found.length) return;
+    var url;
+    try { url = new URL(href, location.href); } catch (e) { return; }
+    var isReserve = RESERVE_HOSTS.some(function (h) {
+      return url.hostname.indexOf(h) > -1;
+    });
+    if (!isReserve) return;
+    found.forEach(function (k) { url.searchParams.set(k, acq[k]); });
+    a.setAttribute('href', url.toString());
+    a.setAttribute('data-acq', '1');
+  }
+
+  function decorateAll() {
+    var list = document.querySelectorAll(SELECTOR);
+    for (var i = 0; i < list.length; i++) decorate(list[i]);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', decorateAll);
+  } else {
+    decorateAll();
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest(SELECTOR) : null;
+    if (a) decorate(a);
+  }, true);
+
+  if (window.MutationObserver) {
+    var pending = false;
+    new MutationObserver(function () {
+      if (pending) return;
+      pending = true;
+      setTimeout(function () { pending = false; decorateAll(); }, 100);
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  }
+
+  window.acqParams = stored;
+})();
+</script>

@@ -517,7 +517,6 @@ const pagesV2All = pagesV2.concat(pagesSushiV2).concat(pagesWagyuV2).concat(page
 module.exports = {
   brand: {
     domain: "japan-omakase.wagyu-sushi.com",
-    ga4_id: "G-71QJSRH923",
     gas_endpoint: "https://script.google.com/macros/s/AKfycbxg9_jS2cMMgvOxJQPoFePq-L9ja7coWWL-bqXCrmMc7OwzGzyqXVF6QPrek5-W3arR/exec",
     brand_name: "Omakase wagyu&sushi 〜Gastronomic Tour〜",
     brand_slug: "japan-omakase",
