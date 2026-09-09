@@ -407,7 +407,7 @@ const pagesWagyuV2 = _wagyuAll.filter(p =>  V2_STORES.includes(p.slug));
 // シンプル版LP(全店舗)。store-simple.njk が使う。/{region}/{slug}/simple/
 // 価格なし・コースカードなし・簡単なコース紹介＋写真数枚のみ。
 const SIMPLE_SLUGS = STORES.filter(s => !s.relocated).map(s => s.slug);
-const pagesSimple = STORES
+const _simpleAll = STORES
   .filter(s => SIMPLE_SLUGS.includes(s.slug))
   .map(s => ({
     ...s,
@@ -415,6 +415,13 @@ const pagesSimple = STORES
     channel_suffix: "simple/",
     channel_utm_source: "lp-simple"
   }));
+
+// V2_STORES の店だけ新デザイン(store-v2.njk)へ。URLは変わらない。
+// sushi / wagyu と同じ分岐。/simple/ だけ旧デザインのまま取り残されていたため追加した。
+// ※ ChatGPT広告のomakaseグループが /simple/ を着地先にしているので、
+//   ここが旧テンプレートのままだと広告LPだけ古い状態になる。
+const pagesSimple   = _simpleAll.filter(p => !V2_STORES.includes(p.slug));
+const pagesSimpleV2 = _simpleAll.filter(p =>  V2_STORES.includes(p.slug));
 
 // ============================================================
 // 【新デザイン検証用】test-a / test-b
@@ -512,7 +519,11 @@ STORES.forEach(s => {
   });
 });
 
-const pagesV2All = pagesV2.concat(pagesSushiV2).concat(pagesWagyuV2).concat(pagesMeta);
+const pagesV2All = pagesV2
+  .concat(pagesSushiV2)
+  .concat(pagesWagyuV2)
+  .concat(pagesSimpleV2)
+  .concat(pagesMeta);
 
 module.exports = {
   brand: {
