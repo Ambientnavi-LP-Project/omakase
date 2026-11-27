@@ -630,7 +630,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
       </div>
       <div class="card">
         <h3 data-i18n="halal.label">Muslim-Friendly Dining</h3>
-        <p data-i18n="halal.p1">We thoughtfully prepare pork-free, alcohol-free dishes.</p>
+        <p data-i18n="halal.p1">We thoughtfully prepare pork-free<template data-hidden="alcohol">, alcohol-free</template> dishes.</p>
       </div>
       <div class="card">
         <h3 data-i18n="story.w.label">For Everyone in the World</h3>
@@ -757,12 +757,16 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
       <p class="lead" data-i18n="voices.p">A selection of impressions shared by our guests.</p>
     </div>
     <div class="rev-wrap reveal">
+      <template data-hidden="tripadvisor">
       <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span>
         <p>Beautifully presented Wagyu, thoughtfully served. The Muslim-friendly menu meant my family from Dubai could fully enjoy the experience. Truly felt at home.</p><cite>Dubai, UAE</cite></div>
+      </template>
       <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span>
         <p>The course was theatrical — watching the chef carve the wagyu felt like a performance. The quality of the beef is on another level. Worth every yen.</p><cite>New York, USA</cite></div>
+      <template data-hidden="tripadvisor">
       <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Tripadvisor</span>
         <p>真正的日本和牛體驗，完全不同於香港吃到的。低溫慢煮帶出的甘甜讓人難忘。師傅對每一片肉的態度就像對藝術品一樣。</p><cite>Hong Kong</cite></div>
+      </template>
       <div class="rev"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rev-src">Google</span>
         <p>As a Muslim food lover, finding an authentic Muslim-friendly omakase in Japan was a dream. The attention to dietary detail and respect for our needs really showed. The wagyu itself was sublime.</p><cite>Kuala Lumpur</cite></div>
     </div>
@@ -803,7 +807,7 @@ footer{background:var(--sumi);color:rgba(244,239,229,.78);padding:clamp(52px,8vw
       <h2 class="sh" data-i18n="faq.h">Before you reserve</h2>
     </div>
     <div class="faq reveal">
-      <details><summary data-i18n="faq.q1">Is the food Muslim-friendly?</summary><p data-i18n="halal.p1">We thoughtfully prepare pork-free, alcohol-free dishes.</p></details>
+      <details><summary data-i18n="faq.q1">Is the food Muslim-friendly?</summary><p data-i18n="halal.p1">We thoughtfully prepare pork-free<template data-hidden="alcohol">, alcohol-free</template> dishes.</p></details>
       <details><summary data-i18n="faq.q2">Can you accommodate dietary restrictions?</summary><p data-i18n="halal.p2">Please feel free to share any dietary preferences or restrictions when making your reservation.</p></details>
       <details><summary data-i18n="faq.q3">How far in advance should I book?</summary><p data-i18n="reserve.p">Reservations recommended 2 weeks in advance. Walk-ins welcome subject to availability.</p></details>
       <details><summary data-i18n="faq.q4">What is the cancellation policy?</summary><p><span data-i18n="rv.cx48">Within 48 hours: &yen;5,000 / person</span><br/><span data-i18n="rv.cx24">Within 24 hours: &yen;10,000 / person</span></p></details>

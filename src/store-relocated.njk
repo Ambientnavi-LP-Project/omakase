@@ -70,7 +70,7 @@ eleventyComputed:
     <p class="rl-jp">{{ store.relocation.closed_label_jp }}は{{ store.relocation.to_label_jp }}へ移転いたしました</p>
     <div class="rl-rule"></div>
     <p class="rl-lead">Thank you for your years of patronage at our {{ store.relocation.closed_label }} restaurant. With heartfelt gratitude, we have relocated.</p>
-    <p class="rl-body">The same hand-crafted Sushi &amp; Wagyu omakase — Muslim-friendly, pork-free and alcohol-free, served course by course — awaits you at our {{ store.relocation.to_label }} restaurant. We would be honored to welcome you once again.</p>
+    <p class="rl-body">The same hand-crafted Sushi &amp; Wagyu omakase — Muslim-friendly, pork-free<template data-hidden="alcohol"> and alcohol-free</template>, served course by course — awaits you at our {{ store.relocation.to_label }} restaurant. We would be honored to welcome you once again.</p>
     <a href="{{ dest_url_utm }}" class="rl-cta" data-ga-event="relocated_visit_click" data-ga-location="relocated_{{ store.slug }}">Visit our restaurant <span aria-hidden="true">&rarr;</span></a>
     <address class="rl-addr">
       {{ store.moved_to.address_en_line1 }}<br>

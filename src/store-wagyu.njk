@@ -16,7 +16,7 @@ eleventyComputed:
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>{{ store.name_full_en }}</title>
-<meta name="description" content="Muslim-friendly wagyu omakase in {{ store.city }}. Pork-free and alcohol-free — wagyu, Kobe beef and sushi, course by course.">
+<meta name="description" content="Muslim-friendly wagyu omakase in {{ store.city }}. Pork-free — wagyu, Kobe beef and sushi, course by course.">
 <link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/wagyu/">
 
 <!-- Google Tag Manager -->
@@ -684,6 +684,7 @@ function toggleCourse(id) {
   </div>
 
   <div class="review-scroll">
+    <template data-hidden="tripadvisor">
     <div class="review-card">
       <div class="flex items-center gap-1 mb-3">
         <span class="text-ginza-gold text-sm">★★★★★</span>
@@ -700,6 +701,7 @@ function toggleCourse(id) {
         </div>
       </div>
     </div>
+    </template>
 
     <div class="review-card">
       <div class="flex items-center gap-1 mb-3">
@@ -718,6 +720,7 @@ function toggleCourse(id) {
       </div>
     </div>
 
+    <template data-hidden="tripadvisor">
     <div class="review-card">
       <div class="flex items-center gap-1 mb-3">
         <span class="text-ginza-gold text-sm">★★★★★</span>
@@ -734,6 +737,7 @@ function toggleCourse(id) {
         </div>
       </div>
     </div>
+    </template>
 
     <div class="review-card">
       <div class="flex items-center gap-1 mb-3">
@@ -761,11 +765,13 @@ function toggleCourse(id) {
       <p class="text-ginza-gold text-sm mb-1">★★★★★</p>
       <p class="text-[9px] text-ginza-ivory/40 font-josefin tracking-widest uppercase">Google · {{ store.rating_count }} reviews</p>
     </div>
-    <div class="w-px h-12 bg-ginza-gold/20"></div>
+    <template data-hidden="tripadvisor"><div class="w-px h-12 bg-ginza-gold/20"></div></template>
+    <template data-hidden="tripadvisor">
     <div class="text-center">
       <p class="font-cormorant text-3xl text-ginza-gold leading-none mb-1">No.1</p>
       <p class="text-[9px] text-ginza-ivory/40 font-josefin tracking-widest uppercase mt-2">Tripadvisor Tokyo<br/>Aug 2025 — Mar 2026 (flagship)</p>
     </div>
+    </template>
   </div>
 </div>
 </section>
@@ -901,14 +907,16 @@ allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" ti
 <p class="section-label mb-3">Muslim-Friendly Dining</p>
 <h2 class="font-cormorant text-3xl mb-6">A Muslim-Friendly Dining Experience in {{ store.city.split(',')[0] }}</h2>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-xs mb-4">
-Welcome to our restaurant — a warm, inclusive space where guests from all cultures can dine with peace of mind. We thoughtfully prepare pork-free, alcohol-free dishes, making us a trusted choice for Muslim travelers and families visiting Japan.
+Welcome to our restaurant — a warm, inclusive space where guests from all cultures can dine with peace of mind. We thoughtfully prepare pork-free<template data-hidden="alcohol">, alcohol-free</template> dishes, making us a trusted choice for Muslim travelers and families visiting Japan.
 </p>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/60 max-w-xs mb-8">
 Please feel free to share any dietary preferences or restrictions when making your reservation — we will do our best to accommodate.
 </p>
 <div class="flex flex-wrap items-center justify-center gap-3 text-xs font-josefin tracking-[0.15em] text-ginza-gold mb-4">
 <span class="px-3 py-1 border border-ginza-gold/30 rounded">NO PORK</span>
+<template data-hidden="alcohol">
 <span class="px-3 py-1 border border-ginza-gold/30 rounded">NO ALCOHOL IN FOOD</span>
+</template>
 <span class="px-3 py-1 border border-ginza-gold/30 rounded">MUSLIM-FRIENDLY</span>
 </div>
 </div>
