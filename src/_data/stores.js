@@ -72,7 +72,7 @@ const STORES = [
     city: "Higashi-Shinsaibashi, Osaka",
     region_label: "Higashi-Shinsaibashi · Osaka",
     station_en: "Shinsaibashi Station",
-    address_jp_line1: "大阪府大阪市中央区東心斎橋1-18-6 ギャラリービルディング 4F",
+    address_jp_line1: "大阪府大阪市中央区東心斎橋１丁目１８−６ ギャラリービルディング ４Ｆ",
     address_en_line1: "1-18-6 Higashi-Shinsaibashi, Chuo-ku, Osaka, Gallery Bldg. 4F",
     address_postal: "542-0083",
 
@@ -83,7 +83,7 @@ const STORES = [
     hours_note: "Open Daily",
 
     reserve_system: "tablecheck",
-    tablecheck_url: "https://www.tablecheck.com/en/halal-wagyu-osaka-higashi-shinsaibashi/reserve/landing",
+    tablecheck_url: "TBD",   // TableCheck廃止（2026-11-27）→ "TBD" で全CTAが電話モーダルになる
     form_config: FORM_DEFAULT,
 
     maps_link: "https://maps.app.goo.gl/bG1aGxzCi2PACLFVA",
@@ -120,7 +120,7 @@ const STORES = [
     city: "Shinjuku, Tokyo",
     region_label: "Shinjuku · Tokyo",
     station_en: "Shinjuku-sanchome Station",
-    address_jp_line1: "東京都新宿区新宿3-7-5 一兆ビル 2F",
+    address_jp_line1: "東京都新宿区新宿３丁目７−５ 一兆ビル ２F",
     address_en_line1: "3-7-5 Shinjuku, Shinjuku-ku, Tokyo, Iccho Bldg. 2F",
     address_postal: "160-0022",   // ⚠️ HTMLに記載なし。新宿区新宿3丁目の郵便番号として補完。要確認
 
