@@ -16,7 +16,7 @@ eleventyComputed:
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>{{ store.name_full_en }}</title>
-<meta name="description" content="Muslim-friendly omakase featuring ultra-rare lean Wagyu and authentic Edomae sushi in {{ store.city }}. Alcohol-free menu, crafted for everyone.">
+<meta name="description" content="Muslim-friendly omakase featuring ultra-rare lean Wagyu and authentic Edomae sushi in {{ store.city }}. crafted for everyone.">
 {% if store.channel_id != "default" %}
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://{{ stores.brand.domain }}/{{ store.region }}/{{ store.slug }}/">
@@ -457,7 +457,7 @@ Ever heard of "omakase"? It's the chef's-choice course — we hand-pick the seas
 <p class="font-josefin text-[12px] md:text-[13px] tracking-[0.2em] uppercase text-ginza-gold/85 mb-4">Our Omakase</p>
 <h3 class="font-cormorant text-3xl md:text-4xl text-ginza-ivory mb-6 leading-snug">A Hand-Picked Journey<br/>of Sushi &amp; Wagyu</h3>
 <p class="text-sm md:text-[15px] font-light leading-relaxed text-ginza-ivory/75 max-w-xl mx-auto mb-4">Ever heard of &ldquo;omakase&rdquo;? It&rsquo;s the chef&rsquo;s-choice course — we hand-pick the season&rsquo;s finest ingredients and serve only what tastes best right now. From delicate nigiri and hand rolls to premium wagyu steak, sukiyaki and Kobe beef, every course unfolds piece by piece.</p>
-<p class="text-[13px] font-light leading-relaxed text-ginza-ivory/60 max-w-xl mx-auto mb-9">Every dish is Muslim-friendly — pork-free and alcohol-free — crafted for everyone to enjoy. Ask our staff about the day&rsquo;s courses when you arrive. Ingredients may vary with the season.</p>
+<p class="text-[13px] font-light leading-relaxed text-ginza-ivory/60 max-w-xl mx-auto mb-9">Every dish is Muslim-friendly — pork-free<template data-hidden="alcohol"> and alcohol-free</template> — crafted for everyone to enjoy. Ask our staff about the day&rsquo;s courses when you arrive. Ingredients may vary with the season.</p>
 {% if store.is_form_reserve == 'true' or is_form_reserve == 'true' %}
 <button onclick="openReserveModal('simple', '')" class="simple-cta" data-ga-event="reserve_click" data-ga-location="simple">Reserve a Table <span aria-hidden="true">&rarr;</span></button>
 {% elif store.tablecheck_url == 'TBD' %}
@@ -787,6 +787,7 @@ Within our signature courses, you'll also find premium dishes — crafted with t
 
 <!-- OUR STORY -->
 {% if false %}{# --- Our Story セクション 一旦非表示 --- #}
+<template data-hidden="1962">
 <section class="reveal py-20 bg-ginza-black border-t border-ginza-gold/10" id="story">
 <div class="max-w-3xl mx-auto px-8">
 <div class="text-center mb-12">
@@ -833,6 +834,7 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
 </div>
 </div>
 </section>
+</template>
 {% endif %}
 
 <!-- REVIEWS / VOICES -->
@@ -847,6 +849,7 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
   </div>
 
   <div class="review-scroll">
+    <template data-hidden="tripadvisor">
     <div class="review-card">
       <div class="flex items-center gap-1 mb-3">
         <span class="text-ginza-gold text-sm">★★★★★</span>
@@ -863,6 +866,7 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
         </div>
       </div>
     </div>
+    </template>
 
     <div class="review-card">
       <div class="flex items-center gap-1 mb-3">
@@ -881,6 +885,7 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
       </div>
     </div>
 
+    <template data-hidden="tripadvisor">
     <div class="review-card">
       <div class="flex items-center gap-1 mb-3">
         <span class="text-ginza-gold text-sm">★★★★★</span>
@@ -897,6 +902,7 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
         </div>
       </div>
     </div>
+    </template>
 
     <div class="review-card">
       <div class="flex items-center gap-1 mb-3">
@@ -924,11 +930,13 @@ I personally select Wagyu processed at trusted suppliers in Japan. This restaura
       <p class="text-ginza-gold text-sm mb-1">★★★★★</p>
       <p class="text-[9px] text-ginza-ivory/40 font-josefin tracking-widest uppercase">Google · {{ store.rating_count }} reviews</p>
     </div>
-    <div class="w-px h-12 bg-ginza-gold/20"></div>
+    <template data-hidden="tripadvisor"><div class="w-px h-12 bg-ginza-gold/20"></div></template>
+    <template data-hidden="tripadvisor">
     <div class="text-center">
       <p class="font-cormorant text-3xl text-ginza-gold leading-none mb-1">No.1</p>
       <p class="text-[9px] text-ginza-ivory/40 font-josefin tracking-widest uppercase mt-2">Tripadvisor Tokyo<br/>Aug 2025 — Mar 2026 (flagship)</p>
     </div>
+    </template>
   </div>
 </div>
 </section>
@@ -1064,14 +1072,16 @@ allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" ti
 <p class="section-label mb-3">Muslim-Friendly Dining</p>
 <h2 class="font-cormorant text-3xl mb-6">A Muslim-Friendly Dining Experience in {{ store.city.split(',')[0] }}</h2>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/70 max-w-xs mb-4">
-Welcome to our restaurant — a warm, inclusive space where guests from all cultures can dine with peace of mind. We thoughtfully prepare pork-free, alcohol-free dishes, making us a trusted choice for Muslim travelers and families visiting Japan.
+Welcome to our restaurant — a warm, inclusive space where guests from all cultures can dine with peace of mind. We thoughtfully prepare pork-free<template data-hidden="alcohol">, alcohol-free</template> dishes, making us a trusted choice for Muslim travelers and families visiting Japan.
 </p>
 <p class="text-sm font-light leading-relaxed text-ginza-ivory/60 max-w-xs mb-8">
 Please feel free to share any dietary preferences or restrictions when making your reservation — we will do our best to accommodate.
 </p>
 <div class="flex flex-wrap items-center justify-center gap-3 text-xs font-josefin tracking-[0.15em] text-ginza-gold mb-4">
 <span class="px-3 py-1 border border-ginza-gold/30 rounded">NO PORK</span>
+<template data-hidden="alcohol">
 <span class="px-3 py-1 border border-ginza-gold/30 rounded">NO ALCOHOL IN FOOD</span>
+</template>
 <span class="px-3 py-1 border border-ginza-gold/30 rounded">MUSLIM-FRIENDLY</span>
 </div>
 </div>
